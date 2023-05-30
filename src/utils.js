@@ -25,6 +25,16 @@ export function useIsDesktop() {
   return useMediaQuery({ query: '(min-width: 992px)' });
 }
 
+export function getPagePath(courseId, config, isMfePageEnabled, urlParameter) {
+  if (isMfePageEnabled === 'true') {
+    if (urlParameter === 'tabs') {
+      return `/course/${courseId}/pages-and-resources`;
+    }
+    return `/course/${courseId}/${urlParameter}`;
+  }
+  return `${config.STUDIO_BASE_URL}/${urlParameter}/course-v1:${courseId}`;
+}
+
 export function useAppSetting(settingName) {
   const dispatch = useDispatch();
   const { courseId } = useContext(PagesAndResourcesContext);

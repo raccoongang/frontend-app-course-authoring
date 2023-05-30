@@ -1,0 +1,111 @@
+.setting-header__title {
+  font: normal 700 32px/36px 'Inter', sans-serif;
+  margin-bottom: 1.75rem;
+
+  .setting-header__title-subtitle {
+    font: normal 400 14px/24px 'Inter', sans-serif;
+    display: block;
+    color: $gray-700;
+  }
+}
+
+.setting-items__policies {
+  .setting-items__policies-instructions {
+    font: normal 400 14px/24px 'Inter', sans-serif;
+    color: $gray-700;
+  }
+
+  .setting-items__deprecated-setting {
+    float: right;
+    margin-bottom: 1.75rem;
+  }
+
+  .setting-items__policies-title {
+    font: normal 400 22px/1.5 'Inter', sans-serif;
+    padding-bottom: .25rem;
+    margin-bottom: .25rem;
+    border-bottom: 1px solid $light-400;
+  }
+
+  .instructions, strong {
+    font: normal 400 14px/24px 'Inter', sans-serif;
+    color: $gray-700;
+  }
+}
+
+.alert-toast {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 0 .625rem;
+}
+
+.setting-items__list {
+  li {
+    list-style: none;
+  }
+
+  .form-control {
+    resize: none;
+    min-height: 2.75rem;
+    width: 30rem;
+  }
+
+  .pgn__card-section {
+    max-width: 30rem;
+  }
+
+  .pgn__card-header {
+    padding: 0 1.5rem;
+  }
+
+  .pgn__card-status {
+    padding: .625rem;
+  }
+
+  .pgn__card-header-content {
+    margin-top: 1.438rem;
+    margin-bottom: 1.438rem;
+    display: flex;
+    flex-direction: revert;
+
+    .pgn__card-header-subtitle-md {
+      margin-left: .375rem;
+      margin-top: .375rem;
+    }
+  }
+}
+
+.setting-sidebar__supplementary {
+  margin-top: 1.875rem;
+
+  .setting-sidebar__supplementary-about {
+    .setting-sidebar__supplementary-about--title {
+      font: normal 700 18px/24px 'Inter', sans-serif;
+      color: $black;
+      margin-bottom: 1.25rem;
+    }
+
+    .setting-sidebar__supplementary-about--descriptions {
+      font: normal 400 14px/24px 'Inter', sans-serif;
+      color: $gray-700;
+    }
+  }
+
+  .setting-sidebar__supplementary-other-links ul {
+    list-style: none;
+
+    .setting-sidebar__supplementary-other-link {
+      font: normal 400 14px/24px 'Inter', sans-serif;
+      line-height: 1.5rem;
+      color: $info-500;
+      margin-bottom: .5rem;
+    }
+  }
+
+  .setting-sidebar__supplementary-other-title {
+    font: normal 700 18px/24px 'Inter', sans-serif;
+    color: $black;
+    margin-bottom: 1.25rem;
+  }
+}

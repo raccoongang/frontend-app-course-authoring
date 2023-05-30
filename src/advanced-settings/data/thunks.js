@@ -4,6 +4,7 @@ import {
   getCourseAdvancedSettings,
   getCourseApps, updateCourseAdvancedSettings,
   updateCourseApp,
+  getProctoringErrors,
 } from './api';
 import {
   fetchCourseAppsSettingsSuccess,
@@ -11,20 +12,8 @@ import {
   updateCourseAppsApiStatus, updateCourseAppsSettingsSuccess,
   updateLoadingStatus,
   updateSavingStatus,
+  getProctoredExamErrors,
 } from './slice';
-
-const COURSE_APPS_ORDER = [
-  'progress',
-  'discussion',
-  'teams',
-  'edxnotes',
-  'wiki',
-  'calculator',
-  'proctoring',
-  'live',
-  'textbooks',
-  'custom_pages',
-];
 
 /* eslint-disable import/prefer-default-export */
 export function fetchCourseApps(courseId) {
@@ -33,8 +22,6 @@ export function fetchCourseApps(courseId) {
 
     try {
       const courseApps = await getCourseApps(courseId);
-      courseApps.sort((firstEl, secondEl) => (
-        COURSE_APPS_ORDER.indexOf(firstEl.id) - COURSE_APPS_ORDER.indexOf(secondEl.id)));
 
       dispatch(addModels({ modelType: 'courseApps', models: courseApps }));
       dispatch(fetchCourseAppsSuccess({
@@ -81,14 +68,30 @@ export function fetchCourseAppSettings(courseId, settings) {
   };
 }
 
-export function updateCourseAppSetting(courseId, setting, value) {
+export function updateCourseAppSetting(courseId, settings) {
+  // console.log('settings', settings);
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
 
     try {
-      const settingValues = await updateCourseAdvancedSettings(courseId, setting, value);
+      const settingValues = await updateCourseAdvancedSettings(courseId, settings);
       dispatch(updateCourseAppsSettingsSuccess(settingValues));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function getProctoredExamsErrors(courseId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      const settingValues = await getProctoringErrors(courseId);
+      dispatch(getProctoredExamErrors(settingValues));
       return true;
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));

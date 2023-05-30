@@ -10,7 +10,8 @@ import Header from './studio-header/Header';
 import { fetchCourseDetail } from './data/thunks';
 import { useModel } from './generic/model-store';
 import PermissionDeniedAlert from './generic/PermissionDeniedAlert';
-import { getCourseAppsApiStatus, getLoadingStatus } from './pages-and-resources/data/selectors';
+import { getCourseAppsApiStatus, getLoadingStatus as pagesAndResourcesLoadingStatus } from './pages-and-resources/data/selectors';
+import { getLoadingStatus as advancedSettingsLoadingStatus } from './advanced-settings/data/selectors';
 import { RequestStatus } from './data/constants';
 import Loading from './generic/Loading';
 
@@ -56,7 +57,8 @@ const CourseAuthoringPage = ({ courseId, children }) => {
   const courseOrg = courseDetail ? courseDetail.org : null;
   const courseTitle = courseDetail ? courseDetail.name : courseId;
   const courseAppsApiStatus = useSelector(getCourseAppsApiStatus);
-  const inProgress = useSelector(getLoadingStatus) === RequestStatus.IN_PROGRESS;
+  const inProgressPagesAndResources = useSelector(pagesAndResourcesLoadingStatus) === RequestStatus.IN_PROGRESS;
+  const inProgressAdvancedSettings = useSelector(advancedSettingsLoadingStatus) === RequestStatus.IN_PROGRESS;
   const { pathname } = useLocation();
   if (courseAppsApiStatus === RequestStatus.DENIED) {
     return (
@@ -70,7 +72,7 @@ const CourseAuthoringPage = ({ courseId, children }) => {
       using url pattern containing /editor/,
       we shouldn't have the header and footer on these pages.
       This functionality will be removed in TNL-9591 */}
-      {inProgress ? !pathname.includes('/editor/') && <Loading />
+      {inProgressAdvancedSettings && inProgressPagesAndResources ? !pathname.includes('/editor/') && <Loading />
         : (
           <AppHeader
             courseNumber={courseNumber}
@@ -80,7 +82,7 @@ const CourseAuthoringPage = ({ courseId, children }) => {
           />
     )}
       {children}
-      {!inProgress && <AppFooter />}
+      {!inProgressAdvancedSettings && inProgressPagesAndResources && <AppFooter />}
     </div>
   );
 };
