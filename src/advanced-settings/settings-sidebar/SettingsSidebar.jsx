@@ -12,7 +12,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
   return (
     <aside className="setting-sidebar__supplementary">
       <div className="setting-sidebar__supplementary-about">
-        <h3 className="setting-sidebar__supplementary-about--title">{intl.formatMessage(messages.about)}</h3>
+        <h4 className="setting-sidebar__supplementary-about--title">{intl.formatMessage(messages.about)}</h4>
         <p className="setting-sidebar__supplementary-about--descriptions">
           {intl.formatMessage(messages.aboutDescription1)}
         </p>
@@ -29,7 +29,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
       </div>
       <hr />
       <div className="setting-sidebar__supplementary-other">
-        <h3 className="setting-sidebar__supplementary-other-title">{intl.formatMessage(messages.other)}</h3>
+        <h4 className="setting-sidebar__supplementary-other-title">{intl.formatMessage(messages.other)}</h4>
         <nav className="setting-sidebar__supplementary-other-links" aria-label={intl.formatMessage(messages.other)}>
           <ul className="p-0 mb-0">
             <li className="setting-sidebar__supplementary-other-link">

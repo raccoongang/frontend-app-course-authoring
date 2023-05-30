@@ -33,6 +33,16 @@
   }
 }
 
+.setting__card {
+  .pgn__icon {
+    color: $black;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
 .alert-toast {
   position: fixed;
   bottom: 0;

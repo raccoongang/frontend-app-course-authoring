@@ -68,16 +68,14 @@ const AdvancedSettings = ({ intl, courseId }) => {
       <Container size="xl">
         <div className="setting-header mt-5">
           {(savingStatus === RequestStatus.FAILED) && (
-          <SettingAlert
-            variant="danger"
-            icon={Info}
-            proctoringErrorsData={proctoringExamErrors}
-            title={intl.formatMessage(messages.alertDanger)}
-            description={intl.formatMessage(messages.alertDangerDescriptions)}
-            aria-hidden={savingStatus === RequestStatus.FAILED ? 'true' : 'false'}
-            aria-labelledby={intl.formatMessage(messages.alertDangerAriaLabelledby)}
-            aria-describedby={intl.formatMessage(messages.alertDangerAriaDescribedby)}
-          />
+            <SettingAlert
+              variant="danger"
+              icon={Info}
+              proctoringErrorsData={proctoringExamErrors}
+              aria-hidden={savingStatus === RequestStatus.FAILED ? 'true' : 'false'}
+              aria-labelledby={intl.formatMessage(messages.alertProctoringAriaLabelledby)}
+              aria-describedby={intl.formatMessage(messages.alertProctoringDescribedby)}
+            />
           )}
           {(savingStatus === RequestStatus.SUCCESSFUL) && (
             <SettingAlert

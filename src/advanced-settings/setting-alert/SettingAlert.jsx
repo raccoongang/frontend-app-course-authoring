@@ -7,7 +7,7 @@ const SettingAlert = ({
 }) => {
   if (proctoringErrorsData) {
     return (
-      <ul className="alert-proctoring-error">
+      <ul className="alert-proctoring-error p-0">
         <Alert {...props}>
           {proctoringErrorsData.map(({ key, model, message }) => (
             <li key={key}>

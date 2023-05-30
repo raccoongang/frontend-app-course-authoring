@@ -23,18 +23,18 @@ const messages = defineMessages({
   },
   alertSuccess: {
     id: 'course-authoring.advanced-settings.alert.success',
-    defaultMessage: 'This course has protected exam setting that are incomplete or invalid.',
+    defaultMessage: 'Your policy changes have been saved.',
   },
   alertSuccessDescriptions: {
     id: 'course-authoring.advanced-settings.alert.success.descriptions',
-    defaultMessage: 'You will be unable to make changes until the following setting are updated on the page below.',
+    defaultMessage: 'No validation is performed on policy keys or value pairs. If you are having difficulties, check your formatting.',
   },
-  alertDanger: {
-    id: 'course-authoring.advanced-settings.alert.danger',
+  alertProctoringError: {
+    id: 'course-authoring.advanced-settings.alert.proctoring.error',
     defaultMessage: 'This course has protected exam setting that are incomplete or invalid.',
   },
-  alertDangerDescriptions: {
-    id: 'course-authoring.advanced-settings.alert.danger.descriptions',
+  alertProctoringErrorDescriptions: {
+    id: 'course-authoring.advanced-settings.alert.proctoring.error.descriptions',
     defaultMessage: 'You will be unable to make changes until the following setting are updated on the page below.',
   },
   buttonSaveText: {
@@ -69,12 +69,12 @@ const messages = defineMessages({
     id: 'course-authoring.advanced-settings.alert.success.aria.describedby',
     defaultMessage: 'alert-confirmation-description',
   },
-  alertDangerAriaLabelledby: {
-    id: 'course-authoring.advanced-settings.alert.danger.aria.labelledby',
+  alertProctoringAriaLabelledby: {
+    id: 'course-authoring.advanced-settings.alert.proctoring.error.aria.labelledby',
     defaultMessage: 'alert-danger-title',
   },
-  alertDangerAriaDescribedby: {
-    id: 'course-authoring.advanced-settings.alert.danger.aria.describedby',
+  alertProctoringDescribedby: {
+    id: 'course-authoring.advanced-settings.alert.proctoring.error.aria.describedby',
     defaultMessage: 'alert-danger-description',
   },
 });

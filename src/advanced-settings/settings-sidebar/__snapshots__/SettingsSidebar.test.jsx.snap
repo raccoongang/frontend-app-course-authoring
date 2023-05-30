@@ -7,11 +7,11 @@ exports[`SettingsSidebar should match the snapshot 1`] = `
   <div
     className="setting-sidebar__supplementary-about"
   >
-    <h3
+    <h4
       className="setting-sidebar__supplementary-about--title"
     >
       What do advanced settings do?
-    </h3>
+    </h4>
     <p
       className="setting-sidebar__supplementary-about--descriptions"
     >
@@ -35,11 +35,11 @@ exports[`SettingsSidebar should match the snapshot 1`] = `
   <div
     className="setting-sidebar__supplementary-other"
   >
-    <h3
+    <h4
       className="setting-sidebar__supplementary-other-title"
     >
       Other Course Settings
-    </h3>
+    </h4>
     <nav
       aria-label="Other Course Settings"
       className="setting-sidebar__supplementary-other-links"

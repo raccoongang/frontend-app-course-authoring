@@ -65,7 +65,6 @@ describe('AdvancedSettings', () => {
     const settingCard = wrapper.find('SettingCard').at(0);
     expect(settingCard.props().value).toBe('value1');
   });
-
   it('updating textarea value and show warning alert', () => {
     const settingCard = wrapper.find('SettingCard').at(0);
     const textarea = settingCard.find('textarea');
@@ -74,7 +73,6 @@ describe('AdvancedSettings', () => {
     const settingAlert = wrapper.find('SettingAlert');
     expect(settingAlert.find('AlertHeading').at(0).text()).toBe('You`ve made some changes');
   });
-
   it('show warning alert and after click on Cancel button reset textarea value', () => {
     const settingCard = wrapper.find('SettingCard').at(0);
     const textarea = settingCard.find('textarea');
@@ -84,7 +82,6 @@ describe('AdvancedSettings', () => {
     resetBtn.simulate('click');
     expect(textarea.text()).toBe('value1');
   });
-
   it('should handle setting change', () => {
     const dispatch = useDispatch();
     wrapper.find('textarea').at(0).simulate('change', { target: { value: 'new value' } });
