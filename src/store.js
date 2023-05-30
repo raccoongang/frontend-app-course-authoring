@@ -18,6 +18,5 @@ export default function initializeStore(preloadedState = undefined) {
       live: liveReducer,
     },
     preloadedState,
-    devTools: true,
   });
 }

@@ -91,7 +91,7 @@ exports[`SettingsSidebar should match the snapshot 1`] = `
         >
           <a
             className="pgn__hyperlink default-link standalone-link"
-            href="https://example.com/group_configurations/course123"
+            href="https://example.com/group_configurations/course-v1:course123"
             onClick={[Function]}
             rel="noopener"
             target="_self"

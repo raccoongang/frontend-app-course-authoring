@@ -11,18 +11,23 @@ describe('SettingAlert', () => {
     description: 'Test Description',
     icon: CheckCircle,
   };
-
   it('successfully renders', () => {
     const tree = renderer.create(<SettingAlert {...defaultProps} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
-
+  it('successfully renders with proctoring error data', () => {
+    const proctoringErrorsData = [{
+      model: { displayName: 'Model 1' },
+      message: 'Message 1',
+    }];
+    const tree = renderer.create(<SettingAlert proctoringErrorsData={proctoringErrorsData} />).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
   it('renders the title correctly in alert-heading', () => {
     const wrapper = mount(<SettingAlert {...defaultProps} />);
     const alertHeading = wrapper.find('div.alert-heading').at(0);
     expect(alertHeading.children().text()).toEqual('Test Title');
   });
-
   it('handles button onClick', () => {
     const mockOnClick = jest.fn();
     const wrapper = mount(
@@ -38,24 +43,12 @@ describe('SettingAlert', () => {
     wrapper.find('.btn').simulate('click');
     expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
-
   it('renders the description correctly', () => {
     const wrapper = shallow(<SettingAlert {...defaultProps} />);
     expect(wrapper.find('p').text()).toEqual('Test Description');
   });
-
   it('passes the additional props correctly', () => {
     const wrapper = shallow(<SettingAlert {...defaultProps} variant="success" />);
     expect(wrapper.props().variant).toEqual('success');
   });
-
-  // it('renders the additional data correctly', () => {
-  //   const data = [
-  //     { model: { displayName: 'Model 1' }, message: 'Message 1' },
-  //   ];
-  //   const wrapper = shallow(<SettingAlert data={data} variant="success" />);
-  //   const alertHeading = wrapper.find('Alert.Heading');
-  //   expect(alertHeading.children().text()).toEqual('Model 1');
-  //   expect(wrapper.find('p').text()).toEqual('Message 1');
-  // });
 });

@@ -3,10 +3,6 @@ import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { convertToSnakeCase } from '../../utils';
 
-// ensureConfig([
-//   'STUDIO_BASE_URL',
-// ], 'Course Apps API service');
-
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 const getCourseAdvancedSettingsApiUrl = () => `${getApiBaseUrl()}/api/contentstore/v0/advanced_settings/course-v1:`;
 const getProctoringErrorsApiUrl = () => `${getApiBaseUrl()}/api/contentstore/v1/proctoring_errors/course-v1:`;

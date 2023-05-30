@@ -57,6 +57,9 @@ SettingCard.propTypes = {
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.bool,
+      PropTypes.number,
+      PropTypes.object,
+      PropTypes.array,
     ]),
     onChange: PropTypes.func.isRequired,
     isOn: PropTypes.bool.isRequired,

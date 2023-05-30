@@ -6,12 +6,8 @@ import { AppContext } from '@edx/frontend-platform/react';
 import SettingsSidebar from './SettingsSidebar';
 
 describe('SettingsSidebar', () => {
-  const config = {
-    STUDIO_BASE_URL: 'https://example.com',
-  };
-
+  const config = { STUDIO_BASE_URL: 'https://example.com' };
   const courseId = 'course123';
-
   it('should match the snapshot', () => {
     const tree = renderer.create(
       // eslint-disable-next-line react/jsx-no-constructed-context-values
@@ -21,7 +17,6 @@ describe('SettingsSidebar', () => {
         </IntlProvider>
       </AppContext.Provider>,
     ).toJSON();
-
     expect(tree).toMatchSnapshot();
   });
 });

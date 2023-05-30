@@ -33,6 +33,7 @@ export function fetchCourseApps(courseId) {
 
     try {
       const courseApps = await getCourseApps(courseId);
+
       courseApps.sort((firstEl, secondEl) => (
         COURSE_APPS_ORDER.indexOf(firstEl.id) - COURSE_APPS_ORDER.indexOf(secondEl.id)));
 

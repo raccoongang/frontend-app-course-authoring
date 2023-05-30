@@ -20,9 +20,7 @@ describe('SettingCard', () => {
     displayName: 'Setting Name',
   };
   const handleChange = jest.fn();
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => jest.clearAllMocks());
   it('matches the snapshot', () => {
     const { container } = render(
       <IntlProvider locale="en">
@@ -38,7 +36,6 @@ describe('SettingCard', () => {
     );
     expect(container.firstChild).toMatchSnapshot();
   });
-
   it('renders the setting card with the provided data', () => {
     const { getByText, getByLabelText } = render(
       <IntlProvider locale="en">
@@ -58,7 +55,6 @@ describe('SettingCard', () => {
     expect(input).toBeInTheDocument();
     expect(input.value).toBe('Setting Value');
   });
-
   it('displays the deprecated status when the setting is deprecated', () => {
     const deprecatedSettingData = { ...settingData, deprecated: true };
     const { getByText } = render(
@@ -76,7 +72,6 @@ describe('SettingCard', () => {
     const deprecatedStatus = getByText('Deprecated');
     expect(deprecatedStatus).toBeInTheDocument();
   });
-
   it('does not display the deprecated status when the setting is not deprecated', () => {
     const { queryByText } = render(
       <IntlProvider locale="en">

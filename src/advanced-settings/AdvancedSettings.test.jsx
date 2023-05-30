@@ -1,13 +1,9 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import thunk from 'redux-thunk';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { IntlProvider } from 'react-intl';
-
+import { shallow, mount } from 'enzyme';
+import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
+import { useDispatch, useSelector } from 'react-redux';
 import AdvancedSettings from './AdvancedSettings';
+import { fetchCourseAppSettings, fetchProctoringExamErrors, updateCourseAppSetting } from './data/thunks';
 
 // Mock the TextareaAutosize component
 jest.mock('react-textarea-autosize', () => jest.fn((props) => (
@@ -18,119 +14,81 @@ jest.mock('react-textarea-autosize', () => jest.fn((props) => (
   />
 )));
 
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(),
+}));
+
+jest.mock('./data/thunks', () => ({
+  fetchCourseAppSettings: jest.fn(),
+  fetchProctoringExamErrors: jest.fn(),
+  updateCourseAppSetting: jest.fn(),
+}));
+
+jest.mock('./data/selectors', () => ({
+  getCourseAppSettings: jest.fn(),
+  getSavingStatus: jest.fn(),
+  getProctoringExamErrors: jest.fn(),
+}));
+
 describe('AdvancedSettings', () => {
-  const courseId = 'course-123';
+  const courseId = '123';
+  const mockDispatch = jest.fn();
+  let wrapper;
+  useDispatch.mockReturnValue(mockDispatch);
 
-  it('renders the component and handles setting change', () => {
-    const mockStore = configureStore([thunk]);
-    const initialState = {
-      advancedSettings: {
-        courseAppSettings: {
-          settingName: {
-            deprecated: false,
-            help: 'This is a help message',
-            displayName: 'Setting Name',
-            value: 'Setting Value',
-          },
-        },
-        savingStatus: 'idle',
-      },
+  beforeEach(() => {
+    const mockAdvancedSettingsData = {
+      setting1: { value: 'value1' },
+      setting2: { value: 'value2' },
     };
-    const store = mockStore(initialState);
-
-    const { getByLabelText } = render(
-      <Provider store={store}>
-        <IntlProvider locale="en">
-          <AdvancedSettings intl={{}} courseId={courseId} />
-        </IntlProvider>
-      </Provider>,
+    useSelector.mockReturnValueOnce(mockAdvancedSettingsData);
+    useSelector.mockReturnValue(mockAdvancedSettingsData);
+    wrapper = mount(
+      <IntlProvider locale="en">
+        <AdvancedSettings intl={injectIntl} courseId={courseId} />
+      </IntlProvider>,
     );
-
-    const input = getByLabelText('Setting Name');
-    fireEvent.change(input, { target: { value: 'New Value' } });
-
-    expect(input.value).toBe('New Value');
   });
 
-  it('dispatches update action when saving settings', () => {
-    const mockStore = configureStore([thunk]);
-    const initialState = {
-      advancedSettings: {
-        courseAppSettings: {
-          settingName: {
-            deprecated: false,
-            help: 'This is a help message',
-            displayName: 'Setting Name',
-            value: 'Setting Value',
-          },
-        },
-        savingStatus: 'idle',
-      },
-    };
-    const store = mockStore(initialState);
+  afterEach(() => jest.clearAllMocks());
 
-    const { getByText, getByLabelText } = render(
-      <Provider store={store}>
-        <IntlProvider locale="en">
-          <AdvancedSettings intl={{}} courseId={courseId} />
-        </IntlProvider>
-      </Provider>,
-    );
-
-    const input = getByLabelText('Setting Name');
-    fireEvent.change(input, { target: { value: 'New Value' } });
-
-    const saveButton = getByText('Save Changes');
-    fireEvent.click(saveButton);
-
-    const actions = store.getActions();
-    expect(actions).toHaveLength(2);
-    expect(actions[0]).toEqual({
-      type: 'advancedSettings/updateLoadingStatus',
-      payload: {
-        status: 'in-progress',
-      },
-    });
+  it('should render without errors', () => {
+    shallow(<AdvancedSettings intl={injectIntl} courseId={courseId} />);
+  });
+  it('should fetch course app settings and proctoring exam errors on mount', () => {
+    expect(mockDispatch).toHaveBeenCalledTimes(2);
+    expect(fetchCourseAppSettings).toHaveBeenCalledWith(courseId);
+    expect(fetchProctoringExamErrors).toHaveBeenCalledWith(courseId);
+  });
+  it('should render setting card with correct value', () => {
+    const settingCard = wrapper.find('SettingCard').at(0);
+    expect(settingCard.props().value).toBe('value1');
   });
 
-  it('dispatches reset action when canceling settings', () => {
-    const mockStore = configureStore([thunk]);
-    const initialState = {
-      advancedSettings: {
-        courseAppSettings: {
-          settingName: {
-            deprecated: false,
-            help: 'This is a help message',
-            displayName: 'Setting Name',
-            value: 'Setting Value',
-          },
-        },
-        savingStatus: 'idle',
-      },
-    };
-    const store = mockStore(initialState);
+  it('updating textarea value and show warning alert', () => {
+    const settingCard = wrapper.find('SettingCard').at(0);
+    const textarea = settingCard.find('textarea');
+    textarea.simulate('change', { target: { value: 'new value' } });
+    expect(textarea.text()).toBe('new value');
+    const settingAlert = wrapper.find('SettingAlert');
+    expect(settingAlert.find('AlertHeading').at(0).text()).toBe('You`ve made some changes');
+  });
 
-    const { getByText, getByLabelText } = render(
-      <Provider store={store}>
-        <IntlProvider locale="en">
-          <AdvancedSettings intl={{}} courseId={courseId} />
-        </IntlProvider>
-      </Provider>,
-    );
+  it('show warning alert and after click on Cancel button reset textarea value', () => {
+    const settingCard = wrapper.find('SettingCard').at(0);
+    const textarea = settingCard.find('textarea');
+    textarea.simulate('change', { target: { value: 'new value' } });
+    const settingAlert = wrapper.find('SettingAlert');
+    const resetBtn = settingAlert.find('Button').at(1);
+    resetBtn.simulate('click');
+    expect(textarea.text()).toBe('value1');
+  });
 
-    const input = getByLabelText('Setting Name');
-    fireEvent.change(input, { target: { value: 'New Value' } });
-
-    const cancelButton = getByText('Cancel');
-    fireEvent.click(cancelButton);
-
-    const actions = store.getActions();
-    expect(actions).toHaveLength(1);
-    expect(actions[0]).toEqual({
-      type: 'advancedSettings/updateLoadingStatus',
-      payload: {
-        status: 'in-progress',
-      },
-    });
+  it('should handle setting change', () => {
+    const dispatch = useDispatch();
+    wrapper.find('textarea').at(0).simulate('change', { target: { value: 'new value' } });
+    wrapper.find('Button').at(0).simulate('click');
+    expect(dispatch).toHaveBeenCalledWith(updateCourseAppSetting(courseId, 'new value'));
   });
 });
