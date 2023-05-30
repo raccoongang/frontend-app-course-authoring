@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
+import { snakeCase } from 'lodash/string';
 
 import { RequestStatus } from './data/constants';
 import { getCourseAppSettingValue, getLoadingStatus } from './pages-and-resources/data/selectors';
@@ -23,6 +24,35 @@ export function useIsMobile() {
 
 export function useIsDesktop() {
   return useMediaQuery({ query: '(min-width: 992px)' });
+}
+
+export function convertToSnakeCase(obj) {
+  return Object.keys(obj).reduce((snakeCaseObj, key) => {
+    const snakeCaseKey = snakeCase(key);
+    return {
+      ...snakeCaseObj,
+      [snakeCaseKey]: { value: obj[key] },
+    };
+  }, {});
+}
+
+export function parseArrayOrObjectValues(obj) {
+  const result = { ...obj };
+  Object.entries(obj).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      try {
+        const parsedValue = JSON.parse(value);
+        if (Array.isArray(parsedValue) || typeof parsedValue === 'object') {
+          result[key] = parsedValue;
+        }
+      } catch (error) {
+        // Error parsing JSON, leave the value unchanged
+      }
+    } else if (typeof value === 'object') {
+      result[key] = parseArrayOrObjectValues(value);
+    }
+  });
+  return result;
 }
 
 export function getPagePath(courseId, config, isMfePageEnabled, urlParameter) {

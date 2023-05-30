@@ -11,18 +11,19 @@ import {
   CheckCircle, Info, WarningFilled,
 } from '@edx/paragon/icons';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { fetchCourseAppSettings, updateCourseAppSetting, getProctoredExamsErrors } from './data/thunks';
+import { fetchCourseAppSettings, updateCourseAppSetting, fetchProctoringExamErrors } from './data/thunks';
+import { getCourseAppSettings, getSavingStatus, getProctoringExamErrors } from './data/selectors';
 import SettingCard from './setting-card/SettingCard';
 import SettingAlert from './setting-alert/SettingAlert';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
-import AdvancedSettingsProvider from './AdvancedSettingsProvider';
 import { RequestStatus } from '../data/constants';
+import { parseArrayOrObjectValues } from '../utils';
 import messages from './messages';
 
 const AdvancedSettings = ({ intl, courseId }) => {
-  const advancedSettingsData = useSelector(state => state.advancedSettings.courseAppSettings);
-  const savingStatus = useSelector(state => state.advancedSettings.savingStatus);
-  const proctoredErrors = useSelector(state => state.advancedSettings.proctoredErrors.proctoredErrors);
+  const advancedSettingsData = useSelector(getCourseAppSettings);
+  const savingStatus = useSelector(getSavingStatus);
+  const proctoringExamErrors = useSelector(getProctoringExamErrors);
   const dispatch = useDispatch();
   const [showWarningAlert, setShowWarningAlert] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -31,7 +32,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
 
   useEffect(() => {
     dispatch(fetchCourseAppSettings(courseId));
-    dispatch(getProctoredExamsErrors(courseId));
+    dispatch(fetchProctoringExamErrors(courseId));
   }, [courseId]);
 
   const handleSettingChange = (e, name) => {
@@ -51,37 +52,6 @@ const AdvancedSettings = ({ intl, courseId }) => {
     }));
   };
 
-  // function processValue(obj) {
-  //   Object.entries(obj).forEach(([key, value]) => {
-  //     try {
-  //       const parsedValue = JSON.parse(value);
-  //       if (Array.isArray(parsedValue) || typeof parsedValue === 'object') {
-  //         obj[key] = parsedValue;
-  //       } else {
-  //         throw new Error(`Invalid JSON value for property ${key}`);
-  //       }
-  //     } catch (error) {
-  //       console.error(error.message);
-  //     }
-  //   });
-  // }
-  function processValue(obj) {
-    const result = {};
-
-    Object.entries(obj).forEach(([key, value]) => {
-      try {
-        const parsedValue = JSON.parse(value);
-        if (Array.isArray(parsedValue) || typeof parsedValue === 'object') {
-          result[key] = parsedValue;
-        } else {
-          throw new Error(`Invalid JSON value for property ${key}`);
-        }
-      } catch (error) {}
-    });
-
-    return result;
-  }
-
   const handleResetSettingsValues = () => {
     setSettingValues({});
     setShowWarningAlert(false);
@@ -90,18 +60,18 @@ const AdvancedSettings = ({ intl, courseId }) => {
   const handleUpdateAdvancedSettingsData = () => {
     setShowWarningAlert(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    dispatch(updateCourseAppSetting(courseId, processValue(settingValues)));
+    dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(settingValues)));
   };
 
   return (
-    <AdvancedSettingsProvider courseId={courseId}>
+    <>
       <Container size="xl">
         <div className="setting-header mt-5">
           {(savingStatus === RequestStatus.FAILED) && (
           <SettingAlert
             variant="danger"
             icon={Info}
-            data={proctoredErrors}
+            proctoringErrorsData={proctoringExamErrors}
             title={intl.formatMessage(messages.alertDanger)}
             description={intl.formatMessage(messages.alertDangerDescriptions)}
             aria-hidden={savingStatus === RequestStatus.FAILED ? 'true' : 'false'}
@@ -187,7 +157,6 @@ const AdvancedSettings = ({ intl, courseId }) => {
           </Layout>
         </section>
       </Container>
-
       <div className="alert-toast">
         <SettingAlert
           show={showWarningAlert}
@@ -209,7 +178,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
           description={intl.formatMessage(messages.alertWarningDescriptions)}
         />
       </div>
-    </AdvancedSettingsProvider>
+    </>
   );
 };
 

@@ -6,25 +6,17 @@ import { RequestStatus } from '../../data/constants';
 const slice = createSlice({
   name: 'advancedSettings',
   initialState: {
-    courseAppIds: [],
     loadingStatus: RequestStatus.IN_PROGRESS,
     savingStatus: '',
-    courseAppsApiStatus: {},
     courseAppSettings: {},
-    proctoredErrors: {},
+    proctoringErrors: {},
   },
   reducers: {
-    fetchCourseAppsSuccess: (state, { payload }) => {
-      state.courseAppIds = payload.courseAppIds;
-    },
     updateLoadingStatus: (state, { payload }) => {
       state.loadingStatus = payload.status;
     },
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
-    },
-    updateCourseAppsApiStatus: (state, { payload }) => {
-      state.courseAppsApiStatus = payload.status;
     },
     fetchCourseAppsSettingsSuccess: (state, { payload }) => {
       Object.assign(state.courseAppSettings, payload);
@@ -32,20 +24,19 @@ const slice = createSlice({
     updateCourseAppsSettingsSuccess: (state, { payload }) => {
       Object.assign(state.courseAppSettings, payload);
     },
-    getProctoredExamErrors: (state, { payload }) => {
-      Object.assign(state.proctoredErrors, payload);
+    fetchProctoringExamErrorsSuccess: (state, { payload }) => {
+      Object.assign(state.proctoringErrors, payload);
     },
   },
 });
 
 export const {
-  fetchCourseAppsSuccess,
   updateLoadingStatus,
   updateSavingStatus,
   updateCourseAppsApiStatus,
   fetchCourseAppsSettingsSuccess,
   updateCourseAppsSettingsSuccess,
-  getProctoredExamErrors,
+  fetchProctoringExamErrorsSuccess,
 } = slice.actions;
 
 export const {

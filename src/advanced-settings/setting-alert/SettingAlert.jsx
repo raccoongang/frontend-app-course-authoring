@@ -3,14 +3,14 @@ import { Alert } from '@edx/paragon';
 import PropTypes from 'prop-types';
 
 const SettingAlert = ({
-  title, description, data, ...props
+  title, description, proctoringErrorsData, ...props
 }) => {
-  if (data) {
+  if (proctoringErrorsData) {
     return (
-      <ul>
+      <ul className="alert-proctoring-error">
         <Alert {...props}>
-          {data.map(({ model, message }) => (
-            <li>
+          {proctoringErrorsData.map(({ key, model, message }) => (
+            <li key={key}>
               <Alert.Heading>{model.displayName}</Alert.Heading>
               <p>{message}</p>
             </li>
@@ -26,19 +26,25 @@ const SettingAlert = ({
     </Alert>
   );
 };
+
 SettingAlert.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf({
-    model: PropTypes.shape({
-      displayName: PropTypes.string,
-    }),
+  proctoringErrorsData: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
     message: PropTypes.string,
-  }),
+    model: PropTypes.shape({
+      deprecated: PropTypes.bool,
+      displayName: PropTypes.string,
+      help: PropTypes.string,
+      hideOnEnabledPublisher: PropTypes.bool,
+    }),
+    value: PropTypes.string,
+  })),
 };
 
 SettingAlert.defaultProps = {
-  data: undefined,
+  proctoringErrorsData: undefined,
 };
 
 export default SettingAlert;

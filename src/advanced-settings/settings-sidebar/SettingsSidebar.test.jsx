@@ -14,6 +14,7 @@ describe('SettingsSidebar', () => {
 
   it('should match the snapshot', () => {
     const tree = renderer.create(
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
       <AppContext.Provider value={{ config }}>
         <IntlProvider locale="en">
           <SettingsSidebar intl={intl} courseId={courseId} />
