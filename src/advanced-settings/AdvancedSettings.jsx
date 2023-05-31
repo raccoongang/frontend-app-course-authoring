@@ -26,7 +26,8 @@ const AdvancedSettings = ({ intl, courseId }) => {
   const proctoringExamErrors = useSelector(getProctoringExamErrors);
   const dispatch = useDispatch();
   const [showWarningAlert, setShowWarningAlert] = useState(false);
-  const [isOn, toggle] = useToggle(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isOn, setOn, setOff, toggle] = useToggle(false);
   const [settingValues, setSettingValues] = useState({});
 
   useEffect(() => {
@@ -88,8 +89,8 @@ const AdvancedSettings = ({ intl, courseId }) => {
             />
           )}
           <header className="setting-header-inner">
-            <h1 className="setting-header__title">
-              <small className="setting-header__title-subtitle">{intl.formatMessage(messages.headingSubtitle)}</small>
+            <h1 className="setting-header-title">
+              <small className="setting-header-title-subtitle">{intl.formatMessage(messages.headingSubtitle)}</small>
               {intl.formatMessage(messages.headingTitle)}
             </h1>
           </header>
@@ -105,18 +106,18 @@ const AdvancedSettings = ({ intl, courseId }) => {
             <Layout.Element>
               <article>
                 <div>
-                  <section className="setting-items__policies">
+                  <section className="setting-items-policies">
                     <header>
-                      <h2 className="setting-items__policies-title">{intl.formatMessage(messages.policy)}</h2>
+                      <h2 className="setting-items-policies-title">{intl.formatMessage(messages.policy)}</h2>
                     </header>
-                    <p className="setting-items__policies-instructions mb-4">
+                    <p className="setting-items-policies-instructions mb-4">
                       <FormattedMessage
                         id="course-authoring.advanced-settings.policies.description"
                         defaultMessage="{notice} Do not modify these policies unless you are familiar with their purpose."
                         values={{ notice: <strong>Warning: </strong> }}
                       />
                     </p>
-                    <div className="setting-items__deprecated-setting">
+                    <div className="setting-items-deprecated-setting">
                       <Button onClick={toggle}>
                         <FormattedMessage
                           id="course-authoring.advanced-settings.deprecated.button.text"
@@ -129,7 +130,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
                         />
                       </Button>
                     </div>
-                    <ul className="setting-items__list p-0">
+                    <ul className="setting-items-list p-0">
                       {Object.keys(advancedSettingsData).sort().map((settingName) => {
                         const settingData = advancedSettingsData[settingName];
                         return (

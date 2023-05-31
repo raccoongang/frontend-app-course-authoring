@@ -28,8 +28,8 @@ const SettingAlert = ({
 };
 
 SettingAlert.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
   proctoringErrorsData: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
     message: PropTypes.string,
@@ -44,7 +44,9 @@ SettingAlert.propTypes = {
 };
 
 SettingAlert.defaultProps = {
+  title: undefined,
   proctoringErrorsData: undefined,
+  description: undefined,
 };
 
 export default SettingAlert;

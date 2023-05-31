@@ -15,7 +15,7 @@ const SettingCard = ({
 const { deprecated, help, displayName } = settingData;
     return (
       <li className={classNames('field-group course-advanced-policy-list-item', { 'd-none': deprecated && !isOn })}>
-        <Card className="flex-column mb-2 setting__card">
+        <Card className="flex-column mb-2 setting-card">
           <Card.Body className="d-flex justify-content-between">
             <Card.Header
               title={displayName}

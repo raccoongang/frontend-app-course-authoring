@@ -10,16 +10,16 @@ import messages from './messages';
 const SettingsSidebar = ({ intl, courseId }) => {
   const { config } = useContext(AppContext);
   return (
-    <aside className="setting-sidebar__supplementary">
-      <div className="setting-sidebar__supplementary-about">
-        <h4 className="setting-sidebar__supplementary-about--title">{intl.formatMessage(messages.about)}</h4>
-        <p className="setting-sidebar__supplementary-about--descriptions">
+    <aside className="setting-sidebar-supplementary">
+      <div className="setting-sidebar-supplementary-about">
+        <h4 className="setting-sidebar-supplementary-about-title">{intl.formatMessage(messages.about)}</h4>
+        <p className="setting-sidebar-supplementary-about-descriptions">
           {intl.formatMessage(messages.aboutDescription1)}
         </p>
-        <p className="setting-sidebar__supplementary-about--descriptions">
+        <p className="setting-sidebar-supplementary-about-descriptions">
           {intl.formatMessage(messages.aboutDescription2)}
         </p>
-        <p className="setting-sidebar__supplementary-about--descriptions">
+        <p className="setting-sidebar-supplementary-about-descriptions">
           <FormattedMessage
             id="course-authoring.advanced-settings.about.description-3"
             defaultMessage="{notice} When you enter strings as policy values, ensure that you use double quotation marks (“) around the string. Do not use single quotation marks (‘)."
@@ -28,11 +28,11 @@ const SettingsSidebar = ({ intl, courseId }) => {
         </p>
       </div>
       <hr />
-      <div className="setting-sidebar__supplementary-other">
-        <h4 className="setting-sidebar__supplementary-other-title">{intl.formatMessage(messages.other)}</h4>
-        <nav className="setting-sidebar__supplementary-other-links" aria-label={intl.formatMessage(messages.other)}>
+      <div className="setting-sidebar-supplementary-other">
+        <h4 className="setting-sidebar-supplementary-other-title">{intl.formatMessage(messages.other)}</h4>
+        <nav className="setting-sidebar-supplementary-other-links" aria-label={intl.formatMessage(messages.other)}>
           <ul className="p-0 mb-0">
-            <li className="setting-sidebar__supplementary-other-link">
+            <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
                 destination={getPagePath(courseId, config, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}
@@ -40,7 +40,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 {intl.formatMessage(messages.otherCourseSettingsLink1)}
               </Hyperlink>
             </li>
-            <li className="setting-sidebar__supplementary-other-link">
+            <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
                 destination={getPagePath(courseId, config, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}
@@ -48,7 +48,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 {intl.formatMessage(messages.otherCourseSettingsLink2)}
               </Hyperlink>
             </li>
-            <li className="setting-sidebar__supplementary-other-link">
+            <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
                 destination={getPagePath(courseId, config, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team')}
@@ -56,7 +56,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 {intl.formatMessage(messages.otherCourseSettingsLink3)}
               </Hyperlink>
             </li>
-            <li className="setting-sidebar__supplementary-other-link">
+            <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
                 destination={`${config.STUDIO_BASE_URL}/group_configurations/course-v1:${courseId}`}
