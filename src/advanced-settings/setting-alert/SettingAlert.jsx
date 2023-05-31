@@ -14,10 +14,10 @@ const SettingAlert = ({
               <Alert.Heading>{model.displayName}</Alert.Heading>
               <p>{message}</p>
             </li>
-        ))}
+          ))}
         </Alert>
       </ul>
-      );
+    );
   }
   return (
     <Alert {...props}>

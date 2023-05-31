@@ -20,7 +20,7 @@ export async function getCourseAdvancedSettings(courseId) {
 }
 
 /**
- * Get's advanced setting for a course.
+ * Update's advanced setting for a course.
  * @param {string} courseId
  * @param {string} setting
  * @returns {Promise<Object>}

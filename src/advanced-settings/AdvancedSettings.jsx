@@ -26,8 +26,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
   const proctoringExamErrors = useSelector(getProctoringExamErrors);
   const dispatch = useDispatch();
   const [showWarningAlert, setShowWarningAlert] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [isOn, setOn, setOff, toggle] = useToggle(false);
+  const [isOn, toggle] = useToggle(false);
   const [settingValues, setSettingValues] = useState({});
 
   useEffect(() => {
@@ -35,20 +34,20 @@ const AdvancedSettings = ({ intl, courseId }) => {
     dispatch(fetchProctoringExamErrors(courseId));
   }, [courseId]);
 
-  const handleSettingChange = (e, name) => {
+  const handleSettingChange = (e, settingName) => {
     const { value } = e.target;
     if (!value) {
       return setSettingValues((prevInputValues) => ({
         ...prevInputValues,
-        [name]: ' ',
+        [settingName]: ' ',
       }));
     }
     if (!showWarningAlert) {
       setShowWarningAlert(true);
     }
-    return setSettingValues((prevInputValues) => ({
-      ...prevInputValues,
-      [name]: value,
+    return setSettingValues((prevSettingValues) => ({
+      ...prevSettingValues,
+      [settingName]: value,
     }));
   };
 
@@ -87,7 +86,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
               aria-labelledby={intl.formatMessage(messages.alertSuccessAriaLabelledby)}
               aria-describedby={intl.formatMessage(messages.alertSuccessAriaDescribedby)}
             />
-            )}
+          )}
           <header className="setting-header-inner">
             <h1 className="setting-header__title">
               <small className="setting-header__title-subtitle">{intl.formatMessage(messages.headingSubtitle)}</small>
@@ -123,10 +122,10 @@ const AdvancedSettings = ({ intl, courseId }) => {
                           id="course-authoring.advanced-settings.deprecated.button.text"
                           defaultMessage="{visibility} Deprecated Settings"
                           values={{
-                                visibility:
-                                    isOn ? intl.formatMessage(messages.deprecatedButtonHideText)
-                                        : intl.formatMessage(messages.deprecatedButtonShowText),
-                              }}
+                            visibility:
+                              isOn ? intl.formatMessage(messages.deprecatedButtonHideText)
+                                : intl.formatMessage(messages.deprecatedButtonShowText),
+                          }}
                         />
                       </Button>
                     </div>
