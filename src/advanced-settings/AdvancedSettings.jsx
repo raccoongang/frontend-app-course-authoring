@@ -118,7 +118,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
                       />
                     </p>
                     <div className="setting-items-deprecated-setting">
-                      <Button onClick={toggle}>
+                      <Button variant={isOn ? 'outline-brand' : 'tertiary'} onClick={toggle}>
                         <FormattedMessage
                           id="course-authoring.advanced-settings.deprecated.button.text"
                           defaultMessage="{visibility} Deprecated Settings"

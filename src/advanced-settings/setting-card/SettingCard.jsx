@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Form, Icon, OverlayTrigger, Tooltip,
+ Card, Form, Icon, OverlayTrigger, Tooltip,
 } from '@edx/paragon';
 import { Info, Warning } from '@edx/paragon/icons';
 import PropTypes from 'prop-types';
@@ -10,17 +10,17 @@ import TextareaAutosize from 'react-textarea-autosize';
 import messages from './messages';
 
 const SettingCard = ({
-  intl, isOn, name, onChange, value, settingData,
+ intl, isOn, name, onChange, value, settingData,
 }) => {
-const { deprecated, help, displayName } = settingData;
+    const { deprecated, help, displayName } = settingData;
     return (
       <li className={classNames('field-group course-advanced-policy-list-item', { 'd-none': deprecated && !isOn })}>
-        <Card className="flex-column mb-2 setting-card">
+        <Card className="flex-column setting-card">
           <Card.Body className="d-flex justify-content-between">
             <Card.Header
               title={displayName}
               subtitle={(
-                <OverlayTrigger placement="bottom" overlay={(<Tooltip id="setting-description">{help}</Tooltip>)}>
+                <OverlayTrigger placement="bottom" overlay={<Tooltip id="setting-description">{help}</Tooltip>}>
                   <Icon src={Info} />
                 </OverlayTrigger>
               )}
@@ -29,7 +29,7 @@ const { deprecated, help, displayName } = settingData;
               <Form.Group className="m-0">
                 <Form.Control
                   as={TextareaAutosize}
-                  value={typeof value === 'object' ? JSON.stringify(value) : value.toString()}
+                  value={typeof value === 'object' ? JSON.stringify(value, null, 2) : value.toString()}
                   name={name}
                   onChange={onChange}
                   aria-label={displayName}
@@ -38,9 +38,9 @@ const { deprecated, help, displayName } = settingData;
             </Card.Section>
           </Card.Body>
           {deprecated && (
-          <Card.Status icon={Warning} variant="danger">
-            {intl.formatMessage(messages.deprecated)}
-          </Card.Status>
+            <Card.Status icon={Warning} variant="danger">
+              {intl.formatMessage(messages.deprecated)}
+            </Card.Status>
           )}
         </Card>
       </li>
@@ -50,16 +50,16 @@ const { deprecated, help, displayName } = settingData;
 SettingCard.propTypes = {
     intl: intlShape.isRequired,
     settingData: PropTypes.shape({
-      deprecated: PropTypes.bool,
-      help: PropTypes.string,
-      displayName: PropTypes.string,
+        deprecated: PropTypes.bool,
+        help: PropTypes.string,
+        displayName: PropTypes.string,
     }).isRequired,
     value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool,
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array,
+        PropTypes.string,
+        PropTypes.bool,
+        PropTypes.number,
+        PropTypes.object,
+        PropTypes.array,
     ]),
     onChange: PropTypes.func.isRequired,
     isOn: PropTypes.bool.isRequired,
@@ -67,7 +67,7 @@ SettingCard.propTypes = {
 };
 
 SettingCard.defaultProps = {
-  value: undefined,
+    value: undefined,
 };
 
 export default injectIntl(SettingCard);

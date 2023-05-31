@@ -36,11 +36,15 @@
   }
 }
 
-.setting-card .pgn__icon {
-  color: $headings-color;
+.setting-card {
+  margin-bottom: 1.75rem;
 
-  &:hover {
-    cursor: pointer;
+  .pgn__card-header .pgn__card-header-title-md {
+    font-size: 1.125rem;
+  }
+
+  .pgn__icon {
+    color: $headings-color;
   }
 }
 
@@ -86,7 +90,7 @@
 
     .pgn__card-header-subtitle-md {
       margin-left: .375rem;
-      margin-top: .375rem;
+      margin-top: .125rem;
     }
   }
 }
