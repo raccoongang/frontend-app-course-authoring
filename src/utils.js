@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
 import { snakeCase } from 'lodash/string';
 
+import { AppContext } from '@edx/frontend-platform/react';
 import { RequestStatus } from './data/constants';
 import { getCourseAppSettingValue, getLoadingStatus } from './pages-and-resources/data/selectors';
 import { fetchCourseAppSettings, updateCourseAppSetting } from './pages-and-resources/data/thunks';
@@ -26,7 +27,7 @@ export function useIsDesktop() {
   return useMediaQuery({ query: '(min-width: 992px)' });
 }
 
-export function convertToSnakeCase(obj) {
+export function convertObjectToSnakeCase(obj) {
   return Object.keys(obj).reduce((snakeCaseObj, key) => {
     const snakeCaseKey = snakeCase(key);
     return {
@@ -55,14 +56,17 @@ export function parseArrayOrObjectValues(obj) {
   return result;
 }
 
-export function getPagePath(courseId, config, isMfePageEnabled, urlParameter) {
+export function getPagePath(courseId, isMfePageEnabled, urlParameter) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { config } = useContext(AppContext);
+
   if (isMfePageEnabled === 'true') {
     if (urlParameter === 'tabs') {
       return `/course/${courseId}/pages-and-resources`;
     }
     return `/course/${courseId}/${urlParameter}`;
   }
-  return `${config.STUDIO_BASE_URL}/${urlParameter}/course-v1:${courseId}`;
+  return `${config.STUDIO_BASE_URL}/${urlParameter}/${courseId}`;
 }
 
 export function useAppSetting(settingName) {

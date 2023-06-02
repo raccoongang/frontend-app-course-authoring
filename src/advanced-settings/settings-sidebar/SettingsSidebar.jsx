@@ -35,7 +35,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
             <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
-                destination={getPagePath(courseId, config, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}
+                destination={getPagePath(courseId, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}
               >
                 {intl.formatMessage(messages.otherCourseSettingsLink1)}
               </Hyperlink>
@@ -43,7 +43,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
             <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
-                destination={getPagePath(courseId, config, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}
+                destination={getPagePath(courseId, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}
               >
                 {intl.formatMessage(messages.otherCourseSettingsLink2)}
               </Hyperlink>
@@ -51,7 +51,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
             <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
-                destination={getPagePath(courseId, config, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team')}
+                destination={getPagePath(courseId, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team')}
               >
                 {intl.formatMessage(messages.otherCourseSettingsLink3)}
               </Hyperlink>
@@ -59,7 +59,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
             <li className="setting-sidebar-supplementary-other-link">
               <Hyperlink
                 rel="noopener"
-                destination={`${config.STUDIO_BASE_URL}/group_configurations/course-v1:${courseId}`}
+                destination={`${config.STUDIO_BASE_URL}/group_configurations/${courseId}`}
               >
                 {intl.formatMessage(messages.otherCourseSettingsLink4)}
               </Hyperlink>

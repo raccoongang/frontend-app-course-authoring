@@ -35,22 +35,22 @@ const Header = ({
       submenuContent: (
         <>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_COURSE_OUTLINE_PAGE, 'course')}>{intl.formatMessage(messages['header.links.outline'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_COURSE_OUTLINE_PAGE, 'course')}>{intl.formatMessage(messages['header.links.outline'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_UPDATES_PAGE, 'course_info')}>{intl.formatMessage(messages['header.links.updates'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_UPDATES_PAGE, 'course_info')}>{intl.formatMessage(messages['header.links.updates'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_CUSTOM_PAGES, 'tabs')}>{intl.formatMessage(messages['header.links.pages'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_CUSTOM_PAGES, 'tabs')}>{intl.formatMessage(messages['header.links.pages'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_FILES_UPLOADS_PAGE, 'assets')}>{intl.formatMessage(messages['header.links.filesAndUploads'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_FILES_UPLOADS_PAGE, 'assets')}>{intl.formatMessage(messages['header.links.filesAndUploads'])}</a>
           </div>
           <div className="mb-1 small">
             <a rel="noopener" href={`${config.STUDIO_BASE_URL}/textbooks/${courseId}`}>{intl.formatMessage(messages['header.links.textbooks'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_VIDEO_UPLOAD_PAGE, 'videos')}>{intl.formatMessage(messages['header.links.videoUploads'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_VIDEO_UPLOAD_PAGE, 'videos')}>{intl.formatMessage(messages['header.links.videoUploads'])}</a>
           </div>
         </>
       ),
@@ -61,19 +61,19 @@ const Header = ({
       submenuContent: (
         <>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}>{intl.formatMessage(messages['header.links.scheduleAndDetails'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}>{intl.formatMessage(messages['header.links.scheduleAndDetails'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}>{intl.formatMessage(messages['header.links.grading'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}>{intl.formatMessage(messages['header.links.grading'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team')}>{intl.formatMessage(messages['header.links.courseTeam'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team')}>{intl.formatMessage(messages['header.links.courseTeam'])}</a>
           </div>
           <div className="mb-1 small">
             <a rel="noopener" href={`${config.STUDIO_BASE_URL}/group_configurations/course-v1:${courseId}`}>{intl.formatMessage(messages['header.links.groupConfigurations'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_ADVANCED_SETTINGS_PAGE, 'settings/advanced')}>{intl.formatMessage(messages['header.links.advancedSettings'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_ADVANCED_SETTINGS_PAGE, 'settings/advanced')}>{intl.formatMessage(messages['header.links.advancedSettings'])}</a>
           </div>
           <div className="mb-1 small">
             <a rel="noopener" href={`${config.STUDIO_BASE_URL}/certificates/${courseId}`}>{intl.formatMessage(messages['header.links.certificates'])}</a>
@@ -87,10 +87,10 @@ const Header = ({
       submenuContent: (
         <>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_IMPORT_PAGE, 'import')}>{intl.formatMessage(messages['header.links.import'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_IMPORT_PAGE, 'import')}>{intl.formatMessage(messages['header.links.import'])}</a>
           </div>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, config, process.env.ENABLE_NEW_EXPORT_PAGE, 'export')}>{intl.formatMessage(messages['header.links.export'])}</a>
+            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_EXPORT_PAGE, 'export')}>{intl.formatMessage(messages['header.links.export'])}</a>
           </div>
           <div className="mb-1 small">
             <a rel="noopener" href={`${config.STUDIO_BASE_URL}/checklists/${courseId}`}>{intl.formatMessage(messages['header.links.checklists'])}</a>
@@ -144,7 +144,7 @@ const Header = ({
     >
       <a
         className="course-title-lockup w-25"
-        href={getPagePath(courseId, config, process.env.ENABLE_NEW_COURSE_OUTLINE_PAGE, 'course')}
+        href={getPagePath(courseId, process.env.ENABLE_NEW_COURSE_OUTLINE_PAGE, 'course')}
         aria-label={intl.formatMessage(messages['header.label.courseOutline'])}
       >
         <span className="d-block small m-0" data-testid="course-org-number">{courseOrg} {courseNumber}</span>

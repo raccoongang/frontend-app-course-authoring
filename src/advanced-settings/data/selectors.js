@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export const getLoadingStatus = (state) => state.advancedSettings.loadingStatus;
 export const getCourseAppSettings = state => state.advancedSettings.courseAppSettings;
 export const getSavingStatus = (state) => state.advancedSettings.savingStatus;

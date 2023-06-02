@@ -10,11 +10,11 @@ import TextareaAutosize from 'react-textarea-autosize';
 import messages from './messages';
 
 const SettingCard = ({
- intl, isOn, name, onChange, value, settingData,
+ intl, showDeprecated, name, onChange, value, settingData,
 }) => {
     const { deprecated, help, displayName } = settingData;
     return (
-      <li className={classNames('field-group course-advanced-policy-list-item', { 'd-none': deprecated && !isOn })}>
+      <li className={classNames('field-group course-advanced-policy-list-item', { 'd-none': deprecated && !showDeprecated })}>
         <Card className="flex-column setting-card">
           <Card.Body className="d-flex justify-content-between">
             <Card.Header
@@ -29,7 +29,7 @@ const SettingCard = ({
               <Form.Group className="m-0">
                 <Form.Control
                   as={TextareaAutosize}
-                  value={typeof value === 'object' ? JSON.stringify(value, null, 2) : value.toString()}
+                  value={typeof value === 'object' ? JSON.stringify(value, null, 4) : value.toString()}
                   name={name}
                   onChange={onChange}
                   aria-label={displayName}
@@ -62,7 +62,7 @@ SettingCard.propTypes = {
         PropTypes.array,
     ]),
     onChange: PropTypes.func.isRequired,
-    isOn: PropTypes.bool.isRequired,
+    showDeprecated: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
 };
 

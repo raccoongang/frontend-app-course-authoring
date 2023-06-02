@@ -67,11 +67,11 @@
   .form-control {
     resize: none;
     min-height: 2.75rem;
-    width: 30rem;
+    width: $setting-form-control-width;
   }
 
   .pgn__card-section {
-    max-width: 30rem;
+    max-width: $setting-form-control-width;
   }
 
   .pgn__card-header {

@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  Button,
-  Layout,
-  useToggle,
-} from '@edx/paragon';
-import {
-  CheckCircle, Info, WarningFilled,
-} from '@edx/paragon/icons';
+import { Container, Button, Layout } from '@edx/paragon';
+import { CheckCircle, Info, WarningFilled } from '@edx/paragon/icons';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { fetchCourseAppSettings, updateCourseAppSetting, fetchProctoringExamErrors } from './data/thunks';
 import { getCourseAppSettings, getSavingStatus, getProctoringExamErrors } from './data/selectors';
@@ -19,16 +12,16 @@ import SettingsSidebar from './settings-sidebar/SettingsSidebar';
 import { RequestStatus } from '../data/constants';
 import { parseArrayOrObjectValues } from '../utils';
 import messages from './messages';
+import AlertProctoringError from '../generic/AlertProctoringError';
 
 const AdvancedSettings = ({ intl, courseId }) => {
   const advancedSettingsData = useSelector(getCourseAppSettings);
   const savingStatus = useSelector(getSavingStatus);
   const proctoringExamErrors = useSelector(getProctoringExamErrors);
   const dispatch = useDispatch();
-  const [showWarningAlert, setShowWarningAlert] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [isOn, setOn, setOff, toggle] = useToggle(false);
-  const [settingValues, setSettingValues] = useState({});
+  const [saveSettingsPrompt, showSaveSettingsPrompt] = useState(false);
+  const [showDeprecated, setShowDeprecated] = useState(false);
+  const [editedSettings, setEditedSettings] = useState({});
 
   useEffect(() => {
     dispatch(fetchCourseAppSettings(courseId));
@@ -37,53 +30,46 @@ const AdvancedSettings = ({ intl, courseId }) => {
 
   const handleSettingChange = (e, settingName) => {
     const { value } = e.target;
-    if (!value) {
-      return setSettingValues((prevInputValues) => ({
-        ...prevInputValues,
-        [settingName]: ' ',
-      }));
+    if (!saveSettingsPrompt) {
+      showSaveSettingsPrompt(true);
     }
-    if (!showWarningAlert) {
-      setShowWarningAlert(true);
-    }
-    return setSettingValues((prevSettingValues) => ({
-      ...prevSettingValues,
-      [settingName]: value,
+    setEditedSettings((prevEditedSettings) => ({
+      ...prevEditedSettings,
+      [settingName]: value || ' ',
     }));
   };
 
   const handleResetSettingsValues = () => {
-    setSettingValues({});
-    setShowWarningAlert(false);
+    setEditedSettings({});
+    showSaveSettingsPrompt(false);
   };
 
   const handleUpdateAdvancedSettingsData = () => {
-    setShowWarningAlert(false);
+    dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
+    showSaveSettingsPrompt(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(settingValues)));
   };
 
   return (
     <>
       <Container size="xl">
         <div className="setting-header mt-5">
-          {(savingStatus === RequestStatus.FAILED) && (
-            <SettingAlert
-              variant="danger"
+          {(proctoringExamErrors?.length > 0) && (
+            <AlertProctoringError
               icon={Info}
               proctoringErrorsData={proctoringExamErrors}
-              aria-hidden={savingStatus === RequestStatus.FAILED ? 'true' : 'false'}
+              aria-hidden="true"
               aria-labelledby={intl.formatMessage(messages.alertProctoringAriaLabelledby)}
               aria-describedby={intl.formatMessage(messages.alertProctoringDescribedby)}
             />
-          )}
+        )}
           {(savingStatus === RequestStatus.SUCCESSFUL) && (
             <SettingAlert
               variant="success"
               icon={CheckCircle}
               title={intl.formatMessage(messages.alertSuccess)}
               description={intl.formatMessage(messages.alertSuccessDescriptions)}
-              aria-hidden={savingStatus === RequestStatus.SUCCESSFUL ? 'true' : 'false'}
+              aria-hidden="true"
               aria-labelledby={intl.formatMessage(messages.alertSuccessAriaLabelledby)}
               aria-describedby={intl.formatMessage(messages.alertSuccessAriaDescribedby)}
             />
@@ -118,13 +104,16 @@ const AdvancedSettings = ({ intl, courseId }) => {
                       />
                     </p>
                     <div className="setting-items-deprecated-setting">
-                      <Button variant={isOn ? 'outline-brand' : 'tertiary'} onClick={toggle}>
+                      <Button
+                        variant={showDeprecated ? 'outline-brand' : 'tertiary'}
+                        onClick={() => setShowDeprecated(!showDeprecated)}
+                      >
                         <FormattedMessage
                           id="course-authoring.advanced-settings.deprecated.button.text"
                           defaultMessage="{visibility} Deprecated Settings"
                           values={{
                             visibility:
-                              isOn ? intl.formatMessage(messages.deprecatedButtonHideText)
+                              showDeprecated ? intl.formatMessage(messages.deprecatedButtonHideText)
                                 : intl.formatMessage(messages.deprecatedButtonShowText),
                           }}
                         />
@@ -138,9 +127,9 @@ const AdvancedSettings = ({ intl, courseId }) => {
                             key={settingName}
                             settingData={settingData}
                             onChange={(e) => handleSettingChange(e, settingName)}
-                            isOn={isOn}
+                            showDeprecated={showDeprecated}
                             name={settingName}
-                            value={settingValues[settingName] || settingData.value}
+                            value={editedSettings[settingName] || settingData.value}
                           />
                           );
                         })}
@@ -157,8 +146,8 @@ const AdvancedSettings = ({ intl, courseId }) => {
       </Container>
       <div className="alert-toast">
         <SettingAlert
-          show={showWarningAlert}
-          aria-hidden={showWarningAlert}
+          show={saveSettingsPrompt}
+          aria-hidden={saveSettingsPrompt}
           aria-labelledby={intl.formatMessage(messages.alertWarningAriaLabelledby)}
           aria-describedby={intl.formatMessage(messages.alertWarningAriaDescribedby)}
           role="dialog"

@@ -15,14 +15,6 @@ describe('SettingAlert', () => {
     const tree = renderer.create(<SettingAlert {...defaultProps} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
-  it('successfully renders with proctoring error data', () => {
-    const proctoringErrorsData = [{
-      model: { displayName: 'Model 1' },
-      message: 'Message 1',
-    }];
-    const tree = renderer.create(<SettingAlert proctoringErrorsData={proctoringErrorsData} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
   it('renders the title correctly in alert-heading', () => {
     const wrapper = mount(<SettingAlert {...defaultProps} />);
     const alertHeading = wrapper.find('div.alert-heading').at(0);
