@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
 import { snakeCase } from 'lodash/string';
 
-import { AppContext } from '@edx/frontend-platform/react';
+import { getConfig } from '@edx/frontend-platform';
 import { RequestStatus } from './data/constants';
 import { getCourseAppSettingValue, getLoadingStatus } from './pages-and-resources/data/selectors';
 import { fetchCourseAppSettings, updateCourseAppSetting } from './pages-and-resources/data/thunks';
@@ -57,16 +57,13 @@ export function parseArrayOrObjectValues(obj) {
 }
 
 export function getPagePath(courseId, isMfePageEnabled, urlParameter) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { config } = useContext(AppContext);
-
   if (isMfePageEnabled === 'true') {
     if (urlParameter === 'tabs') {
       return `/course/${courseId}/pages-and-resources`;
     }
     return `/course/${courseId}/${urlParameter}`;
   }
-  return `${config.STUDIO_BASE_URL}/${urlParameter}/${courseId}`;
+  return `${getConfig().STUDIO_BASE_URL}/${urlParameter}/${courseId}`;
 }
 
 export function useAppSetting(settingName) {
