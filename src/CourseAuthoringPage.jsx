@@ -9,9 +9,6 @@ import {
 import Header from './studio-header/Header';
 import { fetchCourseDetail } from './data/thunks';
 import { useModel } from './generic/model-store';
-import PermissionDeniedAlert from './generic/PermissionDeniedAlert';
-import { getCourseAppsApiStatus, getLoadingStatus as pagesAndResourcesLoadingStatus } from './pages-and-resources/data/selectors';
-import { getLoadingStatus as advancedSettingsLoadingStatus } from './advanced-settings/data/selectors';
 import { RequestStatus } from './data/constants';
 import Loading from './generic/Loading';
 
@@ -52,27 +49,21 @@ const CourseAuthoringPage = ({ courseId, children }) => {
   }, [courseId]);
 
   const courseDetail = useModel('courseDetails', courseId);
+  const loadingStatus = useSelector(state => state.courseDetail.status);
+  const isCourseLoaded = loadingStatus !== RequestStatus.IN_PROGRESS;
 
   const courseNumber = courseDetail ? courseDetail.number : null;
   const courseOrg = courseDetail ? courseDetail.org : null;
   const courseTitle = courseDetail ? courseDetail.name : courseId;
-  const courseAppsApiStatus = useSelector(getCourseAppsApiStatus);
-  const inProgressPagesAndResources = useSelector(pagesAndResourcesLoadingStatus) === RequestStatus.IN_PROGRESS;
-  const inProgressAdvancedSettings = useSelector(advancedSettingsLoadingStatus) === RequestStatus.IN_PROGRESS;
   const { pathname } = useLocation();
-  if (courseAppsApiStatus === RequestStatus.DENIED) {
-    return (
-      <PermissionDeniedAlert />
-    );
-  }
 
   return (
     <div className={pathname.includes('/editor/') ? '' : 'bg-light-200'}>
-      {/* While V2 Editors are tempoarily served from thier own pages
+      {/* While V2 Editors are temporarily served from their own pages
       using url pattern containing /editor/,
       we shouldn't have the header and footer on these pages.
       This functionality will be removed in TNL-9591 */}
-      {inProgressAdvancedSettings && inProgressPagesAndResources ? !pathname.includes('/editor/') && <Loading />
+      {!isCourseLoaded ? !pathname.includes('/editor/') && <Loading />
         : (
           <AppHeader
             courseNumber={courseNumber}
@@ -80,9 +71,9 @@ const CourseAuthoringPage = ({ courseId, children }) => {
             courseTitle={courseTitle}
             courseId={courseId}
           />
-    )}
+        )}
       {children}
-      {!inProgressAdvancedSettings && inProgressPagesAndResources && <AppFooter />}
+      {isCourseLoaded && <AppFooter />}
     </div>
   );
 };
