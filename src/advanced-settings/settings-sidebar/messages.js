@@ -17,23 +17,23 @@ const messages = defineMessages({
     id: 'course-authoring.advanced-settings.sidebar.other.title',
     defaultMessage: 'Other Course Settings',
   },
-  otherCourseSettingsLink1: {
-    id: 'course-authoring.advanced-settings.sidebar.links.link-1',
+  otherCourseSettingsLinkToScheduleAndDetails: {
+    id: 'course-authoring.advanced-settings.sidebar.links.schedule-and-details',
     defaultMessage: 'Schedule & Details',
     description: 'Link to Studio Schedule & Details page',
   },
-  otherCourseSettingsLink2: {
-    id: 'course-authoring.advanced-settings.sidebar.links.link-2',
+  otherCourseSettingsLinkToGrading: {
+    id: 'course-authoring.advanced-settings.sidebar.links.grading',
     defaultMessage: 'Grading',
     description: 'Link to Studio Grading page',
   },
-  otherCourseSettingsLink3: {
-    id: 'course-authoring.advanced-settings.sidebar.links.link-3',
+  otherCourseSettingsLinkToCourseTeam: {
+    id: 'course-authoring.advanced-settings.sidebar.links.course-team',
     defaultMessage: 'Course Team',
     description: 'Link to Studio Course Team page',
   },
-  otherCourseSettingsLink4: {
-    id: 'course-authoring.advanced-settings.sidebar.links.link-4',
+  otherCourseSettingsLinkToGroupConfigurations: {
+    id: 'course-authoring.advanced-settings.sidebar.links.group-configurations',
     defaultMessage: 'Group Configurations',
     description: 'Link to Studio Group Configurations page',
   },

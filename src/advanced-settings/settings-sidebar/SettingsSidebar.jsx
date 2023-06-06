@@ -37,7 +37,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 rel="noopener"
                 destination={getPagePath(courseId, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}
               >
-                {intl.formatMessage(messages.otherCourseSettingsLink1)}
+                {intl.formatMessage(messages.otherCourseSettingsLinkToScheduleAndDetails)}
               </Hyperlink>
             </li>
             <li className="setting-sidebar-supplementary-other-link">
@@ -45,7 +45,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 rel="noopener"
                 destination={getPagePath(courseId, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}
               >
-                {intl.formatMessage(messages.otherCourseSettingsLink2)}
+                {intl.formatMessage(messages.otherCourseSettingsLinkToGrading)}
               </Hyperlink>
             </li>
             <li className="setting-sidebar-supplementary-other-link">
@@ -53,7 +53,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 rel="noopener"
                 destination={getPagePath(courseId, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team')}
               >
-                {intl.formatMessage(messages.otherCourseSettingsLink3)}
+                {intl.formatMessage(messages.otherCourseSettingsLinkToCourseTeam)}
               </Hyperlink>
             </li>
             <li className="setting-sidebar-supplementary-other-link">
@@ -61,7 +61,7 @@ const SettingsSidebar = ({ intl, courseId }) => {
                 rel="noopener"
                 destination={`${config.STUDIO_BASE_URL}/group_configurations/${courseId}`}
               >
-                {intl.formatMessage(messages.otherCourseSettingsLink4)}
+                {intl.formatMessage(messages.otherCourseSettingsLinkToGroupConfigurations)}
               </Hyperlink>
             </li>
           </ul>
