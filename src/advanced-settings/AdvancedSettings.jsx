@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
-import {
-  Container, Button, Layout, AlertModal, ActionRow, Icon, Alert,
-} from '@edx/paragon';
-import {
- CheckCircle, Info, WarningFilled, Error,
-} from '@edx/paragon/icons';
+import { Container, Button, Layout } from '@edx/paragon';
+import { CheckCircle, Info, WarningFilled } from '@edx/paragon/icons';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { fetchCourseAppSettings, updateCourseAppSetting, fetchProctoringExamErrors } from './data/thunks';
 import {
@@ -17,9 +12,10 @@ import SettingCard from './setting-card/SettingCard';
 import SettingAlert from './setting-alert/SettingAlert';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
 import { RequestStatus } from '../data/constants';
-import { parseArrayOrObjectValues } from '../utils';
+import { parseArrayOrObjectValues, removeExtraQuotes, validateAdvancedSettingsData } from '../utils';
 import messages from './messages';
 import AlertProctoringError from '../generic/AlertProctoringError';
+import ModalError from './modal-error/ModalError';
 
 const AdvancedSettings = ({ intl, courseId }) => {
   const advancedSettingsData = useSelector(getCourseAppSettings);
@@ -60,63 +56,28 @@ const AdvancedSettings = ({ intl, courseId }) => {
     }
     setEditedSettings((prevEditedSettings) => ({
       ...prevEditedSettings,
-      [settingName]: value.replace(/^["'](.+(?=["']$))["']$/, '$1') || ' ',
+      [settingName]: removeExtraQuotes(value) || ' ',
     }));
   };
 
   const handleResetSettingsValues = () => {
-    showErrorModal(!errorModal);
+    showErrorModal(false);
     setEditedSettings({});
     showSaveSettingsPrompt(false);
   };
 
-  const schema = Yup.object().test('isValid', 'Wrong format', object => {
-    const fieldsWithErrors = [];
-
-    Object.entries(object).forEach(([settingName, settingValue]) => {
-      if (typeof settingValue === 'string') {
-        if (settingValue.startsWith('[') && settingValue.endsWith(']')) {
-          try {
-            JSON.parse(settingValue);
-          } catch (err) {
-            fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON 1' });
-          }
-        } else if (settingValue.startsWith('{') && settingValue.endsWith('}')) {
-          try {
-            JSON.parse(settingValue);
-          } catch (err) {
-            fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON 2' });
-          }
-        } else if (!settingValue.includes('{') && !settingValue.includes('[') && !settingValue.includes('}') && !settingValue.includes(']')) {
-          // Do nothing
-        } else {
-          fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON 3' });
-        }
-      }
-    });
-
-    setErrorFields(prevState => {
-      if (JSON.stringify(prevState) !== JSON.stringify(fieldsWithErrors)) {
-        return fieldsWithErrors;
-      }
-      return prevState;
-    });
-
-    return fieldsWithErrors.length === 0;
-  });
-
   const handleUpdateAdvancedSettingsData = () => {
-    schema
-        .validate(editedSettings)
+    validateAdvancedSettingsData(editedSettings, setErrorFields)
         .then(() => {
           dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
           window.scrollTo({ top: 0, behavior: 'smooth' });
           showSaveSettingsPrompt(!saveSettingsPrompt);
         })
-        .catch(error => {
+        .catch((error) => {
           if (process.env.NODE_ENV === 'development') {
             console.log(error); // eslint-disable-line no-console
           }
+          showSaveSettingsPrompt(false);
           showErrorModal(!errorModal);
         });
   };
@@ -125,14 +86,15 @@ const AdvancedSettings = ({ intl, courseId }) => {
     <>
       <Container size="xl">
         <div className="setting-header mt-5">
-          <AlertProctoringError
-            show={proctoringExamErrors?.length > 0}
-            icon={Info}
-            proctoringErrorsData={proctoringExamErrors ?? []}
-            aria-hidden="true"
-            aria-labelledby={intl.formatMessage(messages.alertProctoringAriaLabelledby)}
-            aria-describedby={intl.formatMessage(messages.alertProctoringDescribedby)}
-          />
+          {(proctoringExamErrors?.length > 0) && (
+            <AlertProctoringError
+              icon={Info}
+              proctoringErrorsData={proctoringExamErrors}
+              aria-hidden="true"
+              aria-labelledby={intl.formatMessage(messages.alertProctoringAriaLabelledby)}
+              aria-describedby={intl.formatMessage(messages.alertProctoringDescribedby)}
+            />
+          )}
           <SettingAlert
             show={successAlert}
             variant="success"
@@ -234,48 +196,13 @@ const AdvancedSettings = ({ intl, courseId }) => {
           description={intl.formatMessage(messages.alertWarningDescriptions)}
         />
       </div>
-      <AlertModal
-        title={intl.formatMessage(messages.modalErrorTitle)}
-        isOpen={errorModal}
-        variant="danger"
-        footerNode={(
-          <ActionRow>
-            <Button onClick={handleResetSettingsValues}>
-              {intl.formatMessage(messages.modalErrorButtonUndoChanges)}
-            </Button>
-            <Button
-              variant="tertiary"
-              onClick={() => showErrorModal(!errorModal)}
-            >
-              {intl.formatMessage(messages.modalErrorButtonChangeManually)}
-            </Button>
-          </ActionRow>
-          )}
-      >
-        <p>
-          <FormattedMessage
-            id="course-authoring.advanced-settings.modal.error.description"
-            defaultMessage="There was {errorCounter} while trying to save the course settings in the database.
-            Please check the following validation feedbacks and reflect them in your course settings:"
-            values={{ errorCounter: <strong>{errorFields.length} validation error </strong> }}
-          />
-        </p>
-        <hr />
-        <ul className="p-0">
-          {errorFields.map((settingName) => {
-            const outputString = settingName.key.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
-            const { displayName } = advancedSettingsData[outputString];
-            return (
-              <li key={displayName} className="modal-error-item">
-                <Alert variant="danger">
-                  <h4><Icon src={Error} />{displayName}:</h4>
-                  <p className="m-0">{settingName.message}</p>
-                </Alert>
-              </li>
-            );
-          })}
-        </ul>
-      </AlertModal>
+      <ModalError
+        isError={errorModal}
+        showErrorModal={showErrorModal}
+        handleUndoChanges={handleResetSettingsValues}
+        settingsData={advancedSettingsData}
+        errorList={errorFields}
+      />
     </>
   );
 };

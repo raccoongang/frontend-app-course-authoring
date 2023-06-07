@@ -37,6 +37,14 @@ export function convertObjectToSnakeCase(obj) {
   }, {});
 }
 
+export function removeExtraQuotes(value) {
+  return value.replace(/^["'](.+(?=["']$))["']$/, '$1');
+}
+
+export function transformKeysToCamelCase(obj) {
+  return obj.key.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+}
+
 export function parseArrayOrObjectValues(obj) {
   const result = { ...obj };
   Object.entries(obj).forEach(([key, value]) => {
@@ -83,6 +91,44 @@ export function useAppSetting(settingName) {
   const saveSetting = async (value) => dispatch(updateCourseAppSetting(courseId, settingName, value));
   return [settingValue, saveSetting];
 }
+
+export const validateAdvancedSettingsData = (object, setErrorFields) => {
+  const schema = Yup.object().test('isValid', 'Wrong format', obj => {
+    const fieldsWithErrors = [];
+    const errorMsg = 'Incorrectly formatted JSON';
+
+    const pushDataToErrorArray = (settingName) => {
+      fieldsWithErrors.push({ key: settingName, message: errorMsg });
+    };
+
+    Object.entries(obj).forEach(([settingName, settingValue]) => {
+      if (typeof settingValue === 'string') {
+        if ((settingValue.startsWith('[') && settingValue.endsWith(']'))
+            || (settingValue.startsWith('{') && settingValue.endsWith('}'))) {
+          try {
+            JSON.parse(settingValue);
+          } catch (err) {
+            pushDataToErrorArray(settingName);
+          }
+        } else if (settingValue.includes('{') || settingValue.includes('[')
+            || settingValue.includes('}') || settingValue.includes(']')) {
+          pushDataToErrorArray(settingName);
+        }
+      }
+    });
+
+    setErrorFields(prevState => {
+      if (JSON.stringify(prevState) !== JSON.stringify(fieldsWithErrors)) {
+        return fieldsWithErrors;
+      }
+      return prevState;
+    });
+
+    return fieldsWithErrors.length === 0;
+  });
+
+  return schema.validate(object);
+};
 
 /**
  * Adds additional validation methods to Yup.
