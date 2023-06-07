@@ -10,6 +10,7 @@ import {
   updateLoadingStatus,
   updateSavingStatus,
   fetchProctoringExamErrorsSuccess,
+  getDataSendErrors,
 } from './slice';
 
 export function fetchCourseAppSettings(courseId, settings) {
@@ -36,6 +37,12 @@ export function updateCourseAppSetting(courseId, settings) {
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
+      const errorMsg = error.message;
+      const startIndex = errorMsg.indexOf('{');
+      const errorJSONData = errorMsg.substring(startIndex);
+      const errorArray = JSON.parse(errorJSONData);
+
+      dispatch(getDataSendErrors(errorArray));
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }

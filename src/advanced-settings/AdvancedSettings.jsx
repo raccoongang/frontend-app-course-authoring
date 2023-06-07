@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Button, Layout } from '@edx/paragon';
-import { CheckCircle, Info, WarningFilled } from '@edx/paragon/icons';
+import * as Yup from 'yup';
+import {
+  Container, Button, Layout, AlertModal, ActionRow, Icon, Alert,
+} from '@edx/paragon';
+import {
+ CheckCircle, Info, WarningFilled, Error,
+} from '@edx/paragon/icons';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { fetchCourseAppSettings, updateCourseAppSetting, fetchProctoringExamErrors } from './data/thunks';
-import { getCourseAppSettings, getSavingStatus, getProctoringExamErrors } from './data/selectors';
+import {
+  getCourseAppSettings, getSavingStatus, getProctoringExamErrors, getSendRequestErrors,
+} from './data/selectors';
 import SettingCard from './setting-card/SettingCard';
 import SettingAlert from './setting-alert/SettingAlert';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
@@ -18,15 +25,33 @@ const AdvancedSettings = ({ intl, courseId }) => {
   const advancedSettingsData = useSelector(getCourseAppSettings);
   const savingStatus = useSelector(getSavingStatus);
   const proctoringExamErrors = useSelector(getProctoringExamErrors);
+  const settingsWithSendErrors = useSelector(getSendRequestErrors) || {};
   const dispatch = useDispatch();
   const [saveSettingsPrompt, showSaveSettingsPrompt] = useState(false);
   const [showDeprecated, setShowDeprecated] = useState(false);
+  const [errorModal, showErrorModal] = useState(false);
   const [editedSettings, setEditedSettings] = useState({});
+  const [errorFields, setErrorFields] = useState([]);
+  const [successAlert, showSuccessAlert] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCourseAppSettings(courseId));
     dispatch(fetchProctoringExamErrors(courseId));
-  }, [courseId]);
+
+    switch (savingStatus) {
+      case RequestStatus.SUCCESSFUL:
+        showSuccessAlert(true);
+        break;
+      case RequestStatus.FAILED:
+        settingsWithSendErrors.forEach(error => {
+          setErrorFields(prevState => [...prevState, error]);
+        });
+        showErrorModal(true);
+        break;
+      default:
+        break;
+    }
+  }, [courseId, savingStatus, editedSettings]);
 
   const handleSettingChange = (e, settingName) => {
     const { value } = e.target;
@@ -35,45 +60,89 @@ const AdvancedSettings = ({ intl, courseId }) => {
     }
     setEditedSettings((prevEditedSettings) => ({
       ...prevEditedSettings,
-      [settingName]: value || ' ',
+      [settingName]: value.replace(/^["'](.+(?=["']$))["']$/, '$1') || ' ',
     }));
   };
 
   const handleResetSettingsValues = () => {
+    showErrorModal(!errorModal);
     setEditedSettings({});
     showSaveSettingsPrompt(false);
   };
 
+  const schema = Yup.object().test('isValid', 'Wrong format', object => {
+    const fieldsWithErrors = [];
+
+    Object.entries(object).forEach(([settingName, settingValue]) => {
+      if (typeof settingValue === 'string') {
+        if (settingValue.startsWith('[') && settingValue.endsWith(']')) {
+          try {
+            JSON.parse(settingValue);
+          } catch (err) {
+            fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON 1' });
+          }
+        } else if (settingValue.startsWith('{') && settingValue.endsWith('}')) {
+          try {
+            JSON.parse(settingValue);
+          } catch (err) {
+            fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON 2' });
+          }
+        } else if (!settingValue.includes('{') && !settingValue.includes('[') && !settingValue.includes('}') && !settingValue.includes(']')) {
+          // Do nothing
+        } else {
+          fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON 3' });
+        }
+      }
+    });
+
+    setErrorFields(prevState => {
+      if (JSON.stringify(prevState) !== JSON.stringify(fieldsWithErrors)) {
+        return fieldsWithErrors;
+      }
+      return prevState;
+    });
+
+    return fieldsWithErrors.length === 0;
+  });
+
   const handleUpdateAdvancedSettingsData = () => {
-    dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
-    showSaveSettingsPrompt(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    schema
+        .validate(editedSettings)
+        .then(() => {
+          dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          showSaveSettingsPrompt(!saveSettingsPrompt);
+        })
+        .catch(error => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log(error); // eslint-disable-line no-console
+          }
+          showErrorModal(!errorModal);
+        });
   };
 
   return (
     <>
       <Container size="xl">
         <div className="setting-header mt-5">
-          {(proctoringExamErrors?.length > 0) && (
-            <AlertProctoringError
-              icon={Info}
-              proctoringErrorsData={proctoringExamErrors}
-              aria-hidden="true"
-              aria-labelledby={intl.formatMessage(messages.alertProctoringAriaLabelledby)}
-              aria-describedby={intl.formatMessage(messages.alertProctoringDescribedby)}
-            />
-        )}
-          {(savingStatus === RequestStatus.SUCCESSFUL) && (
-            <SettingAlert
-              variant="success"
-              icon={CheckCircle}
-              title={intl.formatMessage(messages.alertSuccess)}
-              description={intl.formatMessage(messages.alertSuccessDescriptions)}
-              aria-hidden="true"
-              aria-labelledby={intl.formatMessage(messages.alertSuccessAriaLabelledby)}
-              aria-describedby={intl.formatMessage(messages.alertSuccessAriaDescribedby)}
-            />
-          )}
+          <AlertProctoringError
+            show={proctoringExamErrors?.length > 0}
+            icon={Info}
+            proctoringErrorsData={proctoringExamErrors ?? []}
+            aria-hidden="true"
+            aria-labelledby={intl.formatMessage(messages.alertProctoringAriaLabelledby)}
+            aria-describedby={intl.formatMessage(messages.alertProctoringDescribedby)}
+          />
+          <SettingAlert
+            show={successAlert}
+            variant="success"
+            icon={CheckCircle}
+            title={intl.formatMessage(messages.alertSuccess)}
+            description={intl.formatMessage(messages.alertSuccessDescriptions)}
+            aria-hidden="true"
+            aria-labelledby={intl.formatMessage(messages.alertSuccessAriaLabelledby)}
+            aria-describedby={intl.formatMessage(messages.alertSuccessAriaDescribedby)}
+          />
           <header className="setting-header-inner">
             <h1 className="setting-header-title">
               <small className="setting-header-title-subtitle">{intl.formatMessage(messages.headingSubtitle)}</small>
@@ -165,6 +234,48 @@ const AdvancedSettings = ({ intl, courseId }) => {
           description={intl.formatMessage(messages.alertWarningDescriptions)}
         />
       </div>
+      <AlertModal
+        title={intl.formatMessage(messages.modalErrorTitle)}
+        isOpen={errorModal}
+        variant="danger"
+        footerNode={(
+          <ActionRow>
+            <Button onClick={handleResetSettingsValues}>
+              {intl.formatMessage(messages.modalErrorButtonUndoChanges)}
+            </Button>
+            <Button
+              variant="tertiary"
+              onClick={() => showErrorModal(!errorModal)}
+            >
+              {intl.formatMessage(messages.modalErrorButtonChangeManually)}
+            </Button>
+          </ActionRow>
+          )}
+      >
+        <p>
+          <FormattedMessage
+            id="course-authoring.advanced-settings.modal.error.description"
+            defaultMessage="There was {errorCounter} while trying to save the course settings in the database.
+            Please check the following validation feedbacks and reflect them in your course settings:"
+            values={{ errorCounter: <strong>{errorFields.length} validation error </strong> }}
+          />
+        </p>
+        <hr />
+        <ul className="p-0">
+          {errorFields.map((settingName) => {
+            const outputString = settingName.key.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+            const { displayName } = advancedSettingsData[outputString];
+            return (
+              <li key={displayName} className="modal-error-item">
+                <Alert variant="danger">
+                  <h4><Icon src={Error} />{displayName}:</h4>
+                  <p className="m-0">{settingName.message}</p>
+                </Alert>
+              </li>
+            );
+          })}
+        </ul>
+      </AlertModal>
     </>
   );
 };
