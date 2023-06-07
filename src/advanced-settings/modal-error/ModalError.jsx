@@ -1,11 +1,9 @@
-import {
- ActionRow, AlertModal, Button,
-} from '@edx/paragon';
-import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import React from 'react';
 import PropTypes from 'prop-types';
-import messages from '../messages';
+import { ActionRow, AlertModal, Button } from '@edx/paragon';
+import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import ModalErrorListItem from './ModalErrorListItem';
+import messages from './messages';
 
 const ModalError = ({
  intl, isError, handleUndoChanges, showErrorModal, errorList, settingsData,
@@ -47,7 +45,7 @@ const ModalError = ({
       ))}
     </ul>
   </AlertModal>
-    );
+);
 
 ModalError.propTypes = {
     intl: intlShape.isRequired,

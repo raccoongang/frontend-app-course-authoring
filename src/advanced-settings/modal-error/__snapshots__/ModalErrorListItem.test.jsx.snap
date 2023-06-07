@@ -14,7 +14,9 @@ exports[`ModalErrorListItem renders correctly 1`] = `
       <div
         className="alert-message-content"
       >
-        <h4>
+        <h4
+          className="modal-error-item-title"
+        >
           <span
             className="pgn__icon"
           >

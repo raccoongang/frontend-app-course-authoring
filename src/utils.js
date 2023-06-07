@@ -46,7 +46,8 @@ export function transformKeysToCamelCase(obj) {
 }
 
 export function parseArrayOrObjectValues(obj) {
-  const result = { ...obj };
+  const result = {};
+
   Object.entries(obj).forEach(([key, value]) => {
     if (typeof value === 'string') {
       try {
@@ -55,12 +56,15 @@ export function parseArrayOrObjectValues(obj) {
           result[key] = parsedValue;
         }
       } catch (error) {
-        // Error parsing JSON, leave the value unchanged
+        result[key] = value;
       }
     } else if (typeof value === 'object') {
       result[key] = parseArrayOrObjectValues(value);
+    } else {
+      result[key] = value;
     }
   });
+
   return result;
 }
 
@@ -93,12 +97,14 @@ export function useAppSetting(settingName) {
 }
 
 export const validateAdvancedSettingsData = (object, setErrorFields) => {
-  const schema = Yup.object().test('isValid', 'Wrong format', obj => {
+  const schema = Yup.object().test('validateAdvancedSettingsData', 'Wrong format', obj => {
     const fieldsWithErrors = [];
-    const errorMsg = 'Incorrectly formatted JSON';
 
     const pushDataToErrorArray = (settingName) => {
-      fieldsWithErrors.push({ key: settingName, message: errorMsg });
+      fieldsWithErrors.push({
+        key: settingName,
+        message: 'Incorrectly formatted JSON',
+      });
     };
 
     Object.entries(obj).forEach(([settingName, settingValue]) => {

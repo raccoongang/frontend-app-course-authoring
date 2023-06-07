@@ -39,9 +39,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
         showSuccessAlert(true);
         break;
       case RequestStatus.FAILED:
-        settingsWithSendErrors.forEach(error => {
-          setErrorFields(prevState => [...prevState, error]);
-        });
+        settingsWithSendErrors.forEach(error => setErrorFields(prevState => [...prevState, error]));
         showErrorModal(true);
         break;
       default:

@@ -264,7 +264,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                           <div
                                             class="alert-message-content"
                                           >
-                                            <h4>
+                                            <h4
+                                              class="modal-error-item-title"
+                                            >
                                               <span
                                                 class="pgn__icon"
                                               >
@@ -309,7 +311,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                           <div
                                             class="alert-message-content"
                                           >
-                                            <h4>
+                                            <h4
+                                              class="modal-error-item-title"
+                                            >
                                               <span
                                                 class="pgn__icon"
                                               >
@@ -513,7 +517,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                 <div
                                                   class="alert-message-content"
                                                 >
-                                                  <h4>
+                                                  <h4
+                                                    class="modal-error-item-title"
+                                                  >
                                                     <span
                                                       class="pgn__icon"
                                                     >
@@ -558,7 +564,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                 <div
                                                   class="alert-message-content"
                                                 >
-                                                  <h4>
+                                                  <h4
+                                                    class="modal-error-item-title"
+                                                  >
                                                     <span
                                                       class="pgn__icon"
                                                     >
@@ -698,7 +706,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                   <div
                                                     class="alert-message-content"
                                                   >
-                                                    <h4>
+                                                    <h4
+                                                      class="modal-error-item-title"
+                                                    >
                                                       <span
                                                         class="pgn__icon"
                                                       >
@@ -743,7 +753,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                   <div
                                                     class="alert-message-content"
                                                   >
-                                                    <h4>
+                                                    <h4
+                                                      class="modal-error-item-title"
+                                                    >
                                                       <span
                                                         class="pgn__icon"
                                                       >
@@ -883,7 +895,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                     <div
                                                       class="alert-message-content"
                                                     >
-                                                      <h4>
+                                                      <h4
+                                                        class="modal-error-item-title"
+                                                      >
                                                         <span
                                                           class="pgn__icon"
                                                         >
@@ -928,7 +942,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                     <div
                                                       class="alert-message-content"
                                                     >
-                                                      <h4>
+                                                      <h4
+                                                        class="modal-error-item-title"
+                                                      >
                                                         <span
                                                           class="pgn__icon"
                                                         >
@@ -1056,7 +1072,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                       <div
                                                         class="alert-message-content"
                                                       >
-                                                        <h4>
+                                                        <h4
+                                                          class="modal-error-item-title"
+                                                        >
                                                           <span
                                                             class="pgn__icon"
                                                           >
@@ -1101,7 +1119,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                       <div
                                                         class="alert-message-content"
                                                       >
-                                                        <h4>
+                                                        <h4
+                                                          class="modal-error-item-title"
+                                                        >
                                                           <span
                                                             class="pgn__icon"
                                                           >
@@ -1244,7 +1264,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                     <div
                                                       class="alert-message-content"
                                                     >
-                                                      <h4>
+                                                      <h4
+                                                        class="modal-error-item-title"
+                                                      >
                                                         <span
                                                           class="pgn__icon"
                                                         >
@@ -1289,7 +1311,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                     <div
                                                       class="alert-message-content"
                                                     >
-                                                      <h4>
+                                                      <h4
+                                                        class="modal-error-item-title"
+                                                      >
                                                         <span
                                                           class="pgn__icon"
                                                         >
@@ -1426,7 +1450,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                       <div
                                                         class="alert-message-content"
                                                       >
-                                                        <h4>
+                                                        <h4
+                                                          class="modal-error-item-title"
+                                                        >
                                                           <span
                                                             class="pgn__icon"
                                                           >
@@ -1471,7 +1497,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                       <div
                                                         class="alert-message-content"
                                                       >
-                                                        <h4>
+                                                        <h4
+                                                          class="modal-error-item-title"
+                                                        >
                                                           <span
                                                             class="pgn__icon"
                                                           >
@@ -1608,7 +1636,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                         <div
                                                           class="alert-message-content"
                                                         >
-                                                          <h4>
+                                                          <h4
+                                                            class="modal-error-item-title"
+                                                          >
                                                             <span
                                                               class="pgn__icon"
                                                             >
@@ -1653,7 +1683,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                         <div
                                                           class="alert-message-content"
                                                         >
-                                                          <h4>
+                                                          <h4
+                                                            class="modal-error-item-title"
+                                                          >
                                                             <span
                                                               class="pgn__icon"
                                                             >
@@ -1943,7 +1975,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                             <div
                                                               className="alert-message-content"
                                                             >
-                                                              <h4>
+                                                              <h4
+                                                                className="modal-error-item-title"
+                                                              >
                                                                 <withDeprecatedProps(Icon)
                                                                   src={[Function]}
                                                                 >
@@ -2092,7 +2126,9 @@ exports[`ModalError should match the snapshot 1`] = `
                                                             <div
                                                               className="alert-message-content"
                                                             >
-                                                              <h4>
+                                                              <h4
+                                                                className="modal-error-item-title"
+                                                              >
                                                                 <withDeprecatedProps(Icon)
                                                                   src={[Function]}
                                                                 >
