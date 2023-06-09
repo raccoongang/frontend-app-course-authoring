@@ -1,0 +1,119 @@
+@import "variables";
+
+.grading-header-title {
+  font: normal $font-weight-bold 2rem/2.25rem $font-family-base;
+  margin-bottom: 1.75rem;
+
+  .grading-header-title-subtitle {
+    font: normal $font-weight-normal .875rem/1.5rem $font-family-base;
+    display: block;
+    color: $text-color-base;
+  }
+}
+
+.grading-items-policies {
+  .grading-items-policies-instructions {
+    font: normal $font-weight-normal .875rem/1.5rem $font-family-base;
+    color: $text-color-base;
+  }
+
+  .setting-items-deprecated-setting {
+    float: right;
+    margin-bottom: 1.75rem;
+  }
+
+  .grading-items-policies-title {
+    font: normal $font-weight-normal 1.375rem/1.5 $font-family-base;
+    padding-bottom: .25rem;
+    margin-bottom: .25rem;
+    border-bottom: $border-width solid $light-400;
+  }
+
+  .instructions,
+  strong {
+    font: normal $font-weight-normal .875rem/1.5rem $font-family-base;
+    color: $text-color-base;
+  }
+}
+
+.ranger {
+  display: flex;
+  margin-top: 25px;
+  align-items: center;
+}
+
+.ranger-track {
+  display: inline-block;
+  height: 50px;
+  width: 100%;
+}
+
+.ranger-tick {
+  .ranger-tick-label {
+    position: absolute;
+    font-size: .6rem;
+    color: $black;
+    top: 100%;
+    transform: translate(-50%, 1.2rem);
+    white-space: nowrap;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    background-color: $gray-400;
+    height: 5px;
+    width: 2px;
+    transform: translate(-50%, .7rem);
+  }
+}
+
+.handle {
+  position: relative;
+  right: 30px;
+  bottom: 7px;
+  display: flex;
+  flex-direction: column;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: .7rem;
+  white-space: nowrap;
+}
+
+.ranger-btn {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  appearance: none;
+  height: 100%;
+  padding: 0;
+  width: 10px;
+}
+
+.handle-title {
+  border: none;
+  outline: none;
+  appearance: none;
+  cursor: text;
+}
+
+.ranger-segment {
+  height: 100%;
+}
+
+.segment-0 {
+  background-color: #FB336C;
+}
+
+.segment-1 {
+  background-color: #EF54A1;
+}
+
+.segment-2 {
+  background-color: #FFB657;
+}
+
+.segment-3 {
+  background-color: #4FE696;
+}
