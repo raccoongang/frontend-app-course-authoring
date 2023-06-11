@@ -12,7 +12,8 @@ import SettingCard from './setting-card/SettingCard';
 import SettingAlert from './setting-alert/SettingAlert';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
 import { RequestStatus } from '../data/constants';
-import { parseArrayOrObjectValues, removeExtraQuotes, validateAdvancedSettingsData } from '../utils';
+import { parseArrayOrObjectValues, removeExtraQuotes } from '../utils';
+import validateAdvancedSettingsData from './utils';
 import messages from './messages';
 import AlertProctoringError from '../generic/AlertProctoringError';
 import ModalError from './modal-error/ModalError';
@@ -28,33 +29,33 @@ const AdvancedSettings = ({ intl, courseId }) => {
   const [errorModal, showErrorModal] = useState(false);
   const [editedSettings, setEditedSettings] = useState({});
   const [errorFields, setErrorFields] = useState([]);
-  const [successAlert, showSuccessAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCourseAppSettings(courseId));
     dispatch(fetchProctoringExamErrors(courseId));
+  }, [courseId]);
 
-    switch (savingStatus) {
-      case RequestStatus.SUCCESSFUL:
-        showSuccessAlert(true);
-        break;
-      case RequestStatus.FAILED:
-        settingsWithSendErrors.forEach(error => setErrorFields(prevState => [...prevState, error]));
-        showErrorModal(true);
-        break;
-      default:
-        break;
+  useEffect(() => {
+    if (savingStatus === RequestStatus.SUCCESSFUL) {
+      setShowSuccessAlert(true);
+    } else if (savingStatus === RequestStatus.FAILED) {
+      setErrorFields(settingsWithSendErrors);
+      showErrorModal(true);
     }
-  }, [courseId, savingStatus, editedSettings]);
+  }, [savingStatus]);
 
   const handleSettingChange = (e, settingName) => {
     const { value } = e.target;
+    const emptyValue = '\u0000';
     if (!saveSettingsPrompt) {
       showSaveSettingsPrompt(true);
     }
     setEditedSettings((prevEditedSettings) => ({
       ...prevEditedSettings,
-      [settingName]: removeExtraQuotes(value) || ' ',
+      // An empty value is needed to prevent the display of the default value,
+      // after manually deleting the textarea value.
+      [settingName]: removeExtraQuotes(value) || emptyValue,
     }));
   };
 
@@ -65,19 +66,15 @@ const AdvancedSettings = ({ intl, courseId }) => {
   };
 
   const handleUpdateAdvancedSettingsData = () => {
-    validateAdvancedSettingsData(editedSettings, setErrorFields)
-        .then(() => {
-          dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          showSaveSettingsPrompt(!saveSettingsPrompt);
-        })
-        .catch((error) => {
-          if (process.env.NODE_ENV === 'development') {
-            console.log(error); // eslint-disable-line no-console
-          }
-          showSaveSettingsPrompt(false);
-          showErrorModal(!errorModal);
-        });
+    const isValid = validateAdvancedSettingsData(editedSettings, setErrorFields);
+    if (isValid) {
+      dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showSaveSettingsPrompt(!saveSettingsPrompt);
+    } else {
+      showSaveSettingsPrompt(false);
+      showErrorModal(!errorModal);
+    }
   };
 
   return (
@@ -94,7 +91,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
             />
           )}
           <SettingAlert
-            show={successAlert}
+            show={showSuccessAlert}
             variant="success"
             icon={CheckCircle}
             title={intl.formatMessage(messages.alertSuccess)}
@@ -160,8 +157,8 @@ const AdvancedSettings = ({ intl, courseId }) => {
                             name={settingName}
                             value={editedSettings[settingName] || settingData.value}
                           />
-                          );
-                        })}
+                        );
+                      })}
                     </ul>
                   </section>
                 </div>

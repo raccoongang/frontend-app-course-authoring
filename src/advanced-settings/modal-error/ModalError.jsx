@@ -6,7 +6,7 @@ import ModalErrorListItem from './ModalErrorListItem';
 import messages from './messages';
 
 const ModalError = ({
- intl, isError, handleUndoChanges, showErrorModal, errorList, settingsData,
+  intl, isError, handleUndoChanges, showErrorModal, errorList, settingsData,
 }) => (
   <AlertModal
     title={intl.formatMessage(messages.modalErrorTitle)}
@@ -48,15 +48,15 @@ const ModalError = ({
 );
 
 ModalError.propTypes = {
-    intl: intlShape.isRequired,
-    isError: PropTypes.bool.isRequired,
-    handleUndoChanges: PropTypes.func.isRequired,
-    showErrorModal: PropTypes.func.isRequired,
-    errorList: PropTypes.arrayOf(PropTypes.shape({
-        key: PropTypes.string,
-        message: PropTypes.string,
-    })).isRequired,
-    settingsData: PropTypes.shape({}).isRequired,
+  intl: intlShape.isRequired,
+  isError: PropTypes.bool.isRequired,
+  handleUndoChanges: PropTypes.func.isRequired,
+  showErrorModal: PropTypes.func.isRequired,
+  errorList: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    message: PropTypes.string,
+  })).isRequired,
+  settingsData: PropTypes.shape({}).isRequired,
 };
 
 export default injectIntl(ModalError);

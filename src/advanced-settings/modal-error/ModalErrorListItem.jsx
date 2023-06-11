@@ -19,11 +19,11 @@ const ModalErrorListItem = ({ settingName, settingsData }) => {
 };
 
 ModalErrorListItem.propTypes = {
-    settingName: PropTypes.shape({
-        key: PropTypes.string,
-        message: PropTypes.string,
-    }).isRequired,
-    settingsData: PropTypes.shape({}).isRequired,
+  settingName: PropTypes.shape({
+    key: PropTypes.string,
+    message: PropTypes.string,
+  }).isRequired,
+  settingsData: PropTypes.shape({}).isRequired,
 };
 
 export default ModalErrorListItem;

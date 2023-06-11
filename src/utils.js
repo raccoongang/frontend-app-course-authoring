@@ -96,46 +96,6 @@ export function useAppSetting(settingName) {
   return [settingValue, saveSetting];
 }
 
-export const validateAdvancedSettingsData = (object, setErrorFields) => {
-  const schema = Yup.object().test('validateAdvancedSettingsData', 'Wrong format', obj => {
-    const fieldsWithErrors = [];
-
-    const pushDataToErrorArray = (settingName) => {
-      fieldsWithErrors.push({
-        key: settingName,
-        message: 'Incorrectly formatted JSON',
-      });
-    };
-
-    Object.entries(obj).forEach(([settingName, settingValue]) => {
-      if (typeof settingValue === 'string') {
-        if ((settingValue.startsWith('[') && settingValue.endsWith(']'))
-            || (settingValue.startsWith('{') && settingValue.endsWith('}'))) {
-          try {
-            JSON.parse(settingValue);
-          } catch (err) {
-            pushDataToErrorArray(settingName);
-          }
-        } else if (settingValue.includes('{') || settingValue.includes('[')
-            || settingValue.includes('}') || settingValue.includes(']')) {
-          pushDataToErrorArray(settingName);
-        }
-      }
-    });
-
-    setErrorFields(prevState => {
-      if (JSON.stringify(prevState) !== JSON.stringify(fieldsWithErrors)) {
-        return fieldsWithErrors;
-      }
-      return prevState;
-    });
-
-    return fieldsWithErrors.length === 0;
-  });
-
-  return schema.validate(object);
-};
-
 /**
  * Adds additional validation methods to Yup.
  */
