@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SettingsSidebar should match the snapshot 1`] = `
+<aside
+  className="setting-sidebar-supplementary"
+>
+  <div
+    className="setting-sidebar-supplementary-about"
+  >
+    <h4
+      className="setting-sidebar-supplementary-about-title"
+    />
+  </div>
+  <hr />
+  <div
+    className="setting-sidebar-supplementary-other"
+  >
+    <h4
+      className="setting-sidebar-supplementary-other-title"
+    >
+      Other Course Settings
+    </h4>
+    <nav
+      aria-label="Other Course Settings"
+      className="setting-sidebar-supplementary-other-links"
+    >
+      <ul
+        className="p-0 mb-0"
+      />
+    </nav>
+  </div>
+</aside>
+`;

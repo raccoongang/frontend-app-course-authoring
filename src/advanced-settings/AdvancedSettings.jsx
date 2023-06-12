@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Button, Layout } from '@edx/paragon';
 import { CheckCircle, Info, WarningFilled } from '@edx/paragon/icons';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { AppContext } from '@edx/frontend-platform/react';
 import { fetchCourseAppSettings, updateCourseAppSetting, fetchProctoringExamErrors } from './data/thunks';
 import { getCourseAppSettings, getSavingStatus, getProctoringExamErrors } from './data/selectors';
 import SettingCard from './setting-card/SettingCard';
 import SettingAlert from './setting-alert/SettingAlert';
-import SettingsSidebar from './settings-sidebar/SettingsSidebar';
+import SettingsSidebar from '../generic/settings-sidebar/SettingsSidebar';
 import { RequestStatus } from '../data/constants';
-import { parseArrayOrObjectValues } from '../utils';
+import { getPagePath, parseArrayOrObjectValues } from '../utils';
 import messages from './messages';
 import AlertProctoringError from '../generic/AlertProctoringError';
 
@@ -22,6 +23,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
   const [saveSettingsPrompt, showSaveSettingsPrompt] = useState(false);
   const [showDeprecated, setShowDeprecated] = useState(false);
   const [editedSettings, setEditedSettings] = useState({});
+  const { config } = useContext(AppContext);
 
   useEffect(() => {
     dispatch(fetchCourseAppSettings(courseId));
@@ -139,7 +141,42 @@ const AdvancedSettings = ({ intl, courseId }) => {
               </article>
             </Layout.Element>
             <Layout.Element>
-              <SettingsSidebar courseId={courseId} />
+              <SettingsSidebar
+                courseId={courseId}
+                title={intl.formatMessage(messages.about)}
+                links={[
+                  {
+                    name: intl.formatMessage(messages.otherCourseSettingsLinkToScheduleAndDetails),
+                    destination: getPagePath(courseId, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details'),
+                  },
+                  {
+                    name: intl.formatMessage(messages.otherCourseSettingsLinkToGrading),
+                    destination: getPagePath(courseId, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading'),
+                  },
+                  {
+                    name: intl.formatMessage(messages.otherCourseSettingsLinkToCourseTeam),
+                    destination: getPagePath(courseId, process.env.ENABLE_NEW_COURSE_TEAM_PAGE, 'course_team'),
+                  },
+                  {
+                    name: intl.formatMessage(messages.otherCourseSettingsLinkToGroupConfigurations),
+                    destination: `${config.STUDIO_BASE_URL}/group_configurations/${courseId}`,
+                  },
+                ]}
+              >
+                <p className="setting-sidebar-supplementary-about-descriptions">
+                  {intl.formatMessage(messages.aboutDescription1)}
+                </p>
+                <p className="setting-sidebar-supplementary-about-descriptions">
+                  {intl.formatMessage(messages.aboutDescription2)}
+                </p>
+                <p className="setting-sidebar-supplementary-about-descriptions">
+                  <FormattedMessage
+                    id="course-authoring.advanced-settings.about.description-3"
+                    defaultMessage="{notice} When you enter strings as policy values, ensure that you use double quotation marks (“) around the string. Do not use single quotation marks (‘)."
+                    values={{ notice: <strong>Note:</strong> }}
+                  />
+                </p>
+              </SettingsSidebar>
             </Layout.Element>
           </Layout>
         </section>
