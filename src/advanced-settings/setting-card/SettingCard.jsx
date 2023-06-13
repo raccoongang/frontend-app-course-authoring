@@ -36,7 +36,7 @@ const SettingCard = ({
                 <IconButton
                   src={Info}
                   iconAs={Icon}
-                  alt="Show help text"
+                  alt={intl.formatMessage(messages.helpButtonText)}
                   variant="light"
                 />
               </OverlayTrigger>
