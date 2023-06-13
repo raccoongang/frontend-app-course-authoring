@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Form } from '@edx/paragon';
+
 import messages from './messages';
 
 const PacingSection = ({
@@ -12,10 +13,10 @@ const PacingSection = ({
   return (
     <section className="section-container pacing-section">
       <header className="section-header">
-        <h2 className="section-header-title">
+        <span className="lead">
           {intl.formatMessage(messages.pacingTitle)}
-        </h2>
-        <span className="section-header-description">
+        </span>
+        <span className="x-small text-gray-700">
           {intl.formatMessage(messages.pacingDescription)}
         </span>
       </header>

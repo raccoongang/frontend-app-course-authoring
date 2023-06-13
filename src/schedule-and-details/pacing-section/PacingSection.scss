@@ -1,15 +1,11 @@
 .pacing-section {
-  label.pgn__form-label {
-    @extend %heading-h6;
-  }
-
   input.pgn__form-radio-input {
     padding: .5rem;
-    height: 1rem;
-    width: 1rem;
+    height: $spacer;
+    width: $spacer;
   }
 
   .pgn__form-control-set {
-    padding: 1rem 0 0 1rem;
+    padding: $spacer 0 0 $spacer;
   }
 }

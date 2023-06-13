@@ -3,6 +3,7 @@ import { fireEvent, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
+
 import PacingSection from '.';
 
 jest.useFakeTimers('modern').setSystemTime(new Date('2023-09-14'));

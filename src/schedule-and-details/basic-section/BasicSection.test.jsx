@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
+
 import { INVITE_STUDENTS_LINK_ID, EMAIL_TO } from './constants';
 import BasicSection from '.';
 
@@ -42,14 +43,13 @@ describe('<BasicSection />', () => {
   });
 
   it('shows the page banner if the marketingEnabled is enabled', () => {
-    const { getByText, queryAllByText, debug } = render(<RootWrapper {...props} />);
+    const { getByText, queryAllByText } = render(<RootWrapper {...props} />);
     expect(getByText(/Promoting your course with edX/i)).toBeInTheDocument();
     expect(
       getByText(
         /Your course summary page will not be viewable until your course has been announced. To provide content for the page and preview it, follow the instructions provided by your Program Manager. Please note that changes here may take up to a business day to appear on your course summary page./i,
       ),
     ).toBeInTheDocument();
-    debug();
     expect(queryAllByText('Course Summary Page').length).toBe(0);
   });
 

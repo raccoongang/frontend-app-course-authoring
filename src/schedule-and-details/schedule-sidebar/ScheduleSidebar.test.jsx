@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppContext } from '@edx/frontend-platform/react';
+
 import ScheduleSidebar from '.';
 
 const mockPathname = '/foo-bar';

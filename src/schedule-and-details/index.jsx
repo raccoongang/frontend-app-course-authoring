@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Container, Button, Layout } from '@edx/paragon';
 import { CheckCircle, WarningFilled } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+
 import { RequestStatus } from '../data/constants';
 import AlertMessage from '../generic/alert-message';
 import Loading from '../generic/Loading';
@@ -76,7 +77,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
   return (
     <>
       <Container size="xl">
-        <div className="schedule-header mt-5">
+        <div className="mt-5">
           {savingStatus === RequestStatus.SUCCESSFUL && (
             <AlertMessage
               variant="success"
@@ -92,10 +93,10 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
             />
           )}
           <header>
-            <h2 className="schedule-header-title">
-              <small className="schedule-header-title-subtitle">
-                {intl.formatMessage(messages.headingSubtitle)}
-              </small>
+            <span className="small text-gray-700">
+              {intl.formatMessage(messages.headingSubtitle)}
+            </span>
+            <h2 className="mb-4 pb-1">
               {intl.formatMessage(messages.headingTitle)}
             </h2>
           </header>

@@ -6,9 +6,10 @@ import {
   FormattedMessage,
 } from '@edx/frontend-platform/i18n';
 import {
-  PageBanner, Button, Card, MailtoLink,
+  PageBanner, Button, Card, MailtoLink, Hyperlink,
 } from '@edx/paragon';
 import { Email } from '@edx/paragon/icons';
+
 import { EMAIL_TO, INVITE_STUDENTS_LINK_ID } from './constants';
 import messages from './messages';
 
@@ -95,16 +96,16 @@ const BasicSection = ({
 
   const renderCoursePromotion = () => (
     <Card>
-      <Card.Header className="px-3" title={promotionTitle} size="sm" />
+      <Card.Header className="h4 px-3 text-gray-500" title={promotionTitle} size="sm" />
       <Card.Section className="px-3 py-1">
-        <a
-          href={lmsLinkForAboutPage}
+        <Hyperlink
+          destination={lmsLinkForAboutPage}
           className="lead info-500 text-decoration-none"
           target="_blank"
-          rel="noreferrer"
+          showLaunchIcon={false}
         >
           {lmsLinkForAboutPage}
-        </a>
+        </Hyperlink>
       </Card.Section>
       <Card.Divider />
       <Card.Footer className="p-3 justify-content-start">
@@ -125,10 +126,10 @@ const BasicSection = ({
   return (
     <section className="section-container basic-section">
       <header className="section-header">
-        <h2 className="section-header-title">
+        <span className="lead">
           {intl.formatMessage(messages.basicTitle)}
-        </h2>
-        <span className="section-header-description">
+        </span>
+        <span className="x-small text-gray-700">
           {intl.formatMessage(messages.basicDescription)}
         </span>
       </header>

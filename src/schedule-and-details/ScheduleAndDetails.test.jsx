@@ -2,12 +2,13 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
-import ScheduleAndDetails from '.';
+
 import { courseDetails, courseSettings } from './__mocks__';
 import {
   fetchCourseDetailsQuery,
   fetchCourseSettingsQuery,
 } from './data/thunks';
+import ScheduleAndDetails from '.';
 
 jest.mock('react-redux', () => ({
   useSelector: jest.fn(),

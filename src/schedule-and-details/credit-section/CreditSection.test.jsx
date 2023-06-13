@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
+
 import CreditSection from '.';
 
 describe('<CreditSection />', () => {

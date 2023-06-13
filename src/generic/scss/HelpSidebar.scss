@@ -3,8 +3,6 @@
 
   .help-sidebar-about {
     .help-sidebar-about-title {
-      @extend %heading-h4;
-
       color: $headings-color;
       margin-bottom: 1.25rem;
     }
