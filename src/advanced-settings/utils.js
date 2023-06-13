@@ -14,7 +14,19 @@ export default function validateAdvancedSettingsData(settingObj, setErrorFields)
     fieldsWithErrors.push({ key: settingName, message: 'Incorrectly formatted JSON' });
   };
 
-  const bracketsValidation = (value) => (/[{[\]}]/.test(value));
+  const bracketsValidation = (value) => /[{[\]}]/.test(value);
+
+  const isQuoted = (value) => /^"(.*)"$/g.test(value);
+
+  const countQuotes = (value) => {
+    let count = 0;
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] === '"') {
+        count++;
+      }
+    }
+    return count;
+  };
 
   Object.entries(settingObj).forEach(([settingName, settingValue]) => {
     const isArrayOrObject = (settingValue.startsWith('[') && settingValue.endsWith(']'))
@@ -27,13 +39,16 @@ export default function validateAdvancedSettingsData(settingObj, setErrorFields)
         } catch (err) {
           pushDataToErrorArray(settingName);
         }
-      } else if (bracketsValidation(settingValue)) {
-        pushDataToErrorArray(settingName);
+      } else if (bracketsValidation(settingValue) || isQuoted(settingValue)) {
+        const quoteCount = countQuotes(settingValue);
+        if (quoteCount > 2) {
+          pushDataToErrorArray(settingName);
+        }
       }
     }
   });
 
-  setErrorFields(prevState => {
+  setErrorFields((prevState) => {
     if (JSON.stringify(prevState) !== JSON.stringify(fieldsWithErrors)) {
       return fieldsWithErrors;
     }

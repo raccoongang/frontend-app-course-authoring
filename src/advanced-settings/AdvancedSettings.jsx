@@ -12,7 +12,7 @@ import SettingCard from './setting-card/SettingCard';
 import SettingAlert from './setting-alert/SettingAlert';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
 import { RequestStatus } from '../data/constants';
-import { parseArrayOrObjectValues, removeExtraQuotes } from '../utils';
+import { parseArrayOrObjectValues } from '../utils';
 import validateAdvancedSettingsData from './utils';
 import messages from './messages';
 import AlertProctoringError from '../generic/AlertProctoringError';
@@ -55,7 +55,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
       ...prevEditedSettings,
       // An empty value is needed to prevent the display of the default value,
       // after manually deleting the textarea value.
-      [settingName]: removeExtraQuotes(value) || emptyValue,
+      [settingName]: value || emptyValue,
     }));
   };
 
