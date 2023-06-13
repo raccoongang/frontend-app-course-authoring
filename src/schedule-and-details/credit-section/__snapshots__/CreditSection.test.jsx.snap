@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CreditSection /> matches the snapshots 1`] = `
+<section
+  className="section-container credit-section"
+>
+  <header
+    className="section-header"
+  >
+    <h2
+      className="section-header-title"
+    >
+      Course Credit Requirements
+    </h2>
+    <span
+      className="section-header-description"
+    >
+      Steps required to earn course credit
+    </span>
+  </header>
+  <span>
+    A requirement appears in this list when you publish the unit that contains the requirement.
+  </span>
+  <ul
+    className="credit-info-list"
+  >
+    <li
+      className="d-grid"
+    >
+      <h4
+        className="text-gray-700"
+        htmlFor="credit-minimum-grade"
+      >
+        Minimum Grade
+      </h4>
+      <span
+        className="small"
+      >
+        80%
+      </span>
+    </li>
+  </ul>
+</section>
+`;

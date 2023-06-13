@@ -1,0 +1,37 @@
+@import "./basic-section/BasicSection";
+@import "./credit-section/CreditSection";
+@import "./pacing-section/PacingSection";
+
+.schedule-header-title {
+  @extend %heading-h2;
+
+  margin-bottom: 1.75rem;
+
+  .schedule-header-title-subtitle {
+    @extend %body-small;
+
+    display: block;
+    color: $text-color-base;
+  }
+}
+
+.section-container:not(:last-child) {
+  margin-bottom: 1.75rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: .25rem;
+  margin-bottom: .75rem;
+  border-bottom: $border-width solid $light-400;
+
+  .section-header-title {
+    @extend %body-large;
+  }
+
+  .section-header-description {
+    @extend %body-small;
+  }
+}
