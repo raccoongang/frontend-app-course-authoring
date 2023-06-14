@@ -32,11 +32,15 @@ exports[`<CreditSection /> matches the snapshots 1`] = `
       >
         Minimum Grade
       </h4>
-      <span
-        className="small"
+      <div
+        className="d-flex flex-column"
       >
-        80%
-      </span>
+        <span
+          className="small"
+        >
+          80%
+        </span>
+      </div>
     </li>
   </ul>
 </section>

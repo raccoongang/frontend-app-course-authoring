@@ -4,69 +4,56 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
 
-const CREDIT_REQUIREMENTS_TYPES = {
-  grade: 'grade',
-  proctoredExam: 'proctoredExam',
-  reverification: 'reverification',
-};
-
 const CreditSection = ({ intl, creditRequirements }) => {
-  const requirementsInfo = [
-    {
-      id: CREDIT_REQUIREMENTS_TYPES.grade,
-      label: intl.formatMessage(messages.creditMinimumGrade),
-      values: creditRequirements?.grade,
-    },
-    {
-      id: CREDIT_REQUIREMENTS_TYPES.proctoredExam,
-      label: intl.formatMessage(messages.creditProctoredExam),
-      values: creditRequirements?.proctoredExam,
-    },
-    {
-      id: CREDIT_REQUIREMENTS_TYPES.reverification,
-      label: intl.formatMessage(messages.creditVerification),
-      values: creditRequirements?.reverification,
-    },
-  ];
+  const CREDIT_REQUIREMENTS_TYPES = {
+    grade: intl.formatMessage(messages.creditMinimumGrade),
+    proctoredExam: intl.formatMessage(messages.creditProctoredExam),
+    reverification: intl.formatMessage(messages.creditVerification),
+  };
 
-  const renderRequirementsInfo = (requirement) => (
-    <li className="d-grid" key={requirement.id}>
-      <h4 className="text-gray-700">
-        {requirement.label}
-      </h4>
-      {requirement.values.map((value) => {
-        const displayValue = requirement.id === CREDIT_REQUIREMENTS_TYPES.grade
-          ? `${(parseFloat(value.criteria.minGrade) || 0) * 100}%`
-          : value.displayName;
-        return (
-          <span className="small" key={value.name}>
-            {displayValue}
-          </span>
-        );
-      })}
-    </li>
-  );
+  const renderRequirementValue = (requirementValue, key) => {
+    const displayValue = key === 'grade'
+      ? `${(parseFloat(requirementValue.criteria.minGrade) || 0) * 100}%`
+      : requirementValue.displayName;
+    return (
+      <span className="small" key={requirementValue.name}>
+        {displayValue}
+      </span>
+    );
+  };
+
+  const renderCreditRequirements = (requirements) => {
+    const creditRequirementsKeys = Object.keys(requirements);
+
+    if (creditRequirementsKeys.length) {
+      return (
+        <ul className="credit-info-list">
+          {creditRequirementsKeys.map((key) => (
+            <li className="d-grid" key={key}>
+              <h4 className="text-gray-700">
+                {CREDIT_REQUIREMENTS_TYPES[key]}
+              </h4>
+              <div className="d-flex flex-column">
+                {creditRequirements[key].map((value) => renderRequirementValue(value, key))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    return <p>{intl.formatMessage(messages.creditNotFound)}</p>;
+  };
 
   return (
     <section className="section-container credit-section">
       <header className="section-header">
-        <span className="lead">
-          {intl.formatMessage(messages.creditTitle)}
-        </span>
+        <span className="lead">{intl.formatMessage(messages.creditTitle)}</span>
         <span className="x-small text-gray-700">
           {intl.formatMessage(messages.creditDescription)}
         </span>
       </header>
       <span>{intl.formatMessage(messages.creditHelp)}</span>
-      {Object.keys(creditRequirements).length ? (
-        <ul className="credit-info-list">
-          {requirementsInfo
-            .filter((item) => item.values?.length)
-            .map(renderRequirementsInfo)}
-        </ul>
-      ) : (
-        <p>{intl.formatMessage(messages.creditNotFound)}</p>
-      )}
+      {renderCreditRequirements(creditRequirements)}
     </section>
   );
 };
