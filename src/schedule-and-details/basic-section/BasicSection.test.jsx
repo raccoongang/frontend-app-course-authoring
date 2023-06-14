@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
 
-import { INVITE_STUDENTS_LINK_ID, EMAIL_TO } from './constants';
+import { INVITE_STUDENTS_LINK_ID } from './constants';
 import BasicSection from '.';
 
 describe('<BasicSection />', () => {
@@ -42,7 +42,7 @@ describe('<BasicSection />', () => {
     expect(getByText(props.run)).toBeInTheDocument();
   });
 
-  it('shows the page banner if the marketingEnabled is enabled', () => {
+  it('shows the page banner if the marketingEnabled is true', () => {
     const { getByText, queryAllByText } = render(<RootWrapper {...props} />);
     expect(getByText(/Promoting your course with edX/i)).toBeInTheDocument();
     expect(
@@ -53,9 +53,11 @@ describe('<BasicSection />', () => {
     expect(queryAllByText('Course Summary Page').length).toBe(0);
   });
 
-  it('shows the course promotion if the marketingEnabled is disabled', () => {
+  it('shows the course promotion if the marketingEnabled is false', () => {
     const initialProps = { ...props, marketingEnabled: false };
-    const { getByText, getByRole, queryAllByText } = render(<RootWrapper {...initialProps} />);
+    const { getByText, getByRole, queryAllByText } = render(
+      <RootWrapper {...initialProps} />,
+    );
     const inviteButton = getByRole('button', { name: 'Invite your students' });
 
     expect(getByText(/Course Summary Page/i)).toBeInTheDocument();
@@ -72,7 +74,7 @@ describe('<BasicSection />', () => {
     const { getByTestId } = render(<RootWrapper {...initialProps} />);
     const inviteLink = getByTestId(INVITE_STUDENTS_LINK_ID);
     expect(decodeURIComponent(inviteLink.href)).toEqual(
-      `mailto:${EMAIL_TO}?body=The course ${props.courseDisplayName}, provided by ${props.platformName}, is open for enrollment. Please navigate to this course at ${props.lmsLinkForAboutPage} to enroll.&subject=Enroll in ${props.courseDisplayName}.`,
+      `mailto:${process.env.INVITE_STUDENTS_EMAIL_TO}?body=The course ${props.courseDisplayName}, provided by ${props.platformName}, is open for enrollment. Please navigate to this course at ${props.lmsLinkForAboutPage} to enroll.&subject=Enroll in ${props.courseDisplayName}.`,
     );
   });
 });

@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Container, Button, Layout } from '@edx/paragon';
-import { CheckCircle, WarningFilled } from '@edx/paragon/icons';
+import {
+  CheckCircle as CheckCircleIcon,
+  WarningFilled as WarningFilledIcon,
+} from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import { RequestStatus } from '../data/constants';
@@ -81,7 +84,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
           {savingStatus === RequestStatus.SUCCESSFUL && (
             <AlertMessage
               variant="success"
-              icon={CheckCircle}
+              icon={CheckCircleIcon}
               title={intl.formatMessage(messages.alertSuccess)}
               aria-hidden="true"
               aria-labelledby={intl.formatMessage(
@@ -163,7 +166,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
             </Button>,
           ]}
           variant="warning"
-          icon={WarningFilled}
+          icon={WarningFilledIcon}
           title={intl.formatMessage(messages.alertWarning)}
           description={intl.formatMessage(messages.alertWarningDescriptions)}
         />

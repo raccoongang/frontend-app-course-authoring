@@ -7,13 +7,13 @@ exports[`<BasicSection /> matches the snapshots 1`] = `
   <header
     className="section-header"
   >
-    <h2
-      className="section-header-title"
+    <span
+      className="lead"
     >
       Basic information
-    </h2>
+    </span>
     <span
-      className="section-header-description"
+      className="x-small text-gray-700"
     >
       The nuts and bolts of this course
     </span>

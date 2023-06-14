@@ -8,9 +8,9 @@ import {
 import {
   PageBanner, Button, Card, MailtoLink, Hyperlink,
 } from '@edx/paragon';
-import { Email } from '@edx/paragon/icons';
+import { Email as EmailIcon } from '@edx/paragon/icons';
 
-import { EMAIL_TO, INVITE_STUDENTS_LINK_ID } from './constants';
+import { INVITE_STUDENTS_LINK_ID } from './constants';
 import messages from './messages';
 
 const BasicSection = ({
@@ -110,12 +110,12 @@ const BasicSection = ({
       <Card.Divider />
       <Card.Footer className="p-3 justify-content-start">
         <MailtoLink
-          to={EMAIL_TO}
+          to={process.env.INVITE_STUDENTS_EMAIL_TO}
           subject={emailSubject}
           body={emailBody}
           data-testid={INVITE_STUDENTS_LINK_ID}
         >
-          <Button variant="info" iconBefore={Email}>
+          <Button variant="info" iconBefore={EmailIcon}>
             {intl.formatMessage(messages.basicPromotionButton)}
           </Button>
         </MailtoLink>

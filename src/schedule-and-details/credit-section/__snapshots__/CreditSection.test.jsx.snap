@@ -7,13 +7,13 @@ exports[`<CreditSection /> matches the snapshots 1`] = `
   <header
     className="section-header"
   >
-    <h2
-      className="section-header-title"
+    <span
+      className="lead"
     >
       Course Credit Requirements
-    </h2>
+    </span>
     <span
-      className="section-header-description"
+      className="x-small text-gray-700"
     >
       Steps required to earn course credit
     </span>
@@ -29,7 +29,6 @@ exports[`<CreditSection /> matches the snapshots 1`] = `
     >
       <h4
         className="text-gray-700"
-        htmlFor="credit-minimum-grade"
       >
         Minimum Grade
       </h4>

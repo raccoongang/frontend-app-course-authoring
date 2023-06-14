@@ -81,7 +81,7 @@ describe('<PacingSection />', () => {
     ).toBe(0);
   });
 
-  it('should calls onChange radio input', () => {
+  it('should call onChange radio input', () => {
     const pastDate = '2023-12-31';
     const initialProps = { ...props, startDate: pastDate };
     const { getAllByRole } = render(<RootWrapper {...initialProps} />);

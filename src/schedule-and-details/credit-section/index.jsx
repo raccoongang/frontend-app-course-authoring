@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
 
-export const CREDIT_REQUIREMENTS_TYPES = {
+const CREDIT_REQUIREMENTS_TYPES = {
   grade: 'grade',
   proctoredExam: 'proctoredExam',
   reverification: 'reverification',
@@ -14,17 +14,17 @@ const CreditSection = ({ intl, creditRequirements }) => {
   const requirementsInfo = [
     {
       id: CREDIT_REQUIREMENTS_TYPES.grade,
-      label: `${intl.formatMessage(messages.creditMinimumGrade)}`,
+      label: intl.formatMessage(messages.creditMinimumGrade),
       values: creditRequirements?.grade,
     },
     {
       id: CREDIT_REQUIREMENTS_TYPES.proctoredExam,
-      label: `${intl.formatMessage(messages.creditProctoredExam)}`,
+      label: intl.formatMessage(messages.creditProctoredExam),
       values: creditRequirements?.proctoredExam,
     },
     {
       id: CREDIT_REQUIREMENTS_TYPES.reverification,
-      label: `${intl.formatMessage(messages.creditVerification)}`,
+      label: intl.formatMessage(messages.creditVerification),
       values: creditRequirements?.reverification,
     },
   ];

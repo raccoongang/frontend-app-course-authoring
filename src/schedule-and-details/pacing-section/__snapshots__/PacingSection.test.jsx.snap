@@ -7,13 +7,13 @@ exports[`<PacingSection /> matches the snapshots 1`] = `
   <header
     className="section-header"
   >
-    <h2
-      className="section-header-title"
+    <span
+      className="lead"
     >
       Course Pacing
-    </h2>
+    </span>
     <span
-      className="section-header-description"
+      className="x-small text-gray-700"
     >
       Set the pacing for this course
     </span>
