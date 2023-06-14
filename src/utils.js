@@ -49,24 +49,16 @@ export function parseArrayOrObjectValues(obj) {
   const result = {};
 
   Object.entries(obj).forEach(([key, value]) => {
-    const newValue = removeExtraQuotes(value);
-    if (typeof newValue === 'string') {
-      try {
-        const parsedValue = JSON.parse(newValue);
-        if (Array.isArray(parsedValue) || typeof parsedValue === 'object') {
-          result[key] = parsedValue;
-        } else if (typeof parsedValue === 'boolean') {
-          result[key] = parsedValue.toString();
-        }
-      } catch (error) {
-        result[key] = newValue;
+    try {
+      if (!Number.isNaN(Number(value))) {
+        result[key] = value;
+      } else {
+        result[key] = JSON.parse(value);
       }
-    } else if (typeof newValue === 'object') {
-      result[key] = parseArrayOrObjectValues(newValue);
-    } else if (typeof newValue === 'boolean') {
-      result[key] = newValue;
-    } else {
-      result[key] = newValue;
+    } catch (e) {
+      // eslint-disable-next-line no-control-regex
+      const modifiedString = value.replace(/['"]/g, '').replace(/\x00/g, '');
+      result[key] = modifiedString;
     }
   });
 

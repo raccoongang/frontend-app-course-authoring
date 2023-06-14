@@ -52,7 +52,7 @@ describe('<CourseAuthoringRoutes>', () => {
   it('renders the PagesAndResources component when the pages and resources route is active', () => {
     render(
       <AppProvider store={store}>
-        <MemoryRouter initialEntries={[`/course/${courseId}/pages-and-resources`]}>
+        <MemoryRouter initialEntries={[`/course/course-v1:${courseId}/pages-and-resources`]}>
           <CourseAuthoringRoutes courseId={courseId} />
         </MemoryRouter>
       </AppProvider>,
