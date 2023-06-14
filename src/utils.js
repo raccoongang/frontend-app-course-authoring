@@ -57,8 +57,8 @@ export function parseArrayOrObjectValues(obj) {
       }
     } catch (e) {
       // eslint-disable-next-line no-control-regex
-      const modifiedString = value.replace(/['"]/g, '').replace(/\x00/g, '');
-      result[key] = modifiedString;
+      const modifiedString = value.replace(/['"]/g, '');
+      result[key] = modifiedString.trim();
     }
   });
 

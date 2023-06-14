@@ -20,12 +20,16 @@ export default function validateAdvancedSettingsData(settingObj, setErrorFields)
     const doubleAndSingleQuotes = /"(.*?)"|'(.*?)'/g;
     const hasMatchingQuotes = doubleAndSingleQuotes.test(value);
 
-    const doubleQuotes = value.includes('""');
-    const singleQuotes = value.includes("''");
-    const hasUnmatchedDoubleQuotes = value.includes('"') && !hasMatchingQuotes;
-    const hasUnmatchedSingleQuotes = value.includes("'") && !hasMatchingQuotes;
+    if ((value !== '""') && (value !== "''")) {
+      const doubleQuotes = value.includes('""');
+      const singleQuotes = value.includes("''");
+      const hasUnmatchedDoubleQuotes = value.includes('"') && !hasMatchingQuotes;
+      const hasUnmatchedSingleQuotes = value.includes("'") && !hasMatchingQuotes;
 
-    return doubleQuotes || singleQuotes || hasUnmatchedDoubleQuotes || hasUnmatchedSingleQuotes;
+      return doubleQuotes || singleQuotes || hasUnmatchedDoubleQuotes || hasUnmatchedSingleQuotes;
+    }
+
+    return false;
   }
 
   Object.entries(settingObj).forEach(([settingName, settingValue]) => {
