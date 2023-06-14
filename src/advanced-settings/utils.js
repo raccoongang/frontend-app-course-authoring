@@ -16,11 +16,22 @@ export default function validateAdvancedSettingsData(settingObj, setErrorFields)
 
   const bracketsValidation = (value) => /[{[\]}]/.test(value);
 
+  function quotesValidation(value) {
+    const doubleAndSingleQuotes = /"(.*?)"|'(.*?)'/g;
+    const hasMatchingQuotes = doubleAndSingleQuotes.test(value);
+
+    const doubleQuotes = value.includes('""');
+    const singleQuotes = value.includes("''");
+    const hasUnmatchedDoubleQuotes = value.includes('"') && !hasMatchingQuotes;
+    const hasUnmatchedSingleQuotes = value.includes("'") && !hasMatchingQuotes;
+
+    return doubleQuotes || singleQuotes || hasUnmatchedDoubleQuotes || hasUnmatchedSingleQuotes;
+  }
+
   Object.entries(settingObj).forEach(([settingName, settingValue]) => {
     const isArrayOrObject = (settingValue.startsWith('[') && settingValue.endsWith(']'))
         || (settingValue.startsWith('{') && settingValue.endsWith('}'));
-    const doubleAndSingleQuotes = /"(.*?)"|'(.*?)'/g;
-    const hasMatchingQuotes = doubleAndSingleQuotes.test(settingValue);
+
     if (typeof settingValue === 'string') {
       if (isArrayOrObject) {
         try {
@@ -28,9 +39,7 @@ export default function validateAdvancedSettingsData(settingObj, setErrorFields)
         } catch (err) {
           pushDataToErrorArray(settingName);
         }
-      } else if (bracketsValidation(settingValue) || settingValue.includes('""') || settingValue.includes("''")
-      // eslint-disable-next-line no-mixed-operators
-      || settingValue.includes('"') && !hasMatchingQuotes || settingValue.includes("'") && !hasMatchingQuotes) {
+      } else if (bracketsValidation(settingValue) || quotesValidation(settingValue)) {
         pushDataToErrorArray(settingName);
       }
     }
