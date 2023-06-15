@@ -52,6 +52,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
     if (!saveSettingsPrompt) {
       showSaveSettingsPrompt(true);
     }
+    setShowSuccessAlert(false);
     setEditedSettings((prevEditedSettings) => ({
       ...prevEditedSettings,
       [settingName]: value,
