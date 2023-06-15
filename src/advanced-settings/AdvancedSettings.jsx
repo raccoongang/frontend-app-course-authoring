@@ -65,8 +65,12 @@ const AdvancedSettings = ({ intl, courseId }) => {
     showSaveSettingsPrompt(false);
   };
 
+  const handleSettingBlur = () => {
+    validateAdvancedSettingsData(editedSettings, setErrorFields, setEditedSettings);
+  };
+
   const handleUpdateAdvancedSettingsData = () => {
-    const isValid = validateAdvancedSettingsData(editedSettings, setErrorFields);
+    const isValid = validateAdvancedSettingsData(editedSettings, setErrorFields, setEditedSettings);
     if (isValid) {
       dispatch(updateCourseAppSetting(courseId, parseArrayOrObjectValues(editedSettings)));
       showSaveSettingsPrompt(!saveSettingsPrompt);
@@ -148,7 +152,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
                       {Object.keys(advancedSettingsData).sort().map((settingName) => {
                         const settingData = advancedSettingsData[settingName];
                         const editedValue = editedSettings[settingName] !== undefined
-                          ? editedSettings[settingName] : settingData.value;
+                          ? editedSettings[settingName] : JSON.stringify(settingData.value, null, 4);
 
                         return (
                           <SettingCard
@@ -158,6 +162,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
                             showDeprecated={showDeprecated}
                             name={settingName}
                             value={editedValue}
+                            handleBlur={handleSettingBlur}
                           />
                         );
                       })}

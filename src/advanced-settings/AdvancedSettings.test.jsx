@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
+
 import AdvancedSettings from './AdvancedSettings';
 import { fetchCourseAppSettings, fetchProctoringExamErrors, updateCourseAppSetting } from './data/thunks';
 
@@ -63,7 +64,7 @@ describe('AdvancedSettings', () => {
   });
   it('should render setting card with correct value', () => {
     const settingCard = wrapper.find('SettingCard').at(0);
-    expect(settingCard.props().value).toBe('value1');
+    expect(settingCard.props().value).toBe('"value1"');
   });
   it('updating textarea value and show warning alert', () => {
     const settingCard = wrapper.find('SettingCard').at(0);
@@ -80,7 +81,7 @@ describe('AdvancedSettings', () => {
     const settingAlert = wrapper.find('SettingAlert');
     const resetBtn = settingAlert.find('Button').at(1);
     resetBtn.simulate('click');
-    expect(textarea.text()).toBe('value1');
+    expect(textarea.text()).toBe('"value1"');
   });
   it('should handle setting change', () => {
     const dispatch = useDispatch();
