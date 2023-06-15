@@ -15,11 +15,12 @@ export default function validateAdvancedSettingsData(settingObj, setErrorFields,
   };
 
   Object.entries(settingObj).forEach(([settingName, settingValue]) => {
+    let targetSettingValue = settingValue;
+
     try {
-      JSON.parse(settingValue);
+      JSON.parse(targetSettingValue);
     } catch (e) {
-      let targetSettingValue = settingValue;
-      const firstNonWhite = settingValue.substring(0, 1);
+      const firstNonWhite = targetSettingValue.substring(0, 1);
       const isValid = !['{', '[', "'"].includes(firstNonWhite);
 
       if (isValid) {
