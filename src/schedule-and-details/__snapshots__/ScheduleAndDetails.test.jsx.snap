@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ScheduleAndDetails /> matches the snapshots 1`] = `
+<div
+  className="d-flex justify-content-center align-items-center flex-column"
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
+>
+  <div
+    className="pgn__spinner spinner-border text-primary"
+    role="status"
+  >
+    <span
+      className="sr-only"
+    >
+      <span
+        className="sr-only"
+      >
+        Loading...
+      </span>
+    </span>
+  </div>
+</div>
+`;

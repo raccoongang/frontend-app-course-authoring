@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CertificateDisplayRow /> matches the snapshots 1`] = `
+<li
+  className="schedule-date-item"
+>
+  <div
+    className="schedule-date-item-container"
+  >
+    <div
+      className="pgn__form-group dropdown-certificate"
+    >
+      <label
+        className="pgn__form-label dropdown-certificate-label"
+        htmlFor="form-field1"
+      >
+        Certificate display behavior
+      </label>
+      <div
+        className="pgn__dropdown pgn__dropdown-light dropdown-certificate-control dropdown"
+        data-testid="dropdown"
+      >
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          className="dropdown-certificate-control-toggle dropdown-toggle btn btn-primary"
+          disabled={false}
+          id="certificate-behavior-dropdown"
+          onClick={[Function]}
+          type="button"
+        >
+          End date of course
+        </button>
+      </div>
+      <div
+        className="pgn__form-control-description pgn__form-text pgn__form-text-default"
+        id="form-field1-3"
+      >
+        <div>
+          Certificates are awarded at the end of a course run
+        </div>
+      </div>
+      <div
+        className="pgn_collapsible"
+      >
+        <div
+          aria-expanded={false}
+          className="d-flex small text-info-500 align-items-center"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          tabIndex={0}
+        >
+          <span
+            className="pgn__icon mr-1"
+          >
+            <svg
+              aria-hidden={true}
+              fill="none"
+              focusable={false}
+              height={24}
+              role="img"
+              viewBox="0 0 24 24"
+              width={24}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          Read more about this setting
+        </div>
+        <div
+          className="pgn-transition-replace-group position-relative"
+          style={
+            Object {
+              "height": null,
+            }
+          }
+        >
+          <div
+            style={
+              Object {
+                "padding": ".1px 0",
+              }
+            }
+          >
+            <div />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+</li>
+`;
