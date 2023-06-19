@@ -467,11 +467,11 @@
   "course-authoring.schedule.schedule-section.upgrade-deadline.time.label": "Upgrade deadline time",
   "course-authoring.schedule.alert.warning.save.error": "You've made some changes, but there are some errors",
   "course-authoring.schedule.alert.warning.save.descriptions.error": "Please address the errors on this page first, and then save your progress.",
-  "course-authoring.schedule.schedule-section.error-1": "The certificates display behavior must be 'A date after the course end date' if certificate available date is set.",
-  "course-authoring.schedule.schedule-section.error-2": "The enrollment end date cannot be after the course end date.",
-  "course-authoring.schedule.schedule-section.error-3": "The enrollment start date cannot be after the enrollment end date.",
-  "course-authoring.schedule.schedule-section.error-4": "The course start date must be later than the enrollment start date.",
-  "course-authoring.schedule.schedule-section.error-5": "The course end date must be later than the course start date.",
-  "course-authoring.schedule.schedule-section.error-6": "The certificate available date must be later than the course end date.",
-  "course-authoring.schedule.schedule-section.error-7": "The course must have an assigned start date."
+  "course-authoring.schedule.schedule-section.error-message-1": "The certificates display behavior must be 'A date after the course end date' if certificate available date is set.",
+  "course-authoring.schedule.schedule-section.error-message-2": "The enrollment end date cannot be after the course end date.",
+  "course-authoring.schedule.schedule-section.error-message-3": "The enrollment start date cannot be after the enrollment end date.",
+  "course-authoring.schedule.schedule-section.error-message-4": "The course start date must be later than the enrollment start date.",
+  "course-authoring.schedule.schedule-section.error-message-5": "The course end date must be later than the course start date.",
+  "course-authoring.schedule.schedule-section.error-message-6": "The certificate available date must be later than the course end date.",
+  "course-authoring.schedule.schedule-section.error-message-7": "The course must have an assigned start date."
 }

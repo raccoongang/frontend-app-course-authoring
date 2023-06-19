@@ -70,7 +70,6 @@ const CertificateDisplayRow = ({
   const renderReadMoreToggle = () => {
     const readMore = [
       {
-        key: 'uponPacing',
         heading: intl.formatMessage(
           messages.certificateDisplayBehaviorToggleHeading1,
         ),
@@ -79,7 +78,6 @@ const CertificateDisplayRow = ({
         ),
       },
       {
-        key: 'onCourseEnd',
         heading: intl.formatMessage(
           messages.certificateDisplayBehaviorToggleHeading2,
         ),
@@ -88,7 +86,6 @@ const CertificateDisplayRow = ({
         ),
       },
       {
-        key: 'dateAfter',
         heading: intl.formatMessage(
           messages.certificateDisplayBehaviorToggleHeading3,
         ),
@@ -97,6 +94,7 @@ const CertificateDisplayRow = ({
         ),
       },
     ];
+
     return (
       <Collapsible.Advanced>
         <Collapsible.Trigger className="d-flex small text-info-500 align-items-center">
@@ -109,10 +107,10 @@ const CertificateDisplayRow = ({
               messages.certificateDisplayBehaviorToggleParagraph,
             )}
           </p>
-          {readMore.map((info) => (
-            <div className="mt-2" key={info.key}>
-              <p className="h6 text-gray-700 mt-1">{info.heading}</p>
-              <p className="x-small text-gray-500 mt-1">{info.paragraph}</p>
+          {readMore.map(({ heading, paragraph }) => (
+            <div className="mt-2" key={heading}>
+              <p className="h6 text-gray-700 mt-1">{heading}</p>
+              <p className="x-small text-gray-500 mt-1">{paragraph}</p>
             </div>
           ))}
         </Collapsible.Body>
@@ -135,12 +133,12 @@ const CertificateDisplayRow = ({
               {certificateDisplayValue}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {dropdownOptions.map((option) => (
+              {dropdownOptions.map(({ id, label }) => (
                 <Dropdown.Item
-                  key={option.id}
-                  onClick={() => handleOnChange(option.id)}
+                  key={id}
+                  onClick={() => handleOnChange(id)}
                 >
-                  {option.label}
+                  {label}
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>

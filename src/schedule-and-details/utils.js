@@ -13,10 +13,19 @@ const convertToDateFromString = (dateStr) => {
   return moment(dateStr).utc().toDate();
 };
 
-const isDateBefore = (dateFormer, dateLatter, checkExists = true) => {
+const isDateBeforeOrEqual = (
+  dateFormer,
+  dateLatter,
+  allowEqual = false,
+  checkExists = true,
+) => {
   if (checkExists && (!dateFormer || !dateLatter)) {
     return false;
   }
+  if (allowEqual) {
+    return new Date(dateFormer) < new Date(dateLatter);
+  }
+
   return new Date(dateFormer) <= new Date(dateLatter);
 };
 
@@ -40,37 +49,41 @@ const validateScheduleAndDetails = (courseDetails, intl) => {
   } = courseDetails;
 
   if (!startDate) {
-    errors.startDate = intl.formatMessage(messages.error7);
+    errors.startDate = intl.formatMessage(messages.errorMessage7);
   }
 
-  if (isDateBefore(certificateAvailableDate, endDate)) {
-    errors.certificateAvailableDate = intl.formatMessage(messages.error6);
+  if (isDateBeforeOrEqual(certificateAvailableDate, endDate)) {
+    errors.certificateAvailableDate = intl.formatMessage(messages.errorMessage6);
   }
 
-  if (isDateBefore(endDate, startDate)) {
-    errors.endDate = intl.formatMessage(messages.error5);
+  if (isDateBeforeOrEqual(endDate, startDate)) {
+    errors.endDate = intl.formatMessage(messages.errorMessage5);
   }
 
-  if (isDateBefore(startDate, enrollmentStart)) {
-    errors.enrollmentStart = intl.formatMessage(messages.error4);
+  if (isDateBeforeOrEqual(startDate, enrollmentStart, true)) {
+    errors.enrollmentStart = intl.formatMessage(messages.errorMessage4);
   }
 
-  if (isDateBefore(enrollmentStart, enrollmentEnd)) {
-    errors.enrollmentStart = intl.formatMessage(messages.error3);
+  if (isDateBeforeOrEqual(enrollmentEnd, enrollmentStart)) {
+    errors.enrollmentStart = intl.formatMessage(messages.errorMessage3);
   }
 
-  if (isDateBefore(enrollmentEnd, endDate)) {
-    errors.enrollmentEnd = intl.formatMessage(messages.error2);
+  if (isDateBeforeOrEqual(endDate, enrollmentEnd, true)) {
+    errors.enrollmentEnd = intl.formatMessage(messages.errorMessage2);
   }
 
   if (
     certificatesDisplayBehavior === CERTIFICATE_DISPLAY_BEHAVIOR.endWithDate
     && !certificateAvailableDate
   ) {
-    errors.certificateAvailableDate = intl.formatMessage(messages.error1);
+    errors.certificateAvailableDate = intl.formatMessage(messages.errorMessage1);
   }
 
   return errors;
 };
 
-export { validateScheduleAndDetails, convertToDateFromString, convertToStringFromDate };
+export {
+  validateScheduleAndDetails,
+  convertToDateFromString,
+  convertToStringFromDate,
+};
