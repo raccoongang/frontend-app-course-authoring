@@ -1,67 +1,104 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useRanger } from 'react-ranger';
 import { Button, Icon, IconButton } from '@edx/paragon';
 import { Add } from '@edx/paragon/icons';
+import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
-const GradingScale = () => {
+// eslint-disable-next-line react/prop-types
+const GradingScale = ({ showSavePrompt }) => {
   const [gradingSegments, setGradingSegments] = useState([
     { current: 100, previous: 26 },
     { current: 26, previous: 0 },
   ]);
+  const [gradeLetters, setGradeLetters] = useState(['A', 'B', 'C', 'D', 'F']);
 
   const addNewGradingSegment = () => {
+    if (gradingSegments.length >= 5) {
+      return;
+    }
+
     setGradingSegments(prevValues => {
-      const first = prevValues[prevValues.length - 1];
-      const second = prevValues[prevValues.length - 2];
+      const firstSegment = prevValues[prevValues.length - 1];
+      const secondSegment = prevValues[prevValues.length - 2];
+      const newCurrentValue = Math.ceil((secondSegment.current - secondSegment.previous) / 2);
 
-      const newCurrent = Math.ceil((second.current - second.previous) / 2);
-
-      const newValue = {
-        current: first.current + newCurrent,
-        previous: first.current,
+      const newUpdatedSegment = {
+        current: firstSegment.current + newCurrentValue,
+        previous: firstSegment.current,
       };
 
-      const updatedSecond = {
-        ...second,
-        previous: first.current + newCurrent,
+      const updatedSecondSegment = {
+        ...secondSegment,
+        previous: firstSegment.current + newCurrentValue,
       };
+
+      showSavePrompt(true);
 
       return [
         ...prevValues.slice(0, prevValues.length - 2),
-        updatedSecond,
-        newValue,
-        first,
+        updatedSecondSegment,
+        newUpdatedSegment,
+        firstSegment,
       ];
     });
   };
 
   const updateGradingSegments = (newGradingSegmentData, activeHandleIndex) => {
-    const sortedSegments = newGradingSegmentData.sort((a, b) => a - b);
-    const newValue = sortedSegments[sortedSegments.length - 1 - activeHandleIndex];
+    const gapToSegment = 1;
+    const sortedSegments = newGradingSegmentData.sort((currentValue, previousValue) => currentValue - previousValue);
+    const newSegmentValue = sortedSegments[sortedSegments.length - 1 - activeHandleIndex];
     const prevSegmentBoundary = (gradingSegments[activeHandleIndex + 1]
         && gradingSegments[activeHandleIndex + 1].current) || 0;
     const nextSegmentBoundary = gradingSegments[activeHandleIndex - 1].current;
 
-    setGradingSegments(gradingSegments.map((segment, idx) => {
-      const upperBoundaryValue = newValue < nextSegmentBoundary - 5 ? newValue : nextSegmentBoundary - 5;
-      const lowerBoundaryValue = upperBoundaryValue > prevSegmentBoundary + 5
-        ? upperBoundaryValue : prevSegmentBoundary + 5;
+    showSavePrompt(true);
+
+    setGradingSegments(gradingSegments.map((gradingSegment, idx) => {
+      const upperBoundaryValue = (newSegmentValue < nextSegmentBoundary - gapToSegment)
+        ? newSegmentValue : (nextSegmentBoundary - gapToSegment);
+      const lowerBoundaryValue = (upperBoundaryValue > prevSegmentBoundary + gapToSegment)
+        ? upperBoundaryValue : (prevSegmentBoundary + gapToSegment);
 
       if (idx === activeHandleIndex - 1) {
-        return { previous: lowerBoundaryValue, current: segment.current };
+        return {
+          previous: lowerBoundaryValue,
+          current: gradingSegment.current,
+        };
       }
 
       if (idx === activeHandleIndex) {
-        return { current: lowerBoundaryValue, previous: segment.previous };
+        return {
+          current: lowerBoundaryValue,
+          previous: gradingSegment.previous,
+        };
       }
 
-      return segment;
+      return gradingSegment;
     }));
   };
 
   const handleRemoveGradingSegment = (gradingSegmentIndex) => {
-    setGradingSegments(prevValues => prevValues
-      .filter((_, i) => i !== gradingSegmentIndex));
+    setGradingSegments(prevValues => {
+      const updatedSegments = [...prevValues];
+      const removedSegment = updatedSegments.splice(gradingSegmentIndex - 1, 1)[0];
+      const previousSegment = updatedSegments[gradingSegmentIndex - 2];
+
+      if (previousSegment) {
+        previousSegment.previous = removedSegment.previous;
+      }
+
+      return updatedSegments;
+    });
+  };
+
+  const handleLetterChange = (e, idx) => {
+    const { value } = e.target;
+    setGradeLetters(prevValue => {
+      const updatedLetters = [...prevValue];
+      updatedLetters[idx - 1] = value;
+      return updatedLetters;
+    });
   };
 
   const {
@@ -93,44 +130,55 @@ const GradingScale = () => {
             <div className="grading-scale-tick-number">{value}</div>
           </div>
         ))}
-        {segments.map(({ value, getSegmentProps }, i) => (
+        {segments.reverse().map(({ value, getSegmentProps }, idx = 1) => (
           <div
             key={value}
-            className={`grading-scale-segment segment-${i}`}
+            className={`grading-scale-segment segment-${idx - 1}`}
             {...getSegmentProps()}
           >
-            <Button
-              variant="link"
-              size="inline"
-              className="grading-scale-segment-btn-remove"
-              type="button"
-              onClick={() => handleRemoveGradingSegment(i)}
-            >
-              Remove
-            </Button>
+            <div className="grading-scale-segment-content">
+              <input
+                className="grading-scale-segment-content-title m-0"
+                value={idx === 0 ? gradeLetters[0] : gradeLetters[idx - 1]}
+                onChange={e => handleLetterChange(e, idx)}
+                disabled={idx === gradingSegments.length}
+              />
+              <span className="grading-scale-segment-content-number m-0">
+                {gradingSegments[idx === 0 ? 0 : idx - 1].previous} - {value}
+              </span>
+            </div>
+            {idx !== gradingSegments.length && idx - 1 !== 0 && (
+              <Button
+                variant="link"
+                size="inline"
+                className="grading-scale-segment-btn-remove"
+                type="button"
+                onClick={() => handleRemoveGradingSegment(idx)}
+              >
+                Remove
+              </Button>
+            )}
           </div>
         ))}
-        {handles.map(({ value, getHandleProps }, i) => (
+        {handles.map(({ value, getHandleProps }, idx) => (
           <button
             key={value}
             className="grading-scale-segment-btn-resize"
             type="button"
-            disabled={gradingSegments[i].current === 100}
+            disabled={gradingSegments[idx].current === 100}
             {...getHandleProps({
-              style: gradingSegments[i].current === 100 ? { cursor: 'default' } : { cursor: 'e-resize' },
+              style: gradingSegments[idx].current === 100 ? { cursor: 'default', display: 'none' } : { cursor: 'e-resize' },
             })}
-          >
-            <div className="grading-scale-segment-content">
-              <h4 className="grading-scale-segment-content-title handle-title m-0" contentEditable="true">
-                {i}
-              </h4>
-              {gradingSegments[i].previous}-{value}
-            </div>
-          </button>
+          />
         ))}
       </div>
     </div>
   );
 };
 
-export default GradingScale;
+GradingScale.propTypes = {
+  intl: intlShape.isRequired,
+  showSavePrompt: PropTypes.func.isRequired,
+};
+
+export default injectIntl(GradingScale);

@@ -44,7 +44,8 @@
   .grading-scale-segments-and-ticks {
     display: inline-block;
     height: 50px;
-    width: 100%;
+    width: 94%;
+    border: 1px solid $black;
 
     .grading-scale-tick {
       .grading-scale-tick-number {
@@ -67,20 +68,6 @@
       }
     }
 
-    .grading-scale-segment-content {
-      position: relative;
-      right: 40px;
-      bottom: 7px;
-      display: flex;
-      flex-direction: column;
-      width: 1.6rem;
-      height: 1.6rem;
-      font-size: .7rem;
-      white-space: nowrap;
-      text-align: right;
-      align-items: flex-end;
-    }
-
     .grading-scale-segment-btn-resize {
       border: none;
       outline: none;
@@ -89,25 +76,24 @@
       height: 100%;
       padding: 0 7px;
       width: 10px;
+      z-index: 199999990 !important;
 
       &:disabled {
         color: black;
       }
     }
 
-    .grading-scale-segment-content-title {
-      border: none;
-      outline: none;
-      appearance: none;
-      cursor: text;
-    }
-
     .grading-scale-segment {
       height: 100%;
+
+      &:last-child {
+        border-right: none;
+      }
 
       @each $key, $color in $grading-scale-segment-colors {
         &.segment-#{$key} {
           background-color: $color;
+          z-index: #{$key};
         }
       }
 
@@ -117,7 +103,7 @@
 
       .grading-scale-segment-btn-remove {
         display: none;
-        font-size: 10px;
+        font-size: 11px;
         line-height: 14px;
         position: absolute;
         top: -25px;
@@ -125,6 +111,57 @@
         padding: 6px;
         text-decoration: none;
       }
+
+      .grading-scale-segment-content {
+        display: flex;
+        flex-direction: column;
+        margin-right: 20px;
+        margin-top: 6px;
+        font-size: .7rem;
+        white-space: nowrap;
+        text-align: right;
+        align-items: flex-end;
+      }
+
+      .grading-scale-segment-content-title {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        appearance: none;
+        cursor: text;
+        font-size: 1rem;
+        line-height: 1rem;
+        font-weight: 600;
+        text-align: end;
+
+        &:disabled {
+          color: $black;
+        }
+      }
+
+      .grading-scale-segment-content-number {
+        font-size: 12px;
+        line-height: 1rem;
+        color: $black;
+
+        &:disabled {
+          color: $black;
+        }
+      }
     }
   }
+}
+
+
+.segment--1 {
+  display: none;
+}
+
+.mock-title {
+  width: 100px;
+  //text-align: right;
+  color: $black;
+  font-size: 12px;
+  font-weight: 600;
+  //margin-left: auto;
 }
