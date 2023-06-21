@@ -85,7 +85,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
   }
 
   const showCreditSection = creditEligibilityEnabled && isCreditCourse;
-  const hasErrors = Object.keys(errorFields).length;
+  const hasErrors = !!Object.keys(errorFields).length;
   const alertWhileSavingTitle = hasErrors
     ? intl.formatMessage(messages.alertWarningOnSaveWithError)
     : intl.formatMessage(messages.alertWarning);
@@ -190,7 +190,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
           actions={[
             <Button
               onClick={handleUpdateValues}
-              disabled={Object.keys(errorFields).length}
+              disabled={hasErrors}
             >
               {intl.formatMessage(messages.buttonSaveText)}
             </Button>,

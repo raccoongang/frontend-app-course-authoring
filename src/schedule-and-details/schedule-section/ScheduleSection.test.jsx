@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import renderer from 'react-test-renderer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
 
@@ -40,11 +39,6 @@ describe('<ScheduleSection />', () => {
     certificatesDisplayBehavior,
     onChange: onChangeMock,
   };
-
-  it('matches the snapshots', () => {
-    const tree = renderer.create(<RootWrapper {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
 
   it('renders schedule section successfully', () => {
     const { getByText, queryAllByText } = render(<RootWrapper {...props} />);

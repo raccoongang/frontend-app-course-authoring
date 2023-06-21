@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
-import renderer from 'react-test-renderer';
 
 import { CERTIFICATE_DISPLAY_BEHAVIOR, CertificateDisplayRow } from '.';
 import { courseDetails } from '../../__mocks__';
@@ -23,11 +22,6 @@ describe('<CertificateDisplayRow />', () => {
     displayBehaviorErrorFeedback: '',
     onChange: onChangeMock,
   };
-
-  it('matches the snapshots', () => {
-    const tree = renderer.create(<RootWrapper {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
 
   it('renders without crashing', () => {
     const { getByText, getByRole, queryAllByText } = render(

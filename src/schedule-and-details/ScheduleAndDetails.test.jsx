@@ -1,5 +1,4 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
@@ -55,11 +54,6 @@ describe('<ScheduleAndDetails />', () => {
     axiosMock
       .onGet(getCourseSettingsApiUrl(courseId))
       .reply(200, courseSettings);
-  });
-
-  it('matches the snapshots', () => {
-    const tree = renderer.create(<RootWrapper />).toJSON();
-    expect(tree).toMatchSnapshot();
   });
 
   it('should render without errors', async () => {

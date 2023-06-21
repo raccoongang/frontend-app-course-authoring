@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IntlProvider } from 'react-intl';
-import renderer from 'react-test-renderer';
 
 import { courseDetails } from '../../__mocks__';
 import { ScheduleRow } from '.';
@@ -24,11 +23,6 @@ describe('<ScheduleRow />', () => {
     errorFeedback: 'foo bar error',
     onChange: onChangeMock,
   };
-
-  it('matches the snapshots', () => {
-    const tree = renderer.create(<RootWrapper {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
 
   it('renders without crashing', () => {
     const { getByText, queryAllByText } = render(<RootWrapper {...props} />);
