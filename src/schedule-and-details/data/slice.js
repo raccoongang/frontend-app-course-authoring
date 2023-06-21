@@ -11,6 +11,7 @@ const slice = createSlice({
     savingStatus: '',
     courseDetails: {},
     courseSettings: {},
+    uploadAssets: {},
   },
   reducers: {
     updateLoadingDetailsStatus: (state, { payload }) => {
@@ -31,6 +32,9 @@ const slice = createSlice({
     fetchCourseSettingsSuccess: (state, { payload }) => {
       Object.assign(state.courseSettings, payload);
     },
+    updateUploadAssetsSuccess: (state, { payload }) => {
+      Object.assign(state.uploadAssets, payload);
+    },
   },
 });
 
@@ -41,6 +45,7 @@ export const {
   updateCourseDetailsSuccess,
   fetchCourseDetailsSuccess,
   fetchCourseSettingsSuccess,
+  updateUploadAssetsSuccess,
 } = slice.actions;
 
 export const {
