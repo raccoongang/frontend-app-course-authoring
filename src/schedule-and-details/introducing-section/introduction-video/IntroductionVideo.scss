@@ -1,7 +1,6 @@
 .embed-video-container {
   @include pgn-box-shadow(1, "down");
 
-  box-sizing: border-box;
   border-radius: .1875rem;
 
   .introduction-video {

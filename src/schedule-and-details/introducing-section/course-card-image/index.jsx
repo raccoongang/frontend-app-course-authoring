@@ -8,6 +8,7 @@ import {
   FormattedMessage,
 } from '@edx/frontend-platform/i18n';
 import { FileUpload as FileUploadIcon } from '@edx/paragon/icons';
+import { getConfig } from '@edx/frontend-platform';
 import {
   Form,
   Dropzone,
@@ -20,7 +21,6 @@ import {
 
 import { updateAssetsQuery } from '../../data/thunks';
 import { getUploadedAssets } from '../../data/selectors';
-import { assetPathRoot, assetsUrl } from '../utils';
 import messages from './messages';
 
 const CourseCardImage = ({
@@ -31,7 +31,8 @@ const CourseCardImage = ({
 }) => {
   const dispatch = useDispatch();
   const uploadedAssets = useSelector(getUploadedAssets);
-  const imageAbsolutePath = assetPathRoot(`/${_.last(courseImageAssetPath.split('/'))}`);
+  const imageAbsolutePath = new URL(courseImageAssetPath, getConfig().LMS_BASE_URL);
+  const assetsUrl = new URL(`/assets/${courseId}`, getConfig().STUDIO_BASE_URL);
 
   const handleChangeImageAsset = (path) => {
     const assetPath = _.last(path.split('/'));
@@ -83,7 +84,7 @@ const CourseCardImage = ({
         values={{
           hyperlink: (
             <Hyperlink
-              destination={assetsUrl(courseId)}
+              destination={assetsUrl}
               target="_blank"
               rel="noopener noreferrer"
               showLaunchIcon={false}

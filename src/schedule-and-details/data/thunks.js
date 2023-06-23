@@ -12,7 +12,7 @@ import {
   fetchCourseDetailsSuccess,
   updateCourseDetailsSuccess,
   fetchCourseSettingsSuccess,
-  updateUploadAssetsSuccess,
+  updateUploadAssetsDataSuccess,
 } from './slice';
 
 export function fetchCourseDetailsQuery(courseId) {
@@ -67,7 +67,7 @@ export function updateAssetsQuery(courseId, fileData) {
 
     try {
       const uploadState = await uploadAssets(courseId, fileData);
-      dispatch(updateUploadAssetsSuccess(uploadState));
+      dispatch(updateUploadAssetsDataSuccess(uploadState));
       dispatch(updateLoadingSettingsStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {

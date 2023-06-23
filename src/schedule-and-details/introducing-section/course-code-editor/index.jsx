@@ -17,6 +17,7 @@ const CourseCodeEditor = ({
     <Form.Control.Feedback>{helpText}</Form.Control.Feedback>
   </Form.Group>
 );
+
 CourseCodeEditor.defaultProps = {
   code: '',
   label: '',
