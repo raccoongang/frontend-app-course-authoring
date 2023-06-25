@@ -92,6 +92,7 @@ describe('ProctoredExamSettings', () => {
     it('Updates Zendesk ticket field if proctortrack is provider', async () => {
       await waitFor(() => {
         screen.getByDisplayValue('mockproc');
+        screen.debug();
       });
       const selectElement = screen.getByDisplayValue('mockproc');
       await act(async () => {
