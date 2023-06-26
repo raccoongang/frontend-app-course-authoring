@@ -4,14 +4,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RequestStatus } from '../../data/constants';
 
 const slice = createSlice({
-  name: 'advancedSettings',
+  name: 'gradingSettings',
   initialState: {
     loadingStatus: RequestStatus.IN_PROGRESS,
     savingStatus: '',
-    courseAppSettings: {},
     gradingSettings: {},
-    // proctoringErrors: {},
-    sendRequestErrors: {},
+    // sendRequestErrors: {},
   },
   reducers: {
     updateLoadingStatus: (state, { payload }) => {
@@ -20,20 +18,14 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
-    fetchCourseAppsSettingsSuccess: (state, { payload }) => {
-      Object.assign(state.courseAppSettings, payload);
-    },
     fetchGradingSettingsSuccess: (state, { payload }) => {
       Object.assign(state.gradingSettings, payload);
     },
-    updateCourseAppsSettingsSuccess: (state, { payload }) => {
-      Object.assign(state.courseAppSettings, payload);
+    sendGradingSettingsSuccess: (state, { payload }) => {
+      Object.assign(state.gradingSettings, payload);
     },
-    getDataSendErrors: (state, { payload }) => {
-      Object.assign(state.sendRequestErrors, payload);
-    },
-    // fetchProctoringExamErrorsSuccess: (state, { payload }) => {
-    //   Object.assign(state.proctoringErrors, payload);
+    // getDataSendErrors: (state, { payload }) => {
+    //   Object.assign(state.sendRequestErrors, payload);
     // },
   },
 });
@@ -41,11 +33,9 @@ const slice = createSlice({
 export const {
   updateLoadingStatus,
   updateSavingStatus,
-  getDataSendErrors,
-  fetchCourseAppsSettingsSuccess,
+  // getDataSendErrors,
   fetchGradingSettingsSuccess,
-  updateCourseAppsSettingsSuccess,
-  // fetchProctoringExamErrorsSuccess,
+  sendGradingSettingsSuccess,
 } = slice.actions;
 
 export const {

@@ -1,31 +1,14 @@
 import { RequestStatus } from '../../data/constants';
 import {
-  getCourseAdvancedSettings, getGradingSettings,
-  updateCourseAdvancedSettings,
-  // getProctoringExamErrors,
+  getGradingSettings,
+  sendGradingSettings,
 } from './api';
 import {
-  fetchCourseAppsSettingsSuccess,
-  updateCourseAppsSettingsSuccess,
+  sendGradingSettingsSuccess,
   updateLoadingStatus,
   updateSavingStatus,
-  // fetchProctoringExamErrorsSuccess,
-  getDataSendErrors, fetchGradingSettingsSuccess,
+  fetchGradingSettingsSuccess,
 } from './slice';
-
-export function fetchCourseAppSettings(courseId, settings) {
-  return async (dispatch) => {
-    dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
-
-    try {
-      const settingValues = await getCourseAdvancedSettings(courseId, settings);
-      dispatch(fetchCourseAppsSettingsSuccess(settingValues));
-      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
-    } catch (error) {
-      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
-    }
-  };
-}
 
 export function fetchGradingSettings(courseId) {
   return async (dispatch) => {
@@ -40,37 +23,13 @@ export function fetchGradingSettings(courseId) {
   };
 }
 
-export function updateCourseAppSetting(courseId, settings) {
+export function sendGradingSetting(courseId, settings) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
-
     try {
-      const settingValues = await updateCourseAdvancedSettings(courseId, settings);
-      dispatch(updateCourseAppsSettingsSuccess(settingValues));
+      const settingValues = await sendGradingSettings(courseId, settings);
+      dispatch(sendGradingSettingsSuccess(settingValues));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      return true;
-    } catch (error) {
-      const { customAttributes: { httpErrorResponseData } } = error;
-      const errorData = JSON.parse(httpErrorResponseData);
-
-      dispatch(getDataSendErrors(errorData));
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
-      return false;
-    }
+    } catch (error) { /* empty */ }
   };
 }
-
-// export function fetchProctoringExamErrors(courseId) {
-//   return async (dispatch) => {
-//     dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
-//
-//     try {
-//       const settingValues = await getProctoringExamErrors(courseId);
-//       dispatch(fetchProctoringExamErrorsSuccess(settingValues));
-//       return true;
-//     } catch (error) {
-//       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
-//       return false;
-//     }
-//   };
-// }

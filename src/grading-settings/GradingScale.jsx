@@ -5,19 +5,38 @@ import { Button, Icon, IconButton } from '@edx/paragon';
 import { Add } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
-// eslint-disable-next-line react/prop-types
-const GradingScale = ({ showSavePrompt }) => {
-  const [gradingSegments, setGradingSegments] = useState([
-    { current: 100, previous: 26 },
-    { current: 26, previous: 0 },
-  ]);
-  const [gradeLetters, setGradeLetters] = useState(['A', 'B', 'C', 'D', 'F']);
+const GradingScale = ({
+  showSavePrompt, gradeCutoffs, setShowSuccessAlert, setGradingData,
+}) => {
+  const titles = Object.keys(gradeCutoffs).map(letter => letter);
+  const values = Object.values(gradeCutoffs).map(number => Math.round(number * 100));
+  // const obj1 = [
+  //   { current: 100, previous: 75 },
+  //   { current: 75, previous: 63 },
+  //   { current: 63, previous: 57 },
+  //   { current: 57, previous: 50 },
+  //   { current: 50, previous: 0 },
+  // ];
+
+  // const arr = [75, 63, 57, 50];
+
+  const sortedGrades = values.reduce((result, current, index) => {
+    if (index === (values.length - 1)) {
+      result.push({ current: values[index - 1] || 100, previous: values[index] });
+      result.push({ current: values[index], previous: 0 });
+    } else if (index === 0) {
+      result.push({ current: 100, previous: current });
+    } else {
+      const previous = values[index - 1];
+      result.push({ current: previous, previous: current });
+    }
+    return result;
+  }, []);
+
+  const [gradingSegments, setGradingSegments] = useState(sortedGrades);
+  const [gradeLetters, setGradeLetters] = useState(titles);
 
   const addNewGradingSegment = () => {
-    if (gradingSegments.length >= 5) {
-      return;
-    }
-
     setGradingSegments(prevValues => {
       const firstSegment = prevValues[prevValues.length - 1];
       const secondSegment = prevValues[prevValues.length - 2];
@@ -101,6 +120,13 @@ const GradingScale = ({ showSavePrompt }) => {
     });
   };
 
+  const result = {};
+
+  gradeLetters.forEach((letter, index) => {
+    const value = gradingSegments[index].previous / 100;
+    result[letter] = value;
+  });
+
   const {
     getTrackProps,
     ticks,
@@ -113,11 +139,19 @@ const GradingScale = ({ showSavePrompt }) => {
     stepSize: 1,
     values: gradingSegments.map(segment => segment.current),
     onDrag: (segmentDataArray) => updateGradingSegments(segmentDataArray, activeHandleIndex),
+    onChange: () => {
+      setShowSuccessAlert(false);
+      setGradingData(prevData => ({
+        ...prevData,
+        gradeCutoffs: result,
+      }));
+    },
   });
 
   return (
     <div className="grading-scale">
       <IconButton
+        disabled={gradingSegments.length >= 5}
         className="mr-3"
         src={Add}
         iconAs={Icon}
@@ -167,7 +201,9 @@ const GradingScale = ({ showSavePrompt }) => {
             type="button"
             disabled={gradingSegments[idx].current === 100}
             {...getHandleProps({
-              style: gradingSegments[idx].current === 100 ? { cursor: 'default', display: 'none' } : { cursor: 'e-resize' },
+              style: gradingSegments[idx].current === 100 ? {
+                cursor: 'default', display: 'none',
+              } : { cursor: 'e-resize' },
             })}
           />
         ))}
@@ -179,6 +215,10 @@ const GradingScale = ({ showSavePrompt }) => {
 GradingScale.propTypes = {
   intl: intlShape.isRequired,
   showSavePrompt: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  gradeCutoffs: PropTypes.object.isRequired,
+  setShowSuccessAlert: PropTypes.func.isRequired,
+  setGradingData: PropTypes.func.isRequired,
 };
 
 export default injectIntl(GradingScale);

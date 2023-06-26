@@ -4,20 +4,7 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { convertObjectToSnakeCase } from '../../utils';
 
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
-const getCourseAdvancedSettingsApiUrl = () => `${getApiBaseUrl()}/api/contentstore/v0/advanced_settings/`;
-const getGradingSettingsApiUrl = () => `${getApiBaseUrl()}/api/contentstore/v1/course_grading/`;
-// const getProctoringErrorsApiUrl = () => `${getApiBaseUrl()}/api/contentstore/v1/proctoring_errors/`;
-
-/**
- * Get's advanced setting for a course.
- * @param {string} courseId
- * @returns {Promise<Object>}
- */
-export async function getCourseAdvancedSettings(courseId) {
-  const { data } = await getAuthenticatedHttpClient()
-    .get(`${getCourseAdvancedSettingsApiUrl()}${courseId}?fetch_all=0`);
-  return camelCaseObject(data);
-}
+const getGradingSettingsApiUrl = (courseId) => `${getApiBaseUrl()}/api/contentstore/v1/course_grading/${courseId}`;
 
 /**
  * Get's grading setting for a course.
@@ -26,28 +13,18 @@ export async function getCourseAdvancedSettings(courseId) {
  */
 export async function getGradingSettings(courseId) {
   const { data } = await getAuthenticatedHttpClient()
-    .get(`${getGradingSettingsApiUrl()}${courseId}`);
+    .get(`${getGradingSettingsApiUrl(courseId)}`);
   return camelCaseObject(data);
 }
 
 /**
- * Updates advanced setting for a course.
+ * Send`s grading setting for a course.
  * @param {string} courseId
  * @param {object} settings
  * @returns {Promise<Object>}
  */
-export async function updateCourseAdvancedSettings(courseId, settings) {
+export async function sendGradingSettings(courseId, settings) {
   const { data } = await getAuthenticatedHttpClient()
-    .patch(`${getCourseAdvancedSettingsApiUrl()}${courseId}`, convertObjectToSnakeCase(settings));
+    .post(`${getGradingSettingsApiUrl(courseId)}`, convertObjectToSnakeCase(settings, true));
   return camelCaseObject(data);
 }
-
-// /**
-//  * Gets proctoring exam errors.
-//  * @param {string} courseId
-//  * @returns {Promise<Object>}
-//  */
-// export async function getProctoringExamErrors(courseId) {
-//   const { data } = await getAuthenticatedHttpClient().get(`${getProctoringErrorsApiUrl()}${courseId}`);
-//   return camelCaseObject(data);
-// }
