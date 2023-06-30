@@ -30,6 +30,8 @@ export function sendGradingSetting(courseId, settings) {
       const settingValues = await sendGradingSettings(courseId, settings);
       dispatch(sendGradingSettingsSuccess(settingValues));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-    } catch (error) { /* empty */ }
+    } catch (error) {
+      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
+    }
   };
 }

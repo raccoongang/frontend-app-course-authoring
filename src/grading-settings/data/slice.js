@@ -9,7 +9,6 @@ const slice = createSlice({
     loadingStatus: RequestStatus.IN_PROGRESS,
     savingStatus: '',
     gradingSettings: {},
-    // sendRequestErrors: {},
   },
   reducers: {
     updateLoadingStatus: (state, { payload }) => {
@@ -24,16 +23,12 @@ const slice = createSlice({
     sendGradingSettingsSuccess: (state, { payload }) => {
       Object.assign(state.gradingSettings, payload);
     },
-    // getDataSendErrors: (state, { payload }) => {
-    //   Object.assign(state.sendRequestErrors, payload);
-    // },
   },
 });
 
 export const {
   updateLoadingStatus,
   updateSavingStatus,
-  // getDataSendErrors,
   fetchGradingSettingsSuccess,
   sendGradingSettingsSuccess,
 } = slice.actions;

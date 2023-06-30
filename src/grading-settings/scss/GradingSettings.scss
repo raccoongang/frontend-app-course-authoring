@@ -38,12 +38,12 @@
 
 .grading-scale {
   display: flex;
-  margin-top: 25px;
+  margin-top: 1.5rem;
   align-items: center;
 
   .grading-scale-segments-and-ticks {
     display: inline-block;
-    height: 50px;
+    height: 3.125rem;
     width: 94%;
     border: 1px solid $black;
 
@@ -62,8 +62,8 @@
         position: absolute;
         left: 0;
         background-color: $gray-400;
-        height: 5px;
-        width: 2px;
+        height: .3125rem;
+        width: .125rem;
         transform: translate(-50%, .7rem);
       }
     }
@@ -74,12 +74,12 @@
       background-color: transparent;
       appearance: none;
       height: 100%;
-      padding: 0 7px;
-      width: 10px;
-      z-index: 199999990 !important;
+      padding: 0 .4375rem;
+      width: .625rem;
+      z-index: $zindex-dropdown !important;
 
       &:disabled {
-        color: black;
+        color: $black;
       }
     }
 
@@ -88,6 +88,10 @@
 
       &:last-child {
         border-right: none;
+      }
+
+      .segment--1 {
+        display: none;
       }
 
       @each $key, $color in $grading-scale-segment-colors {
@@ -103,20 +107,20 @@
 
       .grading-scale-segment-btn-remove {
         display: none;
-        font-size: 11px;
-        line-height: 14px;
+        font-size: .6875rem;
+        line-height: .875rem;
         position: absolute;
-        top: -25px;
-        right: -12px;
-        padding: 6px;
+        top: -1.5625rem;
+        right: -.75rem;
+        padding: .375rem;
         text-decoration: none;
       }
 
       .grading-scale-segment-content {
         display: flex;
         flex-direction: column;
-        margin-right: 20px;
-        margin-top: 6px;
+        margin-right: 1.25rem;
+        margin-top: .375rem;
         font-size: .7rem;
         white-space: nowrap;
         text-align: right;
@@ -140,7 +144,7 @@
       }
 
       .grading-scale-segment-content-number {
-        font-size: 12px;
+        font-size: .75rem;
         line-height: 1rem;
         color: $black;
 
@@ -150,18 +154,4 @@
       }
     }
   }
-}
-
-
-.segment--1 {
-  display: none;
-}
-
-.mock-title {
-  width: 100px;
-  //text-align: right;
-  color: $black;
-  font-size: 12px;
-  font-weight: 600;
-  //margin-left: auto;
 }

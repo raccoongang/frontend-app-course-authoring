@@ -1,24 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRanger } from 'react-ranger';
 import { Button, Icon, IconButton } from '@edx/paragon';
 import { Add } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { capitalize } from 'lodash';
+
+import messages from './messages';
 
 const GradingScale = ({
-  showSavePrompt, gradeCutoffs, setShowSuccessAlert, setGradingData,
+  intl, showSavePrompt, gradeCutoffs, setShowSuccessAlert, setGradingData,
 }) => {
   const titles = Object.keys(gradeCutoffs).map(letter => letter);
   const values = Object.values(gradeCutoffs).map(number => Math.round(number * 100));
-  // const obj1 = [
-  //   { current: 100, previous: 75 },
-  //   { current: 75, previous: 63 },
-  //   { current: 63, previous: 57 },
-  //   { current: 57, previous: 50 },
-  //   { current: 50, previous: 0 },
-  // ];
-
-  // const arr = [75, 63, 57, 50];
 
   const sortedGrades = values.reduce((result, current, index) => {
     if (index === (values.length - 1)) {
@@ -35,6 +29,22 @@ const GradingScale = ({
 
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
   const [gradeLetters, setGradeLetters] = useState(titles);
+  const lettersToAdd = ['A', 'B', 'C', 'D'];
+
+  const convertToResult = () => {
+    const result = {};
+
+    gradeLetters.forEach((letter, index) => {
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      result[letter] = gradingSegments[index]?.previous / 100;
+    });
+
+    return result;
+  };
+
+  useEffect(() => {
+    setGradingSegments(sortedGrades);
+  }, [gradeCutoffs]);
 
   const addNewGradingSegment = () => {
     setGradingSegments(prevValues => {
@@ -53,6 +63,7 @@ const GradingScale = ({
       };
 
       showSavePrompt(true);
+      setShowSuccessAlert(false);
 
       return [
         ...prevValues.slice(0, prevValues.length - 2),
@@ -61,6 +72,13 @@ const GradingScale = ({
         firstSegment,
       ];
     });
+    const nextIndex = (gradeLetters.length) % lettersToAdd.length;
+
+    if (gradingSegments.length === 2) {
+      setGradeLetters(prevLetters => [...prevLetters, lettersToAdd[nextIndex], lettersToAdd[nextIndex + 1]]);
+    } else {
+      setGradeLetters(prevLetters => [...prevLetters, lettersToAdd[nextIndex]]);
+    }
   };
 
   const updateGradingSegments = (newGradingSegmentData, activeHandleIndex) => {
@@ -109,6 +127,19 @@ const GradingScale = ({
 
       return updatedSegments;
     });
+    showSavePrompt(true);
+    setShowSuccessAlert(false);
+
+    setGradeLetters(prevValues => {
+      const prevLetters = [...prevValues];
+      prevLetters.splice(prevLetters.length - 1, 1);
+
+      if (prevLetters.length === 1) {
+        return [];
+      }
+
+      return prevLetters;
+    });
   };
 
   const handleLetterChange = (e, idx) => {
@@ -119,13 +150,6 @@ const GradingScale = ({
       return updatedLetters;
     });
   };
-
-  const result = {};
-
-  gradeLetters.forEach((letter, index) => {
-    const value = gradingSegments[index].previous / 100;
-    result[letter] = value;
-  });
 
   const {
     getTrackProps,
@@ -143,10 +167,29 @@ const GradingScale = ({
       setShowSuccessAlert(false);
       setGradingData(prevData => ({
         ...prevData,
-        gradeCutoffs: result,
+        gradeCutoffs: convertToResult(),
       }));
     },
   });
+
+  function getLettersOnLongScale(idx) {
+    if (idx === 0) {
+      return gradeLetters[0];
+    } if ((idx - 1) === gradingSegments.length - 1) {
+      return 'F';
+    }
+    return capitalize(gradeLetters[idx - 1]);
+  }
+
+  function getLettersOnShortScale(idx) {
+    if (idx === 1) {
+      if (gradeLetters.length > 1) {
+        return capitalize(gradeLetters[idx - 1]);
+      }
+      return capitalize(gradeLetters[idx - 1]) || capitalize('Pass');
+    }
+    return 'Fail';
+  }
 
   return (
     <div className="grading-scale">
@@ -155,7 +198,7 @@ const GradingScale = ({
         className="mr-3"
         src={Add}
         iconAs={Icon}
-        alt="Add new grading segment"
+        alt={intl.formatMessage(messages.addNewSegmentButtonAltText)}
         onClick={addNewGradingSegment}
       />
       <div className="grading-scale-segments-and-ticks" {...getTrackProps()}>
@@ -171,12 +214,22 @@ const GradingScale = ({
             {...getSegmentProps()}
           >
             <div className="grading-scale-segment-content">
-              <input
-                className="grading-scale-segment-content-title m-0"
-                value={idx === 0 ? gradeLetters[0] : gradeLetters[idx - 1]}
-                onChange={e => handleLetterChange(e, idx)}
-                disabled={idx === gradingSegments.length}
-              />
+              {gradingSegments.length === 2 && (
+                <input
+                  className="grading-scale-segment-content-title m-0"
+                  value={getLettersOnShortScale(idx)}
+                  onChange={e => handleLetterChange(e, idx)}
+                  disabled={idx === gradingSegments.length}
+                />
+              )}
+              {gradingSegments.length > 2 && (
+                <input
+                  className="grading-scale-segment-content-title m-0"
+                  value={getLettersOnLongScale(idx)}
+                  onChange={e => handleLetterChange(e, idx)}
+                  disabled={idx === gradingSegments.length}
+                />
+              )}
               <span className="grading-scale-segment-content-number m-0">
                 {gradingSegments[idx === 0 ? 0 : idx - 1].previous} - {value}
               </span>
@@ -189,7 +242,7 @@ const GradingScale = ({
                 type="button"
                 onClick={() => handleRemoveGradingSegment(idx)}
               >
-                Remove
+                {intl.formatMessage(messages.removeSegmentButtonText)}
               </Button>
             )}
           </div>
@@ -215,8 +268,7 @@ const GradingScale = ({
 GradingScale.propTypes = {
   intl: intlShape.isRequired,
   showSavePrompt: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  gradeCutoffs: PropTypes.object.isRequired,
+  gradeCutoffs: PropTypes.objectOf(PropTypes.number).isRequired,
   setShowSuccessAlert: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
 };

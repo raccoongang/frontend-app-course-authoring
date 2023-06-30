@@ -5,17 +5,18 @@ import PropTypes from 'prop-types';
 import { CheckCircle as CheckCircleIcon, WarningFilled as WarningFilledIcon } from '@edx/paragon/icons/es5';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Loading from '../generic/Loading';
 import AlertMessage from '../generic/alert-message';
 import { RequestStatus } from '../data/constants';
-import messages from '../advanced-settings/messages';
 import { getGradingSettings, getSavingStatus, getLoadingStatus } from './data/selectors';
 import { fetchGradingSettings, sendGradingSetting } from './data/thunks';
-import GradingScale from './GradingScale';
+import GradingScale from './grading-scale/GradingScale';
 import GradingSidebar from './grading-sidebar';
+import messages from './messages';
 
 const GradingSettings = ({ intl, courseId }) => {
   const gradingSettingsData = useSelector(getGradingSettings);
-  const [gradingData, setGradingData] = useState([]);
+  const [gradingData, setGradingData] = useState(gradingSettingsData);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
   const [saveValuesPrompt, showSaveValuesPrompt] = useState(false);
@@ -27,8 +28,6 @@ const GradingSettings = ({ intl, courseId }) => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       setShowSuccessAlert(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (savingStatus === RequestStatus.FAILED) {
-      console.log('Error saving');
     }
   }, [savingStatus]);
 
@@ -44,7 +43,7 @@ const GradingSettings = ({ intl, courseId }) => {
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
+    return <Loading />;
   }
 
   const handleSendGradingSettingsData = () => {
@@ -60,7 +59,7 @@ const GradingSettings = ({ intl, courseId }) => {
             show={showSuccessAlert}
             variant="success"
             icon={CheckCircleIcon}
-            title="Your changes have been saved."
+            title={intl.formatMessage(messages.alertSuccess)}
             aria-hidden="true"
             aria-labelledby={intl.formatMessage(
               messages.alertSuccessAriaLabelledby,
@@ -74,7 +73,7 @@ const GradingSettings = ({ intl, courseId }) => {
               <small className="grading-header-title-subtitle">
                 {intl.formatMessage(messages.headingSubtitle)}
               </small>
-              Grading
+              {intl.formatMessage(messages.headingTitle)}
             </h1>
           </header>
         </div>
@@ -92,10 +91,12 @@ const GradingSettings = ({ intl, courseId }) => {
                   <div>
                     <section className="grading-items-policies">
                       <header>
-                        <h2 className="grading-items-policies-title">Overall Grade Range</h2>
+                        <h2 className="grading-items-policies-title">
+                          {intl.formatMessage(messages.policy)}
+                        </h2>
                       </header>
                       <p className="grading-items-policies-instructions mb-4">
-                        Your overall grading scale for student final grades
+                        {intl.formatMessage(messages.policiesDescription)}
                       </p>
                       <GradingScale
                         showSavePrompt={showSaveValuesPrompt}
@@ -126,17 +127,23 @@ const GradingSettings = ({ intl, courseId }) => {
           )}
           role="dialog"
           actions={[
+            <Button
+              variant="tertiary"
+              onClick={() => {
+                showSaveValuesPrompt(!saveValuesPrompt);
+                setGradingData(gradingSettingsData);
+              }}
+            >
+              {intl.formatMessage(messages.buttonCancelText)}
+            </Button>,
             <Button onClick={handleSendGradingSettingsData}>
               {intl.formatMessage(messages.buttonSaveText)}
-            </Button>,
-            <Button variant="tertiary" onClick={() => showSaveValuesPrompt(!saveValuesPrompt)}>
-              {intl.formatMessage(messages.buttonCancelText)}
             </Button>,
           ]}
           variant="warning"
           icon={WarningFilledIcon}
           title={intl.formatMessage(messages.alertWarning)}
-          description="Your changes will not take effect until you save your progress."
+          description={intl.formatMessage(messages.alertWarningDescriptions)}
         />
       </div>
     </>
