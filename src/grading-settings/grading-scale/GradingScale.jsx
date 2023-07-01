@@ -9,8 +9,9 @@ import { capitalize } from 'lodash';
 import messages from './messages';
 
 const GradingScale = ({
-  intl, showSavePrompt, gradeCutoffs, setShowSuccessAlert, setGradingData,
+  intl, showSavePrompt, gradingData, setShowSuccessAlert, setGradingData,
 }) => {
+  const gradeCutoffs = gradingData?.gradeCutoffs;
   const titles = Object.keys(gradeCutoffs).map(letter => letter);
   const values = Object.values(gradeCutoffs).map(number => Math.round(number * 100));
 
@@ -30,8 +31,16 @@ const GradingScale = ({
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
   const [gradeLetters, setGradeLetters] = useState(titles);
   const lettersToAdd = ['A', 'B', 'C', 'D'];
+  const [convertedResult, setConvertedResult] = useState({});
 
-  const convertToResult = () => {
+  useEffect(() => {
+    setGradingData(prevData => ({
+      ...prevData,
+      gradeCutoffs: convertedResult,
+    }));
+  }, [convertedResult]);
+
+  useEffect(() => {
     const result = {};
 
     gradeLetters.forEach((letter, index) => {
@@ -39,12 +48,8 @@ const GradingScale = ({
       result[letter] = gradingSegments[index]?.previous / 100;
     });
 
-    return result;
-  };
-
-  useEffect(() => {
-    setGradingSegments(sortedGrades);
-  }, [gradeCutoffs]);
+    setConvertedResult(result);
+  }, [gradingSegments, gradeLetters]);
 
   const addNewGradingSegment = () => {
     setGradingSegments(prevValues => {
@@ -127,6 +132,7 @@ const GradingScale = ({
 
       return updatedSegments;
     });
+
     showSavePrompt(true);
     setShowSuccessAlert(false);
 
@@ -144,9 +150,14 @@ const GradingScale = ({
 
   const handleLetterChange = (e, idx) => {
     const { value } = e.target;
+
+    showSavePrompt(true);
+    setShowSuccessAlert(false);
+
     setGradeLetters(prevValue => {
       const updatedLetters = [...prevValue];
       updatedLetters[idx - 1] = value;
+
       return updatedLetters;
     });
   };
@@ -167,7 +178,7 @@ const GradingScale = ({
       setShowSuccessAlert(false);
       setGradingData(prevData => ({
         ...prevData,
-        gradeCutoffs: convertToResult(),
+        gradeCutoffs: convertedResult,
       }));
     },
   });
@@ -186,8 +197,10 @@ const GradingScale = ({
       if (gradeLetters.length > 1) {
         return capitalize(gradeLetters[idx - 1]);
       }
+
       return capitalize(gradeLetters[idx - 1]) || capitalize('Pass');
     }
+
     return 'Fail';
   }
 
@@ -203,7 +216,7 @@ const GradingScale = ({
       />
       <div className="grading-scale-segments-and-ticks" {...getTrackProps()}>
         {ticks.map(({ value, getTickProps }) => (
-          <div className="mt-5 grading-scale-tick" {...getTickProps()}>
+          <div className="mt-5 grading-scale-tick" data-testid="grading-scale-tick" {...getTickProps()}>
             <div className="grading-scale-tick-number">{value}</div>
           </div>
         ))}
@@ -211,6 +224,7 @@ const GradingScale = ({
           <div
             key={value}
             className={`grading-scale-segment segment-${idx - 1}`}
+            data-testid="grading-scale-segment"
             {...getSegmentProps()}
           >
             <div className="grading-scale-segment-content">
@@ -231,7 +245,7 @@ const GradingScale = ({
                 />
               )}
               <span className="grading-scale-segment-content-number m-0">
-                {gradingSegments[idx === 0 ? 0 : idx - 1].previous} - {value}
+                {gradingSegments[idx === 0 ? 0 : idx - 1]?.previous} - {value}
               </span>
             </div>
             {idx !== gradingSegments.length && idx - 1 !== 0 && (
@@ -239,6 +253,7 @@ const GradingScale = ({
                 variant="link"
                 size="inline"
                 className="grading-scale-segment-btn-remove"
+                data-testid="grading-scale-btn-remove"
                 type="button"
                 onClick={() => handleRemoveGradingSegment(idx)}
               >
@@ -268,7 +283,9 @@ const GradingScale = ({
 GradingScale.propTypes = {
   intl: intlShape.isRequired,
   showSavePrompt: PropTypes.func.isRequired,
-  gradeCutoffs: PropTypes.objectOf(PropTypes.number).isRequired,
+  gradingData: PropTypes.shape({
+    gradeCutoffs: PropTypes.objectOf(PropTypes.number),
+  }).isRequired,
   setShowSuccessAlert: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
 };

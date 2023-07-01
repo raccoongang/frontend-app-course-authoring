@@ -11,7 +11,7 @@ const messages = defineMessages({
   },
   policy: {
     id: 'course-authoring.grading-settings.policies.title',
-    defaultMessage: 'Overall Grade Range',
+    defaultMessage: 'Overall grade range',
   },
   policiesDescription: {
     id: 'course-authoring.grading-settings.policies.description',

@@ -106,12 +106,11 @@
       }
 
       .grading-scale-segment-btn-remove {
+        font: normal $font-weight-normal .6875rem/1 $font-family-base;
         display: none;
-        font-size: .6875rem;
-        line-height: .875rem;
         position: absolute;
         top: -1.5625rem;
-        right: -.75rem;
+        right: -6px;
         padding: .375rem;
         text-decoration: none;
       }
@@ -128,14 +127,12 @@
       }
 
       .grading-scale-segment-content-title {
+        font: normal $font-weight-semi-bold 1rem/1 $font-family-base;
         border: none;
         outline: none;
         background-color: transparent;
         appearance: none;
         cursor: text;
-        font-size: 1rem;
-        line-height: 1rem;
-        font-weight: 600;
         text-align: end;
 
         &:disabled {
@@ -144,8 +141,7 @@
       }
 
       .grading-scale-segment-content-number {
-        font-size: .75rem;
-        line-height: 1rem;
+        font: normal $font-weight-normal .75rem/1 $font-family-base;
         color: $black;
 
         &:disabled {

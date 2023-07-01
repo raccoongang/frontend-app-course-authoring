@@ -3,14 +3,14 @@ import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-
-import { render, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
-import { getGradingSettingsApiUrl } from './data/api';
 
 import initializeStore from '../store';
-
+import { getGradingSettingsApiUrl } from './data/api';
+import gradingSettings from './__mocks__/gradingSettings';
 import GradingSettings from './GradingSettings';
+import messages from './messages';
 
 const courseId = '123';
 let axiosMock;
@@ -39,62 +39,53 @@ describe('<GradingSettings />', () => {
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     axiosMock
       .onGet(`${getGradingSettingsApiUrl(courseId)}`)
-      .reply(200, {
-        mfeProctoredExamSettingsUrl: '',
-        courseAssignmentLists: {},
-        courseDetails: {
-          graders: [
-            {
-              type: 'Homework',
-              minCount: 0,
-              dropCount: 0,
-              shortLabel: null,
-              weight: 15,
-              id: 0,
-            },
-            {
-              type: 'Lab',
-              minCount: 0,
-              dropCount: 0,
-              shortLabel: null,
-              weight: 15,
-              id: 1,
-            },
-            {
-              type: 'Midterm Exam',
-              minCount: 0,
-              dropCount: 0,
-              shortLabel: null,
-              weight: 30,
-              id: 2,
-            },
-            {
-              type: 'Final Exam',
-              minCount: 0,
-              dropCount: 0,
-              shortLabel: null,
-              weight: 40,
-              id: 3,
-            },
-          ],
-          gradeCutoffs: {
-            a: 0.72,
-            d: 0.71,
-            c: 0.31,
-          },
-          gracePeriod: null,
-          minimumGradeCredit: 0.8,
-        },
-        showCreditEligibility: false,
-        isCreditCourse: false,
-      });
+      .reply(200, gradingSettings);
   });
 
   it('should render without errors', async () => {
-    const { getByText, getByRole } = render(<RootWrapper />);
-    await waitForElementToBeRemoved(getByRole('status'));
+    const { getByText } = render(<RootWrapper />);
+    await waitFor(() => {
+      expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.policy.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.policiesDescription.defaultMessage)).toBeInTheDocument();
+    });
+  });
 
-    const textarea = getByText(/Grading/i);
-    expect(textarea).toBeInTheDocument();
+  it('renders grading scale ticks', async () => {
+    const { getAllByTestId } = render(<RootWrapper />);
+    await waitFor(() => {
+      const ticks = getAllByTestId('grading-scale-tick');
+      expect(ticks).toHaveLength(11); // 0 to 100, inclusive, with step 10
+    });
+  });
+
+  it('renders grading scale segments', async () => {
+    const { getAllByTestId } = render(<RootWrapper />);
+    await waitFor(() => {
+      const segments = getAllByTestId('grading-scale-segment');
+      expect(segments).toHaveLength(5);
+    });
+  });
+  it('should add a new grading segment when "Add new grading segment" button is clicked', async () => {
+    const { getByRole, getAllByTestId } = render(<RootWrapper />);
+    await waitFor(() => {
+      const addNewSegmentBtn = getByRole('button', {
+        name: 'Add new grading segment',
+      });
+      expect(addNewSegmentBtn).toBeInTheDocument();
+      fireEvent.click(addNewSegmentBtn);
+      const segments = getAllByTestId('grading-scale-segment');
+      expect(segments).toHaveLength(6);
+    });
+  });
+  it('should remove grading segment when "Remove" button is clicked', async () => {
+    const { getAllByTestId } = render(<RootWrapper />);
+    await waitFor(() => {
+      const segments = getAllByTestId('grading-scale-segment');
+      const btn = getAllByTestId('grading-scale-btn-remove');
+      fireEvent.click(btn[1]);
+      expect(segments).toHaveLength(5);
+    });
   });
 });

@@ -6,8 +6,10 @@
 @import "~@edx/frontend-component-footer/dist/footer";
 @import "assets/scss/variables";
 @import "assets/scss/form";
+@import "assets/scss/utilities";
 @import "proctored-exam-settings/proctoredExamSettings";
 @import "pages-and-resources/discussions/app-list/AppList";
 @import "advanced-settings/scss/AdvancedSettings";
 @import "schedule-and-details/ScheduleAndDetails";
 @import "grading-settings/scss/GradingSettings";
+@import "generic/styles";

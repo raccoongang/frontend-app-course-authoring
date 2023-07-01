@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Button, Container, Layout } from '@edx/paragon';
 import PropTypes from 'prop-types';
-import { CheckCircle as CheckCircleIcon, WarningFilled as WarningFilledIcon } from '@edx/paragon/icons/es5';
 import { useDispatch, useSelector } from 'react-redux';
+import { CheckCircle as CheckCircleIcon, Warning } from '@edx/paragon/icons';
 
-import Loading from '../generic/Loading';
 import AlertMessage from '../generic/alert-message';
 import { RequestStatus } from '../data/constants';
 import { getGradingSettings, getSavingStatus, getLoadingStatus } from './data/selectors';
@@ -43,7 +42,7 @@ const GradingSettings = ({ intl, courseId }) => {
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <Loading />;
+    return <></>;
   }
 
   const handleSendGradingSettingsData = () => {
@@ -53,7 +52,7 @@ const GradingSettings = ({ intl, courseId }) => {
 
   return (
     <>
-      <Container size="xl">
+      <Container size="xl" className="m-4">
         <div className="setting-header mt-5">
           <AlertMessage
             show={showSuccessAlert}
@@ -100,7 +99,7 @@ const GradingSettings = ({ intl, courseId }) => {
                       </p>
                       <GradingScale
                         showSavePrompt={showSaveValuesPrompt}
-                        gradeCutoffs={gradingData?.gradeCutoffs}
+                        gradingData={gradingData}
                         setShowSuccessAlert={setShowSuccessAlert}
                         setGradingData={setGradingData}
                       />
@@ -141,7 +140,7 @@ const GradingSettings = ({ intl, courseId }) => {
             </Button>,
           ]}
           variant="warning"
-          icon={WarningFilledIcon}
+          icon={Warning}
           title={intl.formatMessage(messages.alertWarning)}
           description={intl.formatMessage(messages.alertWarningDescriptions)}
         />
