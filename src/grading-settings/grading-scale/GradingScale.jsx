@@ -12,26 +12,28 @@ const GradingScale = ({
   intl, showSavePrompt, gradingData, setShowSuccessAlert, setGradingData,
 }) => {
   const gradeCutoffs = gradingData?.gradeCutoffs;
-  const titles = Object.keys(gradeCutoffs).map(letter => letter);
-  const values = Object.values(gradeCutoffs).map(number => Math.round(number * 100));
-
-  const sortedGrades = values.reduce((result, current, index) => {
-    if (index === (values.length - 1)) {
-      result.push({ current: values[index - 1] || 100, previous: values[index] });
-      result.push({ current: values[index], previous: 0 });
-    } else if (index === 0) {
-      result.push({ current: 100, previous: current });
+  const gradeValues = Object.values(gradeCutoffs).map(number => Math.round(number * 100));
+  const sortedGrades = gradeValues.reduce((sortedArray, current, idx) => {
+    if (idx === (gradeValues.length - 1)) {
+      sortedArray.push({ current: gradeValues[idx - 1] || 100, previous: gradeValues[idx] });
+      sortedArray.push({ current: gradeValues[idx], previous: 0 });
+    } else if (idx === 0) {
+      sortedArray.push({ current: 100, previous: current });
     } else {
-      const previous = values[index - 1];
-      result.push({ current: previous, previous: current });
+      const previous = gradeValues[idx - 1];
+      sortedArray.push({ current: previous, previous: current });
     }
-    return result;
+    return sortedArray;
   }, []);
 
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
-  const [gradeLetters, setGradeLetters] = useState(titles);
-  const lettersToAdd = ['A', 'B', 'C', 'D'];
+  const [letters, setLetters] = useState(Object.keys(gradeCutoffs));
+  const defaultLetters = ['A', 'B', 'C', 'D'];
   const [convertedResult, setConvertedResult] = useState({});
+
+  // useEffect(() => {
+  //   setGradingSegments(sortedGrades);
+  // }, [gradeCutoffs]);
 
   useEffect(() => {
     setGradingData(prevData => ({
@@ -41,48 +43,49 @@ const GradingScale = ({
   }, [convertedResult]);
 
   useEffect(() => {
-    const result = {};
+    const convertedData = {};
 
-    gradeLetters.forEach((letter, index) => {
+    letters.forEach((letter, idx) => {
       // eslint-disable-next-line no-unsafe-optional-chaining
-      result[letter] = gradingSegments[index]?.previous / 100;
+      convertedData[letter] = gradingSegments[idx]?.previous / 100;
     });
 
-    setConvertedResult(result);
-  }, [gradingSegments, gradeLetters]);
+    setConvertedResult(convertedData);
+  }, [gradingSegments, letters]);
 
   const addNewGradingSegment = () => {
-    setGradingSegments(prevValues => {
-      const firstSegment = prevValues[prevValues.length - 1];
-      const secondSegment = prevValues[prevValues.length - 2];
+    setGradingSegments(prevSegments => {
+      const firstSegment = prevSegments[prevSegments.length - 1];
+      const secondSegment = prevSegments[prevSegments.length - 2];
       const newCurrentValue = Math.ceil((secondSegment.current - secondSegment.previous) / 2);
 
-      const newUpdatedSegment = {
-        current: firstSegment.current + newCurrentValue,
+      const newSegment = {
+        current: (firstSegment.current + newCurrentValue),
         previous: firstSegment.current,
       };
 
       const updatedSecondSegment = {
         ...secondSegment,
-        previous: firstSegment.current + newCurrentValue,
+        previous: (firstSegment.current + newCurrentValue),
       };
 
       showSavePrompt(true);
       setShowSuccessAlert(false);
 
       return [
-        ...prevValues.slice(0, prevValues.length - 2),
+        ...prevSegments.slice(0, prevSegments.length - 2),
         updatedSecondSegment,
-        newUpdatedSegment,
+        newSegment,
         firstSegment,
       ];
     });
-    const nextIndex = (gradeLetters.length) % lettersToAdd.length;
+
+    const nextIndex = (letters.length % defaultLetters.length);
 
     if (gradingSegments.length === 2) {
-      setGradeLetters(prevLetters => [...prevLetters, lettersToAdd[nextIndex], lettersToAdd[nextIndex + 1]]);
+      setLetters([defaultLetters[0], defaultLetters[nextIndex]]);
     } else {
-      setGradeLetters(prevLetters => [...prevLetters, lettersToAdd[nextIndex]]);
+      setLetters(prevLetters => [...prevLetters, defaultLetters[nextIndex]]);
     }
   };
 
@@ -120,9 +123,9 @@ const GradingScale = ({
     }));
   };
 
-  const handleRemoveGradingSegment = (gradingSegmentIndex) => {
-    setGradingSegments(prevValues => {
-      const updatedSegments = [...prevValues];
+  const removeGradingSegment = (gradingSegmentIndex) => {
+    setGradingSegments(prevSegments => {
+      const updatedSegments = [...prevSegments];
       const removedSegment = updatedSegments.splice(gradingSegmentIndex - 1, 1)[0];
       const previousSegment = updatedSegments[gradingSegmentIndex - 2];
 
@@ -135,29 +138,20 @@ const GradingScale = ({
 
     showSavePrompt(true);
     setShowSuccessAlert(false);
-
-    setGradeLetters(prevValues => {
-      const prevLetters = [...prevValues];
-      prevLetters.splice(prevLetters.length - 1, 1);
-
-      if (prevLetters.length === 1) {
-        return [];
-      }
-
-      return prevLetters;
+    setLetters(prevLetters => {
+      const updatedLetters = [...prevLetters];
+      updatedLetters.splice(updatedLetters.length - 1, 1);
+      return updatedLetters.length === 1 ? ['pass'] : updatedLetters;
     });
   };
 
   const handleLetterChange = (e, idx) => {
     const { value } = e.target;
-
     showSavePrompt(true);
     setShowSuccessAlert(false);
-
-    setGradeLetters(prevValue => {
-      const updatedLetters = [...prevValue];
+    setLetters(prevLetters => {
+      const updatedLetters = [...prevLetters];
       updatedLetters[idx - 1] = value;
-
       return updatedLetters;
     });
   };
@@ -183,31 +177,23 @@ const GradingScale = ({
     },
   });
 
-  function getLettersOnLongScale(idx) {
+  const getLettersOnLongScale = (idx) => {
     if (idx === 0) {
-      return gradeLetters[0];
-    } if ((idx - 1) === gradingSegments.length - 1) {
+      return letters[0];
+    }
+    if ((idx - 1) === (gradingSegments.length - 1)) {
       return 'F';
     }
-    return capitalize(gradeLetters[idx - 1]);
-  }
+    return capitalize(letters[idx - 1]);
+  };
 
-  function getLettersOnShortScale(idx) {
-    if (idx === 1) {
-      if (gradeLetters.length > 1) {
-        return capitalize(gradeLetters[idx - 1]);
-      }
-
-      return capitalize(gradeLetters[idx - 1]) || capitalize('Pass');
-    }
-
-    return 'Fail';
-  }
+  const getLettersOnShortScale = (idx) => (idx === 1 ? capitalize(letters[idx - 1]) : 'Fail');
 
   return (
     <div className="grading-scale">
       <IconButton
         disabled={gradingSegments.length >= 5}
+        data-testid="grading-scale-btn-add-segment"
         className="mr-3"
         src={Add}
         iconAs={Icon}
@@ -231,6 +217,7 @@ const GradingScale = ({
               {gradingSegments.length === 2 && (
                 <input
                   className="grading-scale-segment-content-title m-0"
+                  data-testid="grading-scale-segment-input"
                   value={getLettersOnShortScale(idx)}
                   onChange={e => handleLetterChange(e, idx)}
                   disabled={idx === gradingSegments.length}
@@ -239,6 +226,7 @@ const GradingScale = ({
               {gradingSegments.length > 2 && (
                 <input
                   className="grading-scale-segment-content-title m-0"
+                  data-testid="grading-scale-segment-input"
                   value={getLettersOnLongScale(idx)}
                   onChange={e => handleLetterChange(e, idx)}
                   disabled={idx === gradingSegments.length}
@@ -255,7 +243,7 @@ const GradingScale = ({
                 className="grading-scale-segment-btn-remove"
                 data-testid="grading-scale-btn-remove"
                 type="button"
-                onClick={() => handleRemoveGradingSegment(idx)}
+                onClick={() => removeGradingSegment(idx)}
               >
                 {intl.formatMessage(messages.removeSegmentButtonText)}
               </Button>

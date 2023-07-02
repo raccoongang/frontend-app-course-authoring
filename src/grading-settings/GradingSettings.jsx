@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Button, Container, Layout } from '@edx/paragon';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { CheckCircle as CheckCircleIcon, Warning } from '@edx/paragon/icons';
+import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { Container, Layout, Button } from '@edx/paragon';
+import { CheckCircle, Warning } from '@edx/paragon/icons';
 
 import AlertMessage from '../generic/alert-message';
 import { RequestStatus } from '../data/constants';
@@ -18,7 +18,7 @@ const GradingSettings = ({ intl, courseId }) => {
   const [gradingData, setGradingData] = useState(gradingSettingsData);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
-  const [saveValuesPrompt, showSaveValuesPrompt] = useState(false);
+  const [showSavePrompt, setShowSavePrompt] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const dispatch = useDispatch();
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
@@ -47,7 +47,7 @@ const GradingSettings = ({ intl, courseId }) => {
 
   const handleSendGradingSettingsData = () => {
     dispatch(sendGradingSetting(courseId, gradingData));
-    showSaveValuesPrompt(!saveValuesPrompt);
+    setShowSavePrompt(!showSavePrompt);
   };
 
   return (
@@ -57,15 +57,11 @@ const GradingSettings = ({ intl, courseId }) => {
           <AlertMessage
             show={showSuccessAlert}
             variant="success"
-            icon={CheckCircleIcon}
+            icon={CheckCircle}
             title={intl.formatMessage(messages.alertSuccess)}
             aria-hidden="true"
-            aria-labelledby={intl.formatMessage(
-              messages.alertSuccessAriaLabelledby,
-            )}
-            aria-describedby={intl.formatMessage(
-              messages.alertSuccessAriaDescribedby,
-            )}
+            aria-labelledby={intl.formatMessage(messages.alertSuccessAriaLabelledby)}
+            aria-describedby={intl.formatMessage(messages.alertSuccessAriaDescribedby)}
           />
           <header className="setting-header-inner">
             <h1 className="grading-header-title">
@@ -98,7 +94,7 @@ const GradingSettings = ({ intl, courseId }) => {
                         {intl.formatMessage(messages.policiesDescription)}
                       </p>
                       <GradingScale
-                        showSavePrompt={showSaveValuesPrompt}
+                        showSavePrompt={setShowSavePrompt}
                         gradingData={gradingData}
                         setShowSuccessAlert={setShowSuccessAlert}
                         setGradingData={setGradingData}
@@ -116,20 +112,17 @@ const GradingSettings = ({ intl, courseId }) => {
       </Container>
       <div className="alert-toast">
         <AlertMessage
-          show={saveValuesPrompt}
-          aria-hidden={saveValuesPrompt}
-          aria-labelledby={intl.formatMessage(
-            messages.alertWarningAriaLabelledby,
-          )}
-          aria-describedby={intl.formatMessage(
-            messages.alertWarningAriaDescribedby,
-          )}
+          show={showSavePrompt}
+          aria-hidden={!showSavePrompt}
+          aria-labelledby={intl.formatMessage(messages.alertWarningAriaLabelledby)}
+          aria-describedby={intl.formatMessage(messages.alertWarningAriaDescribedby)}
+          data-testid="grading-settings-save-alert"
           role="dialog"
           actions={[
             <Button
               variant="tertiary"
               onClick={() => {
-                showSaveValuesPrompt(!saveValuesPrompt);
+                setShowSavePrompt(!showSavePrompt);
                 setGradingData(gradingSettingsData);
               }}
             >

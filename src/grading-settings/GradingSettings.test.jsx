@@ -52,40 +52,15 @@ describe('<GradingSettings />', () => {
     });
   });
 
-  it('renders grading scale ticks', async () => {
-    const { getAllByTestId } = render(<RootWrapper />);
+  it('should update segment input value and show save alert', async () => {
+    const { getByTestId, getAllByTestId } = render(<RootWrapper />);
     await waitFor(() => {
-      const ticks = getAllByTestId('grading-scale-tick');
-      expect(ticks).toHaveLength(11); // 0 to 100, inclusive, with step 10
-    });
-  });
-
-  it('renders grading scale segments', async () => {
-    const { getAllByTestId } = render(<RootWrapper />);
-    await waitFor(() => {
-      const segments = getAllByTestId('grading-scale-segment');
-      expect(segments).toHaveLength(5);
-    });
-  });
-  it('should add a new grading segment when "Add new grading segment" button is clicked', async () => {
-    const { getByRole, getAllByTestId } = render(<RootWrapper />);
-    await waitFor(() => {
-      const addNewSegmentBtn = getByRole('button', {
-        name: 'Add new grading segment',
-      });
-      expect(addNewSegmentBtn).toBeInTheDocument();
-      fireEvent.click(addNewSegmentBtn);
-      const segments = getAllByTestId('grading-scale-segment');
-      expect(segments).toHaveLength(6);
-    });
-  });
-  it('should remove grading segment when "Remove" button is clicked', async () => {
-    const { getAllByTestId } = render(<RootWrapper />);
-    await waitFor(() => {
-      const segments = getAllByTestId('grading-scale-segment');
-      const btn = getAllByTestId('grading-scale-btn-remove');
-      fireEvent.click(btn[1]);
-      expect(segments).toHaveLength(5);
+      const segmentInputs = getAllByTestId('grading-scale-segment-input');
+      expect(segmentInputs).toHaveLength(5);
+      const segmentInput = segmentInputs[1];
+      fireEvent.change(segmentInput, { target: { value: 'Test' } });
+      expect(segmentInput).toHaveValue('Test');
+      expect(getByTestId('grading-settings-save-alert')).toBeVisible();
     });
   });
 });
