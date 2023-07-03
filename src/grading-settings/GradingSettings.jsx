@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
@@ -22,6 +22,7 @@ const GradingSettings = ({ intl, courseId }) => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const dispatch = useDispatch();
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
+  const resetDataRef = useRef(false);
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
@@ -98,6 +99,7 @@ const GradingSettings = ({ intl, courseId }) => {
                         gradingData={gradingData}
                         setShowSuccessAlert={setShowSuccessAlert}
                         setGradingData={setGradingData}
+                        resetDataRef={resetDataRef}
                       />
                     </section>
                   </div>
@@ -124,6 +126,7 @@ const GradingSettings = ({ intl, courseId }) => {
               onClick={() => {
                 setShowSavePrompt(!showSavePrompt);
                 setGradingData(gradingSettingsData);
+                resetDataRef.current = true;
               }}
             >
               {intl.formatMessage(messages.buttonCancelText)}

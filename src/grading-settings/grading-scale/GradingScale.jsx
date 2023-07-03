@@ -4,36 +4,36 @@ import { useRanger } from 'react-ranger';
 import { Button, Icon, IconButton } from '@edx/paragon';
 import { Add } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { capitalize } from 'lodash';
 
 import messages from './messages';
+import {
+  getGradingValues,
+  getSortedGrades,
+  getLettersOnLongScale,
+  getLettersOnShortScale,
+} from './utils';
+
+const DEFAULT_LETTERS = ['A', 'B', 'C', 'D'];
 
 const GradingScale = ({
-  intl, showSavePrompt, gradingData, setShowSuccessAlert, setGradingData,
+  intl, showSavePrompt, gradingData, setShowSuccessAlert, setGradingData, resetDataRef,
 }) => {
   const gradeCutoffs = gradingData?.gradeCutoffs;
-  const gradeValues = Object.values(gradeCutoffs).map(number => Math.round(number * 100));
-  const sortedGrades = gradeValues.reduce((sortedArray, current, idx) => {
-    if (idx === (gradeValues.length - 1)) {
-      sortedArray.push({ current: gradeValues[idx - 1] || 100, previous: gradeValues[idx] });
-      sortedArray.push({ current: gradeValues[idx], previous: 0 });
-    } else if (idx === 0) {
-      sortedArray.push({ current: 100, previous: current });
-    } else {
-      const previous = gradeValues[idx - 1];
-      sortedArray.push({ current: previous, previous: current });
-    }
-    return sortedArray;
-  }, []);
+  const gradeValues = getGradingValues(gradeCutoffs);
+  const sortedGrades = getSortedGrades(gradeValues);
 
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
   const [letters, setLetters] = useState(Object.keys(gradeCutoffs));
-  const defaultLetters = ['A', 'B', 'C', 'D'];
   const [convertedResult, setConvertedResult] = useState({});
 
-  // useEffect(() => {
-  //   setGradingSegments(sortedGrades);
-  // }, [gradeCutoffs]);
+  useEffect(() => {
+    if (resetDataRef.current) {
+      setGradingSegments(sortedGrades);
+      setLetters(Object.keys(gradeCutoffs));
+      // eslint-disable-next-line no-param-reassign
+      resetDataRef.current = false;
+    }
+  }, [gradeCutoffs]);
 
   useEffect(() => {
     setGradingData(prevData => ({
@@ -46,8 +46,7 @@ const GradingScale = ({
     const convertedData = {};
 
     letters.forEach((letter, idx) => {
-      // eslint-disable-next-line no-unsafe-optional-chaining
-      convertedData[letter] = gradingSegments[idx]?.previous / 100;
+      convertedData[letter] = gradingSegments[idx].previous / 100;
     });
 
     setConvertedResult(convertedData);
@@ -80,12 +79,12 @@ const GradingScale = ({
       ];
     });
 
-    const nextIndex = (letters.length % defaultLetters.length);
+    const nextIndex = (letters.length % DEFAULT_LETTERS.length);
 
     if (gradingSegments.length === 2) {
-      setLetters([defaultLetters[0], defaultLetters[nextIndex]]);
+      setLetters([DEFAULT_LETTERS[0], DEFAULT_LETTERS[nextIndex]]);
     } else {
-      setLetters(prevLetters => [...prevLetters, defaultLetters[nextIndex]]);
+      setLetters(prevLetters => [...prevLetters, DEFAULT_LETTERS[nextIndex]]);
     }
   };
 
@@ -177,18 +176,6 @@ const GradingScale = ({
     },
   });
 
-  const getLettersOnLongScale = (idx) => {
-    if (idx === 0) {
-      return letters[0];
-    }
-    if ((idx - 1) === (gradingSegments.length - 1)) {
-      return 'F';
-    }
-    return capitalize(letters[idx - 1]);
-  };
-
-  const getLettersOnShortScale = (idx) => (idx === 1 ? capitalize(letters[idx - 1]) : 'Fail');
-
   return (
     <div className="grading-scale">
       <IconButton
@@ -218,7 +205,7 @@ const GradingScale = ({
                 <input
                   className="grading-scale-segment-content-title m-0"
                   data-testid="grading-scale-segment-input"
-                  value={getLettersOnShortScale(idx)}
+                  value={getLettersOnShortScale(idx, letters)}
                   onChange={e => handleLetterChange(e, idx)}
                   disabled={idx === gradingSegments.length}
                 />
@@ -227,7 +214,7 @@ const GradingScale = ({
                 <input
                   className="grading-scale-segment-content-title m-0"
                   data-testid="grading-scale-segment-input"
-                  value={getLettersOnLongScale(idx)}
+                  value={getLettersOnLongScale(idx, letters, gradingSegments)}
                   onChange={e => handleLetterChange(e, idx)}
                   disabled={idx === gradingSegments.length}
                 />
@@ -276,6 +263,7 @@ GradingScale.propTypes = {
   }).isRequired,
   setShowSuccessAlert: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
+  resetDataRef: PropTypes.bool.isRequired,
 };
 
 export default injectIntl(GradingScale);
