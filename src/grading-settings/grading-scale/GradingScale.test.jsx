@@ -5,19 +5,25 @@ import { render, waitFor, fireEvent } from '@testing-library/react';
 
 import GradingScale from './GradingScale';
 
-const gradingData = {
-  gradeCutoffs: {
-    A: 0.9,
-    B: 0.8,
-    C: 0.7,
-  },
-};
+const gradeCutoffs = { A: 0.9, B: 0.8, C: 0.7 };
+
+const gradeLetters = ['A', 'B', 'C', 'D'];
+
+const sortedGrades = [
+  { current: 100, previous: 49 },
+  { current: 49, previous: 41 },
+  { current: 32, previous: 20 },
+  { current: 20, previous: 0 },
+];
 
 const RootWrapper = () => (
   <IntlProvider locale="en" messages={{}}>
     <GradingScale
       intl={injectIntl}
-      gradingData={gradingData}
+      gradeCutoffs={gradeCutoffs}
+      gradeLetters={gradeLetters}
+      sortedGrades={sortedGrades}
+      resetDataRef={{ current: false }}
       showSavePrompt={jest.fn()}
       setShowSuccessAlert={jest.fn()}
       setGradingData={jest.fn()}
@@ -54,13 +60,14 @@ describe('<GradingScale />', () => {
   });
 
   it('should add a new grading segment when "Add new grading segment" button is clicked', async () => {
-    const { getAllByTestId } = render(<RootWrapper />);
+    const { debug, getAllByTestId } = render(<RootWrapper />);
     await waitFor(() => {
       const addNewSegmentBtn = getAllByTestId('grading-scale-btn-add-segment');
       expect(addNewSegmentBtn[0]).toBeInTheDocument();
       fireEvent.click(addNewSegmentBtn[0]);
       const segments = getAllByTestId('grading-scale-segment');
       expect(segments).toHaveLength(6);
+      debug(addNewSegmentBtn);
     });
   });
 
@@ -85,13 +92,20 @@ describe('<GradingScale />', () => {
     });
   });
 
-  it('123', async () => {
-    const shortGradingData = { gradeCutoffs: { Pass: 0.9 } };
+  it('should render GradingScale component with short grade cutoffs and sorted grades', async () => {
+    const shortGradeCutoffs = { Pass: 0.9 };
+    const shortSortedGrades = [
+      { current: 100, previous: 49 },
+      { current: 20, previous: 0 },
+    ];
     const { getAllByTestId } = render(
       <IntlProvider locale="en" messages={{}}>
         <GradingScale
           intl={injectIntl}
-          gradingData={shortGradingData}
+          gradeCutoffs={shortGradeCutoffs}
+          gradeLetters={['A']}
+          sortedGrades={shortSortedGrades}
+          resetDataRef={{ current: false }}
           showSavePrompt={jest.fn()}
           setShowSuccessAlert={jest.fn()}
           setGradingData={jest.fn()}

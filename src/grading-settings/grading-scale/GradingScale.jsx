@@ -1,55 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRanger } from 'react-ranger';
-import { Button, Icon, IconButton } from '@edx/paragon';
+import { Icon, IconButton } from '@edx/paragon';
 import { Add } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
-import {
-  getGradingValues,
-  getSortedGrades,
-  getLettersOnLongScale,
-  getLettersOnShortScale,
-} from './utils';
+import { convertGradeData, MAXIMUM_SCALE_LENGTH } from './utils';
+import { GradingScaleTicks, GradingScaleHandle, GradingScaleSegment } from './components';
 
 const DEFAULT_LETTERS = ['A', 'B', 'C', 'D'];
 
 const GradingScale = ({
-  intl, showSavePrompt, gradingData, setShowSuccessAlert, setGradingData, resetDataRef,
+  intl,
+  showSavePrompt,
+  gradeCutoffs,
+  setShowSuccessAlert,
+  setGradingData,
+  resetDataRef,
+  gradeLetters,
+  sortedGrades,
 }) => {
-  const gradeCutoffs = gradingData?.gradeCutoffs;
-  const gradeValues = getGradingValues(gradeCutoffs);
-  const sortedGrades = getSortedGrades(gradeValues);
-
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
-  const [letters, setLetters] = useState(Object.keys(gradeCutoffs));
+  const [letters, setLetters] = useState(gradeLetters);
   const [convertedResult, setConvertedResult] = useState({});
 
   useEffect(() => {
     if (resetDataRef.current) {
       setGradingSegments(sortedGrades);
-      setLetters(Object.keys(gradeCutoffs));
+      setLetters(gradeLetters);
       // eslint-disable-next-line no-param-reassign
       resetDataRef.current = false;
     }
   }, [gradeCutoffs]);
 
   useEffect(() => {
-    setGradingData(prevData => ({
-      ...prevData,
-      gradeCutoffs: convertedResult,
-    }));
+    setGradingData(prevData => ({ ...prevData, gradeCutoffs: convertedResult }));
   }, [convertedResult]);
 
   useEffect(() => {
-    const convertedData = {};
-
-    letters.forEach((letter, idx) => {
-      convertedData[letter] = gradingSegments[idx].previous / 100;
-    });
-
-    setConvertedResult(convertedData);
+    convertGradeData(letters, gradingSegments, setConvertedResult);
   }, [gradingSegments, letters]);
 
   const addNewGradingSegment = () => {
@@ -137,22 +127,32 @@ const GradingScale = ({
 
     showSavePrompt(true);
     setShowSuccessAlert(false);
+
     setLetters(prevLetters => {
       const updatedLetters = [...prevLetters];
       updatedLetters.splice(updatedLetters.length - 1, 1);
+
       return updatedLetters.length === 1 ? ['pass'] : updatedLetters;
     });
   };
 
   const handleLetterChange = (e, idx) => {
     const { value } = e.target;
+
     showSavePrompt(true);
     setShowSuccessAlert(false);
+
     setLetters(prevLetters => {
       const updatedLetters = [...prevLetters];
       updatedLetters[idx - 1] = value;
+
       return updatedLetters;
     });
+  };
+
+  const handleSegmentChange = () => {
+    setShowSuccessAlert(false);
+    setGradingData(prevData => ({ ...prevData, gradeCutoffs: convertedResult }));
   };
 
   const {
@@ -163,17 +163,11 @@ const GradingScale = ({
     activeHandleIndex,
   } = useRanger({
     min: 0,
-    max: 100,
+    max: MAXIMUM_SCALE_LENGTH,
     stepSize: 1,
-    values: gradingSegments.map(segment => segment.current),
+    values: gradingSegments?.map(segment => segment.current),
     onDrag: (segmentDataArray) => updateGradingSegments(segmentDataArray, activeHandleIndex),
-    onChange: () => {
-      setShowSuccessAlert(false);
-      setGradingData(prevData => ({
-        ...prevData,
-        gradeCutoffs: convertedResult,
-      }));
-    },
+    onChange: handleSegmentChange,
   });
 
   return (
@@ -189,65 +183,27 @@ const GradingScale = ({
       />
       <div className="grading-scale-segments-and-ticks" {...getTrackProps()}>
         {ticks.map(({ value, getTickProps }) => (
-          <div className="mt-5 grading-scale-tick" data-testid="grading-scale-tick" {...getTickProps()}>
-            <div className="grading-scale-tick-number">{value}</div>
-          </div>
+          <GradingScaleTicks key={value} value={value} getTickProps={getTickProps} />
         ))}
         {segments.reverse().map(({ value, getSegmentProps }, idx = 1) => (
-          <div
-            key={value}
-            className={`grading-scale-segment segment-${idx - 1}`}
-            data-testid="grading-scale-segment"
-            {...getSegmentProps()}
-          >
-            <div className="grading-scale-segment-content">
-              {gradingSegments.length === 2 && (
-                <input
-                  className="grading-scale-segment-content-title m-0"
-                  data-testid="grading-scale-segment-input"
-                  value={getLettersOnShortScale(idx, letters)}
-                  onChange={e => handleLetterChange(e, idx)}
-                  disabled={idx === gradingSegments.length}
-                />
-              )}
-              {gradingSegments.length > 2 && (
-                <input
-                  className="grading-scale-segment-content-title m-0"
-                  data-testid="grading-scale-segment-input"
-                  value={getLettersOnLongScale(idx, letters, gradingSegments)}
-                  onChange={e => handleLetterChange(e, idx)}
-                  disabled={idx === gradingSegments.length}
-                />
-              )}
-              <span className="grading-scale-segment-content-number m-0">
-                {gradingSegments[idx === 0 ? 0 : idx - 1]?.previous} - {value}
-              </span>
-            </div>
-            {idx !== gradingSegments.length && idx - 1 !== 0 && (
-              <Button
-                variant="link"
-                size="inline"
-                className="grading-scale-segment-btn-remove"
-                data-testid="grading-scale-btn-remove"
-                type="button"
-                onClick={() => removeGradingSegment(idx)}
-              >
-                {intl.formatMessage(messages.removeSegmentButtonText)}
-              </Button>
-            )}
-          </div>
+          <GradingScaleSegment
+            key={idx}
+            getSegmentProps={getSegmentProps}
+            removeGradingSegment={removeGradingSegment}
+            gradingSegments={gradingSegments}
+            value={value}
+            idx={idx}
+            handleLetterChange={handleLetterChange}
+            letters={letters}
+          />
         ))}
         {handles.map(({ value, getHandleProps }, idx) => (
-          <button
+          <GradingScaleHandle
             key={value}
-            className="grading-scale-segment-btn-resize"
-            type="button"
-            disabled={gradingSegments[idx].current === 100}
-            {...getHandleProps({
-              style: gradingSegments[idx].current === 100 ? {
-                cursor: 'default', display: 'none',
-              } : { cursor: 'e-resize' },
-            })}
+            getHandleProps={getHandleProps}
+            gradingSegments={gradingSegments}
+            value={value}
+            idx={idx}
           />
         ))}
       </div>
@@ -258,12 +214,17 @@ const GradingScale = ({
 GradingScale.propTypes = {
   intl: intlShape.isRequired,
   showSavePrompt: PropTypes.func.isRequired,
-  gradingData: PropTypes.shape({
-    gradeCutoffs: PropTypes.objectOf(PropTypes.number),
-  }).isRequired,
+  gradeCutoffs: PropTypes.objectOf(PropTypes.number).isRequired,
+  gradeLetters: PropTypes.arrayOf(PropTypes.string).isRequired,
   setShowSuccessAlert: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
-  resetDataRef: PropTypes.bool.isRequired,
+  resetDataRef: PropTypes.objectOf(PropTypes.bool).isRequired,
+  sortedGrades: PropTypes.arrayOf(
+    PropTypes.shape({
+      current: PropTypes.number.isRequired,
+      previous: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default injectIntl(GradingScale);

@@ -12,10 +12,11 @@ import { fetchGradingSettings, sendGradingSetting } from './data/thunks';
 import GradingScale from './grading-scale/GradingScale';
 import GradingSidebar from './grading-sidebar';
 import messages from './messages';
+import { getGradingValues, getSortedGrades } from './grading-scale/utils';
 
 const GradingSettings = ({ intl, courseId }) => {
   const gradingSettingsData = useSelector(getGradingSettings);
-  const [gradingData, setGradingData] = useState(gradingSettingsData);
+  const [gradingData, setGradingData] = useState({});
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
   const [showSavePrompt, setShowSavePrompt] = useState(false);
@@ -23,6 +24,10 @@ const GradingSettings = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
   const resetDataRef = useRef(false);
+  const { gradeCutoffs } = gradingData;
+  const gradeLetters = gradeCutoffs && Object.keys(gradeCutoffs);
+  const gradeValues = gradeCutoffs && getGradingValues(gradeCutoffs);
+  const sortedGrades = gradeCutoffs && getSortedGrades(gradeValues);
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
@@ -95,8 +100,11 @@ const GradingSettings = ({ intl, courseId }) => {
                         {intl.formatMessage(messages.policiesDescription)}
                       </p>
                       <GradingScale
+                        gradeCutoffs={gradeCutoffs || {}}
                         showSavePrompt={setShowSavePrompt}
-                        gradingData={gradingData}
+                        gradeLetters={gradeLetters}
+                        gradeValues={gradeValues}
+                        sortedGrades={sortedGrades}
                         setShowSuccessAlert={setShowSuccessAlert}
                         setGradingData={setGradingData}
                         resetDataRef={resetDataRef}
