@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRanger } from 'react-ranger';
 import { Icon, IconButton } from '@edx/paragon';
-import { Add } from '@edx/paragon/icons';
+import { Add as IconAdd } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
@@ -20,6 +20,7 @@ const GradingScale = ({
   resetDataRef,
   gradeLetters,
   sortedGrades,
+  setOverrideInternetConnectionAlert,
 }) => {
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
   const [letters, setLetters] = useState(gradeLetters);
@@ -36,7 +37,7 @@ const GradingScale = ({
 
   useEffect(() => {
     setGradingData(prevData => ({ ...prevData, gradeCutoffs: convertedResult }));
-  }, [convertedResult]);
+  }, [JSON.stringify(convertedResult)]);
 
   useEffect(() => {
     convertGradeData(letters, gradingSegments, setConvertedResult);
@@ -60,6 +61,7 @@ const GradingScale = ({
 
       showSavePrompt(true);
       setShowSuccessAlert(false);
+      setOverrideInternetConnectionAlert(false);
 
       return [
         ...prevSegments.slice(0, prevSegments.length - 2),
@@ -127,6 +129,7 @@ const GradingScale = ({
 
     showSavePrompt(true);
     setShowSuccessAlert(false);
+    setOverrideInternetConnectionAlert(false);
 
     setLetters(prevLetters => {
       const updatedLetters = [...prevLetters];
@@ -141,6 +144,7 @@ const GradingScale = ({
 
     showSavePrompt(true);
     setShowSuccessAlert(false);
+    setOverrideInternetConnectionAlert(false);
 
     setLetters(prevLetters => {
       const updatedLetters = [...prevLetters];
@@ -152,6 +156,7 @@ const GradingScale = ({
 
   const handleSegmentChange = () => {
     setShowSuccessAlert(false);
+    setOverrideInternetConnectionAlert(false);
     setGradingData(prevData => ({ ...prevData, gradeCutoffs: convertedResult }));
   };
 
@@ -176,7 +181,7 @@ const GradingScale = ({
         disabled={gradingSegments.length >= 5}
         data-testid="grading-scale-btn-add-segment"
         className="mr-3"
-        src={Add}
+        src={IconAdd}
         iconAs={Icon}
         alt={intl.formatMessage(messages.addNewSegmentButtonAltText)}
         onClick={addNewGradingSegment}
@@ -218,6 +223,7 @@ GradingScale.propTypes = {
   gradeLetters: PropTypes.arrayOf(PropTypes.string).isRequired,
   setShowSuccessAlert: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
+  setOverrideInternetConnectionAlert: PropTypes.func.isRequired,
   resetDataRef: PropTypes.objectOf(PropTypes.bool).isRequired,
   sortedGrades: PropTypes.arrayOf(
     PropTypes.shape({

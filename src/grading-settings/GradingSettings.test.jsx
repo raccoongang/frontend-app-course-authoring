@@ -63,4 +63,15 @@ describe('<GradingSettings />', () => {
       expect(getByTestId('grading-settings-save-alert')).toBeVisible();
     });
   });
+
+  it('should update grading scale segment input value on change and cancel the action', async () => {
+    const { getByText, getAllByTestId } = render(<RootWrapper />);
+    await waitFor(() => {
+      const segmentInputs = getAllByTestId('grading-scale-segment-input');
+      const segmentInput = segmentInputs[1];
+      fireEvent.change(segmentInput, { target: { value: 'Test' } });
+      fireEvent.click(getByText(messages.buttonCancelText.defaultMessage));
+      expect(segmentInput).toHaveValue('A');
+    });
+  });
 });

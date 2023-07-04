@@ -9,6 +9,10 @@ const messages = defineMessages({
     id: 'course-authoring.grading-settings.remove-segment.btn.text',
     defaultMessage: 'Remove',
   },
+  segmentFailGradingText: {
+    id: 'course-authoring.grading-settings.fail-segment.text',
+    defaultMessage: 'Fail',
+  },
 });
 
 export default messages;

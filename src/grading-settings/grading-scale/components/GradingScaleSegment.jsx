@@ -27,7 +27,7 @@ const GradingScaleSegment = ({
         <input
           className="grading-scale-segment-content-title m-0"
           data-testid="grading-scale-segment-input"
-          value={getLettersOnShortScale(idx, letters)}
+          value={getLettersOnShortScale(idx, letters, intl)}
           onChange={e => handleLetterChange(e, idx)}
           disabled={idx === gradingSegments.length}
         />

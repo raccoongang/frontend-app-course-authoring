@@ -27,6 +27,7 @@ const RootWrapper = () => (
       showSavePrompt={jest.fn()}
       setShowSuccessAlert={jest.fn()}
       setGradingData={jest.fn()}
+      setOverrideInternetConnectionAlert={jest.fn()}
     />
   </IntlProvider>
 );
@@ -109,6 +110,7 @@ describe('<GradingScale />', () => {
           showSavePrompt={jest.fn()}
           setShowSuccessAlert={jest.fn()}
           setGradingData={jest.fn()}
+          setOverrideInternetConnectionAlert={jest.fn()}
         />
       </IntlProvider>,
     );

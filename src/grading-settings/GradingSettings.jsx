@@ -7,6 +7,8 @@ import { CheckCircle, Warning } from '@edx/paragon/icons';
 
 import AlertMessage from '../generic/alert-message';
 import { RequestStatus } from '../data/constants';
+import InternetConnectionAlert from '../generic/internet-connection-alert';
+import SubHeader from '../generic/sub-header/SubHeader';
 import { getGradingSettings, getSavingStatus, getLoadingStatus } from './data/selectors';
 import { fetchGradingSettings, sendGradingSetting } from './data/thunks';
 import GradingScale from './grading-scale/GradingScale';
@@ -28,6 +30,8 @@ const GradingSettings = ({ intl, courseId }) => {
   const gradeLetters = gradeCutoffs && Object.keys(gradeCutoffs);
   const gradeValues = gradeCutoffs && getGradingValues(gradeCutoffs);
   const sortedGrades = gradeCutoffs && getSortedGrades(gradeValues);
+  const [isQueryPending, setIsQueryPending] = useState(false);
+  const [showOverrideInternetConnectionAlert, setOverrideInternetConnectionAlert] = useState(false);
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
@@ -52,14 +56,43 @@ const GradingSettings = ({ intl, courseId }) => {
   }
 
   const handleSendGradingSettingsData = () => {
-    dispatch(sendGradingSetting(courseId, gradingData));
+    setIsQueryPending(true);
+    setOverrideInternetConnectionAlert(true);
     setShowSavePrompt(!showSavePrompt);
+  };
+
+  const handleResetGradingCutoffs = () => {
+    setShowSavePrompt(!showSavePrompt);
+    setGradingData(gradingSettingsData);
+    resetDataRef.current = true;
+    setOverrideInternetConnectionAlert(false);
+  };
+
+  const handleInternetConnectionFailed = () => {
+    setShowSavePrompt(false);
+    setShowSuccessAlert(false);
+    setIsQueryPending(false);
+    setOverrideInternetConnectionAlert(true);
+  };
+
+  const handleDispatchMethodCall = () => {
+    setIsQueryPending(false);
+    setShowSavePrompt(false);
+    setOverrideInternetConnectionAlert(false);
   };
 
   return (
     <>
       <Container size="xl" className="m-4">
         <div className="setting-header mt-5">
+          {showOverrideInternetConnectionAlert && (
+            <InternetConnectionAlert
+              isQueryPending={isQueryPending}
+              dispatchMethod={sendGradingSetting(courseId, gradingData)}
+              onInternetConnectionFailed={handleInternetConnectionFailed}
+              onDispatchMethodCall={handleDispatchMethodCall}
+            />
+          )}
           <AlertMessage
             show={showSuccessAlert}
             variant="success"
@@ -69,14 +102,6 @@ const GradingSettings = ({ intl, courseId }) => {
             aria-labelledby={intl.formatMessage(messages.alertSuccessAriaLabelledby)}
             aria-describedby={intl.formatMessage(messages.alertSuccessAriaDescribedby)}
           />
-          <header className="setting-header-inner">
-            <h1 className="grading-header-title">
-              <small className="grading-header-title-subtitle">
-                {intl.formatMessage(messages.headingSubtitle)}
-              </small>
-              {intl.formatMessage(messages.headingTitle)}
-            </h1>
-          </header>
         </div>
         <div>
           <section className="setting-items mb-4">
@@ -91,14 +116,12 @@ const GradingSettings = ({ intl, courseId }) => {
                 <article>
                   <div>
                     <section className="grading-items-policies">
-                      <header>
-                        <h2 className="grading-items-policies-title">
-                          {intl.formatMessage(messages.policy)}
-                        </h2>
-                      </header>
-                      <p className="grading-items-policies-instructions mb-4">
-                        {intl.formatMessage(messages.policiesDescription)}
-                      </p>
+                      <SubHeader
+                        title={intl.formatMessage(messages.headingTitle)}
+                        subtitle={intl.formatMessage(messages.headingSubtitle)}
+                        contentTitle={intl.formatMessage(messages.policy)}
+                        description={intl.formatMessage(messages.policiesDescription)}
+                      />
                       <GradingScale
                         gradeCutoffs={gradeCutoffs || {}}
                         showSavePrompt={setShowSavePrompt}
@@ -108,6 +131,7 @@ const GradingSettings = ({ intl, courseId }) => {
                         setShowSuccessAlert={setShowSuccessAlert}
                         setGradingData={setGradingData}
                         resetDataRef={resetDataRef}
+                        setOverrideInternetConnectionAlert={setOverrideInternetConnectionAlert}
                       />
                     </section>
                   </div>
@@ -131,11 +155,7 @@ const GradingSettings = ({ intl, courseId }) => {
           actions={[
             <Button
               variant="tertiary"
-              onClick={() => {
-                setShowSavePrompt(!showSavePrompt);
-                setGradingData(gradingSettingsData);
-                resetDataRef.current = true;
-              }}
+              onClick={handleResetGradingCutoffs}
             >
               {intl.formatMessage(messages.buttonCancelText)}
             </Button>,

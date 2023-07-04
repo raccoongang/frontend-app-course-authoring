@@ -1,5 +1,7 @@
 import { capitalize } from 'lodash';
 
+import messages from './messages';
+
 export const MAXIMUM_SCALE_LENGTH = 100;
 
 /**
@@ -61,8 +63,8 @@ export const getLettersOnLongScale = (idx, letters, gradingSegments) => {
  * @param {array} letters - Names of grading segments.
  * @returns {string} - Segment display name.
  */
-export const getLettersOnShortScale = (idx, letters) => {
-  const END_OF_SCALE_NAME = 'Fail';
+export const getLettersOnShortScale = (idx, letters, intl) => {
+  const END_OF_SCALE_NAME = intl.formatMessage(messages.segmentFailGradingText);
 
   return (idx === 1 ? capitalize(letters[idx - 1]) : END_OF_SCALE_NAME);
 };
