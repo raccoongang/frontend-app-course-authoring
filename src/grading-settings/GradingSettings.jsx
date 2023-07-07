@@ -26,7 +26,7 @@ const GradingSettings = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
   const resetDataRef = useRef(false);
-  const { gradeCutoffs } = gradingData;
+  const { gradeCutoffs = {} } = gradingData;
   const gradeLetters = gradeCutoffs && Object.keys(gradeCutoffs);
   const gradeValues = gradeCutoffs && getGradingValues(gradeCutoffs);
   const sortedGrades = gradeCutoffs && getSortedGrades(gradeValues);
@@ -84,7 +84,7 @@ const GradingSettings = ({ intl, courseId }) => {
   return (
     <>
       <Container size="xl" className="m-4">
-        <div className="setting-header mt-5">
+        <div className="mt-5">
           {showOverrideInternetConnectionAlert && (
             <InternetConnectionAlert
               isQueryPending={isQueryPending}
@@ -123,7 +123,7 @@ const GradingSettings = ({ intl, courseId }) => {
                         description={intl.formatMessage(messages.policiesDescription)}
                       />
                       <GradingScale
-                        gradeCutoffs={gradeCutoffs || {}}
+                        gradeCutoffs={gradeCutoffs}
                         showSavePrompt={setShowSavePrompt}
                         gradeLetters={gradeLetters}
                         gradeValues={gradeValues}

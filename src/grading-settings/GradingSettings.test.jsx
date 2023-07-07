@@ -38,7 +38,7 @@ describe('<GradingSettings />', () => {
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     axiosMock
-      .onGet(`${getGradingSettingsApiUrl(courseId)}`)
+      .onGet(getGradingSettingsApiUrl(courseId))
       .reply(200, gradingSettings);
   });
 

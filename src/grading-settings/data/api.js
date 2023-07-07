@@ -14,7 +14,7 @@ export const getGradingSettingsApiUrl = (courseId) => `${getApiBaseUrl()}/api/co
  */
 export async function getGradingSettings(courseId) {
   const { data } = await getAuthenticatedHttpClient()
-    .get(`${getGradingSettingsApiUrl(courseId)}`);
+    .get(getGradingSettingsApiUrl(courseId));
   return camelCaseObject(data);
 }
 
@@ -26,6 +26,6 @@ export async function getGradingSettings(courseId) {
  */
 export async function sendGradingSettings(courseId, settings) {
   const { data } = await getAuthenticatedHttpClient()
-    .post(`${getGradingSettingsApiUrl(courseId)}`, convertObjectToSnakeCase(settings, true));
+    .post(getGradingSettingsApiUrl(courseId), convertObjectToSnakeCase(settings, true));
   return camelCaseObject(data);
 }
