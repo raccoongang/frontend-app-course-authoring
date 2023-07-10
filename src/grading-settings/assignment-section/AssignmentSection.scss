@@ -1,0 +1,32 @@
+.course-grading-assignment-wrapper {
+  background-color: $gray-100;
+  padding: 20px;
+  text-align: right;
+
+  .course-grading-assignment-items {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+
+    .course-grading-assignment-total-grade {
+      grid-area: 2 / 1 / 3 / 2;
+    }
+
+    .course-grading-assignment-total-number {
+      grid-area: 2 / 2 / 3 / 3;
+    }
+
+    .course-grading-assignment-number-droppable {
+      grid-area: 2 / 3 / 3 / 4;
+    }
+
+    .course-grading-assignment-type-name {
+      grid-area: 1 / 1 / 2 / 3;
+    }
+
+    .course-grading-assignment-abbreviation {
+      grid-area: 1 / 3 / 2 / 4;
+    }
+  }
+}

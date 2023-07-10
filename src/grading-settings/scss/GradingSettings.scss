@@ -1,22 +1,11 @@
 @import "variables";
-
-.grading-items-policies {
-  .setting-items-deprecated-setting {
-    float: right;
-    margin-bottom: 1.75rem;
-  }
-
-  .instructions,
-  strong {
-    font: normal $font-weight-normal .875rem/1.5rem $font-family-base;
-    color: $text-color-base;
-  }
-}
+@import "../assignment-section/AssignmentSection.scss";
 
 .grading-scale {
   display: flex;
   margin-top: 1.5rem;
   align-items: center;
+  margin-bottom: 100px;
 
   .grading-scale-segments-and-ticks {
     display: inline-block;
@@ -127,4 +116,14 @@
       }
     }
   }
+}
+
+.grading-label {
+  font: normal $font-weight-bold .75rem/1.25rem $font-family-base;
+  color: $gray-500;
+}
+
+.grading-description {
+  font: normal .75rem/1.5rem $font-family-base;
+  color: $gray-700;
 }
