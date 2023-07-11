@@ -61,7 +61,7 @@ describe('<AdvancedSettings />', () => {
     const { getByText } = render(<RootWrapper />);
     await waitFor(() => {
       expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
-      const advancedSettingsElement = getByText('Advanced settings', {
+      const advancedSettingsElement = getByText(messages.headingTitle.defaultMessage, {
         selector: 'h2.sub-header-title',
       });
       expect(advancedSettingsElement).toBeInTheDocument();
