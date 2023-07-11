@@ -33,17 +33,17 @@ const GradingSettings = ({ intl, courseId }) => {
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
   const resetDataRef = useRef(false);
   const {
-    gradeCutoffs = {}, gracePeriod = { hours: '', minutes: '' }, minimumGradeCredit,
+    gradeCutoffs = {}, gracePeriod = { hours: '', minutes: '' }, minimumGradeCredit, graders,
   } = gradingData;
   const gradeLetters = gradeCutoffs && Object.keys(gradeCutoffs);
   const gradeValues = gradeCutoffs && getGradingValues(gradeCutoffs);
   const sortedGrades = gradeCutoffs && getSortedGrades(gradeValues);
   const [isQueryPending, setIsQueryPending] = useState(false);
   const [showOverrideInternetConnectionAlert, setOverrideInternetConnectionAlert] = useState(false);
-  const [assignments, setAssignments] = useState([]);
+  // const [assignments, setAssignments] = useState(graders || []);
   const [eligibleGrade, setEligibleGrade] = useState();
   const [state, setState] = useState({});
-
+  // console.log('============ gradingData ===============', gradingData);
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       setShowSuccessAlert(true);
@@ -77,7 +77,7 @@ const GradingSettings = ({ intl, courseId }) => {
     setGradingData(gradingSettingsData);
     resetDataRef.current = true;
     setOverrideInternetConnectionAlert(false);
-    setAssignments([]);
+    // setAssignments([]);
   };
 
   const handleInternetConnectionFailed = () => {
@@ -94,17 +94,27 @@ const GradingSettings = ({ intl, courseId }) => {
   };
 
   const handleAddAssignment = () => {
-    setAssignments(prevState => [...prevState, prevState.length + 1]);
-    // setShowSavePrompt(!showSavePrompt);
+    setGradingData(prevState => ({
+      ...prevState,
+      graders: [...prevState.graders, {
+        id: graders.length,
+        dropCount: 0,
+        minCount: 1,
+        shortLabel: null,
+        type: '',
+        weight: 0,
+      }],
+    }));
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleRemoveAssignment = (name) => {
-    const index = assignments.indexOf(name);
-    if (index !== -1) {
-      const updatedItems = [...assignments];
-      updatedItems.splice(index, 1);
-      setAssignments(updatedItems);
-    }
+    // const index = assignments.indexOf(name);
+    // if (index !== -1) {
+    // const updatedItems = [...assignments];
+    // updatedItems.splice(index, 1);
+    // setAssignments(updatedItems);
+    // }
     setShowSavePrompt(!showSavePrompt);
   };
 
@@ -172,6 +182,7 @@ const GradingSettings = ({ intl, courseId }) => {
                         eligibleGrade={eligibleGrade}
                         setShowSavePrompt={setShowSavePrompt}
                         minimumGradeCredit={minimumGradeCredit}
+                        setGradingData={setGradingData}
                       />
                     </section>
                   )}
@@ -184,6 +195,7 @@ const GradingSettings = ({ intl, courseId }) => {
                     <DeadlineSection
                       setShowSavePrompt={setShowSavePrompt}
                       gracePeriod={gracePeriod}
+                      setGradingData={setGradingData}
                     />
                   </section>
 
@@ -192,16 +204,18 @@ const GradingSettings = ({ intl, courseId }) => {
                       title="Assignment Types"
                       description="Categories and labels for any exercises that are gradable"
                     />
-                    {assignments.map((assignment) => (
-                      <AssignmentSection
-                        key={assignment}
-                        idx={assignment}
-                        handleRemoveAssignment={handleRemoveAssignment}
-                        state={state}
-                        setState={setState}
-                        setShowSavePrompt={setShowSavePrompt}
-                      />
-                    ))}
+
+                    <AssignmentSection
+                      // key={assignment}
+                      // idx={assignment}
+                      handleRemoveAssignment={handleRemoveAssignment}
+                      state={state}
+                      setState={setState}
+                      setShowSavePrompt={setShowSavePrompt}
+                      graders={graders}
+                      setGradingData={setGradingData}
+                    />
+
                     <Button
                       variant="success"
                       iconBefore={IconAdd}
@@ -234,7 +248,7 @@ const GradingSettings = ({ intl, courseId }) => {
             >
               {intl.formatMessage(messages.buttonCancelText)}
             </Button>,
-            <Button onClick={handleSendGradingSettingsData} disabled={!state.type}>
+            <Button onClick={handleSendGradingSettingsData}>
               {intl.formatMessage(messages.buttonSaveText)}
             </Button>,
           ]}

@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form } from '@edx/paragon';
 
-// eslint-disable-next-line react/prop-types
-const DeadlineSection = ({ setShowSavePrompt, gracePeriod }) => {
-  const [periodValue, setPeriodValue] = useState(gracePeriod);
+const DeadlineSection = ({ setShowSavePrompt, gracePeriod, setGradingData }) => {
   const handleChange = (e) => {
     const timeArray = e.target.value.split(':');
-    setPeriodValue({
-      hours: parseInt(timeArray[0], 10),
-      minutes: parseInt(timeArray[1], 10),
-    });
+
     setShowSavePrompt(true);
+    setGradingData(prevData => ({
+      ...prevData,
+      gracePeriod: {
+        hours: Number(timeArray[0]),
+        minutes: Number(timeArray[1]),
+      },
+    }));
   };
-  // console.log('============== periodValue ==========', periodValue);
+
   return (
     <Form.Group className="w-50">
       <Form.Label className="grading-label">Grace Period on Deadline:</Form.Label>
       <Form.Control
         type="time"
-        // floatingLabel="HH:MM"
-        value={`${periodValue?.hours}:${periodValue?.minutes}`}
+        value={`${gracePeriod?.hours}:${gracePeriod?.minutes}`}
         onChange={handleChange}
       />
       <Form.Control.Feedback className="grading-description">
@@ -27,6 +29,17 @@ const DeadlineSection = ({ setShowSavePrompt, gracePeriod }) => {
       </Form.Control.Feedback>
     </Form.Group>
   );
+};
+
+DeadlineSection.propTypes = {
+  setShowSavePrompt: PropTypes.func.isRequired,
+  setGradingData: PropTypes.func.isRequired,
+  gracePeriod: PropTypes.objectOf(
+    PropTypes.shape({
+      hours: PropTypes.number.isRequired,
+      minutes: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default DeadlineSection;

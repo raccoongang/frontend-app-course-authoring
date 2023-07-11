@@ -3,18 +3,25 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form } from '@edx/paragon';
 
-// eslint-disable-next-line react/prop-types
-const CreditSection = ({ eligibleGrade, setShowSavePrompt, minimumGradeCredit }) => {
+const CreditSection = ({
+  eligibleGrade, setShowSavePrompt, minimumGradeCredit, setGradingData,
+}) => {
   const [errorEffort, setErrorEffort] = useState(false);
-  const [credit, setCredit] = useState(minimumGradeCredit);
 
   const handleChange = (e) => {
     const { value } = e.target;
-    setCredit(value);
+
+    setGradingData(prevData => ({
+      ...prevData,
+      minimumGradeCredit: value / 100,
+    }));
+
     if (value <= eligibleGrade) {
       setErrorEffort(true);
+      setShowSavePrompt(false);
       return;
     }
+
     setShowSavePrompt(true);
     setErrorEffort(false);
   };
@@ -28,7 +35,7 @@ const CreditSection = ({ eligibleGrade, setShowSavePrompt, minimumGradeCredit })
       <Form.Control
         type="number"
         min={0}
-        value={credit * 100}
+        value={minimumGradeCredit * 100}
         name="minimum_grade_credit"
         isInValid={errorEffort}
         onChange={handleChange}
@@ -48,6 +55,8 @@ const CreditSection = ({ eligibleGrade, setShowSavePrompt, minimumGradeCredit })
 CreditSection.propTypes = {
   eligibleGrade: PropTypes.number.isRequired,
   setShowSavePrompt: PropTypes.func.isRequired,
+  setGradingData: PropTypes.func.isRequired,
+  minimumGradeCredit: PropTypes.number.isRequired,
 };
 
 export default CreditSection;
