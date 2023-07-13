@@ -12,6 +12,7 @@ import CustomPages from './custom-pages';
 import { AdvancedSettings } from './advanced-settings';
 import ScheduleAndDetails from './schedule-and-details';
 import { GradingSettings } from './grading-settings';
+import CourseExportPage from './export-page/CourseExportPage';
 
 /**
  * As of this writing, these routes are mounted at a path prefixed with the following:
@@ -125,7 +126,7 @@ const CourseAuthoringRoutes = ({ courseId }) => {
         <PageRoute path={`${path}/export`}>
           {process.env.ENABLE_NEW_EXPORT_PAGE === 'true'
             && (
-              <Placeholder />
+              <CourseExportPage courseId={courseId} />
             )}
         </PageRoute>
       </Switch>

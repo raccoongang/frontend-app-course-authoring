@@ -38,7 +38,7 @@
     "@edx/brand": "npm:@edx/brand-openedx@1.1.0",
     "@edx/frontend-component-footer": "12.0.0",
     "@edx/frontend-enterprise-hotjar": "^1.2.1",
-    "@edx/frontend-lib-content-components": "^1.160.0",
+    "@edx/frontend-lib-content-components": "^1.162.0",
     "@edx/frontend-platform": "4.2.0",
     "@edx/paragon": "^20.32.0",
     "@fortawesome/fontawesome-svg-core": "1.2.28",
@@ -68,6 +68,7 @@
     "react-transition-group": "4.4.1",
     "redux": "4.0.5",
     "regenerator-runtime": "0.13.7",
+    "universal-cookie": "^4.0.4",
     "uuid": "^3.4.0",
     "yup": "0.31.1"
   },
