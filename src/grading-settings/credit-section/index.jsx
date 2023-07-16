@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form } from '@edx/paragon';
+import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+
+import messages from './messages';
 
 const CreditSection = ({
-  eligibleGrade, setShowSavePrompt, minimumGradeCredit, setGradingData,
+  intl, eligibleGrade, setShowSavePrompt, minimumGradeCredit, setGradingData,
 }) => {
   const [errorEffort, setErrorEffort] = useState(false);
 
@@ -27,25 +30,28 @@ const CreditSection = ({
   };
 
   return (
-    <Form.Group className={classNames('form-group-custom w-50', {
-      'form-group-custom_isInvalid': errorEffort,
-    })}
+    <Form.Group
+      isInvalid={errorEffort}
+      className={classNames('form-group-custom w-50', {
+        'form-group-custom_isInvalid': errorEffort,
+      })}
     >
-      <Form.Label className="grading-label">Minimum Credit-Eligible Grade:</Form.Label>
+      <Form.Label className="grading-label">
+        {intl.formatMessage(messages.creditEligibilityLabel)}
+      </Form.Label>
       <Form.Control
         type="number"
         min={0}
-        value={minimumGradeCredit * 100}
+        defaultValue={Math.round(parseFloat(minimumGradeCredit) * 100)}
         name="minimum_grade_credit"
-        isInValid={errorEffort}
         onChange={handleChange}
       />
       <Form.Control.Feedback className="grading-description">
-        % Must be greater than or equal to the course passing grade
+        {intl.formatMessage(messages.creditEligibilityDescription)}
       </Form.Control.Feedback>
       {errorEffort && (
         <Form.Control.Feedback className="feedback-error" type="invalid">
-          Not able to set passing grade to less than: {eligibleGrade}.
+          {intl.formatMessage(messages.creditEligibilityErrorMsg)} {eligibleGrade}.
         </Form.Control.Feedback>
       )}
     </Form.Group>
@@ -53,10 +59,11 @@ const CreditSection = ({
 };
 
 CreditSection.propTypes = {
+  intl: intlShape.isRequired,
   eligibleGrade: PropTypes.number.isRequired,
   setShowSavePrompt: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
   minimumGradeCredit: PropTypes.number.isRequired,
 };
 
-export default CreditSection;
+export default injectIntl(CreditSection);

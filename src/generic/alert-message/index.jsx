@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 const AlertMessage = ({ title, description, ...props }) => (
   <Alert {...props}>
     <Alert.Heading>{title}</Alert.Heading>
-    <p>{description}</p>
+    <span>{description}</span>
   </Alert>
 );
 
 AlertMessage.propTypes = {
   title: PropTypes.string,
-  description: PropTypes.string,
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 AlertMessage.defaultProps = {

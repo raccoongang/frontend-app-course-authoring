@@ -2,28 +2,30 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import {
-  Container, Layout, Button,
-} from '@edx/paragon';
+import { Container, Layout, Button } from '@edx/paragon';
 import { CheckCircle, Warning, Add as IconAdd } from '@edx/paragon/icons';
 
 import AlertMessage from '../generic/alert-message';
 import { RequestStatus } from '../data/constants';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import SubHeader from '../generic/sub-header/SubHeader';
-import { getGradingSettings, getSavingStatus, getLoadingStatus } from './data/selectors';
-import { fetchGradingSettings, sendGradingSetting } from './data/thunks';
+import SectionSubHeader from '../generic/section-sub-header';
+import {
+  getGradingSettings, getCourseAssignmentLists, getSavingStatus, getLoadingStatus, getCourseSettings,
+} from './data/selectors';
+import { fetchGradingSettings, sendGradingSetting, fetchCourseSettingsQuery } from './data/thunks';
 import GradingScale from './grading-scale/GradingScale';
 import GradingSidebar from './grading-sidebar';
 import messages from './messages';
 import { getGradingValues, getSortedGrades } from './grading-scale/utils';
 import AssignmentSection from './assignment-section';
-import SectionSubHeader from '../generic/section-sub-header';
 import CreditSection from './credit-section';
 import DeadlineSection from './deadline-section';
 
 const GradingSettings = ({ intl, courseId }) => {
   const gradingSettingsData = useSelector(getGradingSettings);
+  const courseSettingsData = useSelector(getCourseSettings);
+  const courseAssignmentLists = useSelector(getCourseAssignmentLists);
   const [gradingData, setGradingData] = useState({});
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
@@ -33,17 +35,18 @@ const GradingSettings = ({ intl, courseId }) => {
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
   const resetDataRef = useRef(false);
   const {
-    gradeCutoffs = {}, gracePeriod = { hours: '', minutes: '' }, minimumGradeCredit, graders,
+    gradeCutoffs = {},
+    gracePeriod = { hours: '', minutes: '' },
+    minimumGradeCredit,
+    graders,
   } = gradingData;
   const gradeLetters = gradeCutoffs && Object.keys(gradeCutoffs);
   const gradeValues = gradeCutoffs && getGradingValues(gradeCutoffs);
   const sortedGrades = gradeCutoffs && getSortedGrades(gradeValues);
   const [isQueryPending, setIsQueryPending] = useState(false);
   const [showOverrideInternetConnectionAlert, setOverrideInternetConnectionAlert] = useState(false);
-  // const [assignments, setAssignments] = useState(graders || []);
-  const [eligibleGrade, setEligibleGrade] = useState();
-  const [state, setState] = useState({});
-  // console.log('============ gradingData ===============', gradingData);
+  const [eligibleGrade, setEligibleGrade] = useState(null);
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       setShowSuccessAlert(true);
@@ -53,6 +56,7 @@ const GradingSettings = ({ intl, courseId }) => {
 
   useEffect(() => {
     dispatch(fetchGradingSettings(courseId));
+    dispatch(fetchCourseSettingsQuery(courseId));
   }, [courseId]);
 
   useEffect(() => {
@@ -77,7 +81,6 @@ const GradingSettings = ({ intl, courseId }) => {
     setGradingData(gradingSettingsData);
     resetDataRef.current = true;
     setOverrideInternetConnectionAlert(false);
-    // setAssignments([]);
   };
 
   const handleInternetConnectionFailed = () => {
@@ -100,21 +103,18 @@ const GradingSettings = ({ intl, courseId }) => {
         id: graders.length,
         dropCount: 0,
         minCount: 1,
-        shortLabel: null,
+        shortLabel: '',
         type: '',
         weight: 0,
       }],
     }));
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const handleRemoveAssignment = (name) => {
-    // const index = assignments.indexOf(name);
-    // if (index !== -1) {
-    // const updatedItems = [...assignments];
-    // updatedItems.splice(index, 1);
-    // setAssignments(updatedItems);
-    // }
+  const handleRemoveAssignment = (id) => {
+    setGradingData((prevState) => ({
+      ...prevState,
+      graders: prevState.graders.filter((obj) => obj.id !== id),
+    }));
     setShowSavePrompt(!showSavePrompt);
   };
 
@@ -172,11 +172,11 @@ const GradingSettings = ({ intl, courseId }) => {
                       setEligibleGrade={setEligibleGrade}
                     />
                   </section>
-                  {process.env.ENABLE_CREDIT_ELIGIBILITY === 'true' && (
+                  {process.env.ENABLE_CREDIT_ELIGIBILITY === 'true' && courseSettingsData.isCreditCourse && (
                     <section>
                       <SectionSubHeader
-                        title="Credit eligibility"
-                        description="Deadlines, requirements, and logistics around grading student work"
+                        title={intl.formatMessage(messages.creditEligibilitySectionTitle)}
+                        description={intl.formatMessage(messages.creditEligibilitySectionDescription)}
                       />
                       <CreditSection
                         eligibleGrade={eligibleGrade}
@@ -189,8 +189,8 @@ const GradingSettings = ({ intl, courseId }) => {
 
                   <section>
                     <SectionSubHeader
-                      title="Grading rules & policies"
-                      description="Deadlines, requirements, and logistics around grading student work"
+                      title={intl.formatMessage(messages.gradingRulesPoliciesSectionTitle)}
+                      description={intl.formatMessage(messages.gradingRulesPoliciesSectionDescription)}
                     />
                     <DeadlineSection
                       setShowSavePrompt={setShowSavePrompt}
@@ -201,19 +201,15 @@ const GradingSettings = ({ intl, courseId }) => {
 
                   <section>
                     <SectionSubHeader
-                      title="Assignment Types"
-                      description="Categories and labels for any exercises that are gradable"
+                      title={intl.formatMessage(messages.assignmentTypeSectionTitle)}
+                      description={intl.formatMessage(messages.assignmentTypeSectionDescription)}
                     />
-
                     <AssignmentSection
-                      // key={assignment}
-                      // idx={assignment}
                       handleRemoveAssignment={handleRemoveAssignment}
-                      state={state}
-                      setState={setState}
                       setShowSavePrompt={setShowSavePrompt}
                       graders={graders}
                       setGradingData={setGradingData}
+                      courseAssignmentLists={courseAssignmentLists}
                     />
 
                     <Button
@@ -221,7 +217,7 @@ const GradingSettings = ({ intl, courseId }) => {
                       iconBefore={IconAdd}
                       onClick={handleAddAssignment}
                     >
-                      New assignment type
+                      {intl.formatMessage(messages.addNewAssignmentTypeBtn)}
                     </Button>
                   </section>
                 </article>

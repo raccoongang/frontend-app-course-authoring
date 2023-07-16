@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { Form } from '@edx/paragon';
 
 const AssignmentItem = ({
-  // eslint-disable-next-line react/prop-types
   title, descriptions, type, min, max, errorMsg, className, name, onChange, value, errorEffort,
 }) => (
   <li className={className}>
@@ -36,16 +35,22 @@ const AssignmentItem = ({
 
 AssignmentItem.defaultProps = {
   max: undefined,
+  errorMsg: undefined,
+  min: undefined,
 };
 
 AssignmentItem.propTypes = {
   title: PropTypes.string.isRequired,
   descriptions: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  min: PropTypes.number.isRequired,
+  min: PropTypes.number,
   max: PropTypes.number,
-  errorMsg: PropTypes.number.isRequired,
+  errorMsg: PropTypes.string,
+  name: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  errorEffort: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 export default AssignmentItem;

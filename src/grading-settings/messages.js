@@ -53,6 +53,34 @@ const messages = defineMessages({
     id: 'course-authoring.grading-settings.alert.success.aria.describedby',
     defaultMessage: 'alert-confirmation-description',
   },
+  creditEligibilitySectionTitle: {
+    id: 'course-authoring.grading-settings.credit-eligibility.title',
+    defaultMessage: 'Credit eligibility',
+  },
+  creditEligibilitySectionDescription: {
+    id: 'course-authoring.grading-settings.credit-eligibility.description',
+    defaultMessage: 'Deadlines, requirements, and logistics around grading student work',
+  },
+  gradingRulesPoliciesSectionTitle: {
+    id: 'course-authoring.grading-settings.grading-rules-policies.title',
+    defaultMessage: 'Grading rules & policies',
+  },
+  gradingRulesPoliciesSectionDescription: {
+    id: 'course-authoring.grading-settings.grading-rules-policies.description',
+    defaultMessage: 'Deadlines, requirements, and logistics around grading student work',
+  },
+  assignmentTypeSectionTitle: {
+    id: 'course-authoring.grading-settings.assignment-type.title',
+    defaultMessage: 'Assignment types',
+  },
+  assignmentTypeSectionDescription: {
+    id: 'course-authoring.grading-settings.assignment-type.description',
+    defaultMessage: 'Categories and labels for any exercises that are gradable',
+  },
+  addNewAssignmentTypeBtn: {
+    id: 'course-authoring.grading-settings.add-new-assignment-type.btn',
+    defaultMessage: 'New assignment type',
+  },
 });
 
 export default messages;
