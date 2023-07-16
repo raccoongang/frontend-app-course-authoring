@@ -1,145 +1,119 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Button } from '@edx/paragon';
 import { CheckCircle, Warning } from '@edx/paragon/icons';
 
 import AlertMessage from '../../generic/alert-message';
-import AssignmentItem from './AssignmentItem';
+import { validationAssignmentFields } from './utils/validation';
+import AssignmentItem from './assignments/AssignmentItem';
+import AssignmentTypeName from './assignments/AssignmentTypeName';
+import { defaultAssignmentsPropTypes, ASSIGNMENT_TYPES } from './utils/enum';
+import messages from './messages';
 
 const AssignmentSection = ({
-  handleRemoveAssignment, setShowSavePrompt, graders, setGradingData, courseAssignmentLists,
+  intl, handleRemoveAssignment, setShowSavePrompt, graders, setGradingData, courseAssignmentLists,
 }) => {
-  const [error, setError] = useState({
-    type: false,
-    weight: false,
-    minCount: false,
-    dropCount: false,
-  });
+  const [errorList, setErrorList] = useState({});
+  const {
+    type, weight, minCount, dropCount,
+  } = ASSIGNMENT_TYPES;
 
-  const handleChange = (e, id, minCount) => {
+  const handleAssignmentChange = (e, id) => {
     const { name, value } = e.target;
 
-    setGradingData(prevState => {
-      const updatedState = prevState.graders.map(obj => {
-        if (obj.id === id) {
-          return {
-            ...obj,
-            [name]: value,
-          };
-        }
-        return obj;
-      });
+    if (name === type && value.length) {
+      setShowSavePrompt(true);
+    }
 
+    setGradingData(prevState => {
+      const updatedState = prevState.graders.map(grader => {
+        if (grader.id === id) {
+          return { ...grader, [name]: value };
+        }
+        return grader;
+      });
       return { ...prevState, graders: updatedState };
     });
 
-    switch (name) {
-    case 'type':
-      if (value === '') {
-        setError(prevState => ({ ...prevState, [name]: true }));
-        return;
-      }
-      break;
-    case 'weight':
-      if (value < 0) {
-        setError(prevState => ({ ...prevState, [name]: true }));
-        return;
-      }
-
-      if (value > 100) {
-        setError(prevState => ({ ...prevState, [name]: true }));
-        return;
-      }
-      break;
-    case 'minCount':
-      if (value < 0 || value === '' || value === '-0') {
-        setError(prevState => ({ ...prevState, [name]: true }));
-        return;
-      }
-      break;
-    case 'dropCount':
-      if (value < 0 || value === '' || value === '-0' || value > minCount) {
-        setError(prevState => ({ ...prevState, [name]: true }));
-        return;
-      }
-      break;
-    default:
-      // eslint-disable-next-line no-console
-      console.log('Error');
-    }
-
-    setShowSavePrompt(true);
-    setError(prevState => ({ ...prevState, [name]: false }));
+    validationAssignmentFields(
+      name,
+      type,
+      value,
+      setErrorList,
+      setShowSavePrompt,
+      graders,
+      weight,
+      minCount,
+      dropCount,
+    );
   };
 
   return (
     <div>
-      {graders.map((gradeField, idx) => {
+      {graders?.map((gradeField, idx) => {
         const courseAssignmentUsage = courseAssignmentLists[gradeField.type.toLowerCase()];
         return (
-          <div className="course-grading-assignment-wrapper mb-4">
+          <div key={gradeField.id} className="course-grading-assignment-wrapper mb-4">
             <ol className="course-grading-assignment-items p-0 mb-4">
-              <AssignmentItem
-                className="course-grading-assignment-type-name"
-                title="Assignment type name"
-                descriptions="The general category for this type of assignment, for example, Homework or Midterm Exam.
-    This name is visible to learners."
-                type="text"
-                name="type"
+              <AssignmentTypeName
                 value={gradeField.type}
-                errorMsg="The assignment type must have a name."
-                // errorMsg="For grading to work, you must change all 1 subsections to TEST."
-                onChange={(e) => handleChange(e, idx)}
-                errorEffort={error.type}
+                errorEffort={errorList[gradeField.type]}
+                onChange={(e) => handleAssignmentChange(e, idx)}
               />
               <AssignmentItem
                 className="course-grading-assignment-abbreviation"
-                title="Abbreviation"
-                descriptions="This short name for the assignment type (for example, HW or Midterm) appears next to
-      assignments on a learner's Progress page."
+                title={intl.formatMessage(messages.abbreviationTitle)}
+                descriptions={intl.formatMessage(messages.abbreviationDescription)}
                 type="text"
                 name="shortLabel"
                 value={gradeField.shortLabel}
-                onChange={(e) => handleChange(e, idx)}
+                onChange={(e) => handleAssignmentChange(e, idx)}
               />
               <AssignmentItem
                 className="course-grading-assignment-total-grade"
-                title="Weight of total grade"
-                descriptions="The weight of all assignments of this type as a percentage of the total grade,
-      for example, 40. Do not include the percent symbol."
+                title={intl.formatMessage(messages.weightOfTotalGradeTitle)}
+                descriptions={intl.formatMessage(messages.weightOfTotalGradeDescription)}
                 type="number"
                 min={0}
                 max={100}
-                errorMsg="Please enter an integer between 0 and 100."
-                name="weight"
+                errorMsg={intl.formatMessage(messages.weightOfTotalGradeErrorMessage)}
+                name={weight}
                 value={gradeField.weight}
-                onChange={(e) => handleChange(e, idx)}
-                errorEffort={error.weight}
+                onChange={(e) => handleAssignmentChange(e, idx)}
+                errorEffort={errorList.weight}
               />
               <AssignmentItem
                 className="course-grading-assignment-total-number"
-                title="Total number"
-                descriptions="The number of subsections in the course that contain problems of this assignment type."
+                title={intl.formatMessage(messages.totalNumberTitle)}
+                descriptions={intl.formatMessage(messages.totalNumberDescription)}
                 type="number"
                 min={1}
-                errorMsg="Please enter an integer greater than 0."
-                name="minCount"
+                errorMsg={intl.formatMessage(messages.totalNumberErrorMessage)}
+                name={minCount}
                 value={gradeField.minCount}
-                onChange={(e) => handleChange(e, idx, gradeField.minCount)}
-                errorEffort={error.minCount}
+                onChange={(e) => handleAssignmentChange(e, idx)}
+                errorEffort={errorList.minCount}
               />
               <AssignmentItem
                 className="course-grading-assignment-number-droppable"
-                title="Number of droppable"
-                descriptions="The number of assignments of this type that will be dropped.
-      The lowest scoring assignments are dropped first."
+                title={intl.formatMessage(messages.numberOfDroppableTitle)}
+                descriptions={intl.formatMessage(messages.numberOfDroppableDescription)}
                 type="number"
                 min={0}
-                errorMsg="Please enter non-negative integer."
-                name="dropCount"
+                errorMsg={intl.formatMessage(messages.numberOfDroppableErrorMessage)}
+                name={dropCount}
+                gradeField={gradeField}
                 value={gradeField.dropCount}
-                onChange={(e) => handleChange(e, idx)}
-                errorEffort={error.dropCount}
+                onChange={(e) => handleAssignmentChange(e, idx)}
+                secondErrorMsg={(
+                  <FormattedMessage
+                    id="course-authoring.grading-settings.assignment.number-of-droppable.second.error.message"
+                    defaultMessage="Cannot drop more {type} assignments than are assigned."
+                    values={{ type: gradeField.type }}
+                  />
+                )}
+                errorEffort={errorList.dropCount}
               />
             </ol>
             {gradeField.minCount !== courseAssignmentUsage?.length && Boolean(courseAssignmentUsage?.length) && (
@@ -147,8 +121,13 @@ const AssignmentSection = ({
                 className="course-grading-assignment-item-alert-warning"
                 variant="warning"
                 icon={Warning}
-                title={`Warning: The number of ${gradeField.type} assignments defined here does not match the current number
-                of ${gradeField.type} assignments in the course:`}
+                title={(
+                  <FormattedMessage
+                    id="course-authoring.grading-settings.assignment.alert.warning.usage.title"
+                    defaultMessage="Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:"
+                    values={{ type: gradeField.type }}
+                  />
+                )}
                 description={(
                   <>
                     <span className="course-grading-assignment-item-alert-warning-list-label">
@@ -162,8 +141,27 @@ const AssignmentSection = ({
                   </>
                 )}
                 aria-hidden="true"
-                aria-labelledby="TEXT"
-                aria-describedby="TEXT"
+              />
+            )}
+            {!courseAssignmentUsage?.length && Boolean(gradeField.type) && (
+              <AlertMessage
+                className="course-grading-assignment-item-alert-warning"
+                variant="warning"
+                icon={Warning}
+                title={(
+                  <FormattedMessage
+                    id="course-authoring.grading-settings.assignment.alert.warning.title"
+                    defaultMessage="Warning: The number of {type} assignments defined here does not match the current number
+                    of {type} assignments in the course:"
+                    values={{ type: gradeField.type }}
+                  />
+                )}
+                description={(
+                  <span className="course-grading-assignment-item-alert-warning-list-label">
+                    {intl.formatMessage(messages.assignmentAlertWarningDescription)}
+                  </span>
+                )}
+                aria-hidden="true"
               />
             )}
             {gradeField.minCount === courseAssignmentUsage?.length && (
@@ -171,10 +169,14 @@ const AssignmentSection = ({
                 className="course-grading-assignment-item-alert-success"
                 variant="success"
                 icon={CheckCircle}
-                title={`The number of ${gradeField.type} assignments in the course matches the number defined here.`}
+                title={(
+                  <FormattedMessage
+                    id="course-authoring.grading-settings.assignment.alert.success.title"
+                    defaultMessage="The number of {type} assignments in the course matches the number defined here."
+                    values={{ type: gradeField.type }}
+                  />
+                )}
                 aria-hidden="true"
-                aria-labelledby="TEXT"
-                aria-describedby="TEXT"
               />
             )}
             <Button
@@ -183,7 +185,7 @@ const AssignmentSection = ({
               size="sm"
               onClick={() => handleRemoveAssignment(idx)}
             >
-              Delete
+              {intl.formatMessage(messages.assignmentDeleteButton)}
             </Button>
           </div>
         );
@@ -192,28 +194,20 @@ const AssignmentSection = ({
   );
 };
 
+AssignmentSection.defaultProps = {
+  courseAssignmentLists: undefined,
+  graders: undefined,
+};
+
 AssignmentSection.propTypes = {
+  intl: intlShape.isRequired,
   handleRemoveAssignment: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
   setShowSavePrompt: PropTypes.func.isRequired,
-  courseAssignmentLists: PropTypes.arrayOf({
-    type: PropTypes.string.isRequired,
-    minCount: PropTypes.number.isRequired,
-    dropCount: PropTypes.number.isRequired,
-    shortLabel: PropTypes.string.isRequired,
-    weight: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-  }).isRequired,
+  courseAssignmentLists: PropTypes.shape(defaultAssignmentsPropTypes),
   graders: PropTypes.arrayOf(
-    PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      minCount: PropTypes.number.isRequired,
-      dropCount: PropTypes.number.isRequired,
-      shortLabel: PropTypes.string.isRequired,
-      weight: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
+    PropTypes.shape(defaultAssignmentsPropTypes),
+  ),
 };
 
-export default AssignmentSection;
+export default injectIntl(AssignmentSection);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
@@ -17,35 +17,44 @@ import { fetchGradingSettings, sendGradingSetting, fetchCourseSettingsQuery } fr
 import GradingScale from './grading-scale/GradingScale';
 import GradingSidebar from './grading-sidebar';
 import messages from './messages';
-import { getGradingValues, getSortedGrades } from './grading-scale/utils';
 import AssignmentSection from './assignment-section';
 import CreditSection from './credit-section';
 import DeadlineSection from './deadline-section';
+import { useConvertGradeCutoffs, useUpdateGradingData } from './hooks';
 
 const GradingSettings = ({ intl, courseId }) => {
   const gradingSettingsData = useSelector(getGradingSettings);
   const courseSettingsData = useSelector(getCourseSettings);
   const courseAssignmentLists = useSelector(getCourseAssignmentLists);
-  const [gradingData, setGradingData] = useState({});
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
-  const [showSavePrompt, setShowSavePrompt] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const dispatch = useDispatch();
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
-  const resetDataRef = useRef(false);
-  const {
-    gradeCutoffs = {},
-    gracePeriod = { hours: '', minutes: '' },
-    minimumGradeCredit,
-    graders,
-  } = gradingData;
-  const gradeLetters = gradeCutoffs && Object.keys(gradeCutoffs);
-  const gradeValues = gradeCutoffs && getGradingValues(gradeCutoffs);
-  const sortedGrades = gradeCutoffs && getSortedGrades(gradeValues);
   const [isQueryPending, setIsQueryPending] = useState(false);
   const [showOverrideInternetConnectionAlert, setOverrideInternetConnectionAlert] = useState(false);
   const [eligibleGrade, setEligibleGrade] = useState(null);
+
+  const {
+    graders,
+    resetDataRef,
+    setGradingData,
+    gradingData,
+    gradeCutoffs,
+    gracePeriod,
+    minimumGradeCredit,
+    showSavePrompt,
+    setShowSavePrompt,
+    handleResetPageData,
+    handleAddAssignment,
+    handleRemoveAssignment,
+  } = useUpdateGradingData(gradingSettingsData, setOverrideInternetConnectionAlert);
+
+  const {
+    gradeLetters,
+    gradeValues,
+    sortedGrades,
+  } = useConvertGradeCutoffs(gradeCutoffs);
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
@@ -59,12 +68,6 @@ const GradingSettings = ({ intl, courseId }) => {
     dispatch(fetchCourseSettingsQuery(courseId));
   }, [courseId]);
 
-  useEffect(() => {
-    if (gradingSettingsData) {
-      setGradingData(gradingSettingsData);
-    }
-  }, [gradingSettingsData]);
-
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
@@ -74,13 +77,6 @@ const GradingSettings = ({ intl, courseId }) => {
     setIsQueryPending(true);
     setOverrideInternetConnectionAlert(true);
     setShowSavePrompt(!showSavePrompt);
-  };
-
-  const handleResetPageData = () => {
-    setShowSavePrompt(!showSavePrompt);
-    setGradingData(gradingSettingsData);
-    resetDataRef.current = true;
-    setOverrideInternetConnectionAlert(false);
   };
 
   const handleInternetConnectionFailed = () => {
@@ -94,28 +90,6 @@ const GradingSettings = ({ intl, courseId }) => {
     setIsQueryPending(false);
     setShowSavePrompt(false);
     setOverrideInternetConnectionAlert(false);
-  };
-
-  const handleAddAssignment = () => {
-    setGradingData(prevState => ({
-      ...prevState,
-      graders: [...prevState.graders, {
-        id: graders.length,
-        dropCount: 0,
-        minCount: 1,
-        shortLabel: '',
-        type: '',
-        weight: 0,
-      }],
-    }));
-  };
-
-  const handleRemoveAssignment = (id) => {
-    setGradingData((prevState) => ({
-      ...prevState,
-      graders: prevState.graders.filter((obj) => obj.id !== id),
-    }));
-    setShowSavePrompt(!showSavePrompt);
   };
 
   return (
@@ -157,7 +131,6 @@ const GradingSettings = ({ intl, courseId }) => {
                     contentTitle={intl.formatMessage(messages.policy)}
                     description={intl.formatMessage(messages.policiesDescription)}
                   />
-
                   <section>
                     <GradingScale
                       gradeCutoffs={gradeCutoffs}
@@ -186,7 +159,6 @@ const GradingSettings = ({ intl, courseId }) => {
                       />
                     </section>
                   )}
-
                   <section>
                     <SectionSubHeader
                       title={intl.formatMessage(messages.gradingRulesPoliciesSectionTitle)}
@@ -198,7 +170,6 @@ const GradingSettings = ({ intl, courseId }) => {
                       setGradingData={setGradingData}
                     />
                   </section>
-
                   <section>
                     <SectionSubHeader
                       title={intl.formatMessage(messages.assignmentTypeSectionTitle)}
@@ -211,9 +182,8 @@ const GradingSettings = ({ intl, courseId }) => {
                       setGradingData={setGradingData}
                       courseAssignmentLists={courseAssignmentLists}
                     />
-
                     <Button
-                      variant="success"
+                      variant="outline-success"
                       iconBefore={IconAdd}
                       onClick={handleAddAssignment}
                     >

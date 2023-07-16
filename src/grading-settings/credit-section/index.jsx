@@ -11,7 +11,7 @@ const CreditSection = ({
 }) => {
   const [errorEffort, setErrorEffort] = useState(false);
 
-  const handleChange = (e) => {
+  const handleCreditChange = (e) => {
     const { value } = e.target;
 
     setGradingData(prevData => ({
@@ -31,7 +31,6 @@ const CreditSection = ({
 
   return (
     <Form.Group
-      isInvalid={errorEffort}
       className={classNames('form-group-custom w-50', {
         'form-group-custom_isInvalid': errorEffort,
       })}
@@ -44,7 +43,7 @@ const CreditSection = ({
         min={0}
         defaultValue={Math.round(parseFloat(minimumGradeCredit) * 100)}
         name="minimum_grade_credit"
-        onChange={handleChange}
+        onChange={handleCreditChange}
       />
       <Form.Control.Feedback className="grading-description">
         {intl.formatMessage(messages.creditEligibilityDescription)}

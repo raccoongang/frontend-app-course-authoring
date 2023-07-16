@@ -2,9 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form } from '@edx/paragon';
+import { defaultAssignmentsPropTypes } from '../utils/enum';
 
 const AssignmentItem = ({
-  title, descriptions, type, min, max, errorMsg, className, name, onChange, value, errorEffort,
+  title,
+  descriptions,
+  type,
+  min,
+  max,
+  errorMsg,
+  className,
+  name,
+  onChange,
+  value,
+  errorEffort,
+  secondErrorMsg,
+  gradeField,
 }) => (
   <li className={className}>
     <Form.Group className={classNames('form-group-custom', {
@@ -24,9 +37,14 @@ const AssignmentItem = ({
       <Form.Control.Feedback className="grading-description">
         {descriptions}
       </Form.Control.Feedback>
-      {errorEffort && (
+      {errorEffort && errorEffort !== 'duplicate' && (
         <Form.Control.Feedback className="feedback-error" type="invalid">
           {errorMsg}
+        </Form.Control.Feedback>
+      )}
+      {gradeField?.dropCount > gradeField?.minCount && (
+        <Form.Control.Feedback className="feedback-error" type="invalid">
+          {secondErrorMsg}
         </Form.Control.Feedback>
       )}
     </Form.Group>
@@ -37,6 +55,10 @@ AssignmentItem.defaultProps = {
   max: undefined,
   errorMsg: undefined,
   min: undefined,
+  value: '',
+  secondErrorMsg: undefined,
+  errorEffort: false,
+  gradeField: undefined,
 };
 
 AssignmentItem.propTypes = {
@@ -48,9 +70,11 @@ AssignmentItem.propTypes = {
   errorMsg: PropTypes.string,
   name: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
+  secondErrorMsg: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  errorEffort: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  errorEffort: PropTypes.bool,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  gradeField: PropTypes.shape(defaultAssignmentsPropTypes),
 };
 
 export default AssignmentItem;
