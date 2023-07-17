@@ -60,7 +60,7 @@ describe('<CourseUpdates />', () => {
       expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.sectionInfo.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.buttons.newUpdate.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.newUpdateButton.defaultMessage)).toBeInTheDocument();
       expect(getAllByTestId('course-update')).toHaveLength(3);
       expect(getByTestId('course-handouts')).toBeInTheDocument();
     });

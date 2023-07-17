@@ -21,7 +21,7 @@ const courseUpdatesInitialValues = (requestType) => {
   case requestTypes.add_new_update:
     return addNewUpdateMock;
   case requestTypes.edit_update:
-    return courseUpdatesMock;
+    return courseUpdatesMock[0];
   default:
     return courseHandoutsMock;
   }
@@ -45,9 +45,9 @@ RootWrapper.propTypes = {
 
 describe('<UpdateModal />', () => {
   it('render UpdateModal component default correctly', () => {
-    const { getByText, getByRole } = render(<RootWrapper />);
+    const { getByText, getByRole } = render(<RootWrapper requestType={requestTypes.add_new_update} />);
 
-    const cancelButton = getByText(messages.buttons.cancel.defaultMessage);
+    const cancelButton = getByText(messages.cancelButton.defaultMessage);
     fireEvent.click(cancelButton);
     const closeButton = getByRole('button', { name: 'Close' });
     fireEvent.click(closeButton);
@@ -59,11 +59,11 @@ describe('<UpdateModal />', () => {
     const { date } = courseUpdatesInitialValues(requestTypes.add_new_update);
     const formattedDate = moment(date).utc().format('MM/DD/yyyy');
 
-    expect(getByText(messages.updateModal.addNewUpdateTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.updateModal.date.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.addNewUpdateTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.updateModalDate.defaultMessage)).toBeInTheDocument();
     expect(getByDisplayValue(formattedDate)).toBeInTheDocument();
 
-    const postButton = getByText(messages.buttons.post.defaultMessage);
+    const postButton = getByText(messages.postButton.defaultMessage);
     fireEvent.click(postButton);
     await waitFor(() => expect(onSubmitMock).toHaveBeenCalledTimes(1));
   });
@@ -73,11 +73,11 @@ describe('<UpdateModal />', () => {
     const { date } = courseUpdatesInitialValues(requestTypes.edit_update);
     const formattedDate = moment(date).format('MM/DD/yyyy');
 
-    expect(getByText(messages.updateModal.editUpdateTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.updateModal.date.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.editUpdateTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.updateModalDate.defaultMessage)).toBeInTheDocument();
     expect(getByDisplayValue(formattedDate)).toBeInTheDocument();
 
-    const postButton = getByText(messages.buttons.post.defaultMessage);
+    const postButton = getByText(messages.postButton.defaultMessage);
     fireEvent.click(postButton);
     await waitFor(() => expect(onSubmitMock).toHaveBeenCalledTimes(1));
   });
@@ -85,9 +85,9 @@ describe('<UpdateModal />', () => {
   it('render Edit handouts modal correctly', async () => {
     const { getByText } = render(<RootWrapper requestType={requestTypes.edit_handouts} />);
 
-    expect(getByText(messages.updateModal.editHandoutsTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.editHandoutsTitle.defaultMessage)).toBeInTheDocument();
 
-    const saveButton = getByText(messages.buttons.save.defaultMessage);
+    const saveButton = getByText(messages.saveButton.defaultMessage);
     fireEvent.click(saveButton);
     await waitFor(() => expect(onSubmitMock).toHaveBeenCalledTimes(3));
   });

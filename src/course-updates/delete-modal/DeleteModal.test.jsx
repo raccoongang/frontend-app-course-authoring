@@ -22,20 +22,20 @@ describe('<DeleteModal />', () => {
   it('render DeleteModal component correctly', () => {
     const { getByText } = render(<RootWrapper />);
 
-    expect(getByText(messages.deleteModal.title.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.deleteModal.description.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.buttons.cancel.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.buttons.ok.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.deleteModalTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.deleteModalDescription.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.cancelButton.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.okButton.defaultMessage)).toBeInTheDocument();
   });
 
   it('calls Cancel and Ok button is clicked', () => {
     const { getByText } = render(<RootWrapper />);
 
-    const cancelButton = getByText(messages.buttons.cancel.defaultMessage);
+    const cancelButton = getByText(messages.cancelButton.defaultMessage);
     fireEvent.click(cancelButton);
     expect(closeMock).toHaveBeenCalledTimes(1);
 
-    const deleteButton = getByText(messages.buttons.ok.defaultMessage);
+    const deleteButton = getByText(messages.okButton.defaultMessage);
     fireEvent.click(deleteButton);
     expect(onDeleteSubmitMock).toHaveBeenCalledTimes(1);
   });

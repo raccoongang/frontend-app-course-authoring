@@ -24,13 +24,13 @@ describe('<CourseHandouts />', () => {
 
     expect(getByText(messages.handoutsTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(handoutsContent)).toBeInTheDocument();
-    expect(getByText(messages.buttons.edit.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.editButton.defaultMessage)).toBeInTheDocument();
   });
 
   it('calls Edit button is clicked', () => {
     const { getByText } = render(<RootWrapper />);
 
-    const editButton = getByText(messages.buttons.edit.defaultMessage);
+    const editButton = getByText(messages.editButton.defaultMessage);
     fireEvent.click(editButton);
     expect(onEditMock).toHaveBeenCalledTimes(1);
   });

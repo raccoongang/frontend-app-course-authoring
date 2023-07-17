@@ -154,7 +154,10 @@ const UpdateModal = ({
 };
 
 UpdateModal.propTypes = {
-  courseUpdatesInitialValues: PropTypes.objectOf(PropTypes.string).isRequired,
+  courseUpdatesInitialValues: PropTypes.objectOf(PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ])).isRequired,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   requestType: PropTypes.string.isRequired,

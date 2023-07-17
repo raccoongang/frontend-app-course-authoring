@@ -27,18 +27,18 @@ describe('<CourseUpdate />', () => {
 
     expect(getByText(updateDate)).toBeInTheDocument();
     expect(getByText(updateContent)).toBeInTheDocument();
-    expect(getByText(messages.buttons.edit.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.buttons.delete.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.editButton.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.deleteButton.defaultMessage)).toBeInTheDocument();
   });
 
   it('calls Edit and Delete buttons is clicked', () => {
     const { getByText } = render(<RootWrapper />);
 
-    const editButton = getByText(messages.buttons.edit.defaultMessage);
+    const editButton = getByText(messages.editButton.defaultMessage);
     fireEvent.click(editButton);
     expect(onEditMock).toHaveBeenCalledTimes(1);
 
-    const deleteButton = getByText(messages.buttons.delete.defaultMessage);
+    const deleteButton = getByText(messages.deleteButton.defaultMessage);
     fireEvent.click(deleteButton);
     expect(onDeleteMock).toHaveBeenCalledTimes(1);
   });
