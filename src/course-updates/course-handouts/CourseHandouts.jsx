@@ -17,7 +17,7 @@ const CourseHandouts = ({ isExample, handoutsContent, onEdit }) => {
           size="sm"
           onClick={onEdit}
         >
-          {intl.formatMessage(messages.buttons.edit)}
+          {intl.formatMessage(messages.editButton)}
         </Button>
       </div>
       {isExample ? (

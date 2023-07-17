@@ -43,11 +43,11 @@ const UpdateModal = ({
   const modalTitle = (type) => {
     switch (type) {
     case requestTypes.add_new_update:
-      return intl.formatMessage(messages.updateModal.addNewUpdateTitle);
+      return intl.formatMessage(messages.addNewUpdateTitle);
     case requestTypes.edit_handouts:
-      return intl.formatMessage(messages.updateModal.editHandoutsTitle);
+      return intl.formatMessage(messages.editHandoutsTitle);
     case requestTypes.edit_update:
-      return intl.formatMessage(messages.updateModal.editUpdateTitle);
+      return intl.formatMessage(messages.editUpdateTitle);
     default:
       return '';
     }
@@ -85,12 +85,12 @@ const UpdateModal = ({
               <div className="update-modal-body">
                 {requestType !== requestTypes.edit_handouts ? (
                   <Form.Group className="mb-4 datepicker-field datepicker-custom">
-                    <Form.Control.Feedback>{intl.formatMessage(messages.updateModal.date)}</Form.Control.Feedback>
+                    <Form.Control.Feedback>{intl.formatMessage(messages.updateModalDate)}</Form.Control.Feedback>
                     <div className="position-relative">
                       <Icon
                         src={Calendar}
                         className="datepicker-custom-control-icon"
-                        alt={intl.formatMessage(messages.updateModal.calendarAltText)}
+                        alt={intl.formatMessage(messages.updateModalCalendarAltText)}
                       />
                       <DatePicker
                         name="date"
@@ -112,8 +112,8 @@ const UpdateModal = ({
                     </div>
                     {!isValid ? (
                       <div className="datepicker-field-error">
-                        <Icon src={Error} alt={intl.formatMessage(messages.updateModal.errorAltText)} />
-                        <span className="message-error">{intl.formatMessage(messages.updateModal.inValid)}</span>
+                        <Icon src={Error} alt={intl.formatMessage(messages.updateModalErrorAltText)} />
+                        <span className="message-error">{intl.formatMessage(messages.updateModalInValid)}</span>
                       </div>
                     ) : null}
                   </Form.Group>
@@ -141,8 +141,8 @@ const UpdateModal = ({
                 </ModalDialog.CloseButton>
                 <Button variant="primary" onClick={handleSubmit} type="submit">
                   {requestType === requestTypes.edit_handouts
-                    ? intl.formatMessage(messages.buttons.save)
-                    : intl.formatMessage(messages.buttons.post)}
+                    ? intl.formatMessage(messages.saveButton)
+                    : intl.formatMessage(messages.postButton)}
                 </Button>
               </ActionRow>
             </ModalDialog.Footer>

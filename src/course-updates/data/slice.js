@@ -1,6 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-/* eslint no-param-reassign: "error" */
 const slice = createSlice({
   name: 'courseUpdates',
   initialState: {

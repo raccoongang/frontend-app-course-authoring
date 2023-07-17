@@ -15,10 +15,10 @@ const CourseUpdate = ({
         <span className="course-update-header__date">{updateDate}</span>
         <div className="course-update-header__action">
           <Button variant="outline-primary" size="sm" onClick={onEdit}>
-            {intl.formatMessage(messages.buttons.edit)}
+            {intl.formatMessage(messages.editButton)}
           </Button>
           <Button variant="outline-primary" size="sm" onClick={onDelete}>
-            {intl.formatMessage(messages.buttons.delete)}
+            {intl.formatMessage(messages.deleteButton)}
           </Button>
         </div>
       </div>

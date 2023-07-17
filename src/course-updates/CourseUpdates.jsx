@@ -128,7 +128,7 @@ const CourseUpdates = ({ courseId }) => {
                       size="sm"
                       onClick={() => handleOpenUpdateModal(requestTypes.add_new_update)}
                     >
-                      {intl.formatMessage(messages.buttons.newUpdate)}
+                      {intl.formatMessage(messages.newUpdateButton)}
                     </Button>
                   )}
                 />

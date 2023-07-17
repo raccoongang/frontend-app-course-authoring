@@ -13,14 +13,14 @@ const DeleteModal = ({ isOpen, close, onDeleteSubmit }) => {
 
   return (
     <AlertModal
-      title={intl.formatMessage(messages.deleteModal.title)}
+      title={intl.formatMessage(messages.deleteModalTitle)}
       variant="danger"
       isOpen={isOpen}
       onClose={close}
       footerNode={(
         <ActionRow>
           <Button variant="tertiary" onClick={close}>
-            {intl.formatMessage(messages.buttons.cancel)}
+            {intl.formatMessage(messages.cancelButton)}
           </Button>
           <Button
             variant="danger"
@@ -29,12 +29,12 @@ const DeleteModal = ({ isOpen, close, onDeleteSubmit }) => {
               onDeleteSubmit();
             }}
           >
-            {intl.formatMessage(messages.buttons.ok)}
+            {intl.formatMessage(messages.okButton)}
           </Button>
         </ActionRow>
       )}
     >
-      <p>{intl.formatMessage(messages.deleteModal.description)}</p>
+      <p>{intl.formatMessage(messages.deleteModalDescription)}</p>
     </AlertModal>
   );
 };

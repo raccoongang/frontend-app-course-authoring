@@ -17,79 +17,73 @@ const messages = defineMessages({
     id: 'course-authoring.course-updates.handouts.title',
     defaultMessage: 'Course Handouts',
   },
-  buttons: {
-    edit: {
-      id: 'course-authoring.course-updates.actions.edit',
-      defaultMessage: 'Edit',
-    },
-    delete: {
-      id: 'course-authoring.course-updates.actions.delete',
-      defaultMessage: 'Delete',
-    },
-    save: {
-      id: 'course-authoring.course-updates.actions.save',
-      defaultMessage: 'Save',
-    },
-    post: {
-      id: 'course-authoring.course-updates.actions.post',
-      defaultMessage: 'Post',
-    },
-    cancel: {
-      id: 'course-authoring.course-updates.actions.cancel',
-      defaultMessage: 'Cancel',
-    },
-    newUpdate: {
-      id: 'course-authoring.course-updates.actions.new-update',
-      defaultMessage: 'New Update',
-    },
-    ok: {
-      id: 'course-authoring.course-updates.button.ok',
-      defaultMessage: 'Ok',
-    },
+  editButton: {
+    id: 'course-authoring.course-updates.actions.edit',
+    defaultMessage: 'Edit',
+  },
+  deleteButton: {
+    id: 'course-authoring.course-updates.actions.delete',
+    defaultMessage: 'Delete',
+  },
+  saveButton: {
+    id: 'course-authoring.course-updates.actions.save',
+    defaultMessage: 'Save',
+  },
+  postButton: {
+    id: 'course-authoring.course-updates.actions.post',
+    defaultMessage: 'Post',
+  },
+  cancelButton: {
+    id: 'course-authoring.course-updates.actions.cancel',
+    defaultMessage: 'Cancel',
+  },
+  newUpdateButton: {
+    id: 'course-authoring.course-updates.actions.new-update',
+    defaultMessage: 'New Update',
+  },
+  okButton: {
+    id: 'course-authoring.course-updates.button.ok',
+    defaultMessage: 'Ok',
   },
   dateInvalidText: {
     id: 'course-authoring.course-updates.date-invalid',
     defineMessage: 'Action required: Enter a valid date.',
   },
-  deleteModal: {
-    title: {
-      id: 'course-authoring.course-updates.delete-modal.title',
-      defaultMessage: 'Are you sure you want to delete this update?',
-    },
-    description: {
-      id: 'course-authoring.course-updates.delete-modal.description',
-      defaultMessage: 'This action cannot be undone.',
-    },
+  deleteModalTitle: {
+    id: 'course-authoring.course-updates.delete-modal.title',
+    defaultMessage: 'Are you sure you want to delete this update?',
   },
-  updateModal: {
-    date: {
-      id: 'course-authoring.course-updates.update-modal.date',
-      defaultMessage: 'Date:',
-    },
-    inValid: {
-      id: 'Action required: Enter a valid date.',
-      defaultMessage: 'Action required: Enter a valid date.',
-    },
-    calendarAltText: {
-      id: 'course-authoring.course-updates.update-modal.calendar-alt-text',
-      defaultMessage: 'Calendar for datepicker input',
-    },
-    errorAltText: {
-      id: 'course-authoring.course-updates.update-modal.error-alt-text',
-      defaultMessage: 'Error icon',
-    },
-    addNewUpdateTitle: {
-      id: 'course-authoring.course-updates.update-modal.new-update-title',
-      defaultMessage: 'Add new update',
-    },
-    editUpdateTitle: {
-      id: 'course-authoring.course-updates.update-modal.edit-update-title',
-      defaultMessage: 'Edit updates',
-    },
-    editHandoutsTitle: {
-      id: 'course-authoring.course-updates.update-modal.edit-handouts-title',
-      defaultMessage: 'Edit handouts',
-    },
+  deleteModalDescription: {
+    id: 'course-authoring.course-updates.delete-modal.description',
+    defaultMessage: 'This action cannot be undone.',
+  },
+  updateModalDate: {
+    id: 'course-authoring.course-updates.update-modal.date',
+    defaultMessage: 'Date:',
+  },
+  updateModalInValid: {
+    id: 'course-authoring.course-updates.update-modal.date',
+    defaultMessage: 'Date:',
+  },
+  updateModalCalendarAltText: {
+    id: 'course-authoring.course-updates.update-modal.calendar-alt-text',
+    defaultMessage: 'Calendar for datepicker input',
+  },
+  updateModalErrorAltText: {
+    id: 'course-authoring.course-updates.update-modal.error-alt-text',
+    defaultMessage: 'Error icon',
+  },
+  addNewUpdateTitle: {
+    id: 'course-authoring.course-updates.update-modal.new-update-title',
+    defaultMessage: 'Add new update',
+  },
+  editUpdateTitle: {
+    id: 'course-authoring.course-updates.update-modal.edit-update-title',
+    defaultMessage: 'Edit updates',
+  },
+  editHandoutsTitle: {
+    id: 'course-authoring.course-updates.update-modal.edit-handouts-title',
+    defaultMessage: 'Edit handouts',
   },
 });
 
