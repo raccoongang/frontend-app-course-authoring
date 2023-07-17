@@ -2,7 +2,7 @@
 import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
-import { convertKeysToSnakeCase } from '../../utils';
+import { deepConvertingKeysToSnakeCase } from '../../utils';
 
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 export const getGradingSettingsApiUrl = (courseId) => `${getApiBaseUrl()}/api/contentstore/v1/course_grading/${courseId}`;
@@ -27,7 +27,7 @@ export async function getGradingSettings(courseId) {
  */
 export async function sendGradingSettings(courseId, settings) {
   const { data } = await getAuthenticatedHttpClient()
-    .post(getGradingSettingsApiUrl(courseId), convertKeysToSnakeCase(settings));
+    .post(getGradingSettingsApiUrl(courseId), deepConvertingKeysToSnakeCase(settings));
   return camelCaseObject(data);
 }
 

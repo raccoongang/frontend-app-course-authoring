@@ -1,69 +1,102 @@
 /**
- * Validates assignment fields, updates error list and save prompt visibility accordingly.
+ * Updates the error list for the job and sets the save warning display flag.
  *
- * @param {number} id - Element id.
- * @param {string} name - The name of the field being validated.
- * @param {string} type - The type of the assignment.
- * @param {string} value - The value of the field being validated.
+ * @param {string} assignmentName - The name of the field being validated.
+ * @param {number} assignmentId - Assignment id.
+ * @param {string, boolean} assignmentValue - The value of the field being validated.
  * @param {function} setErrorList - Function to update the error list state.
  * @param {function} setShowSavePrompt - Function to update the visibility of the save prompt.
- * @param {array} graders - An array of existing grading data.
- * @param {number} weight - The weight of the assignment.
- * @param {number} minCount - The minimum count of the assignment.
- * @param {number} dropCount - The drop count of the assignment.
  * @returns {void}
  */
-// eslint-disable-next-line import/prefer-default-export
-export const validationAssignmentFields = (
-  id,
-  name,
-  type,
-  value,
+export const updateAssignmentErrorList = (
+  assignmentName,
+  assignmentId,
   setErrorList,
   setShowSavePrompt,
-  graders,
-  weight,
-  minCount,
-  dropCount,
+  assignmentValue = true,
 ) => {
-  const gradingTypes = graders?.map(grade => grade.type);
+  setErrorList(prevState => ({ ...prevState, [`${assignmentName}-${assignmentId}`]: assignmentValue }));
+  setShowSavePrompt(false);
+};
+
+/**
+ * Validates assignment fields.
+ *
+ * @param {number} assignmentId - Assignment id.
+ * @param {string} assignmentName - The name of the field being validated.
+ * @param {string} assignmentType - The type of the assignment.
+ * @param {string} assignmentValue - The value of the field being validated.
+ * @param {function} setErrorList - Function to update the error list state.
+ * @param {function} setShowSavePrompt - Function to update the visibility of the save prompt.
+ * @param {array} courseGraders - An array of existing grading data.
+ * @param {number} weightOfTotalGrade - The weight of the assignment.
+ * @param {number} assignmentMinCount - The minimum count of the assignment.
+ * @param {number} assignmentDropCount - The drop count of the assignment.
+ * @returns {void}
+ */
+export const validationAssignmentFields = (
+  assignmentId,
+  assignmentName,
+  assignmentType,
+  assignmentValue,
+  setErrorList,
+  setShowSavePrompt,
+  courseGraders,
+  weightOfTotalGrade,
+  assignmentMinCount,
+  assignmentDropCount,
+) => {
+  const courseGradingTypes = courseGraders?.map(grade => grade.type);
+
   setErrorList({});
 
-  switch (name) {
-  case type:
-    if (value === '') {
-      setErrorList(prevState => ({ ...prevState, [name]: true }));
-      setShowSavePrompt(false);
+  switch (assignmentName) {
+  case assignmentType:
+    if (assignmentValue === '') {
+      updateAssignmentErrorList(assignmentName, assignmentId, setErrorList, setShowSavePrompt);
       return;
     }
-    if (gradingTypes.includes(value)) {
-      setErrorList(prevState => ({ ...prevState, [value]: 'duplicate' }));
-      setShowSavePrompt(false);
+    if (courseGradingTypes.includes(assignmentValue)) {
+      updateAssignmentErrorList(
+        assignmentName,
+        assignmentId,
+        setErrorList,
+        setShowSavePrompt,
+        'duplicateAssignmentName',
+      );
     }
     break;
-
-  case weight:
-    if (value < 0 || value > 100 || value === '-0' || value === '-') {
-      setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
-      setShowSavePrompt(false);
+  case weightOfTotalGrade:
+    if (assignmentValue < 0 || assignmentValue > 100 || assignmentValue === '-0') {
+      updateAssignmentErrorList(
+        assignmentName,
+        assignmentId,
+        setErrorList,
+        setShowSavePrompt,
+      );
     }
     break;
-
-  case minCount:
-    if (value <= 0 || value === '' || value === '-0') {
-      setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
-      setShowSavePrompt(false);
+  case assignmentMinCount:
+    if (assignmentValue <= 0 || assignmentValue === '' || assignmentValue === '-0') {
+      updateAssignmentErrorList(
+        assignmentName,
+        assignmentId,
+        setErrorList,
+        setShowSavePrompt,
+      );
     }
     break;
-
-  case dropCount:
-    if (value < 0 || value === '' || value === '-0') {
-      setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
-      setShowSavePrompt(false);
+  case assignmentDropCount:
+    if (assignmentValue < 0 || assignmentValue === '' || assignmentValue === '-0') {
+      updateAssignmentErrorList(
+        assignmentName,
+        assignmentId,
+        setErrorList,
+        setShowSavePrompt,
+      );
     }
     break;
-
   default:
-    setErrorList(prevState => ({ ...prevState, [name]: false }));
+    setErrorList(prevState => ({ ...prevState, [assignmentName]: false }));
   }
 };

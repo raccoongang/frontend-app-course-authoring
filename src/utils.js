@@ -39,19 +39,19 @@ export function convertObjectToSnakeCase(obj, unpacked = false) {
   }, {});
 }
 
-export function convertKeysToSnakeCase(obj) {
+export function deepConvertingKeysToSnakeCase(obj) {
   if (typeof obj !== 'object' || obj === null) {
     return obj;
   }
 
   if (Array.isArray(obj)) {
-    return obj.map((item) => convertKeysToSnakeCase(item));
+    return obj.map((item) => deepConvertingKeysToSnakeCase(item));
   }
 
   const snakeCaseObj = {};
   Object.keys(obj).forEach((key) => {
     const snakeCaseKey = snakeCase(key);
-    snakeCaseObj[snakeCaseKey] = convertKeysToSnakeCase(obj[key]);
+    snakeCaseObj[snakeCaseKey] = deepConvertingKeysToSnakeCase(obj[key]);
   });
   return snakeCaseObj;
 }

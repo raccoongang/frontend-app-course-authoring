@@ -26,8 +26,8 @@ const GradingScale = ({
   const [gradingSegments, setGradingSegments] = useState(sortedGrades);
   const [letters, setLetters] = useState(gradeLetters);
   const [convertedResult, setConvertedResult] = useState({});
-  const values = Object.values(gradingSegments);
-  const lastValue = values[values.length - 1];
+  const gradingSegmentsValues = Object.values(gradingSegments);
+  const eligibleValue = gradingSegmentsValues[gradingSegmentsValues.length - 1];
 
   useEffect(() => {
     if (resetDataRef.current) {
@@ -40,7 +40,7 @@ const GradingScale = ({
 
   useEffect(() => {
     setGradingData(prevData => ({ ...prevData, gradeCutoffs: convertedResult }));
-    setEligibleGrade(lastValue?.current);
+    setEligibleGrade(eligibleValue?.current);
   }, [JSON.stringify(convertedResult)]);
 
   useEffect(() => {

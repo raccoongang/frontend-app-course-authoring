@@ -31,7 +31,7 @@ const AssignmentTypeName = ({
         <Form.Control.Feedback className="grading-description">
           {intl.formatMessage(messages.assignmentTypeNameDescription)}
         </Form.Control.Feedback>
-        {errorEffort && errorEffort !== 'duplicate' && (
+        {errorEffort && errorEffort !== 'duplicateAssignmentName' && (
           <Form.Control.Feedback className="feedback-error" type="invalid">
             {intl.formatMessage(messages.assignmentTypeNameErrorMessage1)}
           </Form.Control.Feedback>
@@ -45,7 +45,7 @@ const AssignmentTypeName = ({
             />
           </Form.Control.Feedback>
         )}
-        {errorEffort === 'duplicate' && (
+        {errorEffort === 'duplicateAssignmentName' && (
           <Form.Control.Feedback className="feedback-error" type="invalid">
             {intl.formatMessage(messages.assignmentTypeNameErrorMessage3)}
           </Form.Control.Feedback>

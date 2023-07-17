@@ -5,6 +5,8 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
 
+const DEFAULT_TIME_STAMP = '00:00';
+
 const DeadlineSection = ({
   intl, setShowSavePrompt, gracePeriod, setGradingData, setShowSuccessAlert,
 }) => {
@@ -30,7 +32,7 @@ const DeadlineSection = ({
       </Form.Label>
       <Form.Control
         type="time"
-        value={gracePeriod ? `${formatTime(gracePeriod.hours) }:${ formatTime(gracePeriod.minutes)}` : '00:00'}
+        value={gracePeriod ? `${formatTime(gracePeriod.hours) }:${ formatTime(gracePeriod.minutes)}` : DEFAULT_TIME_STAMP}
         onChange={handleDeadlineChange}
       />
       <Form.Control.Feedback className="grading-description">

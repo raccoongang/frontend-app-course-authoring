@@ -2,7 +2,7 @@
   display: flex;
   margin-top: 1.5rem;
   align-items: center;
-  margin-bottom: 100px;
+  margin-bottom: map-get($spacers, 6);
 
   .grading-scale-segments-and-ticks {
     display: inline-block;

@@ -55,10 +55,10 @@ const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnection
     setShowSuccessAlert(false);
   };
 
-  const handleRemoveAssignment = (id) => {
+  const handleRemoveAssignment = (assignmentId) => {
     setGradingData((prevState) => ({
       ...prevState,
-      graders: prevState.graders.filter((obj) => obj.id !== id),
+      graders: prevState.graders.filter((grade) => grade.id !== assignmentId),
     }));
     setShowSuccessAlert(false);
     setShowSavePrompt(true);

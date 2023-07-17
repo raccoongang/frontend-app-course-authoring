@@ -11,6 +11,9 @@ import AssignmentTypeName from './assignments/AssignmentTypeName';
 import { defaultAssignmentsPropTypes, ASSIGNMENT_TYPES } from './utils/enum';
 import messages from './messages';
 
+const MIN_NUMBER_VALUE = 0;
+const MAX_NUMBER_VALUE = 100;
+
 const AssignmentSection = ({
   intl,
   handleRemoveAssignment,
@@ -25,14 +28,14 @@ const AssignmentSection = ({
     type, weight, minCount, dropCount,
   } = ASSIGNMENT_TYPES;
 
-  const handleAssignmentChange = (e, id) => {
+  const handleAssignmentChange = (e, assignmentId) => {
     const { name, value } = e.target;
 
     setShowSavePrompt(true);
 
     setGradingData(prevState => {
       const updatedState = prevState.graders.map(grader => {
-        if (grader.id === id) {
+        if (grader.id === assignmentId) {
           return { ...grader, [name]: value };
         }
         return grader;
@@ -41,7 +44,7 @@ const AssignmentSection = ({
     });
 
     validationAssignmentFields(
-      id,
+      assignmentId,
       name,
       type,
       value,
@@ -56,7 +59,7 @@ const AssignmentSection = ({
   };
 
   return (
-    <div>
+    <div className="assignment-items">
       {graders?.map((gradeField, idx) => {
         const courseAssignmentUsage = courseAssignmentLists[gradeField.type.toLowerCase()];
         return (
@@ -64,7 +67,8 @@ const AssignmentSection = ({
             <ol className="course-grading-assignment-items p-0 mb-4">
               <AssignmentTypeName
                 value={gradeField.type}
-                errorEffort={errorList[gradeField.type]}
+                // errorEffort={errorList[gradeField.type]}
+                errorEffort={errorList[`${type}-${idx}`]}
                 onChange={(e) => handleAssignmentChange(e, idx)}
               />
               <AssignmentItem
@@ -81,8 +85,8 @@ const AssignmentSection = ({
                 title={intl.formatMessage(messages.weightOfTotalGradeTitle)}
                 descriptions={intl.formatMessage(messages.weightOfTotalGradeDescription)}
                 type="number"
-                min={0}
-                max={100}
+                min={MIN_NUMBER_VALUE}
+                max={MAX_NUMBER_VALUE}
                 errorMsg={intl.formatMessage(messages.weightOfTotalGradeErrorMessage)}
                 name={weight}
                 value={gradeField.weight}
@@ -106,7 +110,7 @@ const AssignmentSection = ({
                 title={intl.formatMessage(messages.numberOfDroppableTitle)}
                 descriptions={intl.formatMessage(messages.numberOfDroppableDescription)}
                 type="number"
-                min={0}
+                min={MIN_NUMBER_VALUE}
                 errorMsg={intl.formatMessage(messages.numberOfDroppableErrorMessage)}
                 name={dropCount}
                 gradeField={gradeField}

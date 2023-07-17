@@ -100,7 +100,7 @@ const GradingSettings = ({ intl, courseId }) => {
       default: intl.formatMessage(messages.buttonSaveText),
       pending: intl.formatMessage(messages.buttonSavingText),
     },
-    disabledStates: ['pending'],
+    disabledStates: [RequestStatus.PENDING],
   };
 
   return (
@@ -231,7 +231,7 @@ const GradingSettings = ({ intl, courseId }) => {
             </Button>,
             <StatefulButton
               onClick={handleSendGradingSettingsData}
-              state={isQueryPending ? 'pending' : 'default'}
+              state={isQueryPending ? RequestStatus.PENDING : 'default'}
               {...updateValuesButtonState}
             >
               {intl.formatMessage(messages.buttonSaveText)}
