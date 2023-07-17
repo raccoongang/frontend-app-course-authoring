@@ -42,7 +42,7 @@ const CreditSection = ({
       <Form.Control
         type="number"
         min={0}
-        defaultValue={Math.round(parseFloat(minimumGradeCredit) * 100)}
+        value={Math.round(parseFloat(minimumGradeCredit) * 100) || ''}
         name="minimum_grade_credit"
         onChange={handleCreditChange}
       />
