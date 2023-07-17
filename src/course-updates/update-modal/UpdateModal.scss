@@ -1,0 +1,19 @@
+.update-modal-body {
+  min-height: 300px;
+
+  .datepicker-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .datepicker-field-error {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      svg {
+        color: $warning-300;
+      }
+    }
+  }
+}

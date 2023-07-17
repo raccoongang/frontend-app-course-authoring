@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SubHeader = ({
-  title, subtitle, contentTitle, description, instruction,
+  title, subtitle, contentTitle, description, instruction, headerActions,
 }) => (
   <>
     <header className="sub-header">
@@ -10,6 +10,11 @@ const SubHeader = ({
         <small className="sub-header-title-subtitle">{subtitle}</small>
         {title}
       </h2>
+      {headerActions && (
+        <div className="ml-auto sub-header-actions">
+          {headerActions}
+        </div>
+      )}
     </header>
     <header className="sub-header-content">
       <h2 className="sub-header-content-title">{contentTitle}</h2>
@@ -24,6 +29,7 @@ const SubHeader = ({
 SubHeader.defaultProps = {
   instruction: '',
   description: '',
+  headerActions: null,
 };
 
 SubHeader.propTypes = {
@@ -35,6 +41,7 @@ SubHeader.propTypes = {
     PropTypes.element,
     PropTypes.string,
   ]),
+  headerActions: PropTypes.node,
 };
 
 export default SubHeader;

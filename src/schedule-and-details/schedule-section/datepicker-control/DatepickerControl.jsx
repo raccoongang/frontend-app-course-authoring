@@ -6,8 +6,8 @@ import { Form, Icon } from '@edx/paragon';
 import { Calendar } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import { convertToDateFromString, convertToStringFromDate } from '../../utils';
-import { DATE_FORMAT, TIME_FORMAT } from './constants';
+import { convertToDateFromString, convertToStringFromDate } from '../../../utils';
+import { DATE_FORMAT, TIME_FORMAT } from '../../../constants';
 import messages from './messages';
 
 export const DATEPICKER_TYPES = {

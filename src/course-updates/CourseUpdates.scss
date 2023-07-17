@@ -1,0 +1,23 @@
+@import "./course-handouts/CourseHandouts";
+@import "./course-update/CourseUpdate";
+@import "./update-modal/UpdateModal";
+
+.updates-container {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  border: .0625rem solid $gray-200;
+  border-radius: .375rem;
+  box-shadow: 0 1px 1px $gray-200;
+  background: $white;
+  overflow: hidden;
+}
+
+.updates-info-container {
+  padding: 30px;
+}
+
+.updates-handouts-container {
+  border-left: .0625rem solid $gray-200;
+  padding: 30px;
+  background: $info-100;
+}
