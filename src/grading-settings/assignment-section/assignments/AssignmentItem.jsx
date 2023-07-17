@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form } from '@edx/paragon';
+import { intlShape } from '@edx/frontend-platform/i18n';
 import { defaultAssignmentsPropTypes } from '../utils/enum';
 
 const AssignmentItem = ({
@@ -70,7 +71,7 @@ AssignmentItem.propTypes = {
   errorMsg: PropTypes.string,
   name: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
-  secondErrorMsg: PropTypes.string,
+  secondErrorMsg: intlShape,
   onChange: PropTypes.func.isRequired,
   errorEffort: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

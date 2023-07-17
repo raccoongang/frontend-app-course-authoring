@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Form } from '@edx/paragon';
 
+import { ASSIGNMENT_TYPES } from '../utils/enum';
 import messages from '../messages';
 
 const AssignmentTypeName = ({
@@ -22,10 +23,10 @@ const AssignmentTypeName = ({
         </Form.Label>
         <Form.Control
           type="text"
-          name="type"
+          name={ASSIGNMENT_TYPES.type}
           onChange={onChange}
           value={value}
-          isInvalid={errorEffort}
+          isInvalid={Boolean(errorEffort)}
         />
         <Form.Control.Feedback className="grading-description">
           {intl.formatMessage(messages.assignmentTypeNameDescription)}
@@ -54,10 +55,14 @@ const AssignmentTypeName = ({
   );
 };
 
+AssignmentTypeName.defaultProps = {
+  errorEffort: false,
+};
+
 AssignmentTypeName.propTypes = {
   intl: intlShape.isRequired,
   onChange: PropTypes.func.isRequired,
-  errorEffort: PropTypes.bool.isRequired,
+  errorEffort: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
 };
 

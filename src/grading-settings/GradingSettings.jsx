@@ -113,6 +113,7 @@ const GradingSettings = ({ intl, courseId }) => {
               dispatchMethod={sendGradingSetting(courseId, gradingData)}
               onInternetConnectionFailed={handleInternetConnectionFailed}
               onDispatchMethodCall={handleDispatchMethodCall}
+              isFailed={savingStatus === RequestStatus.FAILED}
             />
           )}
           <AlertMessage
@@ -230,7 +231,7 @@ const GradingSettings = ({ intl, courseId }) => {
             </Button>,
             <StatefulButton
               onClick={handleSendGradingSettingsData}
-              state={isQueryPending && 'pending'}
+              state={isQueryPending ? 'pending' : 'default'}
               {...updateValuesButtonState}
             >
               {intl.formatMessage(messages.buttonSaveText)}

@@ -25,7 +25,7 @@ const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnection
     minimumGradeCredit,
     graders,
   } = gradingData;
-  console.log('========= gradingData ========', gradingData);
+
   useEffect(() => {
     if (gradingSettingsData) {
       setGradingData(gradingSettingsData);

@@ -10,7 +10,7 @@ const AlertMessage = ({ title, description, ...props }) => (
 );
 
 AlertMessage.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 

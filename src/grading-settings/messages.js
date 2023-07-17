@@ -63,7 +63,7 @@ const messages = defineMessages({
   },
   creditEligibilitySectionDescription: {
     id: 'course-authoring.grading-settings.credit-eligibility.description',
-    defaultMessage: 'Deadlines, requirements, and logistics around grading student work',
+    defaultMessage: 'Settings for course credit eligibility',
   },
   gradingRulesPoliciesSectionTitle: {
     id: 'course-authoring.grading-settings.grading-rules-policies.title',

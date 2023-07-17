@@ -43,7 +43,7 @@ export const validationAssignmentFields = (
     break;
 
   case weight:
-    if (value < 0 || value > 100 || value === '-0') {
+    if (value < 0 || value > 100 || value === '-0' || value === '-') {
       setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
       setShowSavePrompt(false);
     }

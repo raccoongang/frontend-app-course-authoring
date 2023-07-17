@@ -622,7 +622,7 @@
   "course-authoring.grading-settings.assignment-type.title": "Assignment types",
   "course-authoring.grading-settings.grading-rules-policies.description": "Deadlines, requirements, and logistics around grading student work",
   "course-authoring.grading-settings.grading-rules-policies.title": "Grading rules & policies",
-  "course-authoring.grading-settings.credit-eligibility.description": "Deadlines, requirements, and logistics around grading student work",
+  "course-authoring.grading-settings.credit-eligibility.description": "Settings for course credit eligibility",
   "course-authoring.grading-settings.credit-eligibility.title": "Credit eligibility",
   "course-authoring.grading-settings.assignment.type-name.title": "Assignment type name",
   "course-authoring.grading-settings.assignment.type-name.description": "The general category for this type of assignment, for example, Homework or Midterm Exam. This name is visible to learners.",
