@@ -7,7 +7,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import messages from './messages';
 
 const CreditSection = ({
-  intl, eligibleGrade, setShowSavePrompt, minimumGradeCredit, setGradingData,
+  intl, eligibleGrade, setShowSavePrompt, minimumGradeCredit, setGradingData, setShowSuccessAlert,
 }) => {
   const [errorEffort, setErrorEffort] = useState(false);
 
@@ -27,6 +27,7 @@ const CreditSection = ({
 
     setShowSavePrompt(true);
     setErrorEffort(false);
+    setShowSuccessAlert(false);
   };
 
   return (
@@ -62,6 +63,7 @@ CreditSection.propTypes = {
   eligibleGrade: PropTypes.number.isRequired,
   setShowSavePrompt: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
+  setShowSuccessAlert: PropTypes.func.isRequired,
   minimumGradeCredit: PropTypes.number.isRequired,
 };
 

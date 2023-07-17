@@ -1,6 +1,7 @@
 /**
  * Validates assignment fields, updates error list and save prompt visibility accordingly.
  *
+ * @param {number} id - Element id.
  * @param {string} name - The name of the field being validated.
  * @param {string} type - The type of the assignment.
  * @param {string} value - The value of the field being validated.
@@ -14,6 +15,7 @@
  */
 // eslint-disable-next-line import/prefer-default-export
 export const validationAssignmentFields = (
+  id,
   name,
   type,
   value,
@@ -41,22 +43,22 @@ export const validationAssignmentFields = (
     break;
 
   case weight:
-    if (value < 0 || value > 100) {
-      setErrorList(prevState => ({ ...prevState, [name]: true }));
+    if (value < 0 || value > 100 || value === '-0') {
+      setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
       setShowSavePrompt(false);
     }
     break;
 
   case minCount:
     if (value <= 0 || value === '' || value === '-0') {
-      setErrorList(prevState => ({ ...prevState, [name]: true }));
+      setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
       setShowSavePrompt(false);
     }
     break;
 
   case dropCount:
     if (value < 0 || value === '' || value === '-0') {
-      setErrorList(prevState => ({ ...prevState, [name]: true }));
+      setErrorList(prevState => ({ ...prevState, [`${name}-${id}`]: true }));
       setShowSavePrompt(false);
     }
     break;

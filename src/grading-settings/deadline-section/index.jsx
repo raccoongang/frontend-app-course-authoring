@@ -6,7 +6,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import messages from './messages';
 
 const DeadlineSection = ({
-  intl, setShowSavePrompt, gracePeriod, setGradingData,
+  intl, setShowSavePrompt, gracePeriod, setGradingData, setShowSuccessAlert,
 }) => {
   const formatTime = (time) => (time >= 10 ? time.toString() : `0${time}`);
 
@@ -20,6 +20,7 @@ const DeadlineSection = ({
         minutes: parseInt(hoursAndMinutes[1], 10),
       },
     }));
+    setShowSuccessAlert(false);
   };
 
   return (
@@ -43,6 +44,7 @@ DeadlineSection.propTypes = {
   intl: intlShape.isRequired,
   setShowSavePrompt: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
+  setShowSuccessAlert: PropTypes.func.isRequired,
   gracePeriod: PropTypes.shape({
     hours: PropTypes.number,
     minutes: PropTypes.number,

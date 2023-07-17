@@ -15,7 +15,7 @@ const useConvertGradeCutoffs = (
   };
 };
 
-const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnectionAlert) => {
+const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnectionAlert, setShowSuccessAlert) => {
   const [gradingData, setGradingData] = useState({});
   const [showSavePrompt, setShowSavePrompt] = useState(false);
   const resetDataRef = useRef(false);
@@ -34,6 +34,7 @@ const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnection
 
   const handleResetPageData = () => {
     setShowSavePrompt(!showSavePrompt);
+    setShowSuccessAlert(false);
     setGradingData(gradingSettingsData);
     resetDataRef.current = true;
     setOverrideInternetConnectionAlert(false);
@@ -51,6 +52,7 @@ const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnection
         weight: 0,
       }],
     }));
+    setShowSuccessAlert(false);
   };
 
   const handleRemoveAssignment = (id) => {
@@ -58,6 +60,8 @@ const useUpdateGradingData = (gradingSettingsData, setOverrideInternetConnection
       ...prevState,
       graders: prevState.graders.filter((obj) => obj.id !== id),
     }));
+    setShowSuccessAlert(false);
+    setShowSavePrompt(true);
   };
 
   return {

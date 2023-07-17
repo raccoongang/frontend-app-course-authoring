@@ -33,6 +33,10 @@ const messages = defineMessages({
     id: 'course-authoring.grading-settings.alert.button.save',
     defaultMessage: 'Save changes',
   },
+  buttonSavingText: {
+    id: 'course-authoring.grading-settings.alert.button.saving',
+    defaultMessage: 'Saving',
+  },
   buttonCancelText: {
     id: 'course-authoring.grading-settings.alert.button.cancel',
     defaultMessage: 'Cancel',

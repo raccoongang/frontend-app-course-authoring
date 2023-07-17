@@ -12,7 +12,13 @@ import { defaultAssignmentsPropTypes, ASSIGNMENT_TYPES } from './utils/enum';
 import messages from './messages';
 
 const AssignmentSection = ({
-  intl, handleRemoveAssignment, setShowSavePrompt, graders, setGradingData, courseAssignmentLists,
+  intl,
+  handleRemoveAssignment,
+  setShowSavePrompt,
+  graders,
+  setGradingData,
+  courseAssignmentLists,
+  setShowSuccessAlert,
 }) => {
   const [errorList, setErrorList] = useState({});
   const {
@@ -22,9 +28,7 @@ const AssignmentSection = ({
   const handleAssignmentChange = (e, id) => {
     const { name, value } = e.target;
 
-    if (name === type && value.length) {
-      setShowSavePrompt(true);
-    }
+    setShowSavePrompt(true);
 
     setGradingData(prevState => {
       const updatedState = prevState.graders.map(grader => {
@@ -37,6 +41,7 @@ const AssignmentSection = ({
     });
 
     validationAssignmentFields(
+      id,
       name,
       type,
       value,
@@ -47,6 +52,7 @@ const AssignmentSection = ({
       minCount,
       dropCount,
     );
+    setShowSuccessAlert(false);
   };
 
   return (
@@ -81,7 +87,7 @@ const AssignmentSection = ({
                 name={weight}
                 value={gradeField.weight}
                 onChange={(e) => handleAssignmentChange(e, idx)}
-                errorEffort={errorList.weight}
+                errorEffort={errorList[`${weight}-${idx}`]}
               />
               <AssignmentItem
                 className="course-grading-assignment-total-number"
@@ -93,7 +99,7 @@ const AssignmentSection = ({
                 name={minCount}
                 value={gradeField.minCount}
                 onChange={(e) => handleAssignmentChange(e, idx)}
-                errorEffort={errorList.minCount}
+                errorEffort={errorList[`${minCount}-${idx}`]}
               />
               <AssignmentItem
                 className="course-grading-assignment-number-droppable"
@@ -113,7 +119,7 @@ const AssignmentSection = ({
                     values={{ type: gradeField.type }}
                   />
                 )}
-                errorEffort={errorList.dropCount}
+                errorEffort={errorList[`${dropCount}-${idx}`]}
               />
             </ol>
             {gradeField.minCount !== courseAssignmentUsage?.length && Boolean(courseAssignmentUsage?.length) && (
@@ -204,6 +210,7 @@ AssignmentSection.propTypes = {
   handleRemoveAssignment: PropTypes.func.isRequired,
   setGradingData: PropTypes.func.isRequired,
   setShowSavePrompt: PropTypes.func.isRequired,
+  setShowSuccessAlert: PropTypes.func.isRequired,
   courseAssignmentLists: PropTypes.shape(defaultAssignmentsPropTypes),
   graders: PropTypes.arrayOf(
     PropTypes.shape(defaultAssignmentsPropTypes),

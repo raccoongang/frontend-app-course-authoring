@@ -37,7 +37,7 @@ const AssignmentItem = ({
       <Form.Control.Feedback className="grading-description">
         {descriptions}
       </Form.Control.Feedback>
-      {errorEffort && errorEffort !== 'duplicate' && (
+      {errorEffort && (
         <Form.Control.Feedback className="feedback-error" type="invalid">
           {errorMsg}
         </Form.Control.Feedback>

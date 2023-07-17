@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Container, Layout, Button } from '@edx/paragon';
+import {
+  Container, Layout, Button, StatefulButton,
+} from '@edx/paragon';
 import { CheckCircle, Warning, Add as IconAdd } from '@edx/paragon/icons';
 
 import AlertMessage from '../generic/alert-message';
@@ -48,7 +50,7 @@ const GradingSettings = ({ intl, courseId }) => {
     handleResetPageData,
     handleAddAssignment,
     handleRemoveAssignment,
-  } = useUpdateGradingData(gradingSettingsData, setOverrideInternetConnectionAlert);
+  } = useUpdateGradingData(gradingSettingsData, setOverrideInternetConnectionAlert, setShowSuccessAlert);
 
   const {
     gradeLetters,
@@ -58,7 +60,9 @@ const GradingSettings = ({ intl, courseId }) => {
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
-      setShowSuccessAlert(true);
+      setShowSuccessAlert(!showSuccessAlert);
+      setShowSavePrompt(!showSavePrompt);
+      setIsQueryPending(!isQueryPending);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [savingStatus]);
@@ -76,7 +80,6 @@ const GradingSettings = ({ intl, courseId }) => {
   const handleSendGradingSettingsData = () => {
     setIsQueryPending(true);
     setOverrideInternetConnectionAlert(true);
-    setShowSavePrompt(!showSavePrompt);
   };
 
   const handleInternetConnectionFailed = () => {
@@ -90,6 +93,14 @@ const GradingSettings = ({ intl, courseId }) => {
     setIsQueryPending(false);
     setShowSavePrompt(false);
     setOverrideInternetConnectionAlert(false);
+  };
+
+  const updateValuesButtonState = {
+    labels: {
+      default: intl.formatMessage(messages.buttonSaveText),
+      pending: intl.formatMessage(messages.buttonSavingText),
+    },
+    disabledStates: ['pending'],
   };
 
   return (
@@ -156,6 +167,7 @@ const GradingSettings = ({ intl, courseId }) => {
                         setShowSavePrompt={setShowSavePrompt}
                         minimumGradeCredit={minimumGradeCredit}
                         setGradingData={setGradingData}
+                        setShowSuccessAlert={setShowSuccessAlert}
                       />
                     </section>
                   )}
@@ -168,6 +180,7 @@ const GradingSettings = ({ intl, courseId }) => {
                       setShowSavePrompt={setShowSavePrompt}
                       gracePeriod={gracePeriod}
                       setGradingData={setGradingData}
+                      setShowSuccessAlert={setShowSuccessAlert}
                     />
                   </section>
                   <section>
@@ -181,6 +194,7 @@ const GradingSettings = ({ intl, courseId }) => {
                       graders={graders}
                       setGradingData={setGradingData}
                       courseAssignmentLists={courseAssignmentLists}
+                      setShowSuccessAlert={setShowSuccessAlert}
                     />
                     <Button
                       variant="outline-success"
@@ -214,9 +228,13 @@ const GradingSettings = ({ intl, courseId }) => {
             >
               {intl.formatMessage(messages.buttonCancelText)}
             </Button>,
-            <Button onClick={handleSendGradingSettingsData}>
+            <StatefulButton
+              onClick={handleSendGradingSettingsData}
+              state={isQueryPending && 'pending'}
+              {...updateValuesButtonState}
+            >
               {intl.formatMessage(messages.buttonSaveText)}
-            </Button>,
+            </StatefulButton>,
           ]}
           variant="warning"
           icon={Warning}
