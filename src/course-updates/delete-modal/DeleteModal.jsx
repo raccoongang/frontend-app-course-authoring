@@ -6,7 +6,7 @@ import {
   AlertModal,
 } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import messages from '../messages';
+import messages from './messages';
 
 const DeleteModal = ({ isOpen, close, onDeleteSubmit }) => {
   const intl = useIntl();

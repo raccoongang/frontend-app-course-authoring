@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import CourseHandouts from './CourseHandouts';
-import messages from '../messages';
+import messages from './messages';
 
 const onEditMock = jest.fn();
 const handoutsContent = 'Handouts Content';

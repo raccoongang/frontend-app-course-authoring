@@ -7,7 +7,7 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 import moment from 'moment/moment';
 import PropTypes from 'prop-types';
 import UpdateModal from './UpdateModal';
-import messages from '../messages';
+import messages from './messages';
 import { requestTypes } from '../constants';
 import { courseHandoutsMock, courseUpdatesMock } from '../__mocks__';
 

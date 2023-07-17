@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import CourseUpdate from './CourseUpdate';
-import messages from '../messages';
+import messages from './messages';
 
 const onEditMock = jest.fn();
 const onDeleteMock = jest.fn();

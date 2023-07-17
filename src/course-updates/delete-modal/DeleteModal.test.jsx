@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import DeleteModal from './DeleteModal';
-import messages from '../messages';
+import messages from './messages';
 
 const closeMock = jest.fn();
 const onDeleteSubmitMock = jest.fn();

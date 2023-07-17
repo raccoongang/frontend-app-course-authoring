@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import { Calendar, Error } from '@edx/paragon/icons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import messages from '../messages';
+import messages from './messages';
 import { convertToStringFromDate, convertToDateFromString, isValidDate } from '../../utils';
 import { DATE_FORMAT } from '../../constants';
 import { requestTypes } from '../constants';
