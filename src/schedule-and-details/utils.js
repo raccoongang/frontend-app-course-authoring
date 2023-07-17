@@ -1,4 +1,5 @@
 import { CERTIFICATE_DISPLAY_BEHAVIOR } from './schedule-section/certificate-display-row';
+import { defaultEntranceExamMinimumScorePct } from './constants';
 import messages from './messages';
 
 const isDateBeforeOrEqual = (
@@ -70,5 +71,16 @@ const validateScheduleAndDetails = (courseDetails, intl) => {
   return errors;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { validateScheduleAndDetails };
+const updateWithDefaultValues = (values) => {
+  const { entranceExamMinimumScorePct } = values;
+  if (entranceExamMinimumScorePct === '') {
+    return {
+      ...values,
+      entranceExamMinimumScorePct: defaultEntranceExamMinimumScorePct,
+    };
+  }
+
+  return values;
+};
+
+export { validateScheduleAndDetails, updateWithDefaultValues };
