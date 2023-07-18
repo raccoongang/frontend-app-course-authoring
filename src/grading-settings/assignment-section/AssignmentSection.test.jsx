@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import AssignmentSection from '.';
@@ -14,7 +14,7 @@ const defaultAssignments = {
   id: 0,
 };
 
-const RootWrapper = () => (
+const RootWrapper = (props = {}) => (
   <IntlProvider locale="en">
     <AssignmentSection
       handleRemoveAssignment={jest.fn()}
@@ -23,6 +23,7 @@ const RootWrapper = () => (
       setGradingData={jest.fn()}
       courseAssignmentLists={defaultAssignments}
       setShowSuccessAlert={jest.fn()}
+      {...props}
     />
   </IntlProvider>
 );
@@ -47,9 +48,16 @@ describe('<AssignmentSection />', () => {
     });
   });
   it('checking correct assignment abbreviation value', () => {
-    const { getByTestId } = render(<RootWrapper />);
+    const testObj = {};
+    const setGradingData = (fn) => {
+      testObj.graders = fn({}).graders;
+    };
+    const { getByTestId } = render(<RootWrapper setGradingData={setGradingData} />);
     const assignmentShortLabelInput = getByTestId('assignment-shortLabel-input');
     expect(assignmentShortLabelInput.value).toBe('TT');
+    fireEvent.change(assignmentShortLabelInput, { target: { value: '123' } });
+    // debug(assignmentShortLabelInput);
+    expect(testObj.graders[0].shortLabel).toBe('123');
   });
   it('checking correct assignment weight of total grade value', async () => {
     const { getByTestId } = render(<RootWrapper />);
