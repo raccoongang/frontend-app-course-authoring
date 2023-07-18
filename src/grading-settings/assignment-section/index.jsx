@@ -40,6 +40,7 @@ const AssignmentSection = ({
         }
         return grader;
       });
+
       return { ...prevState, graders: updatedState };
     });
 
@@ -67,7 +68,6 @@ const AssignmentSection = ({
             <ol className="course-grading-assignment-items p-0 mb-4">
               <AssignmentTypeName
                 value={gradeField.type}
-                // errorEffort={errorList[gradeField.type]}
                 errorEffort={errorList[`${type}-${idx}`]}
                 onChange={(e) => handleAssignmentChange(e, idx)}
               />

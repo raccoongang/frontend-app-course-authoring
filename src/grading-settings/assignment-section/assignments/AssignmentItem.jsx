@@ -27,6 +27,7 @@ const AssignmentItem = ({
     >
       <Form.Label className="grading-label">{title}</Form.Label>
       <Form.Control
+        data-testid={`assignment-${name}-input`}
         type={type}
         min={min}
         max={max}

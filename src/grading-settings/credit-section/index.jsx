@@ -40,6 +40,7 @@ const CreditSection = ({
         {intl.formatMessage(messages.creditEligibilityLabel)}
       </Form.Label>
       <Form.Control
+        data-testid="minimum-grade-credit-input"
         type="number"
         min={0}
         value={Math.round(parseFloat(minimumGradeCredit) * 100) || ''}

@@ -31,6 +31,7 @@ const DeadlineSection = ({
         {intl.formatMessage(messages.gracePeriodOnDeadlineLabel)}
       </Form.Label>
       <Form.Control
+        data-testid="deadline-period-input"
         type="time"
         value={gracePeriod ? `${formatTime(gracePeriod.hours) }:${ formatTime(gracePeriod.minutes)}` : DEFAULT_TIME_STAMP}
         onChange={handleDeadlineChange}

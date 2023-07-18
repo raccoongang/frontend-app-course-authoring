@@ -22,6 +22,7 @@ const AssignmentTypeName = ({
           {intl.formatMessage(messages.assignmentTypeNameTitle)}
         </Form.Label>
         <Form.Control
+          data-testid="assignment-type-name-input"
           type="text"
           name={ASSIGNMENT_TYPES.type}
           onChange={onChange}
