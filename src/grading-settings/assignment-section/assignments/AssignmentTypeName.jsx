@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Form } from '@edx/paragon';
 
-import { ASSIGNMENT_TYPES } from '../utils/enum';
+import { ASSIGNMENT_TYPES, DUPLICATE_ASSIGNMENT_NAME } from '../utils/enum';
 import messages from '../messages';
 
 const AssignmentTypeName = ({
@@ -32,7 +32,7 @@ const AssignmentTypeName = ({
         <Form.Control.Feedback className="grading-description">
           {intl.formatMessage(messages.assignmentTypeNameDescription)}
         </Form.Control.Feedback>
-        {errorEffort && errorEffort !== 'duplicateAssignmentName' && (
+        {errorEffort && errorEffort !== DUPLICATE_ASSIGNMENT_NAME && (
           <Form.Control.Feedback className="feedback-error" type="invalid">
             {intl.formatMessage(messages.assignmentTypeNameErrorMessage1)}
           </Form.Control.Feedback>
@@ -46,7 +46,7 @@ const AssignmentTypeName = ({
             />
           </Form.Control.Feedback>
         )}
-        {errorEffort === 'duplicateAssignmentName' && (
+        {errorEffort === DUPLICATE_ASSIGNMENT_NAME && (
           <Form.Control.Feedback className="feedback-error" type="invalid">
             {intl.formatMessage(messages.assignmentTypeNameErrorMessage3)}
           </Form.Control.Feedback>

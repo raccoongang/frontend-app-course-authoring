@@ -11,6 +11,8 @@ const DeadlineSection = ({
   intl, setShowSavePrompt, gracePeriod, setGradingData, setShowSuccessAlert,
 }) => {
   const formatTime = (time) => (time >= 10 ? time.toString() : `0${time}`);
+  const timeStampValue = gracePeriod
+    ? `${formatTime(gracePeriod.hours) }:${ formatTime(gracePeriod.minutes)}` : DEFAULT_TIME_STAMP;
 
   const handleDeadlineChange = (e) => {
     const hoursAndMinutes = e.target.value.split(':');
@@ -33,7 +35,7 @@ const DeadlineSection = ({
       <Form.Control
         data-testid="deadline-period-input"
         type="time"
-        value={gracePeriod ? `${formatTime(gracePeriod.hours) }:${ formatTime(gracePeriod.minutes)}` : DEFAULT_TIME_STAMP}
+        value={timeStampValue}
         onChange={handleDeadlineChange}
       />
       <Form.Control.Feedback className="grading-description">

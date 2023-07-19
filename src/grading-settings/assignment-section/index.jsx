@@ -27,6 +27,11 @@ const AssignmentSection = ({
   const {
     type, weight, minCount, dropCount,
   } = ASSIGNMENT_TYPES;
+  const isFieldsWithoutErrors = Object.values(errorList).every(field => field !== true);
+
+  if (!isFieldsWithoutErrors) {
+    setShowSavePrompt(false);
+  }
 
   const handleAssignmentChange = (e, assignmentId) => {
     const { name, value } = e.target;
@@ -62,6 +67,10 @@ const AssignmentSection = ({
     <div className="assignment-items">
       {graders?.map((gradeField, idx) => {
         const courseAssignmentUsage = courseAssignmentLists[gradeField.type.toLowerCase()];
+        const showDefinedCaseAlert = gradeField.minCount !== courseAssignmentUsage?.length
+            && Boolean(courseAssignmentUsage?.length);
+        const showNotDefinedCaseAlert = !courseAssignmentUsage?.length && Boolean(gradeField.type);
+
         return (
           <div key={gradeField.id} className="course-grading-assignment-wrapper mb-4">
             <ol className="course-grading-assignment-items p-0 mb-4">
@@ -125,7 +134,7 @@ const AssignmentSection = ({
                 errorEffort={errorList[`${dropCount}-${idx}`]}
               />
             </ol>
-            {gradeField.minCount !== courseAssignmentUsage?.length && Boolean(courseAssignmentUsage?.length) && (
+            {showDefinedCaseAlert && (
               <AlertMessage
                 className="course-grading-assignment-item-alert-warning"
                 variant="warning"
@@ -152,7 +161,7 @@ const AssignmentSection = ({
                 aria-hidden="true"
               />
             )}
-            {!courseAssignmentUsage?.length && Boolean(gradeField.type) && (
+            {showNotDefinedCaseAlert && (
               <AlertMessage
                 className="course-grading-assignment-item-alert-warning"
                 variant="warning"

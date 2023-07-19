@@ -1,3 +1,5 @@
+import { DUPLICATE_ASSIGNMENT_NAME } from './enum';
+
 /**
  * Updates the error list for the job and sets the save warning display flag.
  *
@@ -16,7 +18,9 @@ export const updateAssignmentErrorList = (
   assignmentValue = true,
 ) => {
   setErrorList(prevState => ({ ...prevState, [`${assignmentName}-${assignmentId}`]: assignmentValue }));
-  setShowSavePrompt(false);
+  if (assignmentValue) {
+    setShowSavePrompt(false);
+  }
 };
 
 /**
@@ -48,8 +52,6 @@ export const validationAssignmentFields = (
 ) => {
   const courseGradingTypes = courseGraders?.map(grade => grade.type);
 
-  setErrorList({});
-
   switch (assignmentName) {
   case assignmentType:
     if (assignmentValue === '') {
@@ -62,9 +64,16 @@ export const validationAssignmentFields = (
         assignmentId,
         setErrorList,
         setShowSavePrompt,
-        'duplicateAssignmentName',
+        DUPLICATE_ASSIGNMENT_NAME,
       );
     }
+    updateAssignmentErrorList(
+      assignmentName,
+      assignmentId,
+      setErrorList,
+      setShowSavePrompt,
+      false,
+    );
     break;
   case weightOfTotalGrade:
     if (assignmentValue < 0 || assignmentValue > 100 || assignmentValue === '-0') {
@@ -74,7 +83,15 @@ export const validationAssignmentFields = (
         setErrorList,
         setShowSavePrompt,
       );
+      return;
     }
+    updateAssignmentErrorList(
+      assignmentName,
+      assignmentId,
+      setErrorList,
+      setShowSavePrompt,
+      false,
+    );
     break;
   case assignmentMinCount:
     if (assignmentValue <= 0 || assignmentValue === '' || assignmentValue === '-0') {
@@ -84,7 +101,15 @@ export const validationAssignmentFields = (
         setErrorList,
         setShowSavePrompt,
       );
+      return;
     }
+    updateAssignmentErrorList(
+      assignmentName,
+      assignmentId,
+      setErrorList,
+      setShowSavePrompt,
+      false,
+    );
     break;
   case assignmentDropCount:
     if (assignmentValue < 0 || assignmentValue === '' || assignmentValue === '-0') {
@@ -94,9 +119,23 @@ export const validationAssignmentFields = (
         setErrorList,
         setShowSavePrompt,
       );
+      return;
     }
+    updateAssignmentErrorList(
+      assignmentName,
+      assignmentId,
+      setErrorList,
+      setShowSavePrompt,
+      false,
+    );
     break;
   default:
-    setErrorList(prevState => ({ ...prevState, [assignmentName]: false }));
+    updateAssignmentErrorList(
+      assignmentName,
+      assignmentId,
+      setErrorList,
+      setShowSavePrompt,
+      false,
+    );
   }
 };

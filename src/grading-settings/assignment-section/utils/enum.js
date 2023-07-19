@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
+export const DUPLICATE_ASSIGNMENT_NAME = 'duplicateAssignmentName';
+
 export const ASSIGNMENT_TYPES = {
   type: 'type',
   weight: 'weight',
