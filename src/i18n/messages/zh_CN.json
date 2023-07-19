@@ -681,5 +681,22 @@
   "course-authoring.grading-settings.assignment.alert.warning.usage.title": "Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:",
   "course-authoring.grading-settings.assignment.alert.warning.title": "Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:",
   "course-authoring.grading-settings.assignment.alert.success.title": "The number of {type} assignments in the course matches the number defined here.",
-  "course-authoring.grading-settings.assignment.type-name.error.message-2": "For grading to work, you must change all {initialAssignmentName} subsections to {value}"
+  "course-authoring.grading-settings.assignment.type-name.error.message-2": "For grading to work, you must change all {initialAssignmentName} subsections to {value}",
+  "course-authoring.studio-home.heading.title": "Studio home",
+  "course-authoring.studio-home.add-new-course.btn.text": "New course",
+  "course-authoring.studio-home.add-new-library.btn.text": "New library",
+  "course-authoring.studio-home.courses.tab.title": "Courses",
+  "course-authoring.studio-home.libraries.tab.title": "Libraries",
+  "course-authoring.studio-home.archived.tab.title": "Archived",
+  "course-authoring.studio-home.default-section-1.title": "Are you staff on an exiting Studio course?",
+  "course-authoring.studio-home.default-section-1.description": "The course creator must give you access to the course. Contact the course creator or administrator for the course tou are helping to author.",
+  "course-authoring.studio-home.default-section-2.title": "Create your first course",
+  "course-authoring.studio-home.default-section-2.description": "Your new course is just a click away!",
+  "course-authoring.studio-home.btn.re-run.text": "Re-run course",
+  "course-authoring.studio-home.btn.view-live.text": "View live",
+  "course-authoring.studio-home.organization.title": "Organization and library settings",
+  "course-authoring.studio-home.organization.label": "Show all courses in organization:",
+  "course-authoring.studio-home.organization.btn.submit.text": "Submit",
+  "course-authoring.studio-home.sidebar.about.title": "New to edX Studio?",
+  "course-authoring.studio-home.sidebar.about.description": "Click Help in the upper-rgiht corner to get more information about the Studio page you are viewing. You can also use the links at the bottom of the page to access our continually updated documentation and other Studio resources."
 }
