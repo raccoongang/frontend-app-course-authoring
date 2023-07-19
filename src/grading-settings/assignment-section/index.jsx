@@ -33,16 +33,15 @@ const AssignmentSection = ({
 
     setShowSavePrompt(true);
 
-    setGradingData(prevState => {
-      const updatedState = prevState.graders.map(grader => {
+    setGradingData(prevState => ({
+      ...prevState,
+      graders: graders.map(grader => {
         if (grader.id === assignmentId) {
           return { ...grader, [name]: value };
         }
         return grader;
-      });
-
-      return { ...prevState, graders: updatedState };
-    });
+      }),
+    }));
 
     validationAssignmentFields(
       assignmentId,

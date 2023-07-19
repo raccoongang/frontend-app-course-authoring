@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form } from '@edx/paragon';
 import { intlShape } from '@edx/frontend-platform/i18n';
+
 import { defaultAssignmentsPropTypes } from '../utils/enum';
 
 const AssignmentItem = ({
