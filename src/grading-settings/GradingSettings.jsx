@@ -77,6 +77,11 @@ const GradingSettings = ({ intl, courseId }) => {
     return <></>;
   }
 
+  const handleQueryProcessing = () => {
+    setShowSuccessAlert(false);
+    dispatch(sendGradingSetting(courseId, gradingData));
+  };
+
   const handleSendGradingSettingsData = () => {
     setIsQueryPending(true);
     setOverrideInternetConnectionAlert(true);
@@ -87,12 +92,6 @@ const GradingSettings = ({ intl, courseId }) => {
     setShowSuccessAlert(false);
     setIsQueryPending(false);
     setOverrideInternetConnectionAlert(true);
-  };
-
-  const handleDispatchMethodCall = () => {
-    setIsQueryPending(false);
-    setShowSavePrompt(false);
-    setOverrideInternetConnectionAlert(false);
   };
 
   const updateValuesButtonState = {
@@ -107,15 +106,6 @@ const GradingSettings = ({ intl, courseId }) => {
     <>
       <Container size="xl" className="m-4">
         <div className="mt-5">
-          {showOverrideInternetConnectionAlert && (
-            <InternetConnectionAlert
-              isQueryPending={isQueryPending}
-              dispatchMethod={sendGradingSetting(courseId, gradingData)}
-              onInternetConnectionFailed={handleInternetConnectionFailed}
-              onDispatchMethodCall={handleDispatchMethodCall}
-              isFailed={savingStatus === RequestStatus.FAILED}
-            />
-          )}
           <AlertMessage
             show={showSuccessAlert}
             variant="success"
@@ -215,6 +205,14 @@ const GradingSettings = ({ intl, courseId }) => {
         </div>
       </Container>
       <div className="alert-toast">
+        {showOverrideInternetConnectionAlert && (
+          <InternetConnectionAlert
+            isFailed={savingStatus === RequestStatus.FAILED}
+            isQueryPending={isQueryPending}
+            onQueryProcessing={handleQueryProcessing}
+            onInternetConnectionFailed={handleInternetConnectionFailed}
+          />
+        )}
         <AlertMessage
           show={showSavePrompt}
           aria-hidden={!showSavePrompt}
@@ -223,20 +221,18 @@ const GradingSettings = ({ intl, courseId }) => {
           data-testid="grading-settings-save-alert"
           role="dialog"
           actions={[
-            <Button
-              variant="tertiary"
-              onClick={handleResetPageData}
-            >
-              {intl.formatMessage(messages.buttonCancelText)}
-            </Button>,
+            !isQueryPending && (
+              <Button variant="tertiary" onClick={handleResetPageData}>
+                {intl.formatMessage(messages.buttonCancelText)}
+              </Button>
+            ),
             <StatefulButton
+              key="statefulBtn"
               onClick={handleSendGradingSettingsData}
               state={isQueryPending ? RequestStatus.PENDING : 'default'}
               {...updateValuesButtonState}
-            >
-              {intl.formatMessage(messages.buttonSaveText)}
-            </StatefulButton>,
-          ]}
+            />,
+          ].filter(Boolean)}
           variant="warning"
           icon={Warning}
           title={intl.formatMessage(messages.alertWarning)}
