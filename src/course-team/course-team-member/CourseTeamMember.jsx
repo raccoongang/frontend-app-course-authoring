@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Badge, Button } from '@edx/paragon';
+import { Badge, Button, MailtoLink } from '@edx/paragon';
 import { DeleteOutline } from '@edx/paragon/icons';
 import messages from './messages';
-import { USER_ROLES } from '../enum';
+import { BADGE_STATES, USER_ROLES } from '../enum';
 
 const CourseTeamMember = ({
   userName,
@@ -17,26 +17,23 @@ const CourseTeamMember = ({
   isAllowActions,
 }) => {
   const intl = useIntl();
-  const isCurrentUser = currentUserEmail === email;
-
-  const badgeText = `${role === USER_ROLES.admin
-    ? intl.formatMessage(messages.roleAdmin)
-    : intl.formatMessage(messages.roleStaff)}`;
 
   return (
     <div className="course-team-member" data-testid="course-team-member">
       <div className="member-info">
-        <Badge variant={role === USER_ROLES.admin ? 'danger' : 'secondary'}>
-          {badgeText}
-          {isCurrentUser ? (
-            <span className="badge-currentUser">{intl.formatMessage(messages.roleYou)}</span>
-          ) : null}
+        <Badge variant={role === USER_ROLES.admin ? BADGE_STATES.danger : BADGE_STATES.secondary}>
+          {role === USER_ROLES.admin
+            ? intl.formatMessage(messages.roleAdmin)
+            : intl.formatMessage(messages.roleStaff)}
+          {currentUserEmail === email && (
+            <span className="badge-current-user">{intl.formatMessage(messages.roleYou)}</span>
+          )}
         </Badge>
         <span className="member-info-name">{userName}</span>
-        <a className="member-info-email" href={`mailto:${email}`}>{email}</a>
+        <MailtoLink to={email}>{email}</MailtoLink>
       </div>
       {/* eslint-disable-next-line no-nested-ternary */}
-      {isAllowActions ? (
+      {isAllowActions && (
         !isHideActions ? (
           <div className="member-actions">
             <Button
@@ -62,7 +59,7 @@ const CourseTeamMember = ({
             <span>{intl.formatMessage(messages.hint)}</span>
           </div>
         )
-      ) : null}
+      )}
     </div>
   );
 };

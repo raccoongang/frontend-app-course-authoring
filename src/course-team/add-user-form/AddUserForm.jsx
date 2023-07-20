@@ -32,7 +32,7 @@ const AddUserForm = ({ onSubmit, onCancel }) => {
                 name="email"
                 value={values.email}
                 withErrorText={false}
-                placeholder="example: username@domain.com"
+                placeholder={messages.formPlaceholder.defaultMessage}
               />
               <Form.Control.Feedback className="form-helperText">
                 {intl.formatMessage(messages.formHelperText)}
@@ -43,10 +43,9 @@ const AddUserForm = ({ onSubmit, onCancel }) => {
                 {intl.formatMessage(messages.cancelButton)}
               </Button>
               <Button
-                variant="primary"
                 size="sm"
                 onClick={handleSubmit}
-                disabled={values.email.length < 1}
+                disabled={!values.email.length}
                 type="submit"
               >
                 {intl.formatMessage(messages.addUserButton)}

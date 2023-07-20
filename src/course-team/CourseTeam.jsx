@@ -1,107 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import {
   Button,
   Container,
   Layout,
-  useToggle,
 } from '@edx/paragon';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { Add } from '@edx/paragon/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { Add as IconAdd } from '@edx/paragon/icons';
+
 import SubHeader from '../generic/sub-header/SubHeader';
 import messages from './messages';
 import CourseTeamSideBar from './course-team-sidebar/CourseTeamSidebar';
 import AddUserForm from './add-user-form/AddUserForm';
 import AddTeamMember from './add-team-member/AddTeamMember';
 import CourseTeamMember from './course-team-member/CourseTeamMember';
-
-import {
-  fetchCourseTeamQuery,
-  deleteCourseTeamQuery,
-  createCourseTeamQuery,
-  changeRoleTeamUserQuery,
-} from './data/thunk';
-import {
-  getCourseTeamUsers,
-  getErrorEmail,
-  getIsAllowActions,
-  getIsOwnershipHint,
-} from './data/selectors';
 import { MODAL_TYPES, USER_ROLES } from './enum';
-import { useModel } from '../generic/model-store';
-import { setErrorEmail } from './data/slice';
 import InfoModal from './info-modal/InfoModal';
+import { useCourseTeam } from './hooks';
 
 const CourseTeam = ({ courseId }) => {
-  const dispatch = useDispatch();
   const intl = useIntl();
 
-  const { email: currentUserEmail } = getAuthenticatedUser();
-  const courseDetails = useModel('courseDetails', courseId);
-
-  const [modalType, setModalType] = useState('delete');
-  const [isInfoModalOpen, openInfoModal, closeInfoModal] = useToggle(false);
-  const [isFormVisible, openForm, hideForm] = useToggle(false);
-  const [currentEmail, setCurrentEmail] = useState('');
-
-  const courseTeamUsers = useSelector(getCourseTeamUsers);
-  const errorEmail = useSelector(getErrorEmail);
-  const isAllowActions = useSelector(getIsAllowActions);
-  const isOwnershipHint = useSelector(getIsOwnershipHint);
-  const isSingleAdmin = courseTeamUsers.filter((user) => user.role === USER_ROLES.admin).length === 1;
-
-  const handleOpenInfoModal = (type, email) => {
-    setCurrentEmail(email);
-    setModalType(type);
-    openInfoModal();
-  };
-
-  const handleCloseInfoModal = () => {
-    dispatch(setErrorEmail(''));
-    closeInfoModal();
-  };
-
-  const handleAddUserSubmit = (data) => {
-    const { email } = data;
-    const isUserContains = courseTeamUsers.some((user) => user.email === email);
-
-    setCurrentEmail(email);
-
-    if (isUserContains) {
-      handleOpenInfoModal(MODAL_TYPES.warning, email);
-      return;
-    }
-
-    dispatch(createCourseTeamQuery(courseId, email)).then((result) => {
-      if (result) {
-        hideForm();
-        dispatch(setErrorEmail(''));
-        return;
-      }
-
-      handleOpenInfoModal(MODAL_TYPES.error, email);
-    });
-  };
-
-  const handleDeleteUserSubmit = () => {
-    dispatch(deleteCourseTeamQuery(courseId, currentEmail));
-    handleCloseInfoModal();
-  };
-
-  const handleChangeRoleUserSubmit = (email, role) => {
-    dispatch(changeRoleTeamUserQuery(courseId, email, role));
-  };
-
-  useEffect(() => {
-    dispatch(fetchCourseTeamQuery(courseId));
-  }, [courseId]);
+  const {
+    modalType,
+    errorEmail,
+    courseName,
+    currentEmail,
+    courseTeamUsers,
+    currentUserEmail,
+    isSingleAdmin,
+    isFormVisible,
+    isAllowActions,
+    isInfoModalOpen,
+    isOwnershipHint,
+    openForm,
+    hideForm,
+    closeInfoModal,
+    handleAddUserSubmit,
+    handleOpenInfoModal,
+    handleChangeRoleUserSubmit,
+    handleDeleteUserSubmit,
+  } = useCourseTeam({ intl, courseId });
 
   return (
     <Container size="xl" className="m-4">
-      <div className="mt-5" />
-      <section className="setting-items mb-4">
+      <section className="course-team-container mb-4">
         <Layout
           lg={[{ span: 9 }, { span: 3 }]}
           md={[{ span: 9 }, { span: 3 }]}
@@ -115,28 +58,27 @@ const CourseTeam = ({ courseId }) => {
                 <SubHeader
                   title={intl.formatMessage(messages.headingTitle)}
                   subtitle={intl.formatMessage(messages.headingSubtitle)}
-                  contentTitle=""
-                  headerActions={isAllowActions ? (
+                  headerActions={isAllowActions && (
                     <Button
                       variant="outline-success"
-                      iconBefore={Add}
+                      iconBefore={IconAdd}
                       size="sm"
                       onClick={openForm}
                       disabled={isFormVisible}
                     >
                       {intl.formatMessage(messages.addNewMemberButton)}
                     </Button>
-                  ) : null}
+                  )}
                 />
                 <section className="course-team-section">
                   <div className="members-container">
-                    {isFormVisible ? (
+                    {isFormVisible && (
                       <AddUserForm
                         onSubmit={handleAddUserSubmit}
                         onCancel={hideForm}
                       />
-                    ) : null}
-                    {courseTeamUsers.length ? courseTeamUsers.map(({ username, role, email }) => (
+                    )}
+                    {Boolean(courseTeamUsers.length) && courseTeamUsers.map(({ username, role, email }) => (
                       <CourseTeamMember
                         key={email}
                         userName={username}
@@ -148,28 +90,28 @@ const CourseTeam = ({ courseId }) => {
                         onChangeRole={handleChangeRoleUserSubmit}
                         onDelete={() => handleOpenInfoModal(MODAL_TYPES.delete, email)}
                       />
-                    )) : null}
-                    {courseTeamUsers.length === 1 && isAllowActions ? (
+                    ))}
+                    {courseTeamUsers.length === 1 && isAllowActions && (
                       <AddTeamMember
                         onFormOpen={openForm}
                         isButtonDisable={isFormVisible}
                       />
-                    ) : null}
+                    )}
                   </div>
-                  {!courseTeamUsers.length && !isFormVisible ? (
+                  {(!courseTeamUsers.length && !isFormVisible) && (
                     <div className="sidebar-container">
                       <CourseTeamSideBar
                         courseId={courseId}
                         isOwnershipHint={isOwnershipHint}
                       />
                     </div>
-                  ) : null}
+                  )}
                   <InfoModal
                     isOpen={isInfoModalOpen}
                     close={closeInfoModal}
                     currentEmail={currentEmail}
                     errorEmail={errorEmail}
-                    courseName={courseDetails?.name || ''}
+                    courseName={courseName}
                     modalType={modalType}
                     onDeleteSubmit={handleDeleteUserSubmit}
                   />
@@ -178,12 +120,12 @@ const CourseTeam = ({ courseId }) => {
             </article>
           </Layout.Element>
           <Layout.Element>
-            {courseTeamUsers.length || isFormVisible ? (
+            {(courseTeamUsers.length || isFormVisible) && (
               <CourseTeamSideBar
                 courseId={courseId}
                 isOwnershipHint={isOwnershipHint}
               />
-            ) : null}
+            )}
           </Layout.Element>
         </Layout>
       </section>

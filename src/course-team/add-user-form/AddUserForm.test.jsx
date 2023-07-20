@@ -42,7 +42,6 @@ describe('<AddUserForm />', () => {
     fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
 
     await act(async () => {
-      // Click the "Add User" button
       fireEvent.click(addUserButton);
     });
 

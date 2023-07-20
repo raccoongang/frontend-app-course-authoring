@@ -4,18 +4,18 @@
   border: .0625rem solid $gray-200;
   border-radius: .375rem;
   box-shadow: 0 1px 1px $gray-200;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   background-color: $white;
 
   .form-title {
-    font-size: 24px;
-    margin-bottom: 30px;
+    font-size: 1.5rem;
+    margin-bottom: 1.875rem;
     font-weight: 600;
   }
 
   .form-field {
-    padding: 20px 30px;
-    margin-bottom: 15px;
+    padding: 1.25rem 1.875rem;
+    margin-bottom: $spacer;
 
     .pgn__form-group {
       margin-bottom: 0;
@@ -33,11 +33,11 @@
   }
 
   .form-helperText {
-    font-size: 12px;
+    font-size: .75rem;
   }
 
   .pgn__action-row {
-    padding: 15px 30px;
+    padding: $spacer 1.875rem;
     border-top: .0625rem solid $gray-200;
     justify-content: flex-start;
   }

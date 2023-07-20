@@ -4,21 +4,21 @@
   justify-content: space-between;
   border: .0625rem solid $gray-200;
   border-radius: .375rem;
-  box-shadow: inset 0 1px 2px 1px $gray-200;
-  padding: 20px 30px;
+  box-shadow: inset inset 0 1px 2px 1px $gray-200;
+  padding: 1.25rem 1.875rem;
 
   .add-team-member-info {
     width: 60%;
   }
 
   .add-team-member-title {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
   }
 
   .add-team-member-description {
-    font-size: 14px;
-    line-height: 21px;
+    font-size: .875rem;
+    line-height: 1.3125rem;
     opacity: .75;
   }
 }

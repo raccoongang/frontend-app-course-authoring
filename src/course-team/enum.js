@@ -8,3 +8,8 @@ export const MODAL_TYPES = {
   delete: 'delete',
   warning: 'warning',
 };
+
+export const BADGE_STATES = {
+  danger: 'danger',
+  secondary: 'secondary',
+};

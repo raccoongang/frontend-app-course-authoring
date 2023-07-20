@@ -40,7 +40,7 @@ const InfoModal = ({
           <Button variant={closeButtonVariant} onClick={close}>
             {closeButtonText}
           </Button>
-          {modalType === MODAL_TYPES.delete ? (
+          {modalType === MODAL_TYPES.delete && (
             <Button
               variant="danger"
               onClick={(e) => {
@@ -50,7 +50,7 @@ const InfoModal = ({
             >
               {submitButtonText}
             </Button>
-          ) : null}
+          )}
         </ActionRow>
       )}
     >
