@@ -122,6 +122,7 @@ const CourseTeam = ({ courseId }) => {
                       iconBefore={Add}
                       size="sm"
                       onClick={openForm}
+                      disabled={isFormVisible}
                     >
                       {intl.formatMessage(messages.addNewMemberButton)}
                     </Button>

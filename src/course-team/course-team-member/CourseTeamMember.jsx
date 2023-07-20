@@ -33,7 +33,7 @@ const CourseTeamMember = ({
           ) : null}
         </Badge>
         <span className="member-info-name">{userName}</span>
-        <a className="member-info-email" href={`href:mailto${email}`}>{email}</a>
+        <a className="member-info-email" href={`mailto:${email}`}>{email}</a>
       </div>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isAllowActions ? (

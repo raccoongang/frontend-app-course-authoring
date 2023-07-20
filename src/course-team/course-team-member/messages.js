@@ -19,11 +19,11 @@ const messages = defineMessages({
   },
   addButton: {
     id: 'course-authoring.course-team.member.button.add',
-    defaultMessage: 'Add Admin Access',
+    defaultMessage: 'Add admin access',
   },
   removeButton: {
     id: 'course-authoring.course-team.member.button.remove',
-    defaultMessage: 'Remove Admin Access',
+    defaultMessage: 'Remove admin access',
   },
 });
 

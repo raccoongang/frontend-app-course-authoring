@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   title: {
     id: 'course-authoring.course-team.add-team-member.title',
-    defaultMessage: 'Add Team Members to This Course',
+    defaultMessage: 'Add team members to this course',
   },
   description: {
     id: 'course-authoring.course-team.add-team-member.description',
@@ -11,7 +11,7 @@ const messages = defineMessages({
   },
   button: {
     id: 'course-authoring.course-team.add-team-member.button',
-    defaultMessage: 'Add a New Team member',
+    defaultMessage: 'Add a new team member',
   },
 });
 

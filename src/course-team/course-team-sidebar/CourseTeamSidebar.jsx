@@ -28,22 +28,25 @@ const CourseTeamSideBar = ({ courseId, isOwnershipHint }) => {
         </p>
       </HelpSidebar>
       {isOwnershipHint ? (
-        <HelpSidebar
-          intl={intl}
-          courseId={courseId}
-          showOtherSettings={false}
-        >
-          <h4 className="help-sidebar-about-title">
-            {intl.formatMessage(messages.ownershipTitle)}
-          </h4>
-          <p className="help-sidebar-about-descriptions">
-            <FormattedMessage
-              id="course-authoring.course-team.member.button.add"
-              defaultMessage="Every course must have an Admin. If you are the Admin and you want to transfer ownership of the course, click {strong} to make another user the Admin, then ask that user to remove you from the Course Team list."
-              values={{ strong: <strong>{intl.formatMessage(messages.addAdminAccess)}</strong> }}
-            />
-          </p>
-        </HelpSidebar>
+        <>
+          <hr />
+          <HelpSidebar
+            intl={intl}
+            courseId={courseId}
+            showOtherSettings={false}
+          >
+            <h4 className="help-sidebar-about-title">
+              {intl.formatMessage(messages.ownershipTitle)}
+            </h4>
+            <p className="help-sidebar-about-descriptions">
+              <FormattedMessage
+                id="course-authoring.course-team.member.button.add"
+                defaultMessage="Every course must have an Admin. If you are the Admin and you want to transfer ownership of the course, click {strong} to make another user the Admin, then ask that user to remove you from the Course Team list."
+                values={{ strong: <strong>{intl.formatMessage(messages.addAdminAccess)}</strong> }}
+              />
+            </p>
+          </HelpSidebar>
+        </>
       ) : null}
     </div>
   );

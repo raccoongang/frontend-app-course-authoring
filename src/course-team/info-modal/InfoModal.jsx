@@ -26,6 +26,7 @@ const InfoModal = ({
     variant,
     closeButtonText,
     submitButtonText,
+    closeButtonVariant,
   } = getInfoModalSettings(modalType, currentEmail, errorEmail, courseName, intl);
 
   return (
@@ -36,7 +37,7 @@ const InfoModal = ({
       onClose={close}
       footerNode={(
         <ActionRow>
-          <Button variant={modalType === MODAL_TYPES.delete ? 'tertiary' : 'primary'} onClick={close}>
+          <Button variant={closeButtonVariant} onClick={close}>
             {closeButtonText}
           </Button>
           {modalType === MODAL_TYPES.delete ? (

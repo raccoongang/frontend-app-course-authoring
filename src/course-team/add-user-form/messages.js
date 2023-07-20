@@ -3,11 +3,11 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   formTitle: {
     id: 'course-authoring.course-team.form.title',
-    defaultMessage: 'Add a User to Your Course\'s Team',
+    defaultMessage: 'Add a user to your course\'s team',
   },
   formLabel: {
     id: 'course-authoring.course-team.form.label',
-    defaultMessage: 'User\'s Email Address',
+    defaultMessage: 'User\'s email address',
   },
   formPlaceholder: {
     id: 'course-authoring.course-team.form.placeholder',

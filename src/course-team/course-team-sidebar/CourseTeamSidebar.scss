@@ -1,8 +1,10 @@
 .course-team-sidebar {
-  .help-sidebar:nth-child(2) {
-    margin-top: 24px;
+  .help-sidebar {
+    &:not(:first-child) {
+      margin-top: 0;
+    }
 
-    & hr {
+    hr {
       display: none;
     }
   }

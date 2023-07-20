@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   sidebarTitle: {
     id: 'course-authoring.course-team.sidebar.title',
-    defaultMessage: 'Course Team Roles',
+    defaultMessage: 'Course team roles',
   },
   sidebarAbout_1: {
     id: 'course-authoring.course-team.sidebar.about-1',
@@ -19,7 +19,7 @@ const messages = defineMessages({
   },
   ownershipTitle: {
     id: 'course-authoring.course-team.sidebar.ownership.title',
-    defaultMessage: 'Transferring Ownership',
+    defaultMessage: 'Transferring ownership',
   },
   ownershipDescription: {
     id: 'course-authoring.course-team.sidebar.ownership.description',
