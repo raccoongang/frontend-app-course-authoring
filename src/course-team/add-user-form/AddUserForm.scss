@@ -10,7 +10,6 @@
   .form-title {
     font-size: 1.5rem;
     margin-bottom: 1.875rem;
-    font-weight: 600;
   }
 
   .form-field {
@@ -24,7 +23,6 @@
 
   .form-label {
     position: relative;
-    font-weight: 600;
 
     &::after {
       margin-left: 5px;
@@ -32,8 +30,8 @@
     }
   }
 
-  .form-helperText {
-    font-size: .75rem;
+  .form-helper-text {
+    font-size: $font-size-xs;
   }
 
   .pgn__action-row {

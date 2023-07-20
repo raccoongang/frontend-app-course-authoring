@@ -31,7 +31,7 @@ const CourseTeamMember = ({
             <span className="badge-current-user">{intl.formatMessage(messages.roleYou)}</span>
           )}
         </Badge>
-        <span className="member-info-name">{userName}</span>
+        <span className="member-info-name font-weight-bold">{userName}</span>
         <MailtoLink to={email}>{email}</MailtoLink>
       </div>
       {/* eslint-disable-next-line no-nested-ternary */}
@@ -55,7 +55,7 @@ const CourseTeamMember = ({
             />
           </div>
         ) : (
-          <div className="member-hint">
+          <div className="member-hint text-right">
             <span>{intl.formatMessage(messages.hint)}</span>
           </div>
         )

@@ -25,7 +25,7 @@ const AddUserForm = ({ onSubmit, onCancel }) => {
           <>
             <Form.Group size="sm" className="form-field">
               <h3 className="form-title">{intl.formatMessage(messages.formTitle)}</h3>
-              <Form.Label size="sm" className="form-label">
+              <Form.Label size="sm" className="form-label font-weight-bold">
                 {intl.formatMessage(messages.formLabel)}
               </Form.Label>
               <FormikControl
@@ -34,7 +34,7 @@ const AddUserForm = ({ onSubmit, onCancel }) => {
                 withErrorText={false}
                 placeholder={messages.formPlaceholder.defaultMessage}
               />
-              <Form.Control.Feedback className="form-helperText">
+              <Form.Control.Feedback className="form-helper-text">
                 {intl.formatMessage(messages.formHelperText)}
               </Form.Control.Feedback>
             </Form.Group>

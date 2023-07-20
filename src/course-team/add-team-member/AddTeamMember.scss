@@ -12,13 +12,6 @@
   }
 
   .add-team-member-title {
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  .add-team-member-description {
-    font-size: .875rem;
-    line-height: 1.3125rem;
-    opacity: .75;
+    font-size: $spacer;
   }
 }
