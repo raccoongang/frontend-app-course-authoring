@@ -12,8 +12,7 @@ const slice = createSlice({
   reducers: {
     fetchCourseTeamSuccess: (state, { payload }) => {
       state.users = payload.users;
-      // state.show_transfer_ownership_hint = payload.show_transfer_ownership_hint;
-      state.show_transfer_ownership_hint = false;
+      state.show_transfer_ownership_hint = payload.show_transfer_ownership_hint;
       state.allow_actions = payload.allow_actions;
     },
     deleteCourseTeamUser: (state, { payload }) => {
