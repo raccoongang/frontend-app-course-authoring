@@ -112,7 +112,7 @@ describe('<CourseTeam />', () => {
 
     await waitFor(() => {
       expect(queryByTestId('add-user-form')).not.toBeInTheDocument();
-      const addButton = getByRole('button', { name: 'Add a New Team member' });
+      const addButton = getByRole('button', { name: 'Add a new team member' });
       fireEvent.click(addButton);
       expect(queryByTestId('add-user-form')).toBeInTheDocument();
     });
