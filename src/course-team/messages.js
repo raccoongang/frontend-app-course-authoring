@@ -13,14 +13,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-team.button.new-team-member',
     defaultMessage: 'New Team Member',
   },
-  // sidebarTitle: {
-  //   id: '',
-  //   defineMessages: '',
-  // },
-  // sidebarAbout: {
-  //   id: '',
-  //   defineMessages: '',
-  // },
 });
 
 export default messages;

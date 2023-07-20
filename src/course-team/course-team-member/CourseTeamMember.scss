@@ -1,0 +1,66 @@
+.course-team-member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 25px 30px 20px;
+  background-color: $white;
+  border: .0625rem solid $gray-200;
+  border-radius: .375rem;
+  box-shadow: 0 1px 1px $gray-200;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .member-info {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 40px;
+
+    .badge {
+      position: absolute;
+      top: -36px;
+    }
+
+    .badge-currentUser {
+      color: $gray-100;
+      margin-left: 4px;
+    }
+
+    .member-info-name {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .member-info-email {
+      font-size: 16px;
+      text-decoration: none;
+    }
+  }
+
+  .member-hint {
+    width: 40%;
+    margin-right: 62px;
+    color: $gray-300;
+    text-align: right;
+    font-size: 14px;
+  }
+
+  .member-actions {
+    display: flex;
+    gap: 16px;
+
+    .delete-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & > span {
+        margin: 0;
+      }
+    }
+  }
+}

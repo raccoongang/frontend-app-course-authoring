@@ -1,0 +1,44 @@
+.add-user-form {
+  display: flex;
+  flex-direction: column;
+  border: .0625rem solid $gray-200;
+  border-radius: .375rem;
+  box-shadow: 0 1px 1px $gray-200;
+  margin-bottom: 20px;
+  background-color: $white;
+
+  .form-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+
+  .form-field {
+    padding: 20px 30px;
+    margin-bottom: 15px;
+
+    .pgn__form-group {
+      margin-bottom: 0;
+    }
+  }
+
+  .form-label {
+    position: relative;
+    font-weight: 600;
+
+    &::after {
+      margin-left: 5px;
+      content: "*";
+    }
+  }
+
+  .form-helperText {
+    font-size: 12px;
+  }
+
+  .pgn__action-row {
+    padding: 15px 30px;
+    border-top: .0625rem solid $gray-200;
+    justify-content: flex-start;
+  }
+}

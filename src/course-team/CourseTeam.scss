@@ -1,0 +1,19 @@
+@import "./course-team-sidebar/CourseTeamSidebar";
+@import "./add-user-form/AddUserForm";
+@import "./add-team-member/AddTeamMember";
+@import "./course-team-member/CourseTeamMember";
+
+.course-team-section {
+  .sidebar-container {
+    width: 30%;
+
+    .help-sidebar {
+      margin-top: 0;
+    }
+  }
+
+  .members-container {
+    flex-grow: 1;
+    padding-top: 20px;
+  }
+}
