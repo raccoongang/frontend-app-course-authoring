@@ -10,7 +10,6 @@ import { Form, Hyperlink } from '@edx/paragon';
 import CourseUploadImage from '../../generic/course-upload-image';
 import ScheduleSubHeader from '../schedule-sub-header';
 import IntroductionVideo from './introduction-video';
-import CourseCodeEditor from './course-code-editor';
 import ExtendedCourseDetails from './extended-course-details';
 import messages from './messages';
 
@@ -108,33 +107,15 @@ const IntroducingSection = ({
         </Form.Group>
       )}
       {aboutPageEditable && (
-        <>
-          <CourseCodeEditor
-            code={overview}
-            field="overview"
-            label={intl.formatMessage(messages.courseOverviewLabel)}
-            helpText={overviewHelpText}
-            onChange={onChange}
-          />
-          {sidebarHtmlEnabled && (
-            <CourseCodeEditor
-              code={aboutSidebarHtml}
-              field="aboutSidebarHtml"
-              label={intl.formatMessage(messages.courseAboutSidebarLabel)}
-              helpText={aboutSidebarHelpText}
-              onChange={onChange}
-            />
-          )}
-          <CourseUploadImage
-            label={intl.formatMessage(messages.courseCardImageLabel)}
-            identifierFieldText={intl.formatMessage(messages.courseCardImageIdentifierText)}
-            assetImagePath={courseImageAssetPath}
-            assetImageField="courseImageAssetPath"
-            imageNameField="courseImageName"
-            showImageBodyText
-            onChange={onChange}
-          />
-        </>
+        <CourseUploadImage
+          label={intl.formatMessage(messages.courseCardImageLabel)}
+          identifierFieldText={intl.formatMessage(messages.courseCardImageIdentifierText)}
+          assetImagePath={courseImageAssetPath}
+          assetImageField="courseImageAssetPath"
+          imageNameField="courseImageName"
+          showImageBodyText
+          onChange={onChange}
+        />
       )}
       {enableExtendedCourseDetails && (
         <>
