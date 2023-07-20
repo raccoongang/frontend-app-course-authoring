@@ -3,7 +3,6 @@ import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
-
 import { snakeCase } from 'lodash/string';
 
 import { getConfig } from '@edx/frontend-platform';

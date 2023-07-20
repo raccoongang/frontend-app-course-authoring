@@ -32,11 +32,11 @@ const FormikControl = ({
         onFocus={handleFocus}
         isInvalid={fieldTouched && fieldError}
       />
-      {withErrorText ? (
+      {withErrorText && (
         <FormikErrorFeedback name={name}>
           <Form.Text>{help}</Form.Text>
         </FormikErrorFeedback>
-      ) : null}
+      )}
     </Form.Group>
   );
 };

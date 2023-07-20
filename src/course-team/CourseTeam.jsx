@@ -79,7 +79,7 @@ const CourseTeam = ({ courseId }) => {
                         onCancel={hideForm}
                       />
                     )}
-                    {Boolean(courseTeamUsers.length) && courseTeamUsers.map(({ username, role, email }) => (
+                    {courseTeamUsers.length ? courseTeamUsers.map(({ username, role, email }) => (
                       <CourseTeamMember
                         key={email}
                         userName={username}
@@ -91,22 +91,22 @@ const CourseTeam = ({ courseId }) => {
                         onChangeRole={handleChangeRoleUserSubmit}
                         onDelete={() => handleOpenInfoModal(MODAL_TYPES.delete, email)}
                       />
-                    ))}
-                    {courseTeamUsers.length === 1 && isAllowActions && (
+                    )) : null}
+                    {courseTeamUsers.length === 1 && isAllowActions ? (
                       <AddTeamMember
                         onFormOpen={openForm}
                         isButtonDisable={isFormVisible}
                       />
-                    )}
+                    ) : null}
                   </div>
-                  {(!courseTeamUsers.length && !isFormVisible) && (
+                  {!courseTeamUsers.length && !isFormVisible ? (
                     <div className="sidebar-container">
                       <CourseTeamSideBar
                         courseId={courseId}
                         isOwnershipHint={isOwnershipHint}
                       />
                     </div>
-                  )}
+                  ) : null}
                   <InfoModal
                     isOpen={isInfoModalOpen}
                     close={closeInfoModal}

@@ -18,12 +18,13 @@ const CourseTeamMember = ({
   isAllowActions,
 }) => {
   const intl = useIntl();
+  const isAdminRole = role === USER_ROLES.admin;
 
   return (
     <div className="course-team-member" data-testid="course-team-member">
       <div className="member-info">
-        <Badge variant={role === USER_ROLES.admin ? BADGE_STATES.danger : BADGE_STATES.secondary} className="badge-current-user">
-          {role === USER_ROLES.admin
+        <Badge variant={isAdminRole ? BADGE_STATES.danger : BADGE_STATES.secondary} className="badge-current-user">
+          {isAdminRole
             ? intl.formatMessage(messages.roleAdmin)
             : intl.formatMessage(messages.roleStaff)}
           {currentUserEmail === email && (
@@ -38,13 +39,11 @@ const CourseTeamMember = ({
         !isHideActions ? (
           <div className="member-actions">
             <Button
-              variant={role === USER_ROLES.admin ? 'tertiary' : 'primary'}
+              variant={isAdminRole ? 'tertiary' : 'primary'}
               size="sm"
               onClick={() => onChangeRole(email, role === USER_ROLES.admin ? USER_ROLES.staff : USER_ROLES.admin)}
             >
-              {role === USER_ROLES.admin
-                ? intl.formatMessage(messages.removeButton)
-                : intl.formatMessage(messages.addButton)}
+              {isAdminRole ? intl.formatMessage(messages.removeButton) : intl.formatMessage(messages.addButton)}
             </Button>
             <Button
               className="delete-button"
