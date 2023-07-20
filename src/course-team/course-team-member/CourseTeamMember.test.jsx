@@ -4,7 +4,7 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import CourseTeamMember from './CourseTeamMember';
 import messages from './messages';
-import { USER_ROLES } from '../enum';
+import { USER_ROLES } from '../../constants';
 
 const userNameMock = 'User';
 const emailMock = 'user@example.com';

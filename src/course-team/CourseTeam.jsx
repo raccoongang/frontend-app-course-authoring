@@ -14,7 +14,8 @@ import CourseTeamSideBar from './course-team-sidebar/CourseTeamSidebar';
 import AddUserForm from './add-user-form/AddUserForm';
 import AddTeamMember from './add-team-member/AddTeamMember';
 import CourseTeamMember from './course-team-member/CourseTeamMember';
-import { MODAL_TYPES, USER_ROLES } from './enum';
+import { MODAL_TYPES } from './constants';
+import { USER_ROLES } from '../constants';
 import InfoModal from './info-modal/InfoModal';
 import { useCourseTeam } from './hooks';
 

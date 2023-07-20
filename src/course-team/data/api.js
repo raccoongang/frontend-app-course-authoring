@@ -1,6 +1,6 @@
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { USER_ROLES } from '../enum';
+import { USER_ROLES } from '../../constants';
 
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 export const getCourseTeamApiUrl = (courseId) => `${getApiBaseUrl()}/api/contentstore/v1/course_team/${courseId}`;

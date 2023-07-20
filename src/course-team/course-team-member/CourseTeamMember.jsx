@@ -4,7 +4,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Badge, Button, MailtoLink } from '@edx/paragon';
 import { DeleteOutline } from '@edx/paragon/icons';
 import messages from './messages';
-import { BADGE_STATES, USER_ROLES } from '../enum';
+import { BADGE_STATES } from '../constants';
+import { USER_ROLES } from '../../constants';
 
 const CourseTeamMember = ({
   userName,
@@ -21,7 +22,7 @@ const CourseTeamMember = ({
   return (
     <div className="course-team-member" data-testid="course-team-member">
       <div className="member-info">
-        <Badge variant={role === USER_ROLES.admin ? BADGE_STATES.danger : BADGE_STATES.secondary}>
+        <Badge variant={role === USER_ROLES.admin ? BADGE_STATES.danger : BADGE_STATES.secondary} className="badge-current-user">
           {role === USER_ROLES.admin
             ? intl.formatMessage(messages.roleAdmin)
             : intl.formatMessage(messages.roleStaff)}

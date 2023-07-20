@@ -1,4 +1,4 @@
-import { MODAL_TYPES } from './enum';
+import { MODAL_TYPES } from './constants';
 import messages from './info-modal/messages';
 
 const getErrorEmailFromMessage = (message) => {

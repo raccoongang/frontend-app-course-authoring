@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useToggle } from '@edx/paragon';
 
 import { useModel } from '../generic/model-store';
+import { USER_ROLES } from '../constants';
 import {
   changeRoleTeamUserQuery,
   createCourseTeamQuery,
@@ -17,7 +18,7 @@ import {
   getIsOwnershipHint,
 } from './data/selectors';
 import { setErrorEmail } from './data/slice';
-import { MODAL_TYPES, USER_ROLES } from './enum';
+import { MODAL_TYPES } from './constants';
 
 const useCourseTeam = ({ courseId }) => {
   const dispatch = useDispatch();
