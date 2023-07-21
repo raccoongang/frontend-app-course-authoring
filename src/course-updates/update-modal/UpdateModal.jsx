@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   ActionRow,
@@ -17,6 +17,7 @@ import messages from './messages';
 import { convertToStringFromDate, convertToDateFromString, isValidDate } from '../../utils';
 import { DATE_FORMAT } from '../../constants';
 import { requestTypes } from '../constants';
+import { WysiwygEditor } from '../../generic/WysiwygEditor';
 
 const courseUpdatesValidationSchema = (requestType) => (requestType === requestTypes.edit_handouts
   ? Yup.object().shape()
@@ -38,7 +39,7 @@ const UpdateModal = ({
     ? courseUpdatesInitialValues.data
     : courseUpdatesInitialValues.content;
 
-  const [contentValue, setContentValue] = useState('');
+  // const [contentValue, setContentValue] = useState('');
 
   const modalTitle = (type) => {
     switch (type) {
@@ -52,10 +53,6 @@ const UpdateModal = ({
       return '';
     }
   };
-
-  useEffect(() => {
-    setContentValue(currentContent);
-  }, [requestType, courseUpdatesInitialValues?.id]);
 
   return (
     <ModalDialog
@@ -119,17 +116,12 @@ const UpdateModal = ({
                   </Form.Group>
                 ) : null}
                 <Form.Group className="m-0">
-                  <Form.Control
-                    as="textarea"
-                    value={contentValue}
+                  <WysiwygEditor
+                    initialValue={currentContent}
                     name={requestType === requestTypes.edit_handouts ? 'data' : 'content'}
-                    data-testid="course-update-content"
-                    onChange={(e) => {
-                      setContentValue(e.target.value);
-                      setFieldValue(requestType === requestTypes.edit_handouts ? 'data' : 'content', e.target.value);
+                    onChange={(value) => {
+                      setFieldValue(requestType === requestTypes.edit_handouts ? 'data' : 'content', value);
                     }}
-                    aria-label="content"
-                    rows={8}
                   />
                 </Form.Group>
               </div>

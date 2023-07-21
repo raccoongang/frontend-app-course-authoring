@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { injectIntl, useIntl } from '@edx/frontend-platform/i18n';
-
 import {
   Button,
   Container,

@@ -72,6 +72,7 @@ export const WysiwygEditor = ({ initialValue, editorType, onChange }) => {
 WysiwygEditor.defaultProps = {
   initialValue: '',
   editorType: SUPPORTED_TEXT_EDITORS.text,
+
 };
 
 WysiwygEditor.propTypes = {
