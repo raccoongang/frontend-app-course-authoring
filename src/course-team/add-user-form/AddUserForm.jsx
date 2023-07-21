@@ -6,10 +6,11 @@ import {
   Form,
   ActionRow,
 } from '@edx/paragon';
-
 import { Formik } from 'formik';
+
 import messages from './messages';
 import FormikControl from '../../generic/FormikControl';
+import { EXAMPLE_USER_EMAIL } from '../constants';
 
 const AddUserForm = ({ onSubmit, onCancel }) => {
   const intl = useIntl();
@@ -32,7 +33,7 @@ const AddUserForm = ({ onSubmit, onCancel }) => {
                 name="email"
                 value={values.email}
                 withErrorText={false}
-                placeholder={messages.formPlaceholder.defaultMessage}
+                placeholder={intl.formatMessage(messages.formPlaceholder, { email: EXAMPLE_USER_EMAIL })}
               />
               <Form.Control.Feedback className="form-helper-text">
                 {intl.formatMessage(messages.formHelperText)}

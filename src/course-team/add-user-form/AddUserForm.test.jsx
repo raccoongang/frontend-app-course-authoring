@@ -9,6 +9,7 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import AddUserForm from './AddUserForm';
 import messages from './messages';
+import { EXAMPLE_USER_EMAIL } from '../constants';
 
 const onSubmitMock = jest.fn();
 const onCancelMock = jest.fn();
@@ -36,10 +37,10 @@ describe('<AddUserForm />', () => {
   it('calls onSubmit when the "Add User" button is clicked with a valid email', async () => {
     const { getByPlaceholderText, getByRole } = render(<RootWrapper />);
 
-    const emailInput = getByPlaceholderText(messages.formPlaceholder.defaultMessage);
+    const emailInput = getByPlaceholderText(messages.formPlaceholder.defaultMessage.replace('{email}', EXAMPLE_USER_EMAIL));
     const addUserButton = getByRole('button', { name: messages.addUserButton.defaultMessage });
 
-    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+    fireEvent.change(emailInput, { target: { value: EXAMPLE_USER_EMAIL } });
 
     await act(async () => {
       fireEvent.click(addUserButton);
@@ -49,7 +50,7 @@ describe('<AddUserForm />', () => {
     await waitFor(() => {
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
       expect(onSubmitMock).toHaveBeenCalledWith(
-        { email: 'user@example.com' },
+        { email: EXAMPLE_USER_EMAIL },
         expect.objectContaining({ submitForm: expect.any(Function) }),
       );
     });
@@ -73,7 +74,9 @@ describe('<AddUserForm />', () => {
   it('"Add User" button is not disabled when the email input field is not empty', () => {
     const { getByPlaceholderText, getByText } = render(<RootWrapper />);
 
-    const emailInput = getByPlaceholderText(messages.formPlaceholder.defaultMessage);
+    const emailInput = getByPlaceholderText(
+      messages.formPlaceholder.defaultMessage.replace('{email}', EXAMPLE_USER_EMAIL),
+    );
     const addUserButton = getByText(messages.addUserButton.defaultMessage);
 
     fireEvent.change(emailInput, { target: { value: 'user@example.com' } });

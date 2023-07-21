@@ -1,16 +1,19 @@
 import React from 'react';
 import {
-  render, fireEvent, cleanup, waitFor,
+  render,
+  fireEvent,
+  cleanup,
+  waitFor,
 } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+
 import initializeStore from '../store';
 import { courseTeamMock, courseTeamWithOneUser } from './__mocks__';
 import { getCourseTeamApiUrl } from './data/api';
-
 import CourseTeam from './CourseTeam';
 import messages from './messages';
 

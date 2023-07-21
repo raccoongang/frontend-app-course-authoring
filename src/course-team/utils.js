@@ -1,10 +1,31 @@
 import { MODAL_TYPES } from './constants';
 import messages from './info-modal/messages';
 
+/**
+ * Get email address from request error message
+ * @param {string} message - Message from request error
+ * @returns {string} - Email address
+ */
 const getErrorEmailFromMessage = (message) => {
   const regex = /'([^']+)'/g;
   return message.match(regex)[0];
 };
+
+/**
+ * Create an info modal settings dependent on modal type
+ * @param {typeof MODAL_TYPES} modalType - one of MODAL_TYPES
+ * @param {string} currentEmail - email in current user
+ * @param {string} errorEmail - email from wrong request
+ * @param {string} courseName - current course name
+ * @returns {{
+   * title: string,
+   * message: string,
+   * variant: string,
+   * closeButtonText: string,
+   * submitButtonText: string,
+   * closeButtonVariant: string
+ * }}
+ */
 
 const getInfoModalSettings = (modalType, currentEmail, errorEmail, courseName, intl) => {
   switch (modalType) {

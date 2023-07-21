@@ -9,7 +9,6 @@ import {
   deleteCourseTeamUser,
   setErrorEmail,
 } from './slice';
-
 import { getErrorEmailFromMessage } from '../utils';
 
 export function fetchCourseTeamQuery(courseId) {

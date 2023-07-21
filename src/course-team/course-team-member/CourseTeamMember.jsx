@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Badge, Button, MailtoLink } from '@edx/paragon';
-import { DeleteOutline } from '@edx/paragon/icons';
+import { DeleteOutline as DeleteOutlineIcon } from '@edx/paragon/icons';
+
 import messages from './messages';
-import { BADGE_STATES } from '../constants';
-import { USER_ROLES } from '../../constants';
+import { USER_ROLES, BADGE_STATES } from '../../constants';
 
 const CourseTeamMember = ({
   userName,
@@ -50,7 +50,7 @@ const CourseTeamMember = ({
               variant="tertiary"
               size="sm"
               data-testid="delete-button"
-              iconBefore={DeleteOutline}
+              iconBefore={DeleteOutlineIcon}
               onClick={onDelete}
             />
           </div>

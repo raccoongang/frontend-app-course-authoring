@@ -4,7 +4,4 @@ export const MODAL_TYPES = {
   warning: 'warning',
 };
 
-export const BADGE_STATES = {
-  danger: 'danger',
-  secondary: 'secondary',
-};
+export const EXAMPLE_USER_EMAIL = 'username@domain.com';

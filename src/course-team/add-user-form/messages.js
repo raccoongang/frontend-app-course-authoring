@@ -11,7 +11,7 @@ const messages = defineMessages({
   },
   formPlaceholder: {
     id: 'course-authoring.course-team.form.placeholder',
-    defaultMessage: 'example: username@domain.com',
+    defaultMessage: 'example: {email}',
   },
   formHelperText: {
     id: 'course-authoring.course-team.form.helperText',

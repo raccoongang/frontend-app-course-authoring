@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-
 import { initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
+
 import CourseTeamSidebar from './CourseTeamSidebar';
 import messages from './messages';
 import initializeStore from '../../store';
