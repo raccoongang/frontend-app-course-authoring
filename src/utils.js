@@ -1,12 +1,11 @@
 import { useContext, useEffect } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
 import { snakeCase } from 'lodash/string';
-
-import { getConfig } from '@edx/frontend-platform';
 import moment from 'moment';
+import { getConfig } from '@edx/frontend-platform';
+
 import { RequestStatus } from './data/constants';
 import { getCourseAppSettingValue, getLoadingStatus } from './pages-and-resources/data/selectors';
 import { fetchCourseAppSettings, updateCourseAppSetting } from './pages-and-resources/data/thunks';

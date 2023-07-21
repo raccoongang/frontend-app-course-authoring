@@ -38,9 +38,7 @@
     font-weight: $input-font-weight;
     line-height: $input-line-height;
     background: $input-bg;
-    border-color: $input-border-color;
-    border-width: $input-border-width;
-    box-shadow: $input-box-shadow;
+    border: $input-border-width solid $input-border-color $input-box-shadow;
     border-radius: $input-border-radius;
     color: $input-color;
     padding: $input-padding-y $input-padding-x;
@@ -59,6 +57,11 @@
     &::placeholder {
       color: $input-placeholder-color;
     }
+  }
+
+  .datepicker-custom-control_readonly {
+    border-color: transparent;
+    background: $input-disabled-bg;
   }
 
   .datepicker-custom-control_isInvalid {

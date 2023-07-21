@@ -83,4 +83,4 @@ const updateWithDefaultValues = (values) => {
   return values;
 };
 
-export { validateScheduleAndDetails, updateWithDefaultValues };
+export { updateWithDefaultValues, validateScheduleAndDetails };
