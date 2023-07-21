@@ -1,15 +1,13 @@
 .update-modal-body {
-  //min-height: 500px;
-
   .datepicker-field {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: .5rem;
 
     .datepicker-field-error {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: .25rem;
 
       svg {
         color: $warning-300;
