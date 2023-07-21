@@ -25,7 +25,9 @@ const mapStateToProps = () => ({
 
 const Editor = connect(mapStateToProps)(TinyMceWidget);
 
-export const WysiwygEditor = ({ initialValue, editorType, onChange }) => {
+export const WysiwygEditor = ({
+  initialValue, editorType, onChange, minHeight,
+}) => {
   // default initial string returned onEditorChange if empty input
   const defaultEmptyTextValue = '<p>&nbsp;</p>';
   const { editorRef, refReady, setEditorRef } = prepareEditorRef();
@@ -60,7 +62,7 @@ export const WysiwygEditor = ({ initialValue, editorType, onChange }) => {
         editorRef={editorRef}
         editorType={editorType}
         initialValue={initialValue}
-        minHeight={200}
+        minHeight={minHeight}
         setEditorRef={setEditorRef}
         updateContent={handleUpdate}
         initializeEditor={() => ({})}
@@ -72,11 +74,12 @@ export const WysiwygEditor = ({ initialValue, editorType, onChange }) => {
 WysiwygEditor.defaultProps = {
   initialValue: '',
   editorType: SUPPORTED_TEXT_EDITORS.text,
-
+  minHeight: 200,
 };
 
 WysiwygEditor.propTypes = {
   initialValue: PropTypes.string,
   editorType: PropTypes.oneOf(Object.values(SUPPORTED_TEXT_EDITORS)),
   onChange: PropTypes.func.isRequired,
+  minHeight: PropTypes.number,
 };
