@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Add } from '@edx/paragon/icons';
+import { Add as IconAdd } from '@edx/paragon/icons';
 import { Button } from '@edx/paragon';
+
 import messages from './messages';
 
 const AddTeamMember = ({ onFormOpen, isButtonDisable }) => {
@@ -16,7 +17,7 @@ const AddTeamMember = ({ onFormOpen, isButtonDisable }) => {
       </div>
       <Button
         variant="outline-success"
-        iconBefore={Add}
+        iconBefore={IconAdd}
         onClick={onFormOpen}
         disabled={isButtonDisable}
       >

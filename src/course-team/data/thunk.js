@@ -4,7 +4,6 @@ import {
   createTeamUser,
   changeRoleTeamUser,
 } from './api';
-
 import {
   fetchCourseTeamSuccess,
   deleteCourseTeamUser,

@@ -1,5 +1,6 @@
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+
 import { USER_ROLES } from '../../constants';
 
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;

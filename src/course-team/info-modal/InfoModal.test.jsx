@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { MODAL_TYPES } from '../constants';
 
+import { MODAL_TYPES } from '../constants';
 import InfoModal from './InfoModal';
 import messages from './messages';
 

@@ -34,6 +34,9 @@ const CourseTeam = ({ courseId }) => {
     isAllowActions,
     isInfoModalOpen,
     isOwnershipHint,
+    isShowAddTeamMember,
+    isShowInitialSidebar,
+    isShowUserFilledSidebar,
     openForm,
     hideForm,
     closeInfoModal,
@@ -92,21 +95,21 @@ const CourseTeam = ({ courseId }) => {
                         onDelete={() => handleOpenInfoModal(MODAL_TYPES.delete, email)}
                       />
                     )) : null}
-                    {courseTeamUsers.length === 1 && isAllowActions ? (
+                    {isShowAddTeamMember && (
                       <AddTeamMember
                         onFormOpen={openForm}
                         isButtonDisable={isFormVisible}
                       />
-                    ) : null}
+                    )}
                   </div>
-                  {!courseTeamUsers.length && !isFormVisible ? (
+                  {isShowInitialSidebar && (
                     <div className="sidebar-container">
                       <CourseTeamSideBar
                         courseId={courseId}
                         isOwnershipHint={isOwnershipHint}
                       />
                     </div>
-                  ) : null}
+                  )}
                   <InfoModal
                     isOpen={isInfoModalOpen}
                     close={closeInfoModal}
@@ -121,7 +124,7 @@ const CourseTeam = ({ courseId }) => {
             </article>
           </Layout.Element>
           <Layout.Element>
-            {(courseTeamUsers.length || isFormVisible) && (
+            {isShowUserFilledSidebar && (
               <CourseTeamSideBar
                 courseId={courseId}
                 isOwnershipHint={isOwnershipHint}

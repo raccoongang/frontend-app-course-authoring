@@ -6,6 +6,7 @@ import {
   AlertModal,
 } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
+
 import { MODAL_TYPES } from '../constants';
 import { getInfoModalSettings } from '../utils';
 

@@ -41,7 +41,7 @@ const CourseTeamMember = ({
             <Button
               variant={isAdminRole ? 'tertiary' : 'primary'}
               size="sm"
-              onClick={() => onChangeRole(email, role === USER_ROLES.admin ? USER_ROLES.staff : USER_ROLES.admin)}
+              onClick={() => onChangeRole(email, isAdminRole ? USER_ROLES.staff : USER_ROLES.admin)}
             >
               {isAdminRole ? intl.formatMessage(messages.removeButton) : intl.formatMessage(messages.addButton)}
             </Button>
