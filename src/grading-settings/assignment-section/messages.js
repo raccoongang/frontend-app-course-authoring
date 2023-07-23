@@ -13,6 +13,10 @@ const messages = defineMessages({
     id: 'course-authoring.grading-settings.assignment.type-name.error.message-1',
     defaultMessage: 'The assignment type must have a name.',
   },
+  assignmentTypeNameErrorMessage2: {
+    id: 'course-authoring.grading-settings.assignment.type-name.error.message-2',
+    defaultMessage: 'For grading to work, you must change all {initialAssignmentName} subsections to {value}',
+  },
   assignmentTypeNameErrorMessage3: {
     id: 'course-authoring.grading-settings.assignment.type-name.error.message-3',
     defaultMessage: "There's already another assignment type with this name.",
@@ -61,9 +65,25 @@ const messages = defineMessages({
     id: 'course-authoring.grading-settings.assignment.number-of-droppable.error.message',
     defaultMessage: 'Please enter non-negative integer.',
   },
+  numberOfDroppableSecondErrorMessage: {
+    id: 'course-authoring.grading-settings.assignment.number-of-droppable.second.error.message',
+    defaultMessage: 'Cannot drop more {type} assignments than are assigned.',
+  },
+  assignmentAlertWarningTitle: {
+    id: 'course-authoring.grading-settings.assignment.alert.warning.title',
+    defaultMessage: 'Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:',
+  },
   assignmentAlertWarningDescription: {
     id: 'course-authoring.grading-settings.assignment.alert.warning.description',
     defaultMessage: 'There are no assignments of this type in the course.',
+  },
+  assignmentAlertWarningUsageTitle: {
+    id: 'course-authoring.grading-settings.assignment.alert.warning.usage.title',
+    defaultMessage: 'Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:',
+  },
+  assignmentAlertWarningSuccess: {
+    id: 'course-authoring.grading-settings.assignment.alert.success.title',
+    defaultMessage: 'The number of {type} assignments in the course matches the number defined here.',
   },
   assignmentDeleteButton: {
     id: 'course-authoring.grading-settings.assignment.delete.button',

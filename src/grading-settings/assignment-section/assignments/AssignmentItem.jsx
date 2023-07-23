@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form } from '@edx/paragon';
-import { intlShape } from '@edx/frontend-platform/i18n';
 
 import { defaultAssignmentsPropTypes } from '../utils/enum';
 
@@ -45,7 +44,7 @@ const AssignmentItem = ({
           {errorMsg}
         </Form.Control.Feedback>
       )}
-      {gradeField?.dropCount > gradeField?.minCount && (
+      {gradeField?.dropCount !== 0 && gradeField?.dropCount > gradeField?.minCount && (
         <Form.Control.Feedback className="feedback-error" type="invalid">
           {secondErrorMsg}
         </Form.Control.Feedback>
@@ -73,7 +72,7 @@ AssignmentItem.propTypes = {
   errorMsg: PropTypes.string,
   name: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
-  secondErrorMsg: intlShape,
+  secondErrorMsg: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   errorEffort: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

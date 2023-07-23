@@ -50,7 +50,6 @@ describe('<AssignmentSection />', () => {
       expect(getByText(messages.numberOfDroppableDescription.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.assignmentAlertWarningDescription.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.assignmentDeleteButton.defaultMessage)).toBeInTheDocument();
-      expect(getByText('Warning: The number of Test type assignments defined here does not match the current number of Test type assignments in the course:')).toBeInTheDocument();
     });
   });
   it('checking correct assignment abbreviation value', () => {

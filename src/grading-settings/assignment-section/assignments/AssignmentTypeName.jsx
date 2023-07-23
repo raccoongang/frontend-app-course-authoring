@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Form } from '@edx/paragon';
 
 import { ASSIGNMENT_TYPES, DUPLICATE_ASSIGNMENT_NAME } from '../utils/enum';
@@ -39,11 +39,10 @@ const AssignmentTypeName = ({
         )}
         {value !== initialAssignmentName.current && initialAssignmentName.current !== '' && (
           <Form.Control.Feedback className="feedback-error" type="invalid">
-            <FormattedMessage
-              id="course-authoring.grading-settings.assignment.type-name.error.message-2"
-              defaultMessage="For grading to work, you must change all {initialAssignmentName} subsections to {value}"
-              values={{ initialAssignmentName: initialAssignmentName.current, value }}
-            />
+            {intl.formatMessage(messages.assignmentTypeNameErrorMessage2, {
+              initialAssignmentName: initialAssignmentName.current,
+              value,
+            })}
           </Form.Control.Feedback>
         )}
         {errorEffort === DUPLICATE_ASSIGNMENT_NAME && (

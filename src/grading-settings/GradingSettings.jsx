@@ -12,7 +12,7 @@ import { RequestStatus } from '../data/constants';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import SubHeader from '../generic/sub-header/SubHeader';
 import SectionSubHeader from '../generic/section-sub-header';
-import { DEFAULT_STATE, PENDING_STATE } from '../constants';
+import { STATEFUL_BUTTON_STATES } from '../constants';
 import {
   getGradingSettings, getCourseAssignmentLists, getSavingStatus, getLoadingStatus, getCourseSettings,
 } from './data/selectors';
@@ -230,7 +230,7 @@ const GradingSettings = ({ intl, courseId }) => {
             <StatefulButton
               key="statefulBtn"
               onClick={handleSendGradingSettingsData}
-              state={isQueryPending ? PENDING_STATE : DEFAULT_STATE}
+              state={isQueryPending ? STATEFUL_BUTTON_STATES.pending : STATEFUL_BUTTON_STATES.default}
               {...updateValuesButtonState}
             />,
           ].filter(Boolean)}

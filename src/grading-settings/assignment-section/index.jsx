@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Button } from '@edx/paragon';
 import { CheckCircle, Warning } from '@edx/paragon/icons';
 
@@ -124,13 +124,9 @@ const AssignmentSection = ({
                 gradeField={gradeField}
                 value={gradeField.dropCount}
                 onChange={(e) => handleAssignmentChange(e, idx)}
-                secondErrorMsg={(
-                  <FormattedMessage
-                    id="course-authoring.grading-settings.assignment.number-of-droppable.second.error.message"
-                    defaultMessage="Cannot drop more {type} assignments than are assigned."
-                    values={{ type: gradeField.type }}
-                  />
-                )}
+                secondErrorMsg={intl.formatMessage(messages.numberOfDroppableSecondErrorMessage, {
+                  type: gradeField.type,
+                })}
                 errorEffort={errorList[`${dropCount}-${idx}`]}
               />
             </ol>
@@ -139,13 +135,7 @@ const AssignmentSection = ({
                 className="course-grading-assignment-item-alert-warning"
                 variant="warning"
                 icon={Warning}
-                title={(
-                  <FormattedMessage
-                    id="course-authoring.grading-settings.assignment.alert.warning.usage.title"
-                    defaultMessage="Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:"
-                    values={{ type: gradeField.type }}
-                  />
-                )}
+                title={intl.formatMessage(messages.assignmentAlertWarningUsageTitle, { type: gradeField.type })}
                 description={(
                   <>
                     <span className="course-grading-assignment-item-alert-warning-list-label">
@@ -166,14 +156,7 @@ const AssignmentSection = ({
                 className="course-grading-assignment-item-alert-warning"
                 variant="warning"
                 icon={Warning}
-                title={(
-                  <FormattedMessage
-                    id="course-authoring.grading-settings.assignment.alert.warning.title"
-                    defaultMessage="Warning: The number of {type} assignments defined here does not match the current number
-                    of {type} assignments in the course:"
-                    values={{ type: gradeField.type }}
-                  />
-                )}
+                title={intl.formatMessage(messages.assignmentAlertWarningTitle, { type: gradeField.type })}
                 description={(
                   <span className="course-grading-assignment-item-alert-warning-list-label">
                     {intl.formatMessage(messages.assignmentAlertWarningDescription)}
@@ -187,13 +170,7 @@ const AssignmentSection = ({
                 className="course-grading-assignment-item-alert-success"
                 variant="success"
                 icon={CheckCircle}
-                title={(
-                  <FormattedMessage
-                    id="course-authoring.grading-settings.assignment.alert.success.title"
-                    defaultMessage="The number of {type} assignments in the course matches the number defined here."
-                    values={{ type: gradeField.type }}
-                  />
-                )}
+                title={intl.formatMessage(messages.assignmentAlertWarningSuccess, { type: gradeField.type })}
                 aria-hidden="true"
               />
             )}

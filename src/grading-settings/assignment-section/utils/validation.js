@@ -66,6 +66,7 @@ export const validationAssignmentFields = (
         setShowSavePrompt,
         DUPLICATE_ASSIGNMENT_NAME,
       );
+      return;
     }
     updateAssignmentErrorList(
       assignmentName,
