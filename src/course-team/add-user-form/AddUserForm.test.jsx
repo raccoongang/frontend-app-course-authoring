@@ -29,7 +29,8 @@ describe('<AddUserForm />', () => {
 
     expect(getByText(messages.formTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.formLabel.defaultMessage)).toBeInTheDocument();
-    expect(getByPlaceholderText(messages.formPlaceholder.defaultMessage)).toBeInTheDocument();
+    expect(getByPlaceholderText(messages.formPlaceholder.defaultMessage
+      .replace('{email}', EXAMPLE_USER_EMAIL))).toBeInTheDocument();
     expect(getByText(messages.cancelButton.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.addUserButton.defaultMessage)).toBeInTheDocument();
   });
