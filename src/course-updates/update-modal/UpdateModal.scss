@@ -1,4 +1,12 @@
 .update-modal-body {
+  button[aria-label="Insert/edit link"] {
+    display: none;
+  }
+
+  button[aria-label="Remove link"] {
+    display: none;
+  }
+
   .datepicker-field {
     display: flex;
     align-items: center;

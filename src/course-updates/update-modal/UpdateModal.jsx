@@ -43,7 +43,7 @@ const UpdateModal = ({
 
   return (
     <ModalDialog
-      title="update-moda"
+      title="update-modal"
       isOpen={isOpen}
       onClose={close}
       size="lg"

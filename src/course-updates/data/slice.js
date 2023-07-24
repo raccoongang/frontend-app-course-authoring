@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import { sortBy } from 'lodash';
 
 const slice = createSlice({
   name: 'courseUpdates',
@@ -23,7 +24,7 @@ const slice = createSlice({
       });
     },
     deleteCourseUpdates: (state, { payload }) => {
-      state.courseUpdates = payload;
+      state.courseUpdates = sortBy(payload, 'id').reverse();
     },
     fetchCourseHandoutsSuccess: (state, { payload }) => {
       state.courseHandouts = payload;
