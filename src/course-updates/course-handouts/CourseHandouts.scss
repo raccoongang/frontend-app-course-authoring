@@ -2,10 +2,9 @@
   .course-handouts-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: $spacer;
 
     .course-handouts-header__title {
-      font-size: 1.5rem;
       font-weight: 300;
       color: $gray-800;
     }

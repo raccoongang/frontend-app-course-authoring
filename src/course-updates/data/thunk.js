@@ -6,7 +6,6 @@ import {
   deleteCourseUpdate,
   editCourseHandouts,
 } from './api';
-
 import {
   fetchCourseUpdatesSuccess,
   createCourseUpdates,

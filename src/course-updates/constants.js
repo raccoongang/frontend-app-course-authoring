@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/prefer-default-export
-export const requestTypes = {
+export const REQUEST_TYPES = {
   add_new_update: 'add_new_update',
   edit_update: 'edit_update',
   edit_handouts: 'edit_handouts',

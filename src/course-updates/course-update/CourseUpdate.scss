@@ -1,7 +1,7 @@
 .course-update {
   &:not(:first-child) {
-    padding-top: 30px;
-    margin-top: 30px;
+    padding-top: 1.875rem;
+    margin-top: 1.875rem;
     border-top: 1px solid $light-400;
   }
 
@@ -9,25 +9,22 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 1.125rem;
 
     .course-update-header__date {
-      font-size: .875rem;
-      line-height: 30px;
+      line-height: 1.875rem;
       letter-spacing: 1px;
-      font-weight: 600;
     }
 
     .course-update-header__action {
       display: flex;
       width: auto;
-      gap: 8px;
+      gap: .5rem;
     }
   }
 
   .course-update-content {
     font-size: 1rem;
     line-height: 1.5rem;
-    color: $gray-800;
   }
 }

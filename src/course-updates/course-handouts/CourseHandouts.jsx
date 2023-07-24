@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
+
 import messages from './messages';
 
-const CourseHandouts = ({ isExample, handoutsContent, onEdit }) => {
+const CourseHandouts = ({ handoutsContent, onEdit }) => {
   const intl = useIntl();
 
   return (
@@ -20,16 +21,16 @@ const CourseHandouts = ({ isExample, handoutsContent, onEdit }) => {
           {intl.formatMessage(messages.editButton)}
         </Button>
       </div>
-      {isExample ? (
+      <div
+        className="course-handouts-content"
         // eslint-disable-next-line react/no-danger
-        <div className="course-handouts-content" dangerouslySetInnerHTML={{ __html: handoutsContent }} />
-      ) : null}
+        dangerouslySetInnerHTML={{ __html: handoutsContent || '' }}
+      />
     </div>
   );
 };
 
 CourseHandouts.propTypes = {
-  isExample: PropTypes.bool.isRequired,
   handoutsContent: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
 };

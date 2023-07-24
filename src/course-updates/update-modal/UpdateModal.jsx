@@ -7,25 +7,22 @@ import {
   Icon,
   ModalDialog,
 } from '@edx/paragon';
+import classNames from 'classnames';
 import DatePicker from 'react-datepicker/dist';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import classNames from 'classnames';
-import { Calendar, Error } from '@edx/paragon/icons';
+import { Calendar as CalendarIcon, Error as ErrorIcon } from '@edx/paragon/icons';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
-import messages from './messages';
-import { convertToStringFromDate, convertToDateFromString, isValidDate } from '../../utils';
-import { DATE_FORMAT } from '../../constants';
-import { requestTypes } from '../constants';
-import { WysiwygEditor } from '../../generic/WysiwygEditor';
 
-const courseUpdatesValidationSchema = (requestType) => (requestType === requestTypes.edit_handouts
-  ? Yup.object().shape()
-  : Yup.object().shape({
-    id: Yup.number().required(),
-    date: Yup.string().min(1).required(),
-    content: Yup.string(),
-  }));
+import {
+  convertToStringFromDate,
+  convertToDateFromString,
+  isValidDate,
+} from '../../utils';
+import messages from './messages';
+import { REQUEST_TYPES } from '../constants';
+import { DATE_FORMAT } from '../../constants';
+import { WysiwygEditor } from '../../generic/WysiwygEditor';
+import { geUpdateModalSettings } from './utils';
 
 const UpdateModal = ({
   isOpen,
@@ -35,24 +32,14 @@ const UpdateModal = ({
   courseUpdatesInitialValues,
 }) => {
   const intl = useIntl();
-  const currentContent = requestType === requestTypes.edit_handouts
-    ? courseUpdatesInitialValues.data
-    : courseUpdatesInitialValues.content;
 
-  // const [contentValue, setContentValue] = useState('');
-
-  const modalTitle = (type) => {
-    switch (type) {
-    case requestTypes.add_new_update:
-      return intl.formatMessage(messages.addNewUpdateTitle);
-    case requestTypes.edit_handouts:
-      return intl.formatMessage(messages.editHandoutsTitle);
-    case requestTypes.edit_update:
-      return intl.formatMessage(messages.editUpdateTitle);
-    default:
-      return '';
-    }
-  };
+  const {
+    currentContent,
+    modalTitle,
+    validationSchema,
+    contentFieldName,
+    submitButtonText,
+  } = geUpdateModalSettings(requestType, courseUpdatesInitialValues, intl);
 
   return (
     <ModalDialog
@@ -66,11 +53,11 @@ const UpdateModal = ({
       data-testid="update-modal"
     >
       <ModalDialog.Header>
-        <ModalDialog.Title>{modalTitle(requestType)}</ModalDialog.Title>
+        <ModalDialog.Title>{modalTitle}</ModalDialog.Title>
       </ModalDialog.Header>
       <Formik
         initialValues={courseUpdatesInitialValues}
-        validationSchema={courseUpdatesValidationSchema(requestType)}
+        validationSchema={validationSchema}
         validateOnBlur
         onSubmit={onSubmit}
       >
@@ -80,12 +67,12 @@ const UpdateModal = ({
           <>
             <ModalDialog.Body>
               <div className="update-modal-body">
-                {requestType !== requestTypes.edit_handouts ? (
+                {(requestType !== REQUEST_TYPES.edit_handouts) && (
                   <Form.Group className="mb-4 datepicker-field datepicker-custom">
                     <Form.Control.Feedback>{intl.formatMessage(messages.updateModalDate)}</Form.Control.Feedback>
                     <div className="position-relative">
                       <Icon
-                        src={Calendar}
+                        src={CalendarIcon}
                         className="datepicker-custom-control-icon"
                         alt={intl.formatMessage(messages.updateModalCalendarAltText)}
                       />
@@ -107,20 +94,21 @@ const UpdateModal = ({
                         }}
                       />
                     </div>
-                    {!isValid ? (
+                    {!isValid && (
                       <div className="datepicker-field-error">
-                        <Icon src={Error} alt={intl.formatMessage(messages.updateModalErrorAltText)} />
+                        <Icon src={ErrorIcon} alt={intl.formatMessage(messages.updateModalErrorAltText)} />
                         <span className="message-error">{intl.formatMessage(messages.updateModalInValid)}</span>
                       </div>
-                    ) : null}
+                    )}
                   </Form.Group>
-                ) : null}
+                )}
                 <Form.Group className="m-0">
                   <WysiwygEditor
                     initialValue={currentContent}
-                    name={requestType === requestTypes.edit_handouts ? 'data' : 'content'}
+                    name={contentFieldName}
+                    minHeight={400}
                     onChange={(value) => {
-                      setFieldValue(requestType === requestTypes.edit_handouts ? 'data' : 'content', value);
+                      setFieldValue(contentFieldName, value || '<p>&nbsp;</p>');
                     }}
                   />
                 </Form.Group>
@@ -129,12 +117,10 @@ const UpdateModal = ({
             <ModalDialog.Footer>
               <ActionRow>
                 <ModalDialog.CloseButton variant="tertiary" type="button">
-                  Cancel
+                  {intl.formatMessage(messages.cancelButton)}
                 </ModalDialog.CloseButton>
                 <Button variant="primary" onClick={handleSubmit} type="submit">
-                  {requestType === requestTypes.edit_handouts
-                    ? intl.formatMessage(messages.saveButton)
-                    : intl.formatMessage(messages.postButton)}
+                  {submitButtonText}
                 </Button>
               </ActionRow>
             </ModalDialog.Footer>
@@ -146,10 +132,8 @@ const UpdateModal = ({
 };
 
 UpdateModal.propTypes = {
-  courseUpdatesInitialValues: PropTypes.objectOf(PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ])).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  courseUpdatesInitialValues: PropTypes.object.isRequired,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   requestType: PropTypes.string.isRequired,

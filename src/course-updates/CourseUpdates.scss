@@ -2,6 +2,10 @@
 @import "./course-update/CourseUpdate";
 @import "./update-modal/UpdateModal";
 
+course-updates-container {
+  margin-top: 3rem;
+}
+
 .updates-container {
   display: grid;
   grid-template-columns: 65% 35%;
@@ -13,11 +17,11 @@
 }
 
 .updates-info-container {
-  padding: 30px;
+  padding: 1.875rem;
 }
 
 .updates-handouts-container {
   border-left: .0625rem solid $gray-200;
-  padding: 30px;
+  padding: 1.875rem;
   background: $info-100;
 }

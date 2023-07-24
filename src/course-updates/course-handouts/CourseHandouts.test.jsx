@@ -6,31 +6,30 @@ import CourseHandouts from './CourseHandouts';
 import messages from './messages';
 
 const onEditMock = jest.fn();
-const handoutsContent = 'Handouts Content';
+const handoutsContentMock = 'Handouts Content';
 
-const RootWrapper = () => (
+const renderComponent = () => render(
   <IntlProvider locale="en">
     <CourseHandouts
-      isExample
-      handoutsContent={handoutsContent}
       onEdit={onEditMock}
+      handoutsContent={handoutsContentMock}
     />
-  </IntlProvider>
+  </IntlProvider>,
 );
 
 describe('<CourseHandouts />', () => {
   it('render CourseHandouts component correctly', () => {
-    const { getByText } = render(<RootWrapper />);
+    const { getByText, getByRole } = renderComponent();
 
     expect(getByText(messages.handoutsTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByText(handoutsContent)).toBeInTheDocument();
-    expect(getByText(messages.editButton.defaultMessage)).toBeInTheDocument();
+    expect(getByText(handoutsContentMock)).toBeInTheDocument();
+    expect(getByRole('button', { name: messages.editButton.defaultMessage })).toBeInTheDocument();
   });
 
-  it('calls Edit button is clicked', () => {
-    const { getByText } = render(<RootWrapper />);
+  it('calls the onEdit function when the edit button is clicked', () => {
+    const { getByRole } = renderComponent();
 
-    const editButton = getByText(messages.editButton.defaultMessage);
+    const editButton = getByRole('button', { name: messages.editButton.defaultMessage });
     fireEvent.click(editButton);
     expect(onEditMock).toHaveBeenCalledTimes(1);
   });

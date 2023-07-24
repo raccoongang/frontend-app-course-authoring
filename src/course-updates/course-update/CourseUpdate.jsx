@@ -12,7 +12,7 @@ const CourseUpdate = ({
   return (
     <div className="course-update" data-testid="course-update">
       <div className="course-update-header">
-        <span className="course-update-header__date">{updateDate}</span>
+        <span className="course-update-header__date small font-weight-bold">{updateDate}</span>
         <div className="course-update-header__action">
           <Button variant="outline-primary" size="sm" onClick={onEdit}>
             {intl.formatMessage(messages.editButton)}
@@ -22,8 +22,14 @@ const CourseUpdate = ({
           </Button>
         </div>
       </div>
-      {/* eslint-disable-next-line react/no-danger */}
-      {updateContent ? <div className="course-update-content" dangerouslySetInnerHTML={{ __html: updateContent }} /> : null}
+      {Boolean(updateContent) && (
+        <div
+          className="course-update-content text-gray-800"
+          data-testid="course-update-content"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: updateContent }}
+        />
+      )}
     </div>
   );
 };

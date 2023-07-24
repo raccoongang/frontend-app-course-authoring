@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   headingTitle: {
     id: 'course-authoring.course-updates.header.title',
-    defaultMessage: 'Course Updates',
+    defaultMessage: 'Course updates',
   },
   headingSubtitle: {
     id: 'course-authoring.course-updates.header.subtitle',
@@ -15,7 +15,7 @@ const messages = defineMessages({
   },
   newUpdateButton: {
     id: 'course-authoring.course-updates.actions.new-update',
-    defaultMessage: 'New Update',
+    defaultMessage: 'New update',
   },
 });
 

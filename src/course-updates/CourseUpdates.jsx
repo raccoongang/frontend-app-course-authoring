@@ -1,111 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { injectIntl, useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button,
   Container,
   Layout,
-  useToggle,
 } from '@edx/paragon';
-import { Add } from '@edx/paragon/icons';
+import { Add as AddIcon } from '@edx/paragon/icons';
+
 import SubHeader from '../generic/sub-header/SubHeader';
 import CourseHandouts from './course-handouts/CourseHandouts';
 import CourseUpdate from './course-update/CourseUpdate';
 import DeleteModal from './delete-modal/DeleteModal';
 import UpdateModal from './update-modal/UpdateModal';
 
-import {
-  fetchCourseUpdatesQuery,
-  fetchCourseHandoutsQuery,
-  createCourseUpdateQuery,
-  deleteCourseUpdateQuery,
-  editCourseUpdateQuery,
-  editCourseHandoutsQuery,
-} from './data/thunk';
-import { getCourseUpdates, getCourseHandouts } from './data/selectors';
-
-import { FORMATTED_DATE_FORMAT } from '../constants';
-import { requestTypes } from './constants';
+import { REQUEST_TYPES } from './constants';
 import messages from './messages';
+import { useCourseUpdates } from './hooks';
 
 const CourseUpdates = ({ courseId }) => {
-  const dispatch = useDispatch();
   const intl = useIntl();
-  const initialUpdate = { id: 0, date: moment().utc().toDate(), content: '' };
 
-  const [requestType, setRequestType] = useState('');
-  const [isUpdateModalOpen, openUpdateModal, closeUpdateModal] = useToggle(false);
-  const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
-  const [currentUpdate, setCurrentUpdate] = useState(initialUpdate);
-
-  const courseUpdates = useSelector(getCourseUpdates);
-  const courseHandouts = useSelector(getCourseHandouts);
-
-  const courseUpdatesInitialValues = requestType === requestTypes.edit_handouts
-    ? courseHandouts
-    : currentUpdate;
-
-  const handleOpenUpdateModal = (type, courseUpdate) => {
-    setRequestType(type);
-
-    if (type === requestTypes.add_new_update) {
-      setCurrentUpdate(initialUpdate);
-    }
-    if (type === requestTypes.edit_update) {
-      setCurrentUpdate(courseUpdate);
-    }
-
-    openUpdateModal();
-  };
-
-  const handleOpenDeleteUpdateModal = (courseUpdate) => {
-    setRequestType(requestTypes.delete_update);
-    setCurrentUpdate(courseUpdate);
-    openDeleteModal();
-  };
-
-  const handleUpdatesSubmit = (data) => {
-    const dataToSend = {
-      ...data,
-      date: moment(data.date).format(FORMATTED_DATE_FORMAT),
-    };
-    const { id, date, content } = dataToSend;
-
-    const handleSubmit = (handler) => {
-      closeUpdateModal();
-      return handler();
-    };
-
-    switch (requestType) {
-    case requestTypes.add_new_update:
-      return handleSubmit(dispatch(createCourseUpdateQuery(courseId, { date, content })));
-    case requestTypes.edit_update:
-      return handleSubmit(dispatch(editCourseUpdateQuery(courseId, { id, date, content })));
-    case requestTypes.edit_handouts:
-      return handleSubmit(dispatch(editCourseHandoutsQuery(courseId, data)));
-    default:
-      return true;
-    }
-  };
-
-  const handleDeleteUpdateSubmit = () => {
-    const currentCourseUpdateId = currentUpdate.id;
-
-    dispatch(deleteCourseUpdateQuery(courseId, currentCourseUpdateId));
-    closeDeleteModal();
-  };
-
-  useEffect(() => {
-    dispatch(fetchCourseUpdatesQuery(courseId));
-    dispatch(fetchCourseHandoutsQuery(courseId));
-  }, [courseId]);
+  const {
+    requestType,
+    courseUpdates,
+    courseHandouts,
+    courseUpdatesInitialValues,
+    isUpdateModalOpen,
+    isDeleteModalOpen,
+    closeUpdateModal,
+    closeDeleteModal,
+    handleUpdatesSubmit,
+    handleOpenUpdateModal,
+    handleDeleteUpdateSubmit,
+    handleOpenDeleteUpdateModal,
+  } = useCourseUpdates({ courseId });
 
   return (
     <Container size="xl" className="m-4">
-      <div className="mt-5" />
-      <section className="setting-items mb-4">
+      <section className="setting-items mb-4 course-updates-container">
         <Layout
           lg={[{ span: 9 }, { span: 3 }]}
           md={[{ span: 9 }, { span: 3 }]}
@@ -123,9 +56,9 @@ const CourseUpdates = ({ courseId }) => {
                   headerActions={(
                     <Button
                       variant="outline-success"
-                      iconBefore={Add}
+                      iconBefore={AddIcon}
                       size="sm"
-                      onClick={() => handleOpenUpdateModal(requestTypes.add_new_update)}
+                      onClick={() => handleOpenUpdateModal(REQUEST_TYPES.add_new_update)}
                     >
                       {intl.formatMessage(messages.newUpdateButton)}
                     </Button>
@@ -138,7 +71,7 @@ const CourseUpdates = ({ courseId }) => {
                         <CourseUpdate
                           updateDate={courseUpdate.date}
                           updateContent={courseUpdate.content}
-                          onEdit={() => handleOpenUpdateModal(requestTypes.edit_update, courseUpdate)}
+                          onEdit={() => handleOpenUpdateModal(REQUEST_TYPES.edit_update, courseUpdate)}
                           onDelete={() => handleOpenDeleteUpdateModal(courseUpdate)}
                         />
                       )) : null}
@@ -146,8 +79,7 @@ const CourseUpdates = ({ courseId }) => {
                     <div className="updates-handouts-container">
                       <CourseHandouts
                         handoutsContent={courseHandouts?.data || ''}
-                        isExample
-                        onEdit={() => handleOpenUpdateModal(requestTypes.edit_handouts)}
+                        onEdit={() => handleOpenUpdateModal(REQUEST_TYPES.edit_handouts)}
                       />
                     </div>
                     <UpdateModal
