@@ -35,31 +35,32 @@ const ExportStepper = ({ intl, courseId }) => {
     return () => clearInterval(id);
   });
 
+  const exportSteps = [
+    {
+      title: intl.formatMessage(messages.stepperPreparingTitle),
+      description: intl.formatMessage(messages.stepperPreparingDescription),
+    },
+    {
+      title: intl.formatMessage(messages.stepperExportingTitle),
+      description: intl.formatMessage(messages.stepperExportingDescription),
+    },
+    {
+      title: intl.formatMessage(messages.stepperCompressingTitle),
+      description: intl.formatMessage(messages.stepperCompressingDescription),
+    },
+    {
+      title: intl.formatMessage(messages.stepperSuccessTitle) + getFormattedSuccessDate(successDate),
+      description: intl.formatMessage(messages.stepperSuccessDescription),
+    },
+  ];
+
   return (
     <div>
       <h3>{intl.formatMessage(messages.stepperHeaderTitle)}</h3>
       <hr />
       <CourseStepper
-        courseId={courseId}
-        steps={[{
-          title: intl.formatMessage(messages.stepperPreparingTitle),
-          description: intl.formatMessage(messages.stepperPreparingDescription),
-          key: EXPORT_STAGES.PREPARING,
-        }, {
-          title: intl.formatMessage(messages.stepperExportingTitle),
-          description: intl.formatMessage(messages.stepperExportingDescription),
-          key: EXPORT_STAGES.EXPORTING,
-        }, {
-          title: intl.formatMessage(messages.stepperCompressingTitle),
-          description: intl.formatMessage(messages.stepperCompressingDescription),
-          key: EXPORT_STAGES.COMPRESSING,
-        }, {
-          title: intl.formatMessage(messages.stepperSuccessTitle) + getFormattedSuccessDate(successDate),
-          description: intl.formatMessage(messages.stepperSuccessDescription),
-          key: EXPORT_STAGES.SUCCESS,
-        }]}
+        steps={exportSteps}
         activeKey={currentStage}
-        errorMessage={errorMessage}
       />
       {downloadPath && <Button href={`${getConfig().STUDIO_BASE_URL}${downloadPath}`}>{intl.formatMessage(messages.downloadCourseButtonTitle)}</Button>}
     </div>

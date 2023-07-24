@@ -1,39 +1,114 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import React from 'react';
+import { injectIntl } from '@edx/frontend-platform/i18n';
 import {
-  Container, Layout, Button, Card, MailtoLink, Hyperlink, Stepper,
-} from '@edx/paragon';
+  Settings as SettingsIcon,
+  CheckBoxOutlineBlank as SuccessIcon,
+  LibraryAddCheck as SuccessDoneIcon,
+  Warning as ErrorIcon,
+} from '@edx/paragon/icons';
+import { Icon } from '@edx/paragon';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const CourseStepper = ({
-  intl,
-  courseId,
   steps,
   activeKey,
+  percent,
+  hasError,
   errorMessage,
-}) => (
-  <div>
-    <Stepper activeKey={activeKey}>
-      <Stepper.Header />
-      {steps.map((step) => (
-        <div>
-          <Stepper.Step
-            eventKey={step.key}
-            title={step.title}
-            description={errorMessage && step.key === activeKey ? errorMessage : step.description}
-            hasError={errorMessage && step.key === activeKey}
-          />
-        </div>
-      ))}
-    </Stepper>
-  </div>
-);
+}) => {
+  const getStepperSettings = (index) => {
+    const lastStepIndex = steps.length - 1;
+    const isActiveStep = index === activeKey;
+    const isLastStep = index === lastStepIndex;
+    const isErrorStep = isActiveStep && hasError;
+    const isLastStepDone = isLastStep && isActiveStep;
 
-CourseStepper.defaultProps = {};
+    const getStepIcon = () => {
+      if (hasError && isActiveStep) {
+        return ErrorIcon;
+      }
+      if (isLastStep && !isActiveStep) {
+        return SuccessIcon;
+      }
+      if (isLastStepDone) {
+        return SuccessDoneIcon;
+      }
+
+      return SettingsIcon;
+    };
+
+    return {
+      StepIcon: getStepIcon(index),
+      isPercentShow: Boolean(percent) && percent !== 100 && isActiveStep && !hasError,
+      isErrorMessageShow: isErrorStep && errorMessage,
+      isActiveClass: isActiveStep && !isLastStep && !hasError,
+      isDoneClass: index < activeKey || isLastStepDone,
+      isErrorClass: isErrorStep,
+    };
+  };
+
+  return (
+    <div className="course-stepper">
+      {steps.length ? steps.map(({ title, description }, index) => {
+        const {
+          StepIcon,
+          isPercentShow,
+          isErrorMessageShow,
+          isActiveClass,
+          isDoneClass,
+          isErrorClass,
+        } = getStepperSettings(index);
+
+        return (
+          <div
+            className={classNames('course-stepper__step', {
+              active: isActiveClass,
+              done: isDoneClass,
+              error: isErrorClass,
+            })}
+            key={title}
+            data-testid="course-stepper__step"
+          >
+            <div className="course-stepper__step-icon">
+              <Icon src={StepIcon} alt={title} data-testid={`${title}-icon`} />
+            </div>
+            <div className="course-stepper__step-info">
+              <h3 className="h4 title course-stepper__step-title font-weight-600">{title}</h3>
+              {isPercentShow && (
+                <p
+                  className="course-stepper__step-percent font-weight-400"
+                  data-testid="course-stepper__step-percent"
+                >
+                  {percent}%
+                </p>
+              )}
+              <p className="course-stepper__step-description font-weight-400">
+                {isErrorMessageShow ? errorMessage : description}
+              </p>
+            </div>
+          </div>
+        );
+      }) : null}
+    </div>
+  );
+};
+
+CourseStepper.defaultProps = {
+  percent: false,
+  hasError: false,
+  errorMessage: '',
+};
 
 CourseStepper.propTypes = {
-  //   intl: intlShape.isRequired,
-  //   courseId: PropTypes.string.isRequired,
+  steps: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  })).isRequired,
+  activeKey: PropTypes.number.isRequired,
+  percent: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  errorMessage: PropTypes.string,
+  hasError: PropTypes.bool,
 };
 
 export default injectIntl(CourseStepper);
