@@ -78,6 +78,7 @@ const UpdateModal = ({
                       />
                       <DatePicker
                         name="date"
+                        data-testid="course-updates-datepicker"
                         selected={convertToDateFromString(values.date)}
                         dateFormat={DATE_FORMAT}
                         className={classNames('datepicker-custom-control', {
@@ -105,6 +106,7 @@ const UpdateModal = ({
                 <Form.Group className="m-0">
                   <WysiwygEditor
                     initialValue={currentContent}
+                    data-testid="course-updates-wisiwyg-editor"
                     name={contentFieldName}
                     minHeight={400}
                     onChange={(value) => {

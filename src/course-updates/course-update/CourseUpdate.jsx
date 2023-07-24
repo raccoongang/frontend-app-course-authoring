@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
+
 import messages from './messages';
 
 const CourseUpdate = ({

@@ -1,7 +1,20 @@
 import * as Yup from 'yup';
+
 import { REQUEST_TYPES } from '../constants';
 import messages from './messages';
 
+/**
+ * Get Update modal settings depending on requestType
+ * @param {typeof REQUEST_TYPES} requestType - one of REQUEST_TYPES
+ * @param {object} courseUpdatesInitialValues - form initial values depending on requestType
+ * @returns {{
+  *  currentContent: string,
+  *  validationSchema: object,
+  *  modalTitle: string,
+  *  submitButtonText: string,
+  *  contentFieldName: string
+ *  }}
+ */
 const geUpdateModalSettings = (requestType, courseUpdatesInitialValues, intl) => {
   const updatesValidationSchema = Yup.object().shape({
     id: Yup.number().required(),

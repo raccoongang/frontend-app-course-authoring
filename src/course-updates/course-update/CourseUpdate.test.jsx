@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-
 import { IntlProvider } from '@edx/frontend-platform/i18n';
+
 import CourseUpdate from './CourseUpdate';
 import messages from './messages';
 
