@@ -51,6 +51,7 @@ const UpdateModal = ({
       hasCloseButton
       isFullscreenOnMobile
       data-testid="update-modal"
+      isBlocking
     >
       <ModalDialog.Header>
         <ModalDialog.Title>{modalTitle}</ModalDialog.Title>

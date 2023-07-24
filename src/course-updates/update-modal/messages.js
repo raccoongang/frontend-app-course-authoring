@@ -6,7 +6,7 @@ const messages = defineMessages({
     defaultMessage: 'Date:',
   },
   updateModalInValid: {
-    id: 'course-authoring.course-updates.update-modal.date',
+    id: 'course-authoring.course-updates.update-modal.inValid',
     defaultMessage: 'Action required: Enter a valid date.',
   },
   updateModalCalendarAltText: {
