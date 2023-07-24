@@ -645,7 +645,7 @@
   "course-authoring.course-team.error-modal.button.ok": "Ok",
   "course-authoring.course-team.warning-modal.title": "Already a course team member",
   "course-authoring.course-team.warning-modal.message": "{email} is already on the {courseName} team. Recheck the email address if you want to add a new member.",
-  "course-authoring.course-team.warning-modal.button.return": "Return to team listing"
+  "course-authoring.course-team.warning-modal.button.return": "Return to team listing",
   "course-authoring.advanced-settings.alert.button.saving": "Saving",
   "course-authoring.grading-settings.credit.eligibility.label": "Minimum credit-eligible grade:",
   "course-authoring.grading-settings.credit.eligibility.description": "% Must be greater than or equal to the course passing grade",
