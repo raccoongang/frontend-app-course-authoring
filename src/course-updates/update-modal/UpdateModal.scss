@@ -13,5 +13,9 @@
         color: $warning-300;
       }
     }
+
+    .react-datepicker-popper {
+      z-index: 99;
+    }
   }
 }
