@@ -35,32 +35,37 @@ const ExportStepper = ({ intl, courseId }) => {
     return () => clearInterval(id);
   });
 
-  const exportSteps = [
-    {
-      title: intl.formatMessage(messages.stepperPreparingTitle),
-      description: intl.formatMessage(messages.stepperPreparingDescription),
-    },
-    {
-      title: intl.formatMessage(messages.stepperExportingTitle),
-      description: intl.formatMessage(messages.stepperExportingDescription),
-    },
-    {
-      title: intl.formatMessage(messages.stepperCompressingTitle),
-      description: intl.formatMessage(messages.stepperCompressingDescription),
-    },
-    {
-      title: intl.formatMessage(messages.stepperSuccessTitle) + getFormattedSuccessDate(successDate),
-      description: intl.formatMessage(messages.stepperSuccessDescription),
-    },
-  ];
+  let successTitle = intl.formatMessage(messages.stepperSuccessTitle);
+  const formattedSuccessDate = getFormattedSuccessDate(successDate);
+  if (formattedSuccessDate) {
+    successTitle += formattedSuccessDate;
+  }
 
   return (
     <div>
-      <h3>{intl.formatMessage(messages.stepperHeaderTitle)}</h3>
+      <h3 className="mt-4">{intl.formatMessage(messages.stepperHeaderTitle)}</h3>
       <hr />
       <CourseStepper
-        steps={exportSteps}
+        courseId={courseId}
+        steps={[{
+          title: intl.formatMessage(messages.stepperPreparingTitle),
+          description: intl.formatMessage(messages.stepperPreparingDescription),
+          key: EXPORT_STAGES.PREPARING,
+        }, {
+          title: intl.formatMessage(messages.stepperExportingTitle),
+          description: intl.formatMessage(messages.stepperExportingDescription),
+          key: EXPORT_STAGES.EXPORTING,
+        }, {
+          title: intl.formatMessage(messages.stepperCompressingTitle),
+          description: intl.formatMessage(messages.stepperCompressingDescription),
+          key: EXPORT_STAGES.COMPRESSING,
+        }, {
+          title: successTitle,
+          description: intl.formatMessage(messages.stepperSuccessDescription),
+          key: EXPORT_STAGES.SUCCESS,
+        }]}
         activeKey={currentStage}
+        errorMessage={errorMessage}
       />
       {downloadPath && <Button href={`${getConfig().STUDIO_BASE_URL}${downloadPath}`}>{intl.formatMessage(messages.downloadCourseButtonTitle)}</Button>}
     </div>

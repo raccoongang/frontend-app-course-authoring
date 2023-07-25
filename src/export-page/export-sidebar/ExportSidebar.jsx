@@ -15,14 +15,18 @@ const ExportSidebar = ({ intl, courseId }) => (
     <hr />
     <h4 className="help-sidebar-about-title">{intl.formatMessage(messages.exportedContent)}</h4>
     <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.exportedContentHeading)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content1)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content2)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content3)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content4)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content5)}</p>
+    <ul className="export-sidebar-list">
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content1)}</li>
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content2)}</li>
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content3)}</li>
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content4)}</li>
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content5)}</li>
+    </ul>
     <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.notExportedContent)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content6)}</p>
-    <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content7)}</p>
+    <ul className="export-sidebar-list">
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content6)}</li>
+      <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content7)}</li>
+    </ul>
     <hr />
     <h4 className="help-sidebar-about-title">{intl.formatMessage(messages.openDownloadFile)}</h4>
     <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.openDownloadFileDescription)}</p>

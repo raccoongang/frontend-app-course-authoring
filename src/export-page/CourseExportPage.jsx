@@ -9,18 +9,20 @@ import { ArrowCircleDown } from '@edx/paragon/icons';
 import Cookies from 'universal-cookie';
 import messages from './messages';
 import ExportSidebar from './export-sidebar/ExportSidebar';
-import ExportStepper from './export-stepper/ExportStepper';
-import { getExportTriggered } from './data/selectors';
+import { getCurrentStage, getError, getExportTriggered } from './data/selectors';
 import { startExportingCourse } from './data/thunks';
 import SubHeader from '../generic/sub-header/SubHeader';
-import { LAST_EXPORT_COOKIE_NAME } from './data/constants';
+import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './data/constants';
 import { updateExportTriggered, updateSuccessDate } from './data/slice';
 import ExportModalError from './export-modal-error/ExportModalError';
 import ExportFooter from './export-footer/ExportFooter';
+import ExportStepper from './export-stepper/ExportStepper';
 
 const CourseExportPage = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const exportTriggered = useSelector(getExportTriggered);
+  const currentStage = useSelector(getCurrentStage);
+  const { msg: errorMessage } = useSelector(getError);
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -30,12 +32,6 @@ const CourseExportPage = ({ intl, courseId }) => {
       dispatch(updateSuccessDate(cookieData.date));
     }
   }, []);
-
-  const onButtonClick = () => {
-    if (!exportTriggered) {
-      dispatch(startExportingCourse(courseId));
-    }
-  };
 
   return (
     <Container size="xl" className="m-4">
@@ -61,11 +57,21 @@ const CourseExportPage = ({ intl, courseId }) => {
                   title={intl.formatMessage(messages.titleUnderButton)}
                   size="m"
                 />
-                <Card.Section className="px-3 py-1">
-                  <Button variant="primary" onClick={onButtonClick} iconBefore={ArrowCircleDown}>
-                    {intl.formatMessage(messages.buttonTitle)}
-                  </Button>
-                </Card.Section>
+                {(!exportTriggered || errorMessage || currentStage === EXPORT_STAGES.SUCCESS)
+                  && (
+                    <Card.Section className="px-3 py-1">
+                      <Button
+                        variant="primary"
+                        size="lg"
+                        block
+                        className="mb-4 mt-2"
+                        onClick={() => dispatch(startExportingCourse(courseId))}
+                        iconBefore={ArrowCircleDown}
+                      >
+                        {intl.formatMessage(messages.buttonTitle)}
+                      </Button>
+                    </Card.Section>
+                  )}
               </Card>
               {exportTriggered && <ExportStepper courseId={courseId} />}
               <ExportFooter />
