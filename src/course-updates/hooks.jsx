@@ -20,7 +20,7 @@ const useCourseUpdates = ({ courseId }) => {
   const initialUpdate = { id: 0, date: moment().utc().toDate(), content: '' };
 
   const [requestType, setRequestType] = useState('');
-  const [isUpdateModalOpen, openUpdateModal, closeUpdateModal] = useToggle(false);
+  const [isUpdateFormOpen, openUpdateForm, closeUpdateForm] = useToggle(false);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [currentUpdate, setCurrentUpdate] = useState(initialUpdate);
 
@@ -31,7 +31,7 @@ const useCourseUpdates = ({ courseId }) => {
     ? courseHandouts
     : currentUpdate;
 
-  const handleOpenUpdateModal = (type, courseUpdate) => {
+  const handleOpenUpdateForm = (type, courseUpdate) => {
     setRequestType(type);
 
     if (type === REQUEST_TYPES.add_new_update) {
@@ -41,10 +41,11 @@ const useCourseUpdates = ({ courseId }) => {
       setCurrentUpdate(courseUpdate);
     }
 
-    openUpdateModal();
+    window.scrollTo(0, 0);
+    openUpdateForm();
   };
 
-  const handleOpenDeleteUpdateModal = (courseUpdate) => {
+  const handleOpenDeleteUpdateForm = (courseUpdate) => {
     setRequestType(REQUEST_TYPES.delete_update);
     setCurrentUpdate(courseUpdate);
     openDeleteModal();
@@ -58,7 +59,7 @@ const useCourseUpdates = ({ courseId }) => {
     const { id, date, content } = dataToSend;
 
     const handleSubmit = (handler) => {
-      closeUpdateModal();
+      closeUpdateForm();
       return handler();
     };
 
@@ -91,14 +92,14 @@ const useCourseUpdates = ({ courseId }) => {
     courseUpdates,
     courseHandouts,
     courseUpdatesInitialValues,
-    isUpdateModalOpen,
+    isUpdateFormOpen,
     isDeleteModalOpen,
-    closeUpdateModal,
+    closeUpdateForm,
     closeDeleteModal,
     handleUpdatesSubmit,
-    handleOpenUpdateModal,
+    handleOpenUpdateForm,
     handleDeleteUpdateSubmit,
-    handleOpenDeleteUpdateModal,
+    handleOpenDeleteUpdateForm,
   };
 };
 

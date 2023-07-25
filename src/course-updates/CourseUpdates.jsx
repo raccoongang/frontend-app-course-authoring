@@ -12,7 +12,7 @@ import SubHeader from '../generic/sub-header/SubHeader';
 import CourseHandouts from './course-handouts/CourseHandouts';
 import CourseUpdate from './course-update/CourseUpdate';
 import DeleteModal from './delete-modal/DeleteModal';
-import UpdateModal from './update-modal/UpdateModal';
+import UpdateForm from './update-form/UpdateForm';
 
 import { REQUEST_TYPES } from './constants';
 import messages from './messages';
@@ -26,14 +26,14 @@ const CourseUpdates = ({ courseId }) => {
     courseUpdates,
     courseHandouts,
     courseUpdatesInitialValues,
-    isUpdateModalOpen,
+    isUpdateFormOpen,
     isDeleteModalOpen,
-    closeUpdateModal,
+    closeUpdateForm,
     closeDeleteModal,
     handleUpdatesSubmit,
-    handleOpenUpdateModal,
+    handleOpenUpdateForm,
     handleDeleteUpdateSubmit,
-    handleOpenDeleteUpdateModal,
+    handleOpenDeleteUpdateForm,
   } = useCourseUpdates({ courseId });
 
   return (
@@ -58,37 +58,42 @@ const CourseUpdates = ({ courseId }) => {
                       variant="outline-success"
                       iconBefore={AddIcon}
                       size="sm"
-                      onClick={() => handleOpenUpdateModal(REQUEST_TYPES.add_new_update)}
+                      onClick={() => handleOpenUpdateForm(REQUEST_TYPES.add_new_update)}
+                      disabled={isUpdateFormOpen}
                     >
                       {intl.formatMessage(messages.newUpdateButton)}
                     </Button>
                   )}
                 />
                 <section className="updates-section">
+                  {isUpdateFormOpen && (
+                    <UpdateForm
+                      isOpen={isUpdateFormOpen}
+                      close={closeUpdateForm}
+                      requestType={requestType}
+                      onSubmit={handleUpdatesSubmit}
+                      courseUpdatesInitialValues={courseUpdatesInitialValues}
+                    />
+                  )}
                   <div className="updates-container">
                     <div className="updates-info-container">
                       {courseUpdates.length ? courseUpdates.map((courseUpdate) => (
                         <CourseUpdate
                           updateDate={courseUpdate.date}
                           updateContent={courseUpdate.content}
-                          onEdit={() => handleOpenUpdateModal(REQUEST_TYPES.edit_update, courseUpdate)}
-                          onDelete={() => handleOpenDeleteUpdateModal(courseUpdate)}
+                          onEdit={() => handleOpenUpdateForm(REQUEST_TYPES.edit_update, courseUpdate)}
+                          onDelete={() => handleOpenDeleteUpdateForm(courseUpdate)}
+                          isDisabledButtons={isUpdateFormOpen}
                         />
                       )) : null}
                     </div>
                     <div className="updates-handouts-container">
                       <CourseHandouts
                         handoutsContent={courseHandouts?.data || ''}
-                        onEdit={() => handleOpenUpdateModal(REQUEST_TYPES.edit_handouts)}
+                        onEdit={() => handleOpenUpdateForm(REQUEST_TYPES.edit_handouts)}
+                        isDisabledButtons={isUpdateFormOpen}
                       />
                     </div>
-                    <UpdateModal
-                      isOpen={isUpdateModalOpen}
-                      close={closeUpdateModal}
-                      requestType={requestType}
-                      onSubmit={handleUpdatesSubmit}
-                      courseUpdatesInitialValues={courseUpdatesInitialValues}
-                    />
                     <DeleteModal
                       isOpen={isDeleteModalOpen}
                       close={closeDeleteModal}

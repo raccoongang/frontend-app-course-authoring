@@ -5,7 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
 
-const CourseHandouts = ({ handoutsContent, onEdit }) => {
+const CourseHandouts = ({ handoutsContent, onEdit, isDisabledButtons }) => {
   const intl = useIntl();
 
   return (
@@ -17,6 +17,7 @@ const CourseHandouts = ({ handoutsContent, onEdit }) => {
           variant="outline-primary"
           size="sm"
           onClick={onEdit}
+          disabled={isDisabledButtons}
         >
           {intl.formatMessage(messages.editButton)}
         </Button>
@@ -33,6 +34,7 @@ const CourseHandouts = ({ handoutsContent, onEdit }) => {
 CourseHandouts.propTypes = {
   handoutsContent: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
+  isDisabledButtons: PropTypes.bool.isRequired,
 };
 
 export default CourseHandouts;

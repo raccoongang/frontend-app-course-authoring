@@ -6,7 +6,11 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import messages from './messages';
 
 const CourseUpdate = ({
-  updateDate, updateContent, onEdit, onDelete,
+  updateDate,
+  updateContent,
+  onEdit,
+  onDelete,
+  isDisabledButtons,
 }) => {
   const intl = useIntl();
 
@@ -15,10 +19,10 @@ const CourseUpdate = ({
       <div className="course-update-header">
         <span className="course-update-header__date small font-weight-bold">{updateDate}</span>
         <div className="course-update-header__action">
-          <Button variant="outline-primary" size="sm" onClick={onEdit}>
+          <Button variant="outline-primary" size="sm" onClick={onEdit} disabled={isDisabledButtons}>
             {intl.formatMessage(messages.editButton)}
           </Button>
-          <Button variant="outline-primary" size="sm" onClick={onDelete}>
+          <Button variant="outline-primary" size="sm" onClick={onDelete} disabled={isDisabledButtons}>
             {intl.formatMessage(messages.deleteButton)}
           </Button>
         </div>
@@ -40,6 +44,7 @@ CourseUpdate.propTypes = {
   updateContent: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  isDisabledButtons: PropTypes.bool.isRequired,
 };
 
 export default CourseUpdate;

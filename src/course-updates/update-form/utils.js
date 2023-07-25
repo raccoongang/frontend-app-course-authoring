@@ -4,18 +4,18 @@ import { REQUEST_TYPES } from '../constants';
 import messages from './messages';
 
 /**
- * Get Update modal settings depending on requestType
+ * Get Update form settings depending on requestType
  * @param {typeof REQUEST_TYPES} requestType - one of REQUEST_TYPES
  * @param {object} courseUpdatesInitialValues - form initial values depending on requestType
  * @returns {{
   *  currentContent: string,
   *  validationSchema: object,
-  *  modalTitle: string,
+  *  formTitle: string,
   *  submitButtonText: string,
   *  contentFieldName: string
  *  }}
  */
-const geUpdateModalSettings = (requestType, courseUpdatesInitialValues, intl) => {
+const geUpdateFormSettings = (requestType, courseUpdatesInitialValues, intl) => {
   const updatesValidationSchema = Yup.object().shape({
     id: Yup.number().required(),
     date: Yup.string().min(1).required(),
@@ -26,7 +26,7 @@ const geUpdateModalSettings = (requestType, courseUpdatesInitialValues, intl) =>
   case REQUEST_TYPES.edit_handouts:
     return {
       currentContent: courseUpdatesInitialValues.data,
-      modalTitle: intl.formatMessage(messages.editHandoutsTitle),
+      formTitle: intl.formatMessage(messages.editHandoutsTitle),
       validationSchema: Yup.object().shape(),
       contentFieldName: 'data',
       submitButtonText: intl.formatMessage(messages.saveButton),
@@ -34,7 +34,7 @@ const geUpdateModalSettings = (requestType, courseUpdatesInitialValues, intl) =>
   case REQUEST_TYPES.add_new_update:
     return {
       currentContent: courseUpdatesInitialValues.content,
-      modalTitle: intl.formatMessage(messages.addNewUpdateTitle),
+      formTitle: intl.formatMessage(messages.addNewUpdateTitle),
       validationSchema: updatesValidationSchema,
       contentFieldName: 'content',
       submitButtonText: intl.formatMessage(messages.postButton),
@@ -42,15 +42,15 @@ const geUpdateModalSettings = (requestType, courseUpdatesInitialValues, intl) =>
   case REQUEST_TYPES.edit_update:
     return {
       currentContent: courseUpdatesInitialValues.content,
-      modalTitle: intl.formatMessage(messages.editUpdateTitle),
+      formTitle: intl.formatMessage(messages.editUpdateTitle),
       validationSchema: updatesValidationSchema,
       contentFieldName: 'content',
       submitButtonText: intl.formatMessage(messages.postButton),
     };
   default:
-    return {};
+    return '';
   }
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export { geUpdateModalSettings };
+export { geUpdateFormSettings };

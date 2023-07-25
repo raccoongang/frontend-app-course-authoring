@@ -8,7 +8,7 @@ import {
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import moment from 'moment/moment';
 
-import UpdateModal from './UpdateModal';
+import UpdateForm from './UpdateForm';
 import messages from './messages';
 import { REQUEST_TYPES } from '../constants';
 import { courseHandoutsMock, courseUpdatesMock } from '../__mocks__';
@@ -51,7 +51,7 @@ const courseUpdatesInitialValues = (requestType) => {
 
 const renderComponent = ({ requestType }) => render(
   <IntlProvider locale="en">
-    <UpdateModal
+    <UpdateForm
       isOpen
       close={closeMock}
       requestType={requestType}
