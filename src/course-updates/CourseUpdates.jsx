@@ -13,7 +13,6 @@ import CourseHandouts from './course-handouts/CourseHandouts';
 import CourseUpdate from './course-update/CourseUpdate';
 import DeleteModal from './delete-modal/DeleteModal';
 import UpdateForm from './update-form/UpdateForm';
-
 import { REQUEST_TYPES } from './constants';
 import messages from './messages';
 import { useCourseUpdates } from './hooks';
