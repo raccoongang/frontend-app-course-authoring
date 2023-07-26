@@ -9,6 +9,7 @@ import { reducer as gradingSettingsReducer } from './grading-settings/data/slice
 import { reducer as scheduleAndDetailsReducer } from './schedule-and-details/data/slice';
 import { reducer as customPagesReducer } from './custom-pages/data/slice';
 import { reducer as liveReducer } from './pages-and-resources/live/data/slice';
+import { reducer as courseTeamReducer } from './course-team/data/slice';
 import { reducer as CourseUpdatesReducer } from './course-updates/data/slice';
 
 export default function initializeStore(preloadedState = undefined) {
@@ -23,6 +24,7 @@ export default function initializeStore(preloadedState = undefined) {
       gradingSettings: gradingSettingsReducer,
       models: modelsReducer,
       live: liveReducer,
+      courseTeam: courseTeamReducer,
       courseUpdates: CourseUpdatesReducer,
     },
     preloadedState,

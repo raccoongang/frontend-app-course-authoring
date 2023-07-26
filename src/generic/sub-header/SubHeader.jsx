@@ -25,13 +25,11 @@ const SubHeader = ({
     )}
   </>
 );
-
 SubHeader.defaultProps = {
   instruction: '',
   description: '',
   headerActions: null,
 };
-
 SubHeader.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
@@ -43,5 +41,4 @@ SubHeader.propTypes = {
   ]),
   headerActions: PropTypes.node,
 };
-
 export default SubHeader;
