@@ -19,7 +19,7 @@ const DefaultSection = ({ intl }) => (
       title={intl.formatMessage(messages.defaultSection_2_Title)}
       actions={(
         <Button iconBefore={AddIcon} variant="outline-success" disabled>
-          {intl.formatMessage(messages.btnReRunText)}
+          {intl.formatMessage(messages.btnAddNewCourseText)}
         </Button>
       )}
     >

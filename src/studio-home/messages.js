@@ -41,9 +41,9 @@ const messages = defineMessages({
     id: 'course-authoring.studio-home.default-section-2.description',
     defaultMessage: 'Your new course is just a click away!',
   },
-  btnReRunText: {
-    id: 'course-authoring.studio-home.btn.re-run.text',
-    defaultMessage: 'Re-run course',
+  btnAddNewCourseText: {
+    id: 'course-authoring.studio-home.btn.add-new-course.text',
+    defaultMessage: 'Create your first course',
   },
   viewLiveBtnText: {
     id: 'course-authoring.studio-home.btn.view-live.text',
