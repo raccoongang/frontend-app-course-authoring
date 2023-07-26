@@ -6,10 +6,26 @@
   margin-bottom: 1.5rem;
   padding: 1rem 1.875rem;
 
+  .update-form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
   .datepicker-field {
     display: flex;
     align-items: center;
     gap: .5rem;
+    position: relative;
+
+    .datepicker-float-labels {
+      position: absolute;
+      padding: 0 3px;
+      top: -10px;
+      left: 5px;
+      z-index: 9999;
+      background-color: $white;
+    }
 
     .datepicker-field-error {
       display: flex;
@@ -25,4 +41,22 @@
       z-index: 99;
     }
   }
+}
+
+.update-form__inner {
+  margin-bottom: 0;
+  margin-top: 1.875rem;
+  padding: 1.5rem 0 0;
+  border-top: .0625rem solid $light-400;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.update-form__inner-first {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
 }

@@ -40,8 +40,10 @@ const useCourseUpdates = ({ courseId }) => {
     if (type === REQUEST_TYPES.edit_update) {
       setCurrentUpdate(courseUpdate);
     }
+    if (type !== REQUEST_TYPES.edit_update) {
+      window.scrollTo(0, 0);
+    }
 
-    window.scrollTo(0, 0);
     openUpdateForm();
   };
 
@@ -60,6 +62,7 @@ const useCourseUpdates = ({ courseId }) => {
 
     const handleSubmit = (handler) => {
       closeUpdateForm();
+      setCurrentUpdate(initialUpdate);
       return handler();
     };
 
@@ -79,6 +82,7 @@ const useCourseUpdates = ({ courseId }) => {
     const { id } = currentUpdate;
 
     dispatch(deleteCourseUpdateQuery(courseId, id));
+    setCurrentUpdate(initialUpdate);
     closeDeleteModal();
   };
 
@@ -92,6 +96,8 @@ const useCourseUpdates = ({ courseId }) => {
     courseUpdates,
     courseHandouts,
     courseUpdatesInitialValues,
+    isMainFormOpen: isUpdateFormOpen && requestType !== REQUEST_TYPES.edit_update,
+    isInnerFormOpen: (id) => isUpdateFormOpen && currentUpdate.id === id && requestType === REQUEST_TYPES.edit_update,
     isUpdateFormOpen,
     isDeleteModalOpen,
     closeUpdateForm,

@@ -8,11 +8,12 @@ import messages from './messages';
 const onEditMock = jest.fn();
 const handoutsContentMock = 'Handouts Content';
 
-const renderComponent = () => render(
+const renderComponent = (props) => render(
   <IntlProvider locale="en">
     <CourseHandouts
       onEdit={onEditMock}
       handoutsContent={handoutsContentMock}
+      {...props}
     />
   </IntlProvider>,
 );
@@ -32,5 +33,12 @@ describe('<CourseHandouts />', () => {
     const editButton = getByRole('button', { name: messages.editButton.defaultMessage });
     fireEvent.click(editButton);
     expect(onEditMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('"Edit" button is disabled when isDisabledButtons is true', () => {
+    const { getByRole } = renderComponent({ isDisabledButtons: true });
+
+    const editButton = getByRole('button', { name: messages.editButton.defaultMessage });
+    expect(editButton).toBeDisabled();
   });
 });

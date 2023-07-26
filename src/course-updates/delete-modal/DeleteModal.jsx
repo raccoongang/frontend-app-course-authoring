@@ -15,7 +15,7 @@ const DeleteModal = ({ isOpen, close, onDeleteSubmit }) => {
   return (
     <AlertModal
       title={intl.formatMessage(messages.deleteModalTitle)}
-      variant="danger"
+      variant="warning"
       isOpen={isOpen}
       onClose={close}
       footerNode={(
@@ -24,7 +24,7 @@ const DeleteModal = ({ isOpen, close, onDeleteSubmit }) => {
             {intl.formatMessage(messages.cancelButton)}
           </Button>
           <Button
-            variant="danger"
+            variant="primary"
             onClick={(e) => {
               e.preventDefault();
               onDeleteSubmit();

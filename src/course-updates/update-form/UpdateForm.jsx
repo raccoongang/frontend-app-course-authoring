@@ -28,20 +28,25 @@ const UpdateForm = ({
   requestType,
   onSubmit,
   courseUpdatesInitialValues,
+  isInnerForm,
+  isFirstUpdate,
 }) => {
   const intl = useIntl();
 
   const {
     currentContent,
-    modalTitle,
+    formTitle,
     validationSchema,
     contentFieldName,
     submitButtonText,
   } = geUpdateFormSettings(requestType, courseUpdatesInitialValues, intl);
 
   return (
-    <div className="update-form">
-      <h3 className="title h3">{modalTitle}</h3>
+    <div className={classNames('update-form', {
+      'update-form__inner': isInnerForm,
+      'update-form__inner-first': isFirstUpdate,
+    })}
+    >
       <Formik
         initialValues={courseUpdatesInitialValues}
         validationSchema={validationSchema}
@@ -52,55 +57,56 @@ const UpdateForm = ({
           values, handleSubmit, isValid, setFieldValue,
         }) => (
           <>
-            <div className="update-modal-body">
-              {(requestType !== REQUEST_TYPES.edit_handouts) && (
-                <Form.Group className="mb-4 datepicker-field datepicker-custom">
-                  <Form.Control.Feedback>{intl.formatMessage(messages.updateFormDate)}</Form.Control.Feedback>
-                  <div className="position-relative">
-                    <Icon
-                      src={CalendarIcon}
-                      className="datepicker-custom-control-icon"
-                      alt={intl.formatMessage(messages.updateFormCalendarAltText)}
-                    />
-                    <DatePicker
-                      name="date"
-                      data-testid="course-updates-datepicker"
-                      selected={convertToDateFromString(values.date)}
-                      dateFormat={DATE_FORMAT}
-                      className={classNames('datepicker-custom-control', {
-                        'datepicker-custom-control_isInvalid': !isValid,
-                      })}
-                      autoComplete="off"
-                      selectsStart
-                      showPopperArrow={false}
-                      onChange={(value) => {
-                        if (!isValidDate(value)) {
-                          return;
-                        }
-                        setFieldValue('date', convertToStringFromDate(value));
-                      }}
-                    />
+            <h3 className="update-form-title">{formTitle}</h3>
+            {(requestType !== REQUEST_TYPES.edit_handouts) && (
+              <Form.Group className="mb-4 datepicker-field datepicker-custom">
+                <Form.Control.Feedback className="datepicker-float-labels">
+                  {intl.formatMessage(messages.updateFormDate)}
+                </Form.Control.Feedback>
+                <div className="position-relative">
+                  <Icon
+                    src={CalendarIcon}
+                    className="datepicker-custom-control-icon"
+                    alt={intl.formatMessage(messages.updateFormCalendarAltText)}
+                  />
+                  <DatePicker
+                    name="date"
+                    data-testid="course-updates-datepicker"
+                    selected={convertToDateFromString(values.date)}
+                    dateFormat={DATE_FORMAT}
+                    className={classNames('datepicker-custom-control', {
+                      'datepicker-custom-control_isInvalid': !isValid,
+                    })}
+                    autoComplete="off"
+                    selectsStart
+                    showPopperArrow={false}
+                    onChange={(value) => {
+                      if (!isValidDate(value)) {
+                        return;
+                      }
+                      setFieldValue('date', convertToStringFromDate(value));
+                    }}
+                  />
+                </div>
+                {!isValid && (
+                  <div className="datepicker-field-error">
+                    <Icon src={ErrorIcon} alt={intl.formatMessage(messages.updateFormErrorAltText)} />
+                    <span className="message-error">{intl.formatMessage(messages.updateFormInValid)}</span>
                   </div>
-                  {!isValid && (
-                    <div className="datepicker-field-error">
-                      <Icon src={ErrorIcon} alt={intl.formatMessage(messages.updateFormErrorAltText)} />
-                      <span className="message-error">{intl.formatMessage(messages.updateFormInValid)}</span>
-                    </div>
-                  )}
-                </Form.Group>
-              )}
-              <Form.Group className="m-0 mb-3">
-                <WysiwygEditor
-                  initialValue={currentContent}
-                  data-testid="course-updates-wisiwyg-editor"
-                  name={contentFieldName}
-                  minHeight={300}
-                  onChange={(value) => {
-                    setFieldValue(contentFieldName, value || '<p>&nbsp;</p>');
-                  }}
-                />
+                )}
               </Form.Group>
-            </div>
+            )}
+            <Form.Group className="m-0 mb-3">
+              <WysiwygEditor
+                initialValue={currentContent}
+                data-testid="course-updates-wisiwyg-editor"
+                name={contentFieldName}
+                minHeight={300}
+                onChange={(value) => {
+                  setFieldValue(contentFieldName, value || '<p>&nbsp;</p>');
+                }}
+              />
+            </Form.Group>
             <ActionRow>
               <Button variant="tertiary" type="button" onClick={close}>
                 {intl.formatMessage(messages.cancelButton)}
@@ -116,12 +122,19 @@ const UpdateForm = ({
   );
 };
 
+UpdateForm.defaultProps = {
+  isInnerForm: false,
+  isFirstUpdate: false,
+};
+
 UpdateForm.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   courseUpdatesInitialValues: PropTypes.object.isRequired,
   close: PropTypes.func.isRequired,
   requestType: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  isInnerForm: PropTypes.bool,
+  isFirstUpdate: PropTypes.bool,
 };
 
 export default UpdateForm;

@@ -56,4 +56,11 @@ describe('<CourseUpdate />', () => {
     fireEvent.click(deleteButton);
     expect(onDeleteMock).toHaveBeenCalledTimes(1);
   });
+
+  it('"Edit" and "Delete" buttons is disabled when isDisabledButtons is true', () => {
+    const { getByRole } = renderComponent({ isDisabledButtons: true });
+
+    expect(getByRole('button', { name: messages.editButton.defaultMessage })).toBeDisabled();
+    expect(getByRole('button', { name: messages.deleteButton.defaultMessage })).toBeDisabled();
+  });
 });

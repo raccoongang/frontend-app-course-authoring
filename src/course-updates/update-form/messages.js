@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   updateFormDate: {
     id: 'course-authoring.course-updates.update-form.date',
-    defaultMessage: 'Date:',
+    defaultMessage: 'Date',
   },
   updateFormInValid: {
     id: 'course-authoring.course-updates.update-form.inValid',
@@ -23,7 +23,7 @@ const messages = defineMessages({
   },
   editUpdateTitle: {
     id: 'course-authoring.course-updates.update-form.edit-update-title',
-    defaultMessage: 'Edit updates',
+    defaultMessage: 'Edit update',
   },
   editHandoutsTitle: {
     id: 'course-authoring.course-updates.update-form.edit-handouts-title',

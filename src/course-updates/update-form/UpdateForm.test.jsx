@@ -61,36 +61,36 @@ const renderComponent = ({ requestType }) => render(
   </IntlProvider>,
 );
 
-describe('<UpdateModal />', () => {
-  it('render Add new update modal correctly', async () => {
+describe('<UpdateForm />', () => {
+  it('render Add new update form correctly', async () => {
     const { getByText, getByDisplayValue, getByRole } = renderComponent({ requestType: REQUEST_TYPES.add_new_update });
     const { date } = courseUpdatesInitialValues(REQUEST_TYPES.add_new_update);
     const formattedDate = moment(date).utc().format('MM/DD/yyyy');
 
     expect(getByText(messages.addNewUpdateTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.updateModalDate.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.updateFormDate.defaultMessage)).toBeInTheDocument();
     expect(getByDisplayValue(formattedDate)).toBeInTheDocument();
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage }));
     expect(getByRole('button', { name: messages.postButton.defaultMessage }));
   });
 
-  it('render Edit update modal correctly', async () => {
+  it('render Edit update form correctly', async () => {
     const { getByText, getByDisplayValue, getByRole } = renderComponent({ requestType: REQUEST_TYPES.edit_update });
 
     expect(getByText(messages.editUpdateTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.updateModalDate.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.updateFormDate.defaultMessage)).toBeInTheDocument();
     expect(getByDisplayValue(formattedDateMock)).toBeInTheDocument();
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage }));
     expect(getByRole('button', { name: messages.postButton.defaultMessage }));
   });
 
-  it('render Edit handouts modal correctly', async () => {
+  it('render Edit handouts form correctly', async () => {
     const {
       getByText, getByRole, queryByTestId, queryByText,
     } = renderComponent({ requestType: REQUEST_TYPES.edit_handouts });
 
     expect(getByText(messages.editHandoutsTitle.defaultMessage)).toBeInTheDocument();
-    expect(queryByText(messages.updateModalDate.defaultMessage)).not.toBeInTheDocument();
+    expect(queryByText(messages.updateFormDate.defaultMessage)).not.toBeInTheDocument();
     expect(queryByTestId('course-updates-datepicker')).not.toBeInTheDocument();
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage }));
     expect(getByRole('button', { name: messages.saveButton.defaultMessage }));
