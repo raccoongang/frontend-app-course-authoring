@@ -3,17 +3,14 @@
 @import "./update-form/UpdateForm";
 
 .updates-container {
+  @include pgn-box-shadow(1, "centered");
+
   display: grid;
   grid-template-columns: 65% 35%;
   border: .0625rem solid $gray-200;
   border-radius: .375rem;
-  box-shadow: 0 1px 1px $gray-200;
   background: $white;
   overflow: hidden;
-}
-
-.updates-info-container {
-  padding: 1.875rem;
 }
 
 .updates-handouts-container {

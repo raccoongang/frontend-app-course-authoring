@@ -77,7 +77,7 @@ const CourseUpdates = ({ courseId }) => {
                     />
                   )}
                   <div className="updates-container">
-                    <div className="updates-info-container">
+                    <div className="p-4.5">
                       {courseUpdates.length ? courseUpdates.map((courseUpdate, index) => (
                         isInnerFormOpen(courseUpdate.id) ? (
                           <UpdateForm
@@ -91,8 +91,8 @@ const CourseUpdates = ({ courseId }) => {
                           />
                         ) : (
                           <CourseUpdate
-                            updateDate={courseUpdate.date}
-                            updateContent={courseUpdate.content}
+                            dateForUpdate={courseUpdate.date}
+                            contentForUpdate={courseUpdate.content}
                             onEdit={() => handleOpenUpdateForm(REQUEST_TYPES.edit_update, courseUpdate)}
                             onDelete={() => handleOpenDeleteUpdateForm(courseUpdate)}
                             isDisabledButtons={isUpdateFormOpen}
@@ -101,7 +101,7 @@ const CourseUpdates = ({ courseId }) => {
                     </div>
                     <div className="updates-handouts-container">
                       <CourseHandouts
-                        handoutsContent={courseHandouts?.data || ''}
+                        contentForHandouts={courseHandouts?.data || ''}
                         onEdit={() => handleOpenUpdateForm(REQUEST_TYPES.edit_handouts)}
                         isDisabledButtons={isUpdateFormOpen}
                       />

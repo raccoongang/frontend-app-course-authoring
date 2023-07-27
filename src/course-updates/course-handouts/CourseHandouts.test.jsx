@@ -12,7 +12,8 @@ const renderComponent = (props) => render(
   <IntlProvider locale="en">
     <CourseHandouts
       onEdit={onEditMock}
-      handoutsContent={handoutsContentMock}
+      contentForHandouts={handoutsContentMock}
+      isDisabledButtons={false}
       {...props}
     />
   </IntlProvider>,

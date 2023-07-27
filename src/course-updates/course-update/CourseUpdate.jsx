@@ -6,8 +6,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import messages from './messages';
 
 const CourseUpdate = ({
-  updateDate,
-  updateContent,
+  dateForUpdate,
+  contentForUpdate,
   onEdit,
   onDelete,
   isDisabledButtons,
@@ -17,7 +17,7 @@ const CourseUpdate = ({
   return (
     <div className="course-update" data-testid="course-update">
       <div className="course-update-header">
-        <span className="course-update-header__date small font-weight-bold">{updateDate}</span>
+        <span className="course-update-header__date small font-weight-bold">{dateForUpdate}</span>
         <div className="course-update-header__action">
           <Button variant="outline-primary" size="sm" onClick={onEdit} disabled={isDisabledButtons}>
             {intl.formatMessage(messages.editButton)}
@@ -27,12 +27,12 @@ const CourseUpdate = ({
           </Button>
         </div>
       </div>
-      {Boolean(updateContent) && (
+      {Boolean(contentForUpdate) && (
         <div
-          className="course-update-content text-gray-800"
+          className="small text-gray-800"
           data-testid="course-update-content"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: updateContent }}
+          dangerouslySetInnerHTML={{ __html: contentForUpdate }}
         />
       )}
     </div>
@@ -40,8 +40,8 @@ const CourseUpdate = ({
 };
 
 CourseUpdate.propTypes = {
-  updateDate: PropTypes.string.isRequired,
-  updateContent: PropTypes.string.isRequired,
+  dateForUpdate: PropTypes.string.isRequired,
+  contentForUpdate: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   isDisabledButtons: PropTypes.bool.isRequired,

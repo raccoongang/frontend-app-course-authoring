@@ -22,7 +22,7 @@ export async function getCourseUpdates(courseId) {
 }
 
 /**
- * Create new course updates.
+ * Create new course update.
  * @param {string} courseId
  * @param {object} courseUpdate
  * @returns {Promise<Object>}
@@ -35,7 +35,7 @@ export async function createUpdate(courseId, courseUpdate) {
 }
 
 /**
- * Edit course updates.
+ * Edit course update.
  * @param {string} courseId
  * @param {object} courseUpdate
  * @returns {Promise<Object>}

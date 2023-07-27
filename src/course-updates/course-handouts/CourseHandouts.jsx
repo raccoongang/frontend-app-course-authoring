@@ -5,7 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from './messages';
 
-const CourseHandouts = ({ handoutsContent, onEdit, isDisabledButtons }) => {
+const CourseHandouts = ({ contentForHandouts, onEdit, isDisabledButtons }) => {
   const intl = useIntl();
 
   return (
@@ -23,16 +23,16 @@ const CourseHandouts = ({ handoutsContent, onEdit, isDisabledButtons }) => {
         </Button>
       </div>
       <div
-        className="course-handouts-content"
+        className="small"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: handoutsContent || '' }}
+        dangerouslySetInnerHTML={{ __html: contentForHandouts || '' }}
       />
     </div>
   );
 };
 
 CourseHandouts.propTypes = {
-  handoutsContent: PropTypes.string.isRequired,
+  contentForHandouts: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
   isDisabledButtons: PropTypes.bool.isRequired,
 };
