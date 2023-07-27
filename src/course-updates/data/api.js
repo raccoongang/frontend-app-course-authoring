@@ -27,7 +27,7 @@ export async function getCourseUpdates(courseId) {
  * @param {object} courseUpdate
  * @returns {Promise<Object>}
  */
-export async function createCourseUpdate(courseId, courseUpdate) {
+export async function createUpdate(courseId, courseUpdate) {
   const { data } = await getAuthenticatedHttpClient()
     .post(getCourseUpdatesApiUrl(courseId), courseUpdate);
 
@@ -40,7 +40,7 @@ export async function createCourseUpdate(courseId, courseUpdate) {
  * @param {object} courseUpdate
  * @returns {Promise<Object>}
  */
-export async function editCourseUpdate(courseId, courseUpdate) {
+export async function editUpdate(courseId, courseUpdate) {
   const { data } = await getAuthenticatedHttpClient()
     .put(updateCourseUpdatesApiUrl(courseId, courseUpdate.id), courseUpdate);
 
@@ -53,7 +53,7 @@ export async function editCourseUpdate(courseId, courseUpdate) {
  * @param {number} updateId
  * @param {string} content
  */
-export async function deleteCourseUpdate(courseId, updateId) {
+export async function deleteUpdate(courseId, updateId) {
   const { data } = await getAuthenticatedHttpClient()
     .delete(updateCourseUpdatesApiUrl(courseId, updateId));
 
@@ -77,7 +77,7 @@ export async function getCourseHandouts(courseId) {
  * @param {object} courseHandouts
  * @returns {Promise<Object>}
  */
-export async function editCourseHandouts(courseId, courseHandouts) {
+export async function editHandouts(courseId, courseHandouts) {
   const { data } = await getAuthenticatedHttpClient()
     .put(getCourseHandoutApiUrl(courseId), courseHandouts);
 

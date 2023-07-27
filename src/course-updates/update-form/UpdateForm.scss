@@ -1,7 +1,8 @@
 .update-form {
+  @include pgn-box-shadow(1, "centered");
+
   border: .0625rem solid $gray-200;
   border-radius: .375rem;
-  box-shadow: 0 1px 1px $gray-200;
   background: $white;
   margin-bottom: 1.5rem;
   padding: 1rem 1.875rem;
@@ -20,10 +21,10 @@
 
     .datepicker-float-labels {
       position: absolute;
-      padding: 0 3px;
-      top: -10px;
-      left: 5px;
-      z-index: 9999;
+      padding: 0 .1875rem;
+      top: -.625rem;
+      left: .3125rem;
+      z-index: 9;
       background-color: $white;
     }
 

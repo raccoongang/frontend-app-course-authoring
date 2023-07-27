@@ -8,6 +8,8 @@ import {
   TinyMceWidget,
 } from '@edx/frontend-lib-content-components';
 
+import { DEFAULT_EMPTY_WYSIWYG_VALUE } from '../constants';
+
 const store = createStore(() => ({}));
 
 export const SUPPORTED_TEXT_EDITORS = {
@@ -29,7 +31,6 @@ export const WysiwygEditor = ({
   initialValue, editorType, onChange, minHeight,
 }) => {
   // default initial string returned onEditorChange if empty input
-  const defaultEmptyTextValue = '<p>&nbsp;</p>';
   const { editorRef, refReady, setEditorRef } = prepareEditorRef();
 
   const isEquivalentCodeExtraSpaces = (first, second) => {
@@ -46,7 +47,7 @@ export const WysiwygEditor = ({
 
   const needToChange = (value) => !isEquivalentCodeQuotes(initialValue, value)
     && !isEquivalentCodeExtraSpaces(initialValue, value)
-    && (initialValue !== defaultEmptyTextValue || value !== '');
+    && (initialValue !== DEFAULT_EMPTY_WYSIWYG_VALUE || value !== '');
 
   const handleUpdate = (value, editor) => {
     // With bookmarks keep the current cursor position at the end of the line

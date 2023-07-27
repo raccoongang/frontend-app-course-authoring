@@ -5,7 +5,7 @@ import { useToggle } from '@edx/paragon';
 
 import { getCourseHandouts, getCourseUpdates } from './data/selectors';
 import { REQUEST_TYPES } from './constants';
-import { FORMATTED_DATE_FORMAT } from '../constants';
+import { COMMA_SEPARATED_DATE_FORMAT } from '../constants';
 import {
   createCourseUpdateQuery,
   deleteCourseUpdateQuery,
@@ -34,13 +34,14 @@ const useCourseUpdates = ({ courseId }) => {
   const handleOpenUpdateForm = (type, courseUpdate) => {
     setRequestType(type);
 
-    if (type === REQUEST_TYPES.add_new_update) {
+    switch (type) {
+    case REQUEST_TYPES.add_new_update:
       setCurrentUpdate(initialUpdate);
-    }
-    if (type === REQUEST_TYPES.edit_update) {
+      break;
+    case REQUEST_TYPES.edit_update:
       setCurrentUpdate(courseUpdate);
-    }
-    if (type !== REQUEST_TYPES.edit_update) {
+      break;
+    default:
       window.scrollTo(0, 0);
     }
 
@@ -56,7 +57,7 @@ const useCourseUpdates = ({ courseId }) => {
   const handleUpdatesSubmit = (data) => {
     const dataToSend = {
       ...data,
-      date: moment(data.date).format(FORMATTED_DATE_FORMAT),
+      date: moment(data.date).format(COMMA_SEPARATED_DATE_FORMAT),
     };
     const { id, date, content } = dataToSend;
 

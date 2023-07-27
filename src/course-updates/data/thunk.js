@@ -1,18 +1,18 @@
 import {
   getCourseUpdates,
   getCourseHandouts,
-  createCourseUpdate,
-  editCourseUpdate,
-  deleteCourseUpdate,
-  editCourseHandouts,
+  createUpdate,
+  editUpdate,
+  deleteUpdate,
+  editHandouts,
 } from './api';
 import {
   fetchCourseUpdatesSuccess,
-  createCourseUpdates,
-  editCourseUpdates,
-  deleteCourseUpdates,
+  createCourseUpdate,
+  editCourseUpdate,
+  deleteCourseUpdate,
   fetchCourseHandoutsSuccess,
-  editCourseHandout,
+  editCourseHandouts,
 } from './slice';
 
 export function fetchCourseUpdatesQuery(courseId) {
@@ -30,8 +30,8 @@ export function fetchCourseUpdatesQuery(courseId) {
 export function createCourseUpdateQuery(courseId, data) {
   return async (dispatch) => {
     try {
-      const courseUpdate = await createCourseUpdate(courseId, data);
-      dispatch(createCourseUpdates(courseUpdate));
+      const courseUpdate = await createUpdate(courseId, data);
+      dispatch(createCourseUpdate(courseUpdate));
       return true;
     } catch (error) {
       return false;
@@ -42,8 +42,8 @@ export function createCourseUpdateQuery(courseId, data) {
 export function editCourseUpdateQuery(courseId, data) {
   return async (dispatch) => {
     try {
-      const courseUpdate = await editCourseUpdate(courseId, data);
-      dispatch(editCourseUpdates(courseUpdate));
+      const courseUpdate = await editUpdate(courseId, data);
+      dispatch(editCourseUpdate(courseUpdate));
       return true;
     } catch (error) {
       return false;
@@ -54,8 +54,8 @@ export function editCourseUpdateQuery(courseId, data) {
 export function deleteCourseUpdateQuery(courseId, updateId) {
   return async (dispatch) => {
     try {
-      const courseUpdates = await deleteCourseUpdate(courseId, updateId);
-      dispatch(deleteCourseUpdates(courseUpdates));
+      const courseUpdates = await deleteUpdate(courseId, updateId);
+      dispatch(deleteCourseUpdate(courseUpdates));
       return true;
     } catch (error) {
       return false;
@@ -78,8 +78,8 @@ export function fetchCourseHandoutsQuery(courseId) {
 export function editCourseHandoutsQuery(courseId, data) {
   return async (dispatch) => {
     try {
-      const courseHandouts = await editCourseHandouts(courseId, data);
-      dispatch(editCourseHandout(courseHandouts));
+      const courseHandouts = await editHandouts(courseId, data);
+      dispatch(editCourseHandouts(courseHandouts));
       return true;
     } catch (error) {
       return false;

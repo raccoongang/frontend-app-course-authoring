@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button,
   Container,
@@ -39,7 +39,7 @@ const CourseUpdates = ({ courseId }) => {
 
   return (
     <Container size="xl" className="m-4">
-      <section className="setting-items mb-4 course-updates-container">
+      <section className="setting-items mb-4 mt-5">
         <Layout
           lg={[{ span: 9 }, { span: 3 }]}
           md={[{ span: 9 }, { span: 3 }]}
@@ -126,4 +126,4 @@ CourseUpdates.propTypes = {
   courseId: PropTypes.string.isRequired,
 };
 
-export default injectIntl(CourseUpdates);
+export default CourseUpdates;

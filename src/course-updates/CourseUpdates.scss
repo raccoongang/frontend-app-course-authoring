@@ -2,10 +2,6 @@
 @import "./course-update/CourseUpdate";
 @import "./update-form/UpdateForm";
 
-course-updates-container {
-  margin-top: 3rem;
-}
-
 .updates-container {
   display: grid;
   grid-template-columns: 65% 35%;

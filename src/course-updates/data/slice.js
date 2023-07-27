@@ -12,10 +12,10 @@ const slice = createSlice({
     fetchCourseUpdatesSuccess: (state, { payload }) => {
       state.courseUpdates = payload;
     },
-    createCourseUpdates: (state, { payload }) => {
+    createCourseUpdate: (state, { payload }) => {
       state.courseUpdates = [payload, ...state.courseUpdates];
     },
-    editCourseUpdates: (state, { payload }) => {
+    editCourseUpdate: (state, { payload }) => {
       state.courseUpdates = state.courseUpdates.map((courseUpdate) => {
         if (courseUpdate.id === payload.id) {
           return payload;
@@ -23,13 +23,13 @@ const slice = createSlice({
         return courseUpdate;
       });
     },
-    deleteCourseUpdates: (state, { payload }) => {
+    deleteCourseUpdate: (state, { payload }) => {
       state.courseUpdates = sortBy(payload, 'id').reverse();
     },
     fetchCourseHandoutsSuccess: (state, { payload }) => {
       state.courseHandouts = payload;
     },
-    editCourseHandout: (state, { payload }) => {
+    editCourseHandouts: (state, { payload }) => {
       state.courseHandouts = {
         ...state.courseHandouts,
         ...payload,
@@ -40,11 +40,11 @@ const slice = createSlice({
 
 export const {
   fetchCourseUpdatesSuccess,
-  createCourseUpdates,
-  editCourseUpdates,
-  deleteCourseUpdates,
+  createCourseUpdate,
+  editCourseUpdate,
+  deleteCourseUpdate,
   fetchCourseHandoutsSuccess,
-  editCourseHandout,
+  editCourseHandouts,
 } = slice.actions;
 
 export const {

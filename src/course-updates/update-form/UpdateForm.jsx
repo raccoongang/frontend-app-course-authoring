@@ -19,7 +19,7 @@ import {
 } from '../../utils';
 import messages from './messages';
 import { REQUEST_TYPES } from '../constants';
-import { DATE_FORMAT } from '../../constants';
+import { DATE_FORMAT, DEFAULT_EMPTY_WYSIWYG_VALUE } from '../../constants';
 import { WysiwygEditor } from '../../generic/WysiwygEditor';
 import { geUpdateFormSettings } from './utils';
 
@@ -103,7 +103,7 @@ const UpdateForm = ({
                 name={contentFieldName}
                 minHeight={300}
                 onChange={(value) => {
-                  setFieldValue(contentFieldName, value || '<p>&nbsp;</p>');
+                  setFieldValue(contentFieldName, value || DEFAULT_EMPTY_WYSIWYG_VALUE);
                 }}
               />
             </Form.Group>
