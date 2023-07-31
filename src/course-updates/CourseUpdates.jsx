@@ -33,7 +33,7 @@ const CourseUpdates = ({ courseId }) => {
     closeDeleteModal,
     handleUpdatesSubmit,
     handleOpenUpdateForm,
-    handleDeleteUpdateSubmit,
+    handleOpenDeleteForm,
     handleOpenDeleteUpdateForm,
   } = useCourseUpdates({ courseId });
 
@@ -109,7 +109,7 @@ const CourseUpdates = ({ courseId }) => {
                     <DeleteModal
                       isOpen={isDeleteModalOpen}
                       close={closeDeleteModal}
-                      onDeleteSubmit={handleDeleteUpdateSubmit}
+                      onDeleteSubmit={handleOpenDeleteForm}
                     />
                   </div>
                 </section>

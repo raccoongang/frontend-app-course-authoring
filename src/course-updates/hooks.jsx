@@ -48,7 +48,7 @@ const useCourseUpdates = ({ courseId }) => {
     openUpdateForm();
   };
 
-  const handleOpenDeleteUpdateForm = (courseUpdate) => {
+  const handleOpenDeleteForm = (courseUpdate) => {
     setRequestType(REQUEST_TYPES.delete_update);
     setCurrentUpdate(courseUpdate);
     openDeleteModal();
@@ -106,7 +106,7 @@ const useCourseUpdates = ({ courseId }) => {
     handleUpdatesSubmit,
     handleOpenUpdateForm,
     handleDeleteUpdateSubmit,
-    handleOpenDeleteUpdateForm,
+    handleOpenDeleteForm,
   };
 };
 
