@@ -7,16 +7,17 @@ import messages from './messages';
 
 const onEditMock = jest.fn();
 const onDeleteMock = jest.fn();
-const updateDate = 'May 1, 2023';
-const updateContent = 'Update Content';
+const dateForUpdateMock = 'May 1, 2023';
+const contentForUpdateMock = 'Update Content';
 
 const renderComponent = (props) => render(
   <IntlProvider locale="en">
     <CourseUpdate
-      updateDate={updateDate}
-      updateContent={updateContent}
+      dateForUpdate={dateForUpdateMock}
+      contentForUpdate={contentForUpdateMock}
       onEdit={onEditMock}
       onDelete={onDeleteMock}
+      isDisabledButtons={false}
       {...props}
     />
   </IntlProvider>,
@@ -26,16 +27,16 @@ describe('<CourseUpdate />', () => {
   it('render CourseUpdate component correctly', () => {
     const { getByText, getByRole } = renderComponent();
 
-    expect(getByText(updateDate)).toBeInTheDocument();
-    expect(getByText(updateContent)).toBeInTheDocument();
+    expect(getByText(dateForUpdateMock)).toBeInTheDocument();
+    expect(getByText(dateForUpdateMock)).toBeInTheDocument();
     expect(getByRole('button', { name: messages.editButton.defaultMessage })).toBeInTheDocument();
     expect(getByRole('button', { name: messages.deleteButton.defaultMessage })).toBeInTheDocument();
   });
 
   it('render CourseUpdate component without content correctly', () => {
-    const { getByText, queryByTestId, getByRole } = renderComponent({ updateContent: '' });
+    const { getByText, queryByTestId, getByRole } = renderComponent({ contentForUpdate: '' });
 
-    expect(getByText(updateDate)).toBeInTheDocument();
+    expect(getByText(dateForUpdateMock)).toBeInTheDocument();
     expect(queryByTestId('course-update-content')).not.toBeInTheDocument();
     expect(getByRole('button', { name: messages.editButton.defaultMessage })).toBeInTheDocument();
     expect(getByRole('button', { name: messages.deleteButton.defaultMessage })).toBeInTheDocument();
