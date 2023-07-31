@@ -73,10 +73,10 @@ describe('<TabsSection />', () => {
   });
   it('should render default sections when courses are empty', () => {
     studioHomeMock.courses = [];
-    const { getByText } = render(<RootWrapper />);
+    const { getByText, getByRole } = render(<RootWrapper />);
     expect(getByText(messages.defaultSection_1_Title.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.defaultSection_1_Description.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.defaultSection_2_Title.defaultMessage)).toBeInTheDocument();
+    expect(getByRole('button', { name: messages.defaultSection_2_Title.defaultMessage })).toBeInTheDocument();
     expect(getByText(messages.defaultSection_2_Description.defaultMessage)).toBeInTheDocument();
   });
 });

@@ -6,19 +6,19 @@ import { initializeMockApp } from '@edx/frontend-platform';
 
 import messages from '../messages';
 import initializeStore from '../../store';
-import SettingsSection from '.';
+import OrganizationSection from '.';
 
 let store;
 
 const RootWrapper = () => (
   <AppProvider store={store}>
     <IntlProvider locale="en" messages={{}}>
-      <SettingsSection intl={{ formatMessage: jest.fn() }} />
+      <OrganizationSection intl={{ formatMessage: jest.fn() }} />
     </IntlProvider>
   </AppProvider>
 );
 
-describe('<SettingsSection />', () => {
+describe('<OrganizationSection />', () => {
   beforeEach(() => {
     initializeMockApp({
       authenticatedUser: {

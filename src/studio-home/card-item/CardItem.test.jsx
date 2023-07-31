@@ -48,8 +48,8 @@ describe('<CardItem />', () => {
     const { getByText } = render(<RootWrapper />);
     const courseTitleLink = getByText('Artificial intelligence');
     expect(courseTitleLink).toHaveAttribute('href', `${getConfig().STUDIO_BASE_URL}/artificial-intelligence`);
-    const rerunCourseLink = getByText(messages.btnReRunText.defaultMessage);
-    expect(rerunCourseLink).toHaveAttribute('href', '/artificial-intelligence-rerun');
+    const btnReRunCourse = getByText(messages.btnReRunText.defaultMessage);
+    expect(btnReRunCourse).toHaveAttribute('href', '/artificial-intelligence-rerun');
     const viewLiveLink = getByText(messages.viewLiveBtnText.defaultMessage);
     expect(viewLiveLink).toHaveAttribute('href', '/lms-artificial-intelligence');
   });

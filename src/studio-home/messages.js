@@ -45,6 +45,10 @@ const messages = defineMessages({
     id: 'course-authoring.studio-home.btn.add-new-course.text',
     defaultMessage: 'Create your first course',
   },
+  btnReRunText: {
+    id: 'course-authoring.studio-home.btn.re-run.text',
+    defaultMessage: 'Re-run course',
+  },
   viewLiveBtnText: {
     id: 'course-authoring.studio-home.btn.view-live.text',
     defaultMessage: 'View live',

@@ -698,5 +698,6 @@
   "course-authoring.studio-home.organization.label": "Show all courses in organization:",
   "course-authoring.studio-home.organization.btn.submit.text": "Submit",
   "course-authoring.studio-home.sidebar.about.title": "New to edX Studio?",
-  "course-authoring.studio-home.sidebar.about.description": "Click Help in the upper-rgiht corner to get more information about the Studio page you are viewing. You can also use the links at the bottom of the page to access our continually updated documentation and other Studio resources."
+  "course-authoring.studio-home.sidebar.about.description": "Click Help in the upper-rgiht corner to get more information about the Studio page you are viewing. You can also use the links at the bottom of the page to access our continually updated documentation and other Studio resources.",
+  "course-authoring.studio-home.btn.re-run.text": "Re-run course"
 }

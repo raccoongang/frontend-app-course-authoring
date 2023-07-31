@@ -5,7 +5,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import messages from '../messages';
 
 // TODO: This component will be finalized in the task (https://youtrack.raccoongang.com/issue/2U-47).
-const SettingsSection = ({ intl }) => {
+const OrganizationSection = ({ intl }) => {
   const [value, setValue] = useState('');
 
   const handleSettingsChange = (e) => {
@@ -35,8 +35,8 @@ const SettingsSection = ({ intl }) => {
   );
 };
 
-SettingsSection.propTypes = {
+OrganizationSection.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(SettingsSection);
+export default injectIntl(OrganizationSection);

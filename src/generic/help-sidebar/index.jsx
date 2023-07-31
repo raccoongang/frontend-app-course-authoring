@@ -59,7 +59,6 @@ const HelpSidebar = ({
   return (
     <aside className={classNames('help-sidebar', className)}>
       <div className="help-sidebar-about">{children}</div>
-      <hr />
       {studioHomeDestination.includes(pathname) && (
         <HelpSidebarLink
           as="span"
@@ -103,9 +102,9 @@ const HelpSidebar = ({
                     title={intl.formatMessage(messages.sidebarLinkToProctoredExamSettings)}
                   />
                 )}
-                {shouldShowLink(groupConfigurationsDestination.href) && (
+                {shouldShowLink(groupConfigurationsDestination) && (
                   <HelpSidebarLink
-                    pathToPage={groupConfigurationsDestination.href}
+                    pathToPage={groupConfigurationsDestination}
                     title={intl.formatMessage(messages.sidebarLinkToGroupConfigurations)}
                   />
                 )}
@@ -115,7 +114,7 @@ const HelpSidebar = ({
                     title={intl.formatMessage(messages.sidebarLinkToAdvancedSettings)}
                   />
                 )}
-                {shouldShowLink(proctoredExamSettingsDestination.href) && (
+                {shouldShowLink(proctoredExamSettingsDestination) && shouldShowLink(gradingDestination) && (
                   <HelpSidebarLink
                     pathToPage={proctoredExamSettingsDestination}
                     title={intl.formatMessage(messages.sidebarLinkToProctoredExamSettings)}

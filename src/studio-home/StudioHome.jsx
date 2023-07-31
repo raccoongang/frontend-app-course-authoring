@@ -10,7 +10,7 @@ import Header from '../studio-header/Header';
 import SubHeader from '../generic/sub-header/SubHeader';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
 import TabsSection from './tabs-section';
-import SettingsSection from './settings-section';
+import OrganizationSection from './organization-section';
 import messages from './messages';
 import { getLoadingStatus, getStudioHomeData } from './data/selectors';
 import { fetchStudioHomeData } from './data/thunks';
@@ -67,7 +67,7 @@ const StudioHome = ({ intl }) => {
           >
             <Layout.Element>
               <section>
-                <SettingsSection />
+                <OrganizationSection />
                 <TabsSection tabsData={studioHomeItems} />
               </section>
             </Layout.Element>
