@@ -39,7 +39,7 @@
     }
 
     .react-datepicker-popper {
-      z-index: 99;
+      z-index: $zindex-dropdown;
     }
   }
 }
