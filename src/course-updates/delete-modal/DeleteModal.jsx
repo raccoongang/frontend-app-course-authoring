@@ -24,7 +24,6 @@ const DeleteModal = ({ isOpen, close, onDeleteSubmit }) => {
             {intl.formatMessage(messages.cancelButton)}
           </Button>
           <Button
-            variant="primary"
             onClick={(e) => {
               e.preventDefault();
               onDeleteSubmit();

@@ -17,6 +17,7 @@ import {
   convertToDateFromString,
   isValidDate,
 } from '../../utils';
+
 import messages from './messages';
 import { REQUEST_TYPES } from '../constants';
 import { DATE_FORMAT, DEFAULT_EMPTY_WYSIWYG_VALUE } from '../../constants';
@@ -111,7 +112,7 @@ const UpdateForm = ({
               <Button variant="tertiary" type="button" onClick={close}>
                 {intl.formatMessage(messages.cancelButton)}
               </Button>
-              <Button variant="primary" onClick={handleSubmit} type="submit">
+              <Button onClick={handleSubmit} type="submit">
                 {submitButtonText}
               </Button>
             </ActionRow>

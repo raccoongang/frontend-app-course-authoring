@@ -20,7 +20,7 @@ const renderComponent = (props) => render(
 );
 
 describe('<DeleteModal />', () => {
-  it('renders DeleteModal component correctly', () => {
+  it('render DeleteModal component correctly', () => {
     const { getByText, getByRole } = renderComponent();
 
     expect(getByText(messages.deleteModalTitle.defaultMessage)).toBeInTheDocument();

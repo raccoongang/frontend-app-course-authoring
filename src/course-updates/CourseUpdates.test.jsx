@@ -6,9 +6,9 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
+import initializeStore from '../store';
 import CourseUpdates from './CourseUpdates';
 import messages from './messages';
-import initializeStore from '../store';
 import { getCourseUpdatesApiUrl, getCourseHandoutApiUrl } from './data/api';
 import { courseUpdatesMock, courseHandoutsMock } from './__mocks__';
 
@@ -24,7 +24,6 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-// Mock the tinymce lib
 jest.mock('@tinymce/tinymce-react', () => {
   const originalModule = jest.requireActual('@tinymce/tinymce-react');
   return {
@@ -34,7 +33,6 @@ jest.mock('@tinymce/tinymce-react', () => {
   };
 });
 
-// Mock the TinyMceWidget from frontend-lib-content-components
 jest.mock('@edx/frontend-lib-content-components', () => ({
   TinyMceWidget: () => <div>Widget</div>,
   prepareEditorRef: jest.fn(() => ({

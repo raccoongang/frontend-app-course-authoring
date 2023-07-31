@@ -3,9 +3,9 @@ import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
 import { useToggle } from '@edx/paragon';
 
+import { COMMA_SEPARATED_DATE_FORMAT } from '../constants';
 import { getCourseHandouts, getCourseUpdates } from './data/selectors';
 import { REQUEST_TYPES } from './constants';
-import { COMMA_SEPARATED_DATE_FORMAT } from '../constants';
 import {
   createCourseUpdateQuery,
   deleteCourseUpdateQuery,
@@ -61,7 +61,7 @@ const useCourseUpdates = ({ courseId }) => {
     };
     const { id, date, content } = dataToSend;
 
-    const handleSubmit = (handler) => {
+    const handleQuerySubmit = (handler) => {
       closeUpdateForm();
       setCurrentUpdate(initialUpdate);
       return handler();
@@ -69,11 +69,11 @@ const useCourseUpdates = ({ courseId }) => {
 
     switch (requestType) {
     case REQUEST_TYPES.add_new_update:
-      return handleSubmit(dispatch(createCourseUpdateQuery(courseId, { date, content })));
+      return handleQuerySubmit(dispatch(createCourseUpdateQuery(courseId, { date, content })));
     case REQUEST_TYPES.edit_update:
-      return handleSubmit(dispatch(editCourseUpdateQuery(courseId, { id, date, content })));
+      return handleQuerySubmit(dispatch(editCourseUpdateQuery(courseId, { id, date, content })));
     case REQUEST_TYPES.edit_handouts:
-      return handleSubmit(dispatch(editCourseHandoutsQuery(courseId, { ...data, data: data?.data || '' })));
+      return handleQuerySubmit(dispatch(editCourseHandoutsQuery(courseId, { ...data, data: data?.data || '' })));
     default:
       return true;
     }

@@ -8,10 +8,10 @@ import {
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import moment from 'moment/moment';
 
-import UpdateForm from './UpdateForm';
-import messages from './messages';
 import { REQUEST_TYPES } from '../constants';
 import { courseHandoutsMock, courseUpdatesMock } from '../__mocks__';
+import UpdateForm from './UpdateForm';
+import messages from './messages';
 
 const closeMock = jest.fn();
 const onSubmitMock = jest.fn();
@@ -19,7 +19,6 @@ const addNewUpdateMock = { id: 0, date: moment().utc().toDate(), content: 'Some 
 const formattedDateMock = '07/11/2023';
 const contentMock = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
-// Mock the tinymce lib
 jest.mock('@tinymce/tinymce-react', () => {
   const originalModule = jest.requireActual('@tinymce/tinymce-react');
   return {
@@ -29,7 +28,6 @@ jest.mock('@tinymce/tinymce-react', () => {
   };
 });
 
-// Mock the TinyMceWidget from frontend-lib-content-components
 jest.mock('@edx/frontend-lib-content-components', () => ({
   TinyMceWidget: () => <div>Widget</div>,
   prepareEditorRef: jest.fn(() => ({

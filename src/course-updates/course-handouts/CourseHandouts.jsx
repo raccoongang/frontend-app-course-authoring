@@ -13,7 +13,7 @@ const CourseHandouts = ({ contentForHandouts, onEdit, isDisabledButtons }) => {
       <div className="course-handouts-header">
         <h2 className="course-handouts-header__title lead">{intl.formatMessage(messages.handoutsTitle)}</h2>
         <Button
-          className="course-handouts__btn"
+          className="course-handouts-header__btn"
           variant="outline-primary"
           size="sm"
           onClick={onEdit}
