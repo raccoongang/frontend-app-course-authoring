@@ -12,6 +12,7 @@ import {
   updateSuccessDate,
   updateError,
   updateIsErrorModalOpen,
+  reset,
 } from './slice';
 import { setExportCookie } from '../utils';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './constants';
@@ -19,6 +20,7 @@ import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './constants';
 export function startExportingCourse(courseId) {
   return async (dispatch) => {
     try {
+      dispatch(reset());
       dispatch(updateExportTriggered(true));
       const exportData = await startCourseExporting(courseId);
       dispatch(updateCurrentStage(exportData.exportStatus));

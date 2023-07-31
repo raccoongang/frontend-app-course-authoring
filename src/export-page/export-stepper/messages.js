@@ -11,7 +11,7 @@ const messages = defineMessages({
   },
   stepperCompressingTitle: {
     id: 'course-authoring.export.stepper.title.compressing',
-    defaultMessage: 'Comressing',
+    defaultMessage: 'Compressing',
   },
   stepperSuccessTitle: {
     id: 'course-authoring.export.stepper.title.success',
@@ -23,7 +23,7 @@ const messages = defineMessages({
   },
   stepperExportingDescription: {
     id: 'course-authoring.export.stepper.description.exporting',
-    defaultMessage: 'Creating the export data files (You can now leave this page safely, but avoid making drastic changes to content until this export is complete',
+    defaultMessage: 'Creating the export data files (You can now leave this page safely, but avoid making drastic changes to content until this export is complete)',
   },
   stepperCompressingDescription: {
     id: 'course-authoring.export.stepper.description.compressing',
@@ -35,11 +35,11 @@ const messages = defineMessages({
   },
   downloadCourseButtonTitle: {
     id: 'course-authoring.export.stepper.download.button.title',
-    defaultMessage: 'Download Exported Course',
+    defaultMessage: 'Download exported course',
   },
   stepperHeaderTitle: {
     id: 'course-authoring.export.stepper.header.title',
-    defaultMessage: 'Course Export Status',
+    defaultMessage: 'Course export status',
   },
 });
 

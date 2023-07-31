@@ -1,16 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  exportTriggered: false,
+  currentStage: 0,
+  error: { msg: null, unitUrl: null },
+  downloadPath: null,
+  successDate: null,
+  isErrorModalOpen: false,
+};
+
 const slice = createSlice({
   name: 'exportPage',
-  initialState: {
-    exportTriggered: false,
-    currentStage: 0,
-    error: { msg: null, unitUrl: null },
-    downloadPath: null,
-    successDate: null,
-    isErrorModalOpen: false,
-  },
+  initialState,
   reducers: {
     updateExportTriggered: (state, { payload }) => {
       state.exportTriggered = payload;
@@ -30,6 +32,7 @@ const slice = createSlice({
     updateIsErrorModalOpen: (state, { payload }) => {
       state.isErrorModalOpen = payload;
     },
+    reset: () => initialState,
   },
 });
 
@@ -40,6 +43,7 @@ export const {
   updateSuccessDate,
   updateError,
   updateIsErrorModalOpen,
+  reset,
 } = slice.actions;
 
 export const {

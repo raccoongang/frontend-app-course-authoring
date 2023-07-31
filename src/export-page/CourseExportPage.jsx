@@ -53,7 +53,7 @@ const CourseExportPage = ({ intl, courseId }) => {
               <p>{intl.formatMessage(messages.description2)}</p>
               <Card>
                 <Card.Header
-                  className="h3 px-3 text-black"
+                  className="h3 px-3 text-black mb-4"
                   title={intl.formatMessage(messages.titleUnderButton)}
                   size="m"
                 />
@@ -64,7 +64,7 @@ const CourseExportPage = ({ intl, courseId }) => {
                         variant="primary"
                         size="lg"
                         block
-                        className="mb-4 mt-2"
+                        className="mb-4"
                         onClick={() => dispatch(startExportingCourse(courseId))}
                         iconBefore={ArrowCircleDown}
                       >

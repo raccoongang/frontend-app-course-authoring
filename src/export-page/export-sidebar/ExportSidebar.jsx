@@ -5,6 +5,7 @@ import {
 } from '@edx/frontend-platform/i18n';
 import PropTypes from 'prop-types';
 import { Button } from '@edx/paragon';
+import { getConfig } from '@edx/frontend-platform';
 import HelpSidebar from '../../generic/help-sidebar';
 import messages from './messages';
 
@@ -31,7 +32,7 @@ const ExportSidebar = ({ intl, courseId }) => (
     <h4 className="help-sidebar-about-title">{intl.formatMessage(messages.openDownloadFile)}</h4>
     <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.openDownloadFileDescription)}</p>
     <hr />
-    <Button variant="outline-primary">{intl.formatMessage(messages.learnMoreButtonTitle)}</Button>
+    <Button href={getConfig().EXPORT_LEARN_MORE_URL} target="_blank" variant="outline-primary">{intl.formatMessage(messages.learnMoreButtonTitle)}</Button>
   </HelpSidebar>
 );
 

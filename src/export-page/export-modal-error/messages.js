@@ -15,7 +15,7 @@ const messages = defineMessages({
   },
   errorCancelButtonUnit: {
     id: 'course-authoring.export.modal.error.button.cancel.unit',
-    defaultMessage: 'Return to Export',
+    defaultMessage: 'Return to export',
   },
   errorCancelButtonNotUnit: {
     id: 'course-authoring.export.modal.error.button.cancel.not.unit',

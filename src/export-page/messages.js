@@ -19,11 +19,11 @@ const messages = defineMessages({
   },
   titleUnderButton: {
     id: 'course-authoring.export.title-under-button',
-    defaultMessage: 'Export My Course Content',
+    defaultMessage: 'Export my course content',
   },
   buttonTitle: {
     id: 'course-authoring.export.button.title',
-    defaultMessage: 'Export Course Content',
+    defaultMessage: 'Export course content',
   },
   errorTitle: {
     id: 'course-authoring.export.modal.error.title',

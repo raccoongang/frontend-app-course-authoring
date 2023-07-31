@@ -40,6 +40,25 @@ const ExportStepper = ({ intl, courseId }) => {
   if (formattedSuccessDate) {
     successTitle += formattedSuccessDate;
   }
+  const steps = [
+    {
+      title: intl.formatMessage(messages.stepperPreparingTitle),
+      description: intl.formatMessage(messages.stepperPreparingDescription),
+      key: EXPORT_STAGES.PREPARING,
+    }, {
+      title: intl.formatMessage(messages.stepperExportingTitle),
+      description: intl.formatMessage(messages.stepperExportingDescription),
+      key: EXPORT_STAGES.EXPORTING,
+    }, {
+      title: intl.formatMessage(messages.stepperCompressingTitle),
+      description: intl.formatMessage(messages.stepperCompressingDescription),
+      key: EXPORT_STAGES.COMPRESSING,
+    }, {
+      title: successTitle,
+      description: intl.formatMessage(messages.stepperSuccessDescription),
+      key: EXPORT_STAGES.SUCCESS,
+    },
+  ];
 
   return (
     <div>
@@ -47,27 +66,12 @@ const ExportStepper = ({ intl, courseId }) => {
       <hr />
       <CourseStepper
         courseId={courseId}
-        steps={[{
-          title: intl.formatMessage(messages.stepperPreparingTitle),
-          description: intl.formatMessage(messages.stepperPreparingDescription),
-          key: EXPORT_STAGES.PREPARING,
-        }, {
-          title: intl.formatMessage(messages.stepperExportingTitle),
-          description: intl.formatMessage(messages.stepperExportingDescription),
-          key: EXPORT_STAGES.EXPORTING,
-        }, {
-          title: intl.formatMessage(messages.stepperCompressingTitle),
-          description: intl.formatMessage(messages.stepperCompressingDescription),
-          key: EXPORT_STAGES.COMPRESSING,
-        }, {
-          title: successTitle,
-          description: intl.formatMessage(messages.stepperSuccessDescription),
-          key: EXPORT_STAGES.SUCCESS,
-        }]}
+        steps={steps}
         activeKey={currentStage}
         errorMessage={errorMessage}
+        hasError={!!errorMessage}
       />
-      {downloadPath && <Button href={`${getConfig().STUDIO_BASE_URL}${downloadPath}`}>{intl.formatMessage(messages.downloadCourseButtonTitle)}</Button>}
+      {downloadPath && currentStage === EXPORT_STAGES.SUCCESS && <Button href={`${getConfig().STUDIO_BASE_URL}${downloadPath}`}>{intl.formatMessage(messages.downloadCourseButtonTitle)}</Button>}
     </div>
   );
 };

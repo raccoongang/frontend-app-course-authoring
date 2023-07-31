@@ -7,19 +7,19 @@ const messages = defineMessages({
   },
   exportedDataItem1: {
     id: 'course-authoring.export.footer.exportedData.item.1',
-    defaultMessage: 'Values from Advanced Settings, including MATLAB API keys and LTI passports',
+    defaultMessage: 'Values from Advanced settings, including MATLAB API keys and LTI passports',
   },
   exportedDataItem2: {
     id: 'course-authoring.export.footer.exportedData.item.2',
-    defaultMessage: 'Course Content (all Sections, Sub-sections, and Units)',
+    defaultMessage: 'Course content (all sections, sub-sections, and units)',
   },
   exportedDataItem3: {
     id: 'course-authoring.export.footer.exportedData.item.3',
-    defaultMessage: 'Course Structure',
+    defaultMessage: 'Course structure',
   },
   exportedDataItem4: {
     id: 'course-authoring.export.footer.exportedData.item.4',
-    defaultMessage: 'Individual Problems',
+    defaultMessage: 'Individual problems',
   },
   exportedDataItem5: {
     id: 'course-authoring.export.footer.exportedData.item.5',
@@ -27,11 +27,11 @@ const messages = defineMessages({
   },
   exportedDataItem6: {
     id: 'course-authoring.export.footer.exportedData.item.6',
-    defaultMessage: 'Course Assets',
+    defaultMessage: 'Course assets',
   },
   exportedDataItem7: {
     id: 'course-authoring.export.footer.exportedData.item.7',
-    defaultMessage: 'Course Settings',
+    defaultMessage: 'Course settings',
   },
   notExportedDataTitle: {
     id: 'course-authoring.export.footer.notExportedData.title',
@@ -39,15 +39,15 @@ const messages = defineMessages({
   },
   notExportedDataItem1: {
     id: 'course-authoring.export.footer.notExportedData.item.1',
-    defaultMessage: 'User Data',
+    defaultMessage: 'User data',
   },
   notExportedDataItem2: {
     id: 'course-authoring.export.footer.notExportedData.item.2',
-    defaultMessage: 'Course Team Data',
+    defaultMessage: 'Course team data',
   },
   notExportedDataItem3: {
     id: 'course-authoring.export.footer.notExportedData.item.3',
-    defaultMessage: 'Forum/discussion Data',
+    defaultMessage: 'Forum/discussion data',
   },
   notExportedDataItem4: {
     id: 'course-authoring.export.footer.notExportedData.item.4',
