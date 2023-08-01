@@ -18,7 +18,7 @@ const messages = defineMessages({
     defaultMessage: 'Reindex current course',
   },
   expandAllButton: {
-    id: 'course-authoring.course-outline.header-navigations.button.new-section',
+    id: 'course-authoring.course-outline.header-navigations.button.expand-all',
     defaultMessage: 'Expand all',
   },
   collapseAllButton: {
