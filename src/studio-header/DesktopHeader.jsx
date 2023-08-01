@@ -97,7 +97,7 @@ class DesktopHeader extends React.Component {
           <div className="nav-container position-relative d-flex align-items-center">
             {logoDestination === null ? <Logo className="logo" src={logo} alt={logoAltText} /> : <LinkedLogo className="logo" {...logoProps} />}
             {/* This lockup HTML was copied from edx/frontend-app-learning/src/course-header/Header.jsx. */}
-            { !isHomePage && this.props.courseLockUp }
+            {!isHomePage && this.props.courseLockUp}
             {!isHomePage && (
               <nav
                 aria-label={intl.formatMessage(messages['header.label.main.nav'])}

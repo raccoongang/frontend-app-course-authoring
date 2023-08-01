@@ -9,13 +9,13 @@ const DefaultSection = ({ intl }) => (
   <Card variant="muted">
     <Card.Section
       title={intl.formatMessage(messages.defaultSection_1_Title)}
-      className="default-section-description"
+      className="small"
     >
       {intl.formatMessage(messages.defaultSection_1_Description)}
     </Card.Section>
     <Card.Divider />
     <Card.Section
-      className="default-section-description"
+      className="small"
       title={intl.formatMessage(messages.defaultSection_2_Title)}
       actions={(
         <Button iconBefore={AddIcon} variant="outline-success" disabled>

@@ -39,22 +39,22 @@ describe('<TabsSection />', () => {
   });
   it('should render specific course details', () => {
     const { getByText } = render(<RootWrapper />);
-    expect(getByText(/Managing Risk in the Information Age/i)).toBeVisible();
-    expect(getByText(/HarvardX/i)).toBeVisible();
+    expect(getByText(studioHomeMock.courses[0].displayName)).toBeVisible();
+    expect(getByText(`${studioHomeMock.courses[0].org} / ${studioHomeMock.courses[0].number}`)).toBeVisible();
   });
   it('should switch to Libraries tab and render specific library details', () => {
     const { getByText } = render(<RootWrapper />);
     const librariesTab = getByText(messages.librariesTabTitle.defaultMessage);
     fireEvent.click(librariesTab);
-    expect(getByText(/MBA/i)).toBeVisible();
-    expect(getByText(/Cambridge/i)).toBeVisible();
+    expect(getByText(studioHomeMock.libraries[0].displayName)).toBeVisible();
+    expect(getByText(`${studioHomeMock.libraries[0].org} / ${studioHomeMock.libraries[0].number}`)).toBeVisible();
   });
   it('should switch to Archived tab and render specific archived course details', () => {
     const { getByText } = render(<RootWrapper />);
     const archivedTab = getByText(messages.archivedTabTitle.defaultMessage);
     fireEvent.click(archivedTab);
-    expect(getByText(/Machine Learning/i)).toBeVisible();
-    expect(getByText(/LSE/i)).toBeVisible();
+    expect(getByText(studioHomeMock.archivedCourses[0].displayName)).toBeVisible();
+    expect(getByText(`${studioHomeMock.archivedCourses[0].org} / ${studioHomeMock.archivedCourses[0].number}`)).toBeVisible();
   });
   it('should hide Libraries tab when libraries are disabled', () => {
     studioHomeMock.librariesEnabled = false;

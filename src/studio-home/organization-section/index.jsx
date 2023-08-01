@@ -13,16 +13,16 @@ const OrganizationSection = ({ intl }) => {
   };
 
   return (
-    <div className="settings-section">
-      <h3 className="settings-section-title">
+    <div className="organization-section">
+      <h3 className="organization-section-title">
         {intl.formatMessage(messages.organizationTitle)}
       </h3>
-      <Form.Group className="settings-section-form d-flex align-items-center">
-        <FormLabel className="settings-section-form-label">
+      <Form.Group className="organization-section-form d-flex align-items-center">
+        <FormLabel className="organization-section-form-label">
           {intl.formatMessage(messages.organizationLabel)}
         </FormLabel>
         <Form.Control
-          className="settings-section-form-control"
+          className="organization-section-form-control"
           onChange={handleSettingsChange}
           value={value}
           placeholder="Label"

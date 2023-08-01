@@ -8,31 +8,35 @@ import messages from '../messages';
 
 const CardItem = ({
   intl, displayName, lmsLink, rerunLink, org, number, isLibraries, url,
-}) => (
-  <Card className="card-item">
-    <Card.Header
-      title={(
-        <Hyperlink
-          className="card-item-title"
-          destination={`${getConfig().STUDIO_BASE_URL}${url}`}
-        >
-          {displayName}
-        </Hyperlink>
-      )}
-      subtitle={`${org} / ${number}`}
-      actions={!isLibraries && (
-        <ActionRow>
-          <Hyperlink className="card-item-link-btn" destination={rerunLink}>
-            {intl.formatMessage(messages.btnReRunText)}
+}) => {
+  const courseUrl = new URL(url, getConfig().STUDIO_BASE_URL);
+
+  return (
+    <Card className="card-item">
+      <Card.Header
+        title={(
+          <Hyperlink
+            className="card-item-title"
+            destination={courseUrl.toString()}
+          >
+            {displayName}
           </Hyperlink>
-          <Hyperlink className="card-item-link-btn ml-3" destination={lmsLink}>
-            {intl.formatMessage(messages.viewLiveBtnText)}
-          </Hyperlink>
-        </ActionRow>
-      )}
-    />
-  </Card>
-);
+        )}
+        subtitle={`${org} / ${number}`}
+        actions={!isLibraries && (
+          <ActionRow>
+            <Hyperlink className="small" destination={rerunLink}>
+              {intl.formatMessage(messages.btnReRunText)}
+            </Hyperlink>
+            <Hyperlink className="small ml-3" destination={lmsLink}>
+              {intl.formatMessage(messages.viewLiveBtnText)}
+            </Hyperlink>
+          </ActionRow>
+        )}
+      />
+    </Card>
+  );
+};
 
 CardItem.defaultProps = {
   isLibraries: false,

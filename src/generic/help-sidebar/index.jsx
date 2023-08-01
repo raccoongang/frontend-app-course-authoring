@@ -9,8 +9,6 @@ import { getPagePath } from '../../utils';
 import messages from './messages';
 import HelpSidebarLink from './HelpSidebarLink';
 
-const GET_STARTED_DOCS_URL = 'https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/open-release-olive.master/getting_started/CA_get_started_Studio.html';
-
 const HelpSidebar = ({
   intl,
   courseId,
@@ -62,7 +60,8 @@ const HelpSidebar = ({
       {studioHomeDestination.includes(pathname) && (
         <HelpSidebarLink
           as="span"
-          pathToPage={GET_STARTED_DOCS_URL}
+          // TODO: the link will be fetched in the future from the backend response.
+          pathToPage="#"
           title={intl.formatMessage(messages.studioHomeLinkToGettingStarted)}
         />
       )}
