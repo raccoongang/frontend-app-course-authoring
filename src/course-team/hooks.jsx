@@ -31,7 +31,6 @@ const useCourseTeam = ({ courseId }) => {
   const [isInfoModalOpen, openInfoModal, closeInfoModal] = useToggle(false);
   const [isFormVisible, openForm, hideForm] = useToggle(false);
   const [currentEmail, setCurrentEmail] = useState('');
-
   const [isInternetConnectionAlertShow, setInternetConnectionAlertShow] = useState(false);
   const [isQueryPending, setIsQueryPending] = useState(false);
 
