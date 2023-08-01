@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const slice = createSlice({
   name: 'courseTeam',
   initialState: {
+    savingStatus: '',
     users: [],
     show_transfer_ownership_hint: false,
     allow_actions: false,
@@ -18,6 +19,9 @@ const slice = createSlice({
     deleteCourseTeamUser: (state, { payload }) => {
       state.users = state.users.filter((user) => user.email !== payload);
     },
+    updateSavingStatus: (state, { payload }) => {
+      state.savingStatus = payload.status;
+    },
     setErrorEmail: (state, { payload }) => {
       state.errorEmail = payload;
     },
@@ -27,6 +31,7 @@ const slice = createSlice({
 export const {
   fetchCourseTeamSuccess,
   deleteCourseTeamUser,
+  updateSavingStatus,
   setErrorEmail,
 } = slice.actions;
 

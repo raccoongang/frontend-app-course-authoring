@@ -34,7 +34,7 @@ const InfoModal = ({
     <AlertModal
       title={title}
       variant={variant}
-      isOpen={isOpen}
+      isOpen={modalType === MODAL_TYPES.error && !errorEmail ? false : isOpen}
       onClose={close}
       footerNode={(
         <ActionRow>

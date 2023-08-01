@@ -3,8 +3,9 @@ import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useEffect, useState } from 'react';
 import { useToggle } from '@edx/paragon';
 
-import { useModel } from '../generic/model-store';
 import { USER_ROLES } from '../constants';
+import { RequestStatus } from '../data/constants';
+import { useModel } from '../generic/model-store';
 import {
   changeRoleTeamUserQuery,
   createCourseTeamQuery,
@@ -15,7 +16,7 @@ import {
   getCourseTeamUsers,
   getErrorEmail,
   getIsAllowActions,
-  getIsOwnershipHint,
+  getIsOwnershipHint, getSavingStatus,
 } from './data/selectors';
 import { setErrorEmail } from './data/slice';
 import { MODAL_TYPES } from './constants';
@@ -31,8 +32,12 @@ const useCourseTeam = ({ courseId }) => {
   const [isFormVisible, openForm, hideForm] = useToggle(false);
   const [currentEmail, setCurrentEmail] = useState('');
 
+  const [isInternetConnectionAlertShow, setInternetConnectionAlertShow] = useState(false);
+  const [isQueryPending, setIsQueryPending] = useState(false);
+
   const courseTeamUsers = useSelector(getCourseTeamUsers);
   const errorEmail = useSelector(getErrorEmail);
+  const savingStatus = useSelector(getSavingStatus);
   const isAllowActions = useSelector(getIsAllowActions);
   const isOwnershipHint = useSelector(getIsOwnershipHint);
   const isSingleAdmin = courseTeamUsers.filter((user) => user.role === USER_ROLES.admin).length === 1;
@@ -49,10 +54,11 @@ const useCourseTeam = ({ courseId }) => {
   };
 
   const handleAddUserSubmit = (data) => {
+    setInternetConnectionAlertShow(true);
+    setIsQueryPending(true);
+
     const { email } = data;
     const isUserContains = courseTeamUsers.some((user) => user.email === email);
-
-    setCurrentEmail(email);
 
     if (isUserContains) {
       handleOpenInfoModal(MODAL_TYPES.warning, email);
@@ -71,17 +77,34 @@ const useCourseTeam = ({ courseId }) => {
   };
 
   const handleDeleteUserSubmit = () => {
+    setInternetConnectionAlertShow(true);
+    setIsQueryPending(true);
+
     dispatch(deleteCourseTeamQuery(courseId, currentEmail));
     handleCloseInfoModal();
   };
 
   const handleChangeRoleUserSubmit = (email, role) => {
+    setInternetConnectionAlertShow(true);
+    setIsQueryPending(true);
+
     dispatch(changeRoleTeamUserQuery(courseId, email, role));
+  };
+
+  const handleInternetConnectionFailed = () => {
+    setIsQueryPending(false);
   };
 
   useEffect(() => {
     dispatch(fetchCourseTeamQuery(courseId));
   }, [courseId]);
+
+  useEffect(() => {
+    if (savingStatus === RequestStatus.SUCCESSFUL) {
+      setIsQueryPending(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [savingStatus]);
 
   return {
     modalType,
@@ -95,6 +118,9 @@ const useCourseTeam = ({ courseId }) => {
     isAllowActions,
     isInfoModalOpen,
     isOwnershipHint,
+    isQueryPending,
+    isInternetConnectionAlertShow,
+    isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     isShowAddTeamMember: courseTeamUsers.length === 1 && isAllowActions,
     isShowInitialSidebar: !courseTeamUsers.length && !isFormVisible,
     isShowUserFilledSidebar: Boolean(courseTeamUsers.length) || isFormVisible,
@@ -103,8 +129,9 @@ const useCourseTeam = ({ courseId }) => {
     closeInfoModal,
     handleAddUserSubmit,
     handleOpenInfoModal,
-    handleChangeRoleUserSubmit,
     handleDeleteUserSubmit,
+    handleChangeRoleUserSubmit,
+    handleInternetConnectionFailed,
   };
 };
 
