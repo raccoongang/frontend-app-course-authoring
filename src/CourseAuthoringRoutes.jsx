@@ -67,10 +67,7 @@ const CourseAuthoringRoutes = ({ courseId }) => {
           <ProctoredExamSettings courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/custom-pages`}>
-          {process.env.ENABLE_NEW_CUSTOM_PAGES === 'true'
-            && (
-              <CustomPages courseId={courseId} />
-            )}
+          <CustomPages courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/container/:blockId`}>
           {process.env.ENABLE_UNIT_PAGE === 'true'
@@ -113,10 +110,7 @@ const CourseAuthoringRoutes = ({ courseId }) => {
             )}
         </PageRoute>
         <PageRoute path={`${path}/settings/advanced`}>
-          {process.env.ENABLE_NEW_ADVANCED_SETTINGS_PAGE === 'true'
-            && (
-              <AdvancedSettings courseId={courseId} />
-            )}
+          <AdvancedSettings courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/import`}>
           {process.env.ENABLE_NEW_IMPORT_PAGE === 'true'
