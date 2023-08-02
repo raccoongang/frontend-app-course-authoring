@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/anchor-has-content */
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import Responsive from 'react-responsive';
@@ -24,7 +22,7 @@ ensureConfig([
 ], 'Header component');
 
 const Header = ({
-  courseId, courseNumber, courseOrg, courseTitle, intl,
+  courseId, courseNumber, courseOrg, courseTitle, intl, isHomePage,
 }) => {
   const { authenticatedUser, config } = useContext(AppContext);
 
@@ -166,6 +164,7 @@ const Header = ({
     avatar: authenticatedUser !== null ? authenticatedUser.avatar : null,
     mainMenu,
     userMenu,
+    isHomePage,
   };
   return (
     <>
@@ -180,16 +179,20 @@ const Header = ({
 };
 
 Header.propTypes = {
-  courseId: PropTypes.string.isRequired,
+  courseId: PropTypes.string,
   courseNumber: PropTypes.string,
   courseOrg: PropTypes.string,
-  courseTitle: PropTypes.string.isRequired,
+  courseTitle: PropTypes.string,
   intl: intlShape.isRequired,
+  isHomePage: PropTypes.bool,
 };
 
 Header.defaultProps = {
+  courseId: null,
   courseNumber: null,
   courseOrg: null,
+  isHomePage: false,
+  courseTitle: null,
 };
 
 export default injectIntl(Header);
