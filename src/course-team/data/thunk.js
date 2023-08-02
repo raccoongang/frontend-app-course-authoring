@@ -1,3 +1,5 @@
+import { RequestStatus } from '../../data/constants';
+import { getErrorEmailFromMessage } from '../utils';
 import {
   getCourseTeam,
   deleteTeamUser,
@@ -6,18 +8,23 @@ import {
 } from './api';
 import {
   fetchCourseTeamSuccess,
+  updateLoadingCourseTeamStatus,
   deleteCourseTeamUser,
+  updateSavingStatus,
   setErrorEmail,
 } from './slice';
-import { getErrorEmailFromMessage } from '../utils';
 
 export function fetchCourseTeamQuery(courseId) {
   return async (dispatch) => {
+    dispatch(updateLoadingCourseTeamStatus({ status: RequestStatus.IN_PROGRESS }));
     try {
       const courseTeam = await getCourseTeam(courseId);
       dispatch(fetchCourseTeamSuccess(courseTeam));
+
+      dispatch(updateLoadingCourseTeamStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
+      dispatch(updateLoadingCourseTeamStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };
@@ -25,13 +32,19 @@ export function fetchCourseTeamQuery(courseId) {
 
 export function createCourseTeamQuery(courseId, email) {
   return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+
     try {
       await createTeamUser(courseId, email);
       const courseTeam = await getCourseTeam(courseId);
       dispatch(fetchCourseTeamSuccess(courseTeam));
+
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch ({ message }) {
       dispatch(setErrorEmail(getErrorEmailFromMessage(message)));
+
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };
@@ -39,12 +52,17 @@ export function createCourseTeamQuery(courseId, email) {
 
 export function changeRoleTeamUserQuery(courseId, email, role) {
   return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+
     try {
       await changeRoleTeamUser(courseId, email, role);
       const courseTeam = await getCourseTeam(courseId);
       dispatch(fetchCourseTeamSuccess(courseTeam));
+
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch ({ message }) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };
@@ -52,11 +70,16 @@ export function changeRoleTeamUserQuery(courseId, email, role) {
 
 export function deleteCourseTeamQuery(courseId, email) {
   return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+
     try {
       await deleteTeamUser(courseId, email);
       dispatch(deleteCourseTeamUser(email));
+
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };
