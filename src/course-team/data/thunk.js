@@ -17,6 +17,7 @@ import {
 export function fetchCourseTeamQuery(courseId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseTeamStatus({ status: RequestStatus.IN_PROGRESS }));
+
     try {
       const courseTeam = await getCourseTeam(courseId);
       dispatch(fetchCourseTeamSuccess(courseTeam));
