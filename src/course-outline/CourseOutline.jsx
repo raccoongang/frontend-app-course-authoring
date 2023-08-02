@@ -13,10 +13,16 @@ const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    isLoading,
     isReIndexShow,
     isSectionsExpanded,
     headerNavigationsActions,
   } = useCourseOutline({ courseId });
+
+  if (isLoading) {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
   return (
     <Container size="xl" className="m-4">
