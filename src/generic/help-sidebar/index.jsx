@@ -4,10 +4,10 @@ import { useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
-import { Hyperlink } from '@edx/paragon';
 
 import { getPagePath } from '../../utils';
 import messages from './messages';
+import HelpSidebarLink from './HelpSidebarLink';
 
 const HelpSidebar = ({
   intl,
@@ -28,6 +28,11 @@ const HelpSidebar = ({
     process.env.ENABLE_NEW_GRADING_PAGE,
     'settings/grading',
   );
+  const studioHomeDestination = getPagePath(
+    courseId,
+    process.env.ENABLE_NEW_HOME_PAGE,
+    'home',
+  );
   const courseTeamDestination = getPagePath(
     courseId,
     process.env.ENABLE_NEW_COURSE_TEAM_PAGE,
@@ -47,91 +52,77 @@ const HelpSidebar = ({
     getConfig().BASE_URL,
   ).href;
 
+  const shouldShowLink = (path) => !path.includes(pathname) && !studioHomeDestination.includes(pathname);
+
   return (
     <aside className={classNames('help-sidebar', className)}>
       <div className="help-sidebar-about">{children}</div>
-      <hr />
+      {studioHomeDestination.includes(pathname) && (
+        <HelpSidebarLink
+          as="span"
+          // TODO: the link will be fetched in the future from the backend response.
+          pathToPage="#"
+          title={intl.formatMessage(messages.studioHomeLinkToGettingStarted)}
+        />
+      )}
       {showOtherSettings && (
-        <div className="help-sidebar-other">
-          <h4 className="help-sidebar-other-title">
-            {intl.formatMessage(messages.sidebarTitleOther)}
-          </h4>
-          <nav
-            className="help-sidebar-other-links"
-            aria-label={intl.formatMessage(messages.sidebarTitleOther)}
-          >
-            <ul className="p-0 mb-0">
-              {!scheduleAndDetailsDestination.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink destination={scheduleAndDetailsDestination}>
-                    {intl.formatMessage(
-                      messages.sidebarLinkToScheduleAndDetails,
-                    )}
-                  </Hyperlink>
-                </li>
-              )}
-              {!gradingDestination.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink rel="noopener" destination={gradingDestination}>
-                    {intl.formatMessage(messages.sidebarLinkToGrading)}
-                  </Hyperlink>
-                </li>
-              )}
-              {!courseTeamDestination.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink rel="noopener" destination={courseTeamDestination}>
-                    {intl.formatMessage(messages.sidebarLinkToCourseTeam)}
-                  </Hyperlink>
-                </li>
-              )}
-              {proctoredExamSettingsUrl
-                && !proctoredExamSettingsUrl.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink
-                    rel="noopener"
-                    destination={proctoredExamSettingsUrl}
-                  >
-                    {intl.formatMessage(
-                      messages.sidebarLinkToProctoredExamSettings,
-                    )}
-                  </Hyperlink>
-                </li>
-              )}
-              {!groupConfigurationsDestination.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink
-                    rel="noopener"
-                    destination={groupConfigurationsDestination}
-                  >
-                    {intl.formatMessage(
-                      messages.sidebarLinkToGroupConfigurations,
-                    )}
-                  </Hyperlink>
-                </li>
-              )}
-              {!advancedSettingsDestination.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink
-                    rel="noopener"
-                    destination={advancedSettingsDestination}
-                  >
-                    {intl.formatMessage(messages.sidebarLinkToAdvancedSettings)}
-                  </Hyperlink>
-                </li>
-              )}
-              {!proctoredExamSettingsDestination.includes(pathname) && !gradingDestination.includes(pathname) && (
-                <li className="help-sidebar-other-link">
-                  <Hyperlink
-                    rel="noopener"
-                    destination={proctoredExamSettingsDestination}
-                  >
-                    {intl.formatMessage(messages.sidebarLinkToProctoredExamSettings)}
-                  </Hyperlink>
-                </li>
-              )}
-            </ul>
-          </nav>
-        </div>
+        <>
+          <hr />
+          <div className="help-sidebar-other">
+            <h4 className="help-sidebar-other-title">
+              {intl.formatMessage(messages.sidebarTitleOther)}
+            </h4>
+            <nav
+              className="help-sidebar-other-links"
+              aria-label={intl.formatMessage(messages.sidebarTitleOther)}
+            >
+              <ul className="p-0 mb-0">
+                {shouldShowLink(scheduleAndDetailsDestination) && (
+                  <HelpSidebarLink
+                    pathToPage={scheduleAndDetailsDestination}
+                    title={intl.formatMessage(messages.sidebarLinkToScheduleAndDetails)}
+                  />
+                )}
+                {shouldShowLink(gradingDestination) && (
+                  <HelpSidebarLink
+                    pathToPage={gradingDestination}
+                    title={intl.formatMessage(messages.sidebarLinkToGrading)}
+                  />
+                )}
+                {shouldShowLink(courseTeamDestination) && (
+                  <HelpSidebarLink
+                    pathToPage={courseTeamDestination}
+                    title={intl.formatMessage(messages.sidebarLinkToCourseTeam)}
+                  />
+                )}
+                {proctoredExamSettingsUrl && shouldShowLink(proctoredExamSettingsUrl) && (
+                  <HelpSidebarLink
+                    pathToPage={proctoredExamSettingsUrl}
+                    title={intl.formatMessage(messages.sidebarLinkToProctoredExamSettings)}
+                  />
+                )}
+                {shouldShowLink(groupConfigurationsDestination) && (
+                  <HelpSidebarLink
+                    pathToPage={groupConfigurationsDestination}
+                    title={intl.formatMessage(messages.sidebarLinkToGroupConfigurations)}
+                  />
+                )}
+                {shouldShowLink(advancedSettingsDestination) && (
+                  <HelpSidebarLink
+                    pathToPage={advancedSettingsDestination}
+                    title={intl.formatMessage(messages.sidebarLinkToAdvancedSettings)}
+                  />
+                )}
+                {shouldShowLink(proctoredExamSettingsDestination) && shouldShowLink(gradingDestination) && (
+                  <HelpSidebarLink
+                    pathToPage={proctoredExamSettingsDestination}
+                    title={intl.formatMessage(messages.sidebarLinkToProctoredExamSettings)}
+                  />
+                )}
+              </ul>
+            </nav>
+          </div>
+        </>
       )}
     </aside>
   );
@@ -140,12 +131,14 @@ const HelpSidebar = ({
 HelpSidebar.defaultProps = {
   proctoredExamSettingsUrl: '',
   className: undefined,
+  courseId: undefined,
+  showOtherSettings: false,
 };
 
 HelpSidebar.propTypes = {
   intl: intlShape.isRequired,
-  courseId: PropTypes.string.isRequired,
-  showOtherSettings: PropTypes.bool.isRequired,
+  courseId: PropTypes.string,
+  showOtherSettings: PropTypes.bool,
   proctoredExamSettingsUrl: PropTypes.string,
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
