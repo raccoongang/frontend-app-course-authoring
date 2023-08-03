@@ -8,7 +8,8 @@ import messages from './info-modal/messages';
  */
 const getErrorEmailFromMessage = (message) => {
   const regex = /'([^']+)'/g;
-  return message.match(regex)[0];
+  const match = message.match(regex);
+  return match ? match[0] : '';
 };
 
 /**
