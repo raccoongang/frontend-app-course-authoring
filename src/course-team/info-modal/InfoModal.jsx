@@ -30,11 +30,13 @@ const InfoModal = ({
     closeButtonVariant,
   } = getInfoModalSettings(modalType, currentEmail, errorEmail, courseName, intl);
 
+  const isEmptyErrorEmail = modalType === MODAL_TYPES.error && !errorEmail;
+
   return (
     <AlertModal
       title={title}
       variant={variant}
-      isOpen={isOpen}
+      isOpen={isOpen && !isEmptyErrorEmail}
       onClose={close}
       footerNode={(
         <ActionRow>
