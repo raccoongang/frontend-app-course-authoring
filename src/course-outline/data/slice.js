@@ -7,23 +7,11 @@ const slice = createSlice({
   name: 'courseOutline',
   initialState: {
     loadingOutlineIndexStatus: RequestStatus.IN_PROGRESS,
-    reindexLink: '',
-    lmsLink: '',
-    docsLinks: {
-      learnMoreOutlineUrl: '',
-      learnMoreGradingUrl: '',
-      learnMoreVisibilityUrl: '',
-    },
+    outlineIndexData: {},
   },
   reducers: {
     fetchOutlineIndexSuccess: (state, { payload }) => {
-      state.reindexLink = payload.reindexLink;
-      state.lmsLink = payload.lmsLink;
-      state.docsLinks = {
-        learnMoreOutlineUrl: payload.learnMoreOutlineUrl,
-        learnMoreGradingUrl: payload.learnMoreGradingUrl,
-        learnMoreVisibilityUrl: payload.learnMoreVisibilityUrl,
-      };
+      state.outlineIndexData = payload;
     },
     updateLoadingOutlineIndexStatus: (state, { payload }) => {
       state.loadingOutlineIndexStatus = payload.status;

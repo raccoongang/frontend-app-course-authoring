@@ -5,13 +5,24 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useSelector } from 'react-redux';
 
 import HelpSidebar from '../../generic/help-sidebar';
-import { getOutlineDocsLinks } from '../data/selectors';
+import { getOutlineIndexData } from '../data/selectors';
 import { getFormattedSidebarMessages } from './utils';
 
 const OutlineSideBar = ({ courseId }) => {
   const intl = useIntl();
-  const docksLinks = useSelector(getOutlineDocsLinks);
-  const sidebarMessages = getFormattedSidebarMessages(docksLinks, intl);
+  const {
+    learnMoreGradingUrl,
+    learnMoreOutlineUrl,
+    learnMoreVisibilityUrl,
+  } = useSelector(getOutlineIndexData);
+  const sidebarMessages = getFormattedSidebarMessages(
+    {
+      learnMoreGradingUrl,
+      learnMoreOutlineUrl,
+      learnMoreVisibilityUrl,
+    },
+    intl,
+  );
 
   return (
     <HelpSidebar
