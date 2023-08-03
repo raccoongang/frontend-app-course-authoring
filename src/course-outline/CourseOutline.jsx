@@ -8,14 +8,17 @@ import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import messages from './messages';
 import { useCourseOutline } from './hooks';
+import StatusBar from './status-bar/StatusBar';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    statusBarData,
     isLoading,
     isReIndexShow,
     isSectionsExpanded,
+    handleEnableHighlights,
     headerNavigationsActions,
   } = useCourseOutline({ courseId });
 
@@ -51,6 +54,11 @@ const CourseOutline = ({ courseId }) => {
             <article>
               <div>
                 <section className="course-outline-section">
+                  <StatusBar
+                    courseId={courseId}
+                    statusBarData={statusBarData}
+                    onEnableHighlights={handleEnableHighlights}
+                  />
                   {/* TODO add status bar and list of outlines */}
                 </section>
               </div>

@@ -1,11 +1,15 @@
 import {
+  getCourseBestPractices,
+  getCourseLaunch,
   getCourseOutlineIndex,
 } from './api';
 import {
   fetchOutlineIndexSuccess,
   updateLoadingOutlineIndexStatus,
+  updateChecklist,
 } from './slice';
 import { RequestStatus } from '../../data/constants';
+import { getCourseLaunchChecklist } from '../utils/utils';
 
 // eslint-disable-next-line import/prefer-default-export
 export function fetchCourseOutlineIndexQuery(courseId) {
@@ -20,6 +24,42 @@ export function fetchCourseOutlineIndexQuery(courseId) {
       return true;
     } catch (error) {
       dispatch(updateLoadingOutlineIndexStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function fetchCourseBestPracticesQuery({
+  courseId,
+  excludeGraded = true,
+  all = true,
+}) {
+  return async (dispatch) => {
+    try {
+      const data = await getCourseBestPractices({ courseId, excludeGraded, all });
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+}
+
+export function fetchCourseLaunchQuery({
+  courseId,
+  gradedOnly = true,
+  validateOras = true,
+  all = true,
+}) {
+  return async (dispatch) => {
+    try {
+      const data = await getCourseLaunch({
+        courseId, gradedOnly, validateOras, all,
+      });
+      dispatch(updateChecklist(getCourseLaunchChecklist(data)));
+
+      return true;
+    } catch (error) {
       return false;
     }
   };

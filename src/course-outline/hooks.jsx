@@ -1,13 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchCourseOutlineIndexQuery } from './data/thunk';
-import { getCourseOutline } from './data/selectors';
 import { RequestStatus } from '../data/constants';
+import {
+  fetchCourseBestPracticesQuery,
+  fetchCourseLaunchQuery,
+  fetchCourseOutlineIndexQuery,
+} from './data/thunk';
+import { getCourseOutline } from './data/selectors';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
-  const { reIndexLink, outlineIndexLoadingStatus } = useSelector(getCourseOutline);
+  const {
+    reIndexLink,
+    outlineIndexLoadingStatus,
+    courseReleaseDate,
+    highlightsEnabledForMessaging,
+    highlightsDocUrl,
+    checklist,
+    isSelfPaced,
+  } = useSelector(getCourseOutline);
 
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
 
@@ -26,8 +38,14 @@ const useCourseOutline = ({ courseId }) => {
     },
   };
 
+  const handleEnableHighlights = () => {
+    console.log('handleEnableHighlights');
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
+    dispatch(fetchCourseBestPracticesQuery({ courseId }));
+    dispatch(fetchCourseLaunchQuery({ courseId }));
   }, [courseId]);
 
   return {
@@ -35,6 +53,14 @@ const useCourseOutline = ({ courseId }) => {
     isReIndexShow: Boolean(reIndexLink),
     isSectionsExpanded,
     headerNavigationsActions,
+    handleEnableHighlights,
+    statusBarData: {
+      courseReleaseDate,
+      highlightsEnabledForMessaging,
+      highlightsDocUrl,
+      checklist,
+      isSelfPaced,
+    },
   };
 };
 
