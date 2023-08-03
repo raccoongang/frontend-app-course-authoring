@@ -1,30 +1,47 @@
 import * as healthValidators from './courseChecklistValidators';
 import { CHECKLIST_FILTERS } from '../constants';
 
+/**
+ * The utilities are taken from the https://github.com/openedx/studio-frontend repository.
+ * Perform a minor refactoring of the functions while preserving their original functionality.
+ */
 const getChecklistValidatedValue = (data, id) => {
+  const {
+    updates,
+    grades,
+    certificates,
+    dates,
+    assignments,
+    videos,
+    subsections,
+    sections,
+    units,
+    proctoring,
+  } = data;
+
   switch (id) {
   case 'welcomeMessage':
-    return healthValidators.hasWelcomeMessage(data.updates);
+    return healthValidators.hasWelcomeMessage(updates);
   case 'gradingPolicy':
-    return healthValidators.hasGradingPolicy(data.grades);
+    return healthValidators.hasGradingPolicy(grades);
   case 'certificate':
-    return healthValidators.hasCertificate(data.certificates);
+    return healthValidators.hasCertificate(certificates);
   case 'courseDates':
-    return healthValidators.hasDates(data.dates);
+    return healthValidators.hasDates(dates);
   case 'assignmentDeadlines':
-    return healthValidators.hasAssignmentDeadlines(data.assignments, data.dates);
+    return healthValidators.hasAssignmentDeadlines(assignments, dates);
   case 'videoDuration':
-    return healthValidators.hasShortVideoDuration(data.videos);
+    return healthValidators.hasShortVideoDuration(videos);
   case 'mobileFriendlyVideo':
-    return healthValidators.hasMobileFriendlyVideos(data.videos);
+    return healthValidators.hasMobileFriendlyVideos(videos);
   case 'diverseSequences':
-    return healthValidators.hasDiverseSequences(data.subsections);
+    return healthValidators.hasDiverseSequences(subsections);
   case 'weeklyHighlights':
-    return healthValidators.hasWeeklyHighlights(data.sections);
+    return healthValidators.hasWeeklyHighlights(sections);
   case 'unitDepth':
-    return healthValidators.hasShortUnitDepth(data.units);
+    return healthValidators.hasShortUnitDepth(units);
   case 'proctoringEmail':
-    return healthValidators.hasProctoringEscalationEmail(data.proctoring);
+    return healthValidators.hasProctoringEscalationEmail(proctoring);
   default:
     throw new Error(`Unknown validator ${id}.`);
   }
@@ -40,20 +57,20 @@ const getChecklistValues = ({
   let filteredCheckList;
 
   if (isSelfPaced) {
-    filteredCheckList = checklist.filter(data => data.pacingTypeFilter === CHECKLIST_FILTERS.ALL
-      || data.pacingTypeFilter === CHECKLIST_FILTERS.SELF_PACED);
+    filteredCheckList = checklist.filter(({ pacingTypeFilter }) => pacingTypeFilter === CHECKLIST_FILTERS.ALL
+      || pacingTypeFilter === CHECKLIST_FILTERS.SELF_PACED);
   } else {
-    filteredCheckList = checklist.filter(data => data.pacingTypeFilter === CHECKLIST_FILTERS.ALL
-      || data.pacingTypeFilter === CHECKLIST_FILTERS.INSTRUCTOR_PACED);
+    filteredCheckList = checklist.filter(({ pacingTypeFilter }) => pacingTypeFilter === CHECKLIST_FILTERS.ALL
+      || pacingTypeFilter === CHECKLIST_FILTERS.INSTRUCTOR_PACED);
   }
 
-  filteredCheckList = filteredCheckList.filter(data => data.id !== 'certificate'
+  filteredCheckList = filteredCheckList.filter(({ id }) => id !== 'certificate'
     || hasCertificatesEnabled);
 
-  filteredCheckList = filteredCheckList.filter(data => data.id !== 'weeklyHighlights'
+  filteredCheckList = filteredCheckList.filter(({ id }) => id !== 'weeklyHighlights'
     || hasHighlightsEnabled);
 
-  filteredCheckList = filteredCheckList.filter(data => data.id !== 'proctoringEmail'
+  filteredCheckList = filteredCheckList.filter(({ id }) => id !== 'proctoringEmail'
     || needsProctoringEscalationEmail);
 
   return filteredCheckList;

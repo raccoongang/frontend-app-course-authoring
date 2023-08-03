@@ -1,32 +1,55 @@
-export const hasWelcomeMessage = updates => (
-  updates.has_update
-);
+/**
+ * The utilities are taken from the https://github.com/openedx/studio-frontend repository.
+ * Perform a minor refactoring of the functions while preserving their original functionality.
+ */
 
-export const hasGradingPolicy = grades => (
-  grades.has_grading_policy
-  && parseFloat(grades.sum_of_weights.toPrecision(2), 10) === 1.0
-);
+export const hasWelcomeMessage = (updates) => updates.hasUpdate;
 
-export const hasCertificate = certificates => (
-  certificates.is_activated && certificates.has_certificate
-);
+export const hasGradingPolicy = (grades) => {
+  // eslint-disable-next-line no-shadow
+  const { hasGradingPolicy, sumOfWeights } = grades;
 
-export const hasDates = dates => (
-  dates.has_start_date && dates.has_end_date
-);
+  return hasGradingPolicy && parseFloat(sumOfWeights.toPrecision(2), 10) === 1.0;
+};
+
+export const hasCertificate = (certificates) => {
+  // eslint-disable-next-line no-shadow
+  const { isActivated, hasCertificate } = certificates;
+
+  return isActivated && hasCertificate;
+};
+
+export const hasDates = (dates) => {
+  const { hasStartDate, hasEndDate } = dates;
+
+  return hasStartDate && hasEndDate;
+};
 
 export const hasAssignmentDeadlines = (assignments, dates) => {
+  const {
+    totalNumber,
+    assignmentsWithDatesBeforeStart,
+    assignmentsWithDatesAfterEnd,
+    assignmentsWithOraDatesBeforeStart,
+    assignmentsWithOraDatesAfterEnd,
+  } = assignments;
+
   if (!hasDates(dates)) {
     return false;
-  } if (assignments.total_number === 0) {
+  }
+  if (totalNumber === 0) {
     return false;
-  } if (assignments.assignments_with_dates_before_start.length > 0) {
+  }
+  if (assignmentsWithDatesBeforeStart.length > 0) {
     return false;
-  } if (assignments.assignments_with_dates_after_end.length > 0) {
+  }
+  if (assignmentsWithDatesAfterEnd.length > 0) {
     return false;
-  } if (assignments.assignments_with_ora_dates_before_start.length > 0) {
+  }
+  if (assignmentsWithOraDatesBeforeStart.length > 0) {
     return false;
-  } if (assignments.assignments_with_ora_dates_after_end.length > 0) {
+  }
+  if (assignmentsWithOraDatesAfterEnd.length > 0) {
     return false;
   }
 
@@ -34,9 +57,12 @@ export const hasAssignmentDeadlines = (assignments, dates) => {
 };
 
 export const hasShortVideoDuration = (videos) => {
-  if (videos.total_number === 0) {
+  const { totalNumber, durations } = videos;
+
+  if (totalNumber === 0) {
     return true;
-  } if (videos.total_number > 0 && videos.durations.median <= 600) {
+  }
+  if (totalNumber > 0 && durations.median <= 600) {
     return true;
   }
 
@@ -44,9 +70,12 @@ export const hasShortVideoDuration = (videos) => {
 };
 
 export const hasMobileFriendlyVideos = (videos) => {
-  if (videos.total_number === 0) {
+  const { totalNumber, numMobileEncoded } = videos;
+
+  if (totalNumber === 0) {
     return true;
-  } if (videos.total_number > 0 && (videos.num_mobile_encoded / videos.total_number) >= 0.9) {
+  }
+  if (totalNumber > 0 && (numMobileEncoded / totalNumber) >= 0.9) {
     return true;
   }
 
@@ -54,23 +83,24 @@ export const hasMobileFriendlyVideos = (videos) => {
 };
 
 export const hasDiverseSequences = (subsections) => {
-  if (subsections.total_visible === 0) {
+  const { totalVisible, numWithOneBlockType } = subsections;
+
+  if (totalVisible === 0) {
     return false;
-  } if (subsections.total_visible > 0) {
-    return ((subsections.num_with_one_block_type / subsections.total_visible) < 0.2);
+  }
+  if (totalVisible > 0) {
+    return ((numWithOneBlockType / totalVisible) < 0.2);
   }
 
   return false;
 };
 
-export const hasWeeklyHighlights = sections => (
-  sections.highlights_active_for_course && sections.highlights_enabled
-);
+export const hasWeeklyHighlights = (sections) => {
+  const { highlightsActiveForCourse, highlightsEnabled } = sections;
 
-export const hasShortUnitDepth = units => (
-  units.num_blocks.median <= 3
-);
+  return highlightsActiveForCourse && highlightsEnabled;
+};
 
-export const hasProctoringEscalationEmail = proctoring => (
-  proctoring.has_proctoring_escalation_email
-);
+export const hasShortUnitDepth = (units) => units.numBlocks.median <= 3;
+
+export const hasProctoringEscalationEmail = (proctoring) => proctoring.hasProctoringEscalationEmail;

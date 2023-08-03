@@ -16,23 +16,32 @@ const slice = createSlice({
       checklist: {
         totalCourseLaunchChecks: 0,
         completedCourseLaunchChecks: 0,
+        totalCourseBestPracticesChecks: 0,
+        completedCourseBestPracticesChecks: 0,
       },
     },
   },
   reducers: {
     fetchOutlineIndexSuccess: (state, { payload }) => {
       state.outlineIndexData = payload;
-
-      state.statusBarData.courseReleaseDate = payload.courseReleaseDate;
-      state.statusBarData.highlightsEnabledForMessaging = payload.courseStructure.highlightsEnabledForMessaging;
-      state.statusBarData.highlightsDocUrl = payload.courseStructure.highlightsDocUrl;
     },
     updateLoadingOutlineIndexStatus: (state, { payload }) => {
       state.loadingOutlineIndexStatus = payload.status;
     },
-    fetchStatusBarSuccess: (state, { payload }) => {
-      state.checklist.totalCourseLaunchChecks = payload.totalCourseLaunchChecks;
-      state.checklist.completedCourseLaunchChecks = payload.completedCourseLaunchChecks;
+    updateStatusBar: (state, { payload }) => {
+      state.statusBarData = {
+        ...state.statusBarData,
+        ...payload,
+      };
+    },
+    fetchStatusBarChecklistSuccess: (state, { payload }) => {
+      state.statusBarData.checklist = {
+        ...state.statusBarData.checklist,
+        ...payload,
+      };
+    },
+    fetchStatusBarSelPacedSuccess: (state, { payload }) => {
+      state.statusBarData.isSelfPaced = payload.isSelfPaced;
     },
   },
 });
@@ -40,7 +49,9 @@ const slice = createSlice({
 export const {
   fetchOutlineIndexSuccess,
   updateLoadingOutlineIndexStatus,
-  fetchStatusBarSuccess,
+  updateStatusBar,
+  fetchStatusBarChecklistSuccess,
+  fetchStatusBarSelPacedSuccess,
 } = slice.actions;
 
 export const {

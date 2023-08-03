@@ -758,5 +758,11 @@
   "course-authoring.course-outline.status-bar.highlight-emails": "Course highlight emails",
   "course-authoring.course-outline.status-bar.highlight-emails.button": "Enable now",
   "course-authoring.course-outline.status-bar.highlight-emails.enabled": "Enabled",
-  "course-authoring.course-outline.status-bar.highlight-emails.link": "Learn more"
+  "course-authoring.course-outline.status-bar.highlight-emails.link": "Learn more",
+  "course-authoring.course-outline.status-bar.modal.title": "Enable Course Highlight Emails",
+  "course-authoring.course-outline.status-bar.modal.description-1": "When you enable course highlight emails, learners automatically receive email messages for each section that has highlights. You cannot disable highlights after you start sending them.",
+  "course-authoring.course-outline.status-bar.modal.description-2": "Are you sure you want to enable course highlight emails?",
+  "course-authoring.course-outline.status-bar.modal.link": "Learn more",
+  "course-authoring.course-outline.status-bar.modal.cancelButton": "Not yet",
+  "course-authoring.course-outline.status-bar.modal.submitButton": "Enable"
 }

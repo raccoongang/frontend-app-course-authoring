@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useToggle } from '@edx/paragon';
 import { RequestStatus } from '../data/constants';
 import {
   getLoadingOutlineIndexStatus,
@@ -8,6 +9,7 @@ import {
   getStatusBarData,
 } from './data/selectors';
 import {
+  enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
@@ -19,6 +21,7 @@ const useCourseOutline = ({ courseId }) => {
   const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
   const statusBarData = useSelector(getStatusBarData);
 
+  const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
 
   const headerNavigationsActions = {
@@ -36,8 +39,9 @@ const useCourseOutline = ({ courseId }) => {
     },
   };
 
-  const handleEnableHighlights = () => {
-    console.log('handleEnableHighlights');
+  const handleEnableHighlightsSubmit = () => {
+    dispatch(enableCourseHighlightsEmailsQuery(courseId));
+    closeEnableHighlightsModal();
   };
 
   useEffect(() => {
@@ -51,8 +55,11 @@ const useCourseOutline = ({ courseId }) => {
     isReIndexShow: Boolean(reindexLink),
     isSectionsExpanded,
     headerNavigationsActions,
-    handleEnableHighlights,
+    handleEnableHighlightsSubmit,
     statusBarData,
+    isEnableHighlightsModalOpen,
+    openEnableHighlightsModal,
+    closeEnableHighlightsModal,
   };
 };
 

@@ -9,6 +9,7 @@ import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import messages from './messages';
 import { useCourseOutline } from './hooks';
 import StatusBar from './status-bar/StatusBar';
+import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
@@ -18,8 +19,11 @@ const CourseOutline = ({ courseId }) => {
     isLoading,
     isReIndexShow,
     isSectionsExpanded,
-    handleEnableHighlights,
+    isEnableHighlightsModalOpen,
     headerNavigationsActions,
+    openEnableHighlightsModal,
+    closeEnableHighlightsModal,
+    handleEnableHighlightsSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -56,8 +60,9 @@ const CourseOutline = ({ courseId }) => {
                 <section className="course-outline-section">
                   <StatusBar
                     courseId={courseId}
+                    isLaoding={isLoading}
                     statusBarData={statusBarData}
-                    onEnableHighlights={handleEnableHighlights}
+                    openEnableHighlightsModal={openEnableHighlightsModal}
                   />
                   {/* TODO add status bar and list of outlines */}
                 </section>
@@ -68,6 +73,12 @@ const CourseOutline = ({ courseId }) => {
             <OutlineSideBar courseId={courseId} />
           </Layout.Element>
         </Layout>
+        <EnableHighlightsModal
+          isOpen={isEnableHighlightsModalOpen}
+          close={closeEnableHighlightsModal}
+          onEnableHighlightsSubmit={handleEnableHighlightsSubmit}
+          highlightsDocUrl={statusBarData.highlightsDocUrl}
+        />
       </section>
     </Container>
   );

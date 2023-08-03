@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, Hyperlink, Stack } from '@edx/paragon';
+import { AppContext } from '@edx/frontend-platform/react';
 
-import messages from './messages';
 import { getPagePath } from '../../utils';
+import messages from './messages';
 
-const StatusBar = ({ statusBarData, courseId, onEnableHighlights }) => {
+const StatusBar = ({
+  statusBarData,
+  isLoading,
+  courseId,
+  openEnableHighlightsModal,
+}) => {
   const intl = useIntl();
+  const { config } = useContext(AppContext);
+
   const {
     courseReleaseDate,
     highlightsEnabledForMessaging,
@@ -15,6 +23,20 @@ const StatusBar = ({ statusBarData, courseId, onEnableHighlights }) => {
     checklist,
     isSelfPaced,
   } = statusBarData;
+
+  const {
+    completedCourseLaunchChecks,
+    completedCourseBestPracticesChecks,
+    totalCourseLaunchChecks,
+    totalCourseBestPracticesChecks,
+  } = checklist;
+
+  const checkListTitle = `${completedCourseLaunchChecks + completedCourseBestPracticesChecks}/${totalCourseLaunchChecks + totalCourseBestPracticesChecks}`;
+
+  if (isLoading) {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
   return (
     <Stack direction="horizontal" gap={3.5} className="outline-status-bar">
@@ -24,7 +46,6 @@ const StatusBar = ({ statusBarData, courseId, onEnableHighlights }) => {
           className="small"
           destination={getPagePath(courseId, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details#schedule')}
           showLaunchIcon={false}
-          target="_blank"
         >
           {courseReleaseDate}
         </Hyperlink>
@@ -41,10 +62,10 @@ const StatusBar = ({ statusBarData, courseId, onEnableHighlights }) => {
         <h5 className="h5">{intl.formatMessage(messages.checklistTitle)}</h5>
         <Hyperlink
           className="small"
-          target="_blank"
+          destination={`${config.STUDIO_BASE_URL}/checklists/${courseId}`}
           showLaunchIcon={false}
         >
-          0 {intl.formatMessage(messages.checklistCompleted)}
+          {checkListTitle} {intl.formatMessage(messages.checklistCompleted)}
         </Hyperlink>
       </div>
       <div className="outline-status-bar__item">
@@ -53,7 +74,7 @@ const StatusBar = ({ statusBarData, courseId, onEnableHighlights }) => {
           {highlightsEnabledForMessaging ? (
             <span className="small">{intl.formatMessage(messages.highlightEmailsEnabled)}</span>
           ) : (
-            <Button size="sm" onClick={onEnableHighlights}>
+            <Button size="sm" onClick={openEnableHighlightsModal}>
               {intl.formatMessage(messages.highlightEmailsButton)}
             </Button>
           )}
@@ -73,13 +94,16 @@ const StatusBar = ({ statusBarData, courseId, onEnableHighlights }) => {
 
 StatusBar.propTypes = {
   courseId: PropTypes.string.isRequired,
-  onEnableHighlights: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  openEnableHighlightsModal: PropTypes.func.isRequired,
   statusBarData: PropTypes.shape({
     courseReleaseDate: PropTypes.string.isRequired,
     isSelfPaced: PropTypes.bool.isRequired,
     checklist: PropTypes.shape({
       totalCourseLaunchChecks: PropTypes.number.isRequired,
       completedCourseLaunchChecks: PropTypes.number.isRequired,
+      totalCourseBestPracticesChecks: PropTypes.number.isRequired,
+      completedCourseBestPracticesChecks: PropTypes.number.isRequired,
     }),
     highlightsEnabledForMessaging: PropTypes.bool.isRequired,
     highlightsDocUrl: PropTypes.string.isRequired,
