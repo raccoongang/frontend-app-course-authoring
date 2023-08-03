@@ -7,40 +7,30 @@ const slice = createSlice({
   name: 'courseOutline',
   initialState: {
     loadingOutlineIndexStatus: RequestStatus.IN_PROGRESS,
-    reindexLink: '',
-    lmsLink: '',
-    courseReleaseDate: '',
-    highlightsEnabledForMessaging: false,
-    highlightsDocUrl: '',
-    checklist: {
-      totalCourseLaunchChecks: 0,
-      completedCourseLaunchChecks: 0,
-    },
-    isSelfPaced: false,
-    docsLinks: {
-      learnMoreOutlineUrl: '',
-      learnMoreGradingUrl: '',
-      learnMoreVisibilityUrl: '',
+    outlineIndexData: {},
+    statusBarData: {
+      courseReleaseDate: '',
+      highlightsEnabledForMessaging: false,
+      highlightsDocUrl: '',
+      isSelfPaced: false,
+      checklist: {
+        totalCourseLaunchChecks: 0,
+        completedCourseLaunchChecks: 0,
+      },
     },
   },
   reducers: {
     fetchOutlineIndexSuccess: (state, { payload }) => {
-      state.reindexLink = payload.reindexLink;
-      state.lmsLink = payload.lmsLink;
-      state.courseReleaseDate = payload.courseReleaseDate;
-      state.highlightsEnabledForMessaging = payload.courseStructure.highlightsEnabledForMessaging;
-      state.highlightsDocUrl = payload.courseStructure.highlightsDocUrl;
-      state.docsLinks = {
-        learnMoreOutlineUrl: payload.learnMoreOutlineUrl,
-        learnMoreGradingUrl: payload.learnMoreGradingUrl,
-        learnMoreVisibilityUrl: payload.learnMoreVisibilityUrl,
-      };
+      state.outlineIndexData = payload;
+
+      state.statusBarData.courseReleaseDate = payload.courseReleaseDate;
+      state.statusBarData.highlightsEnabledForMessaging = payload.courseStructure.highlightsEnabledForMessaging;
+      state.statusBarData.highlightsDocUrl = payload.courseStructure.highlightsDocUrl;
     },
     updateLoadingOutlineIndexStatus: (state, { payload }) => {
       state.loadingOutlineIndexStatus = payload.status;
     },
-    updateChecklist: (state, { payload }) => {
-      console.log(payload, '---------- payload');
+    fetchStatusBarSuccess: (state, { payload }) => {
       state.checklist.totalCourseLaunchChecks = payload.totalCourseLaunchChecks;
       state.checklist.completedCourseLaunchChecks = payload.completedCourseLaunchChecks;
     },
@@ -50,7 +40,7 @@ const slice = createSlice({
 export const {
   fetchOutlineIndexSuccess,
   updateLoadingOutlineIndexStatus,
-  updateChecklist,
+  fetchStatusBarSuccess,
 } = slice.actions;
 
 export const {

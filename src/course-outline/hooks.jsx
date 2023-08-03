@@ -3,23 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { RequestStatus } from '../data/constants';
 import {
+  getLoadingOutlineIndexStatus,
+  getOutlineIndexData,
+  getStatusBarData,
+} from './data/selectors';
+import {
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
 } from './data/thunk';
-import { getCourseOutline } from './data/selectors';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
-  const {
-    reIndexLink,
-    outlineIndexLoadingStatus,
-    courseReleaseDate,
-    highlightsEnabledForMessaging,
-    highlightsDocUrl,
-    checklist,
-    isSelfPaced,
-  } = useSelector(getCourseOutline);
+  const { reindexLink } = useSelector(getOutlineIndexData);
+  const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
+  const statusBarData = useSelector(getStatusBarData);
 
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
 
@@ -50,17 +48,11 @@ const useCourseOutline = ({ courseId }) => {
 
   return {
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
-    isReIndexShow: Boolean(reIndexLink),
+    isReIndexShow: Boolean(reindexLink),
     isSectionsExpanded,
     headerNavigationsActions,
     handleEnableHighlights,
-    statusBarData: {
-      courseReleaseDate,
-      highlightsEnabledForMessaging,
-      highlightsDocUrl,
-      checklist,
-      isSelfPaced,
-    },
+    statusBarData,
   };
 };
 

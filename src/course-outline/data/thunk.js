@@ -6,7 +6,7 @@ import {
 import {
   fetchOutlineIndexSuccess,
   updateLoadingOutlineIndexStatus,
-  updateChecklist,
+  fetchStatusBarSuccess,
 } from './slice';
 import { RequestStatus } from '../../data/constants';
 import { getCourseLaunchChecklist } from '../utils/utils';
@@ -56,7 +56,7 @@ export function fetchCourseLaunchQuery({
       const data = await getCourseLaunch({
         courseId, gradedOnly, validateOras, all,
       });
-      dispatch(updateChecklist(getCourseLaunchChecklist(data)));
+      dispatch(fetchStatusBarSuccess(getCourseLaunchChecklist(data)));
 
       return true;
     } catch (error) {
