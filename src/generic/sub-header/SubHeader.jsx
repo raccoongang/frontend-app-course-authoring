@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import { ActionRow } from '@edx/paragon';
 
 const SubHeader = ({
-  title, subtitle, contentTitle, description, instruction, headerActions,
+  title,
+  subtitle,
+  contentTitle,
+  description,
+  instruction,
+  headerActions,
+  withSubHeaderContent,
 }) => (
   <>
     <header className="sub-header">
@@ -17,10 +23,12 @@ const SubHeader = ({
         </ActionRow>
       )}
     </header>
-    <header className="sub-header-content">
-      <h2 className="sub-header-content-title">{contentTitle}</h2>
-      <span className="small text-gray-700">{description}</span>
-    </header>
+    {withSubHeaderContent && (
+      <header className="sub-header-content">
+        <h2 className="sub-header-content-title">{contentTitle}</h2>
+        <span className="small text-gray-700">{description}</span>
+      </header>
+    )}
     {instruction && (
       <p className="sub-header-instructions mb-4">{instruction}</p>
     )}
@@ -32,6 +40,7 @@ SubHeader.defaultProps = {
   subtitle: '',
   contentTitle: '',
   headerActions: null,
+  withSubHeaderContent: true,
 };
 SubHeader.propTypes = {
   title: PropTypes.string.isRequired,
@@ -43,5 +52,6 @@ SubHeader.propTypes = {
     PropTypes.string,
   ]),
   headerActions: PropTypes.node,
+  withSubHeaderContent: PropTypes.bool,
 };
 export default SubHeader;
