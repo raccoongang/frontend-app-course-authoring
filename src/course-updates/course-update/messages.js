@@ -6,7 +6,7 @@ const messages = defineMessages({
     defaultMessage: 'Edit',
   },
   deleteButton: {
-    id: 'course-authoring.course-updates.actions.delete',
+    id: 'course-authoring.course-updates.button.delete',
     defaultMessage: 'Delete',
   },
   errorMessage: {
