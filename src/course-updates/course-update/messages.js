@@ -9,6 +9,14 @@ const messages = defineMessages({
     id: 'course-authoring.course-updates.actions.delete',
     defaultMessage: 'Delete',
   },
+  errorAltText: {
+    id: 'course-authoring.course-updates.update-form.error-alt-text',
+    defaultMessage: 'Error icon',
+  },
+  errorMessage: {
+    id: 'course-authoring.course-updates.update-form.inValid',
+    defaultMessage: 'Action required: Enter a valid date.',
+  },
 });
 
 export default messages;

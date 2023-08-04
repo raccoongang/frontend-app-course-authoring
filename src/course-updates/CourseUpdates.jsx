@@ -34,7 +34,7 @@ const CourseUpdates = ({ courseId }) => {
     handleUpdatesSubmit,
     handleOpenUpdateForm,
     handleOpenDeleteForm,
-    handleOpenDeleteUpdateForm,
+    handleDeleteUpdateSubmit,
   } = useCourseUpdates({ courseId });
 
   return (
@@ -94,7 +94,7 @@ const CourseUpdates = ({ courseId }) => {
                             dateForUpdate={courseUpdate.date}
                             contentForUpdate={courseUpdate.content}
                             onEdit={() => handleOpenUpdateForm(REQUEST_TYPES.edit_update, courseUpdate)}
-                            onDelete={() => handleOpenDeleteUpdateForm(courseUpdate)}
+                            onDelete={() => handleOpenDeleteForm(courseUpdate)}
                             isDisabledButtons={isUpdateFormOpen}
                           />
                         ))) : null}
@@ -109,7 +109,7 @@ const CourseUpdates = ({ courseId }) => {
                     <DeleteModal
                       isOpen={isDeleteModalOpen}
                       close={closeDeleteModal}
-                      onDeleteSubmit={handleOpenDeleteForm}
+                      onDeleteSubmit={handleDeleteUpdateSubmit}
                     />
                   </div>
                 </section>
