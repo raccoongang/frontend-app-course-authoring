@@ -4,6 +4,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Container, Layout } from '@edx/paragon';
 
 import SubHeader from '../generic/sub-header/SubHeader';
+import InternetConnectionAlert from '../generic/internet-connection-alert';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import messages from './messages';
@@ -18,12 +19,15 @@ const CourseOutline = ({ courseId }) => {
     statusBarData,
     isLoading,
     isReIndexShow,
+    isQueryPending,
     isSectionsExpanded,
     isEnableHighlightsModalOpen,
+    isInternetConnectionAlertFailed,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
     handleEnableHighlightsSubmit,
+    handleInternetConnectionFailed,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -32,55 +36,64 @@ const CourseOutline = ({ courseId }) => {
   }
 
   return (
-    <Container size="xl" className="m-4">
-      <section className="course-outline-container mb-4 mt-5">
-        <SubHeader
-          className="mt-5"
-          title={intl.formatMessage(messages.headingTitle)}
-          subtitle={intl.formatMessage(messages.headingSubtitle)}
-          withSubHeaderContent={false}
-          headerActions={(
-            <HeaderNavigations
-              isReIndexShow={isReIndexShow}
-              isSectionsExpanded={isSectionsExpanded}
-              headerNavigationsActions={headerNavigationsActions}
-            />
-          )}
+    <>
+      <Container size="xl" className="m-4">
+        <section className="course-outline-container mb-4 mt-5">
+          <SubHeader
+            className="mt-5"
+            title={intl.formatMessage(messages.headingTitle)}
+            subtitle={intl.formatMessage(messages.headingSubtitle)}
+            withSubHeaderContent={false}
+            headerActions={(
+              <HeaderNavigations
+                isReIndexShow={isReIndexShow}
+                isSectionsExpanded={isSectionsExpanded}
+                headerNavigationsActions={headerNavigationsActions}
+              />
+            )}
+          />
+          <Layout
+            lg={[{ span: 9 }, { span: 3 }]}
+            md={[{ span: 9 }, { span: 3 }]}
+            sm={[{ span: 9 }, { span: 3 }]}
+            xs={[{ span: 9 }, { span: 3 }]}
+            xl={[{ span: 9 }, { span: 3 }]}
+          >
+            <Layout.Element>
+              <article>
+                <div>
+                  <section className="course-outline-section">
+                    <StatusBar
+                      courseId={courseId}
+                      isLaoding={isLoading}
+                      statusBarData={statusBarData}
+                      openEnableHighlightsModal={openEnableHighlightsModal}
+                    />
+                    {/* TODO add status bar and list of outlines */}
+                  </section>
+                </div>
+              </article>
+            </Layout.Element>
+            <Layout.Element>
+              <OutlineSideBar courseId={courseId} />
+            </Layout.Element>
+          </Layout>
+          <EnableHighlightsModal
+            isOpen={isEnableHighlightsModalOpen}
+            close={closeEnableHighlightsModal}
+            onEnableHighlightsSubmit={handleEnableHighlightsSubmit}
+            highlightsDocUrl={statusBarData.highlightsDocUrl}
+          />
+        </section>
+      </Container>
+      <div className="alert-toast">
+        <InternetConnectionAlert
+          isFailed={isInternetConnectionAlertFailed}
+          isQueryPending={isQueryPending}
+          onInternetConnectionFailed={handleInternetConnectionFailed}
         />
-        <Layout
-          lg={[{ span: 9 }, { span: 3 }]}
-          md={[{ span: 9 }, { span: 3 }]}
-          sm={[{ span: 9 }, { span: 3 }]}
-          xs={[{ span: 9 }, { span: 3 }]}
-          xl={[{ span: 9 }, { span: 3 }]}
-        >
-          <Layout.Element>
-            <article>
-              <div>
-                <section className="course-outline-section">
-                  <StatusBar
-                    courseId={courseId}
-                    isLaoding={isLoading}
-                    statusBarData={statusBarData}
-                    openEnableHighlightsModal={openEnableHighlightsModal}
-                  />
-                  {/* TODO add status bar and list of outlines */}
-                </section>
-              </div>
-            </article>
-          </Layout.Element>
-          <Layout.Element>
-            <OutlineSideBar courseId={courseId} />
-          </Layout.Element>
-        </Layout>
-        <EnableHighlightsModal
-          isOpen={isEnableHighlightsModalOpen}
-          close={closeEnableHighlightsModal}
-          onEnableHighlightsSubmit={handleEnableHighlightsSubmit}
-          highlightsDocUrl={statusBarData.highlightsDocUrl}
-        />
-      </section>
-    </Container>
+      </div>
+    </>
   );
 };
 

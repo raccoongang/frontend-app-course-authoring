@@ -11,6 +11,7 @@ import {
   updateStatusBar,
   fetchStatusBarChecklistSuccess,
   fetchStatusBarSelPacedSuccess,
+  updateSavingStatus,
 } from './slice';
 import { getCourseBestPracticesChecklist, getCourseLaunchChecklist } from '../utils/utils';
 
@@ -73,14 +74,16 @@ export function fetchCourseBestPracticesQuery({
 
 export function enableCourseHighlightsEmailsQuery(courseId) {
   return async (dispatch) => {
-    dispatch(updateLoadingOutlineIndexStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
 
     try {
       await enableCourseHighlightsEmails(courseId);
       dispatch(fetchCourseOutlineIndexQuery(courseId));
 
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };

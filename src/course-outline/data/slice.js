@@ -8,6 +8,7 @@ const slice = createSlice({
   initialState: {
     loadingOutlineIndexStatus: RequestStatus.IN_PROGRESS,
     outlineIndexData: {},
+    savingStatus: RequestStatus.IN_PROGRESS,
     statusBarData: {
       courseReleaseDate: '',
       highlightsEnabledForMessaging: false,
@@ -43,6 +44,9 @@ const slice = createSlice({
     fetchStatusBarSelPacedSuccess: (state, { payload }) => {
       state.statusBarData.isSelfPaced = payload.isSelfPaced;
     },
+    updateSavingStatus: (state, { payload }) => {
+      state.savingStatus = payload.status;
+    },
   },
 });
 
@@ -52,6 +56,7 @@ export const {
   updateStatusBar,
   fetchStatusBarChecklistSuccess,
   fetchStatusBarSelPacedSuccess,
+  updateSavingStatus,
 } = slice.actions;
 
 export const {

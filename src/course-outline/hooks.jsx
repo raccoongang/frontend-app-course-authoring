@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useToggle } from '@edx/paragon';
+
 import { RequestStatus } from '../data/constants';
 import {
   getLoadingOutlineIndexStatus,
   getOutlineIndexData,
+  getSavingStatus,
   getStatusBarData,
 } from './data/selectors';
 import {
@@ -20,9 +21,11 @@ const useCourseOutline = ({ courseId }) => {
   const { reindexLink } = useSelector(getOutlineIndexData);
   const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
   const statusBarData = useSelector(getStatusBarData);
+  const savingStatus = useSelector(getSavingStatus);
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
+  const [isQueryPending, setIsQueryPending] = useState(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -40,8 +43,13 @@ const useCourseOutline = ({ courseId }) => {
   };
 
   const handleEnableHighlightsSubmit = () => {
+    setIsQueryPending(true);
     dispatch(enableCourseHighlightsEmailsQuery(courseId));
     closeEnableHighlightsModal();
+  };
+
+  const handleInternetConnectionFailed = () => {
+    setIsQueryPending(false);
   };
 
   useEffect(() => {
@@ -60,6 +68,9 @@ const useCourseOutline = ({ courseId }) => {
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
+    isQueryPending,
+    isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
+    handleInternetConnectionFailed,
   };
 };
 

@@ -1,5 +1,5 @@
-import * as healthValidators from './courseChecklistValidators';
 import { CHECKLIST_FILTERS } from '../constants';
+import * as healthValidators from './courseChecklistValidators';
 
 /**
  * The utilities are taken from the https://github.com/openedx/studio-frontend repository.
