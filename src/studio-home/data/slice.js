@@ -9,6 +9,9 @@ const slice = createSlice({
     loadingStatus: RequestStatus.IN_PROGRESS,
     savingStatus: '',
     studioHomeData: {},
+    organizations: [],
+    newCourseData: {},
+    postErrors: {},
   },
   reducers: {
     updateLoadingStatus: (state, { payload }) => {
@@ -17,16 +20,28 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
+    updateNewCourseData: (state, { payload }) => {
+      state.newCourseData = payload;
+    },
+    updatePostErrors: (state, { payload }) => {
+      state.postErrors = payload;
+    },
     fetchStudioHomeDataSuccess: (state, { payload }) => {
       Object.assign(state.studioHomeData, payload);
+    },
+    fetchOrganizations: (state, { payload }) => {
+      Object.assign(state.organizations, payload);
     },
   },
 });
 
 export const {
+  updatePostErrors,
   updateLoadingStatus,
   updateSavingStatus,
+  updateNewCourseData,
   fetchStudioHomeDataSuccess,
+  fetchOrganizations,
 } = slice.actions;
 
 export const {
