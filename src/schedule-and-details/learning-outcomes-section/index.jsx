@@ -4,7 +4,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form, Button } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons';
 
-import ScheduleSubHeader from '../schedule-sub-header';
+import SectionSubHeader from '../../generic/section-sub-header';
 import messages from './messages';
 
 const LearningOutcomesSection = ({ learningInfo, onChange }) => {
@@ -41,7 +41,7 @@ const LearningOutcomesSection = ({ learningInfo, onChange }) => {
         onChange={(e) => handleInputChange(e.target.value, idx)}
       />
       <Button
-        variant="danger"
+        variant="outline-danger"
         onClick={() => handleDelete(idx)}
       >
         {intl.formatMessage(messages.outcomesDelete)}
@@ -51,14 +51,14 @@ const LearningOutcomesSection = ({ learningInfo, onChange }) => {
 
   return (
     <section className="section-container learning-outcomes-section">
-      <ScheduleSubHeader
+      <SectionSubHeader
         title={intl.formatMessage(messages.outcomesTitle)}
         description={intl.formatMessage(messages.outcomesDescription)}
       />
       <ul className="learning-outcomes-list">
         {learningInfo.map(renderLearningOutcomeItem)}
       </ul>
-      <Button iconBefore={AddIcon} variant="success" onClick={handleAdd}>
+      <Button iconBefore={AddIcon} variant="outline-success" onClick={handleAdd}>
         {intl.formatMessage(messages.outcomesAdd)}
       </Button>
     </section>

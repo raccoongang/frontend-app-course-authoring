@@ -11,7 +11,7 @@ import MockAdapter from 'axios-mock-adapter';
 import initializeStore from '../store';
 import { courseDetailsMock, courseSettingsMock } from './__mocks__';
 import { getCourseDetailsApiUrl, getCourseSettingsApiUrl } from './data/api';
-import { DATE_FORMAT } from './schedule-section/datepicker-control/constants';
+import { DATE_FORMAT } from '../constants';
 import creditMessages from './credit-section/messages';
 import pacingMessages from './pacing-section/messages';
 import scheduleMessages from './schedule-section/messages';
@@ -23,6 +23,25 @@ let axiosMock;
 let store;
 const mockPathname = '/foo-bar';
 const courseId = '123';
+
+// Mock the tinymce lib
+jest.mock('@tinymce/tinymce-react', () => {
+  const originalModule = jest.requireActual('@tinymce/tinymce-react');
+  return {
+    __esModule: true,
+    ...originalModule,
+    Editor: () => 'foo bar',
+  };
+});
+
+// Mock the TinyMceWidget from frontend-lib-content-components
+jest.mock('@edx/frontend-lib-content-components', () => ({
+  TinyMceWidget: () => <div>Widget</div>,
+  prepareEditorRef: jest.fn(() => ({
+    refReady: true,
+    setEditorRef: jest.fn().mockName('prepareEditorRef.setEditorRef'),
+  })),
+}));
 
 // Mock the TextareaAutosize component
 jest.mock('react-textarea-autosize', () => jest.fn((props) => (

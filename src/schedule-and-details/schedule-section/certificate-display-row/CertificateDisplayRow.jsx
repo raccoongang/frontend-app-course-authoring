@@ -7,7 +7,7 @@ import {
 import { Info as InfoIcon } from '@edx/paragon/icons';
 
 import { getLabelById } from '../../../utils';
-import { DatepickerControl, DATEPICKER_TYPES } from '../datepicker-control';
+import { DatepickerControl, DATEPICKER_TYPES } from '../../../generic/datepicker-control';
 import messages from './messages';
 
 export const CERTIFICATE_DISPLAY_BEHAVIOR = {
@@ -126,7 +126,7 @@ const CertificateDisplayRow = ({
             {intl.formatMessage(messages.certificateBehaviorLabel)}
           </Form.Label>
           <Dropdown>
-            <Dropdown.Toggle id="certificate-behavior-dropdown">
+            <Dropdown.Toggle id="certificate-behavior-dropdown" variant="outline-primary">
               {certificateDisplayValue}
             </Dropdown.Toggle>
             <Dropdown.Menu>

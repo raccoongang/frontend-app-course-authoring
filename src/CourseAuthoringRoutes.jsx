@@ -10,8 +10,11 @@ import EditorContainer from './editors/EditorContainer';
 import VideoSelectorContainer from './selectors/VideoSelectorContainer';
 import CustomPages from './custom-pages';
 import { AdvancedSettings } from './advanced-settings';
+import { CourseOutline } from './course-outline';
 import ScheduleAndDetails from './schedule-and-details';
 import { GradingSettings } from './grading-settings';
+import CourseTeam from './course-team/CourseTeam';
+import { CourseUpdates } from './course-updates';
 import CourseExportPage from './export-page/CourseExportPage';
 
 /**
@@ -38,13 +41,13 @@ const CourseAuthoringRoutes = ({ courseId }) => {
         <PageRoute path={`${path}/outline`}>
           {process.env.ENABLE_NEW_COURSE_OUTLINE_PAGE === 'true'
             && (
-              <Placeholder />
+              <CourseOutline courseId={courseId} />
             )}
         </PageRoute>
         <PageRoute path={`${path}/course_info`}>
           {process.env.ENABLE_NEW_UPDATES_PAGE === 'true'
             && (
-              <Placeholder />
+              <CourseUpdates courseId={courseId} />
             )}
         </PageRoute>
         <PageRoute path={`${path}/assets`}>
@@ -66,10 +69,7 @@ const CourseAuthoringRoutes = ({ courseId }) => {
           <ProctoredExamSettings courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/custom-pages`}>
-          {process.env.ENABLE_NEW_CUSTOM_PAGES === 'true'
-            && (
-              <CustomPages courseId={courseId} />
-            )}
+          <CustomPages courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/container/:blockId`}>
           {process.env.ENABLE_UNIT_PAGE === 'true'
@@ -108,14 +108,11 @@ const CourseAuthoringRoutes = ({ courseId }) => {
         <PageRoute path={`${path}/course_team`}>
           {process.env.ENABLE_NEW_COURSE_TEAM_PAGE === 'true'
             && (
-              <Placeholder />
+              <CourseTeam courseId={courseId} />
             )}
         </PageRoute>
         <PageRoute path={`${path}/settings/advanced`}>
-          {process.env.ENABLE_NEW_ADVANCED_SETTINGS_PAGE === 'true'
-            && (
-              <AdvancedSettings courseId={courseId} />
-            )}
+          <AdvancedSettings courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/import`}>
           {process.env.ENABLE_NEW_IMPORT_PAGE === 'true'

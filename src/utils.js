@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
 import { snakeCase } from 'lodash/string';
-
+import moment from 'moment';
 import { getConfig } from '@edx/frontend-platform';
+
 import { RequestStatus } from './data/constants';
 import { getCourseAppSettingValue, getLoadingStatus } from './pages-and-resources/data/selectors';
 import { fetchCourseAppSettings, updateCourseAppSetting } from './pages-and-resources/data/thunks';
@@ -13,6 +13,7 @@ import { PagesAndResourcesContext } from './pages-and-resources/PagesAndResource
 import {
   hasValidDateFormat, hasValidTimeFormat, decodeDateTime, endOfDayTime, startOfDayTime,
 } from './pages-and-resources/discussions/app-config-form/utils';
+import { DATE_TIME_FORMAT } from './constants';
 
 export const executeThunk = async (thunk, dispatch, getState) => {
   await thunk(dispatch, getState);
@@ -36,6 +37,23 @@ export function convertObjectToSnakeCase(obj, unpacked = false) {
       [snakeCaseKey]: value,
     };
   }, {});
+}
+
+export function deepConvertingKeysToSnakeCase(obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => deepConvertingKeysToSnakeCase(item));
+  }
+
+  const snakeCaseObj = {};
+  Object.keys(obj).forEach((key) => {
+    const snakeCaseKey = snakeCase(key);
+    snakeCaseObj[snakeCaseKey] = deepConvertingKeysToSnakeCase(obj[key]);
+  });
+  return snakeCaseObj;
 }
 
 export function transformKeysToCamelCase(obj) {
@@ -199,3 +217,25 @@ export function setupYupExtensions() {
     });
   });
 }
+
+export const convertToDateFromString = (dateStr) => {
+  if (!dateStr) {
+    return '';
+  }
+
+  return moment(dateStr).utc().toDate();
+};
+
+export const convertToStringFromDate = (date) => {
+  if (!date) {
+    return '';
+  }
+
+  return moment(date).utc().format(DATE_TIME_FORMAT);
+};
+
+export const isValidDate = (date) => {
+  const formattedValue = convertToStringFromDate(date).split('T')[0];
+
+  return Boolean(formattedValue.length <= 10);
+};

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { Warning as WarningIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
@@ -8,10 +7,9 @@ import AlertMessage from '../alert-message';
 import messages from './messages';
 
 const InternetConnectionAlert = ({
-  isFailed, isQueryPending, dispatchMethod, onInternetConnectionFailed,
+  isFailed, isQueryPending, onQueryProcessing, onInternetConnectionFailed,
 }) => {
   const intl = useIntl();
-  const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
 
@@ -31,17 +29,20 @@ const InternetConnectionAlert = ({
   }, [isOnline]);
 
   useEffect(() => {
-    if (!isOnline) {
-      setShowAlert(true);
-      onInternetConnectionFailed();
-      return;
-    }
-
     if (isQueryPending) {
-      dispatch(dispatchMethod);
+      if (onQueryProcessing) {
+        onQueryProcessing();
+      }
+
+      setShowAlert(!isOnline);
+
+      if (!isOnline) {
+        onInternetConnectionFailed();
+      }
+    } else if (isFailed) {
+      setShowAlert(!isOnline);
+    } else if (isOnline) {
       setShowAlert(false);
-    } else if (isFailed && !isOnline) {
-      setShowAlert(true);
     }
   }, [isOnline, isQueryPending, isFailed]);
 
@@ -65,13 +66,13 @@ const InternetConnectionAlert = ({
 
 InternetConnectionAlert.defaultProps = {
   isQueryPending: false,
-
+  onQueryProcessing: null,
 };
 
 InternetConnectionAlert.propTypes = {
   isFailed: PropTypes.bool.isRequired,
   isQueryPending: PropTypes.bool,
-  dispatchMethod: PropTypes.func.isRequired,
+  onQueryProcessing: PropTypes.func,
   onInternetConnectionFailed: PropTypes.func.isRequired,
 };
 

@@ -11,12 +11,12 @@ import { Route, Switch } from 'react-router-dom';
 
 import { initializeHotjar } from '@edx/frontend-enterprise-hotjar';
 import { logError } from '@edx/frontend-platform/logging';
-import Placeholder from '@edx/frontend-lib-content-components';
 import messages from './i18n';
 
 import initializeStore from './store';
 import CourseAuthoringRoutes from './CourseAuthoringRoutes';
 import Head from './head/Head';
+import { StudioHome } from './studio-home';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './index.scss';
@@ -41,10 +41,9 @@ const App = () => {
       <Head />
       <Switch>
         <Route path="/home">
-          {process.env.ENABLE_NEW_HOME_PAGE === 'true'
-              && (
-                <Placeholder />
-              )}
+          {process.env.ENABLE_NEW_HOME_PAGE === 'true' && (
+            <StudioHome />
+          )}
         </Route>
         <Route
           path="/course/:courseId"

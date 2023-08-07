@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form, Dropdown } from '@edx/paragon';
 
-import { TIME_FORMAT } from '../schedule-section/datepicker-control/constants';
-import ScheduleSubHeader from '../schedule-sub-header';
+import { TIME_FORMAT } from '../../constants';
+import SectionSubHeader from '../../generic/section-sub-header';
 import EntranceExam from './entrance-exam';
 import messages from './messages';
 
@@ -21,7 +21,7 @@ const RequirementsSection = ({
   onChange,
 }) => {
   const intl = useIntl();
-  const selectedItem = possiblePreRequisiteCourses.find(
+  const selectedItem = possiblePreRequisiteCourses?.find(
     (course) => course.courseKey === preRequisiteCourses[0],
   );
   const formattedSelectedItem = selectedItem?.displayName || intl.formatMessage(messages.dropdownEmptyText);
@@ -33,7 +33,7 @@ const RequirementsSection = ({
     >
       <Form.Label>{intl.formatMessage(messages.dropdownLabel)}</Form.Label>
       <Dropdown>
-        <Dropdown.Toggle id="prerequisiteDropdown">
+        <Dropdown.Toggle id="prerequisiteDropdown" variant="outline-primary">
           {formattedSelectedItem}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -61,7 +61,7 @@ const RequirementsSection = ({
 
   return (
     <section className="section-container requirements-section">
-      <ScheduleSubHeader
+      <SectionSubHeader
         title={intl.formatMessage(messages.requirementsTitle)}
         description={intl.formatMessage(messages.requirementsDescription)}
       />
@@ -71,7 +71,7 @@ const RequirementsSection = ({
             {intl.formatMessage(messages.timepickerLabel)}
           </Form.Label>
           <Form.Control
-            value={effort}
+            value={effort || ''}
             placeholder={TIME_FORMAT.toUpperCase()}
             onChange={(e) => onChange(e.target.value, 'effort')}
           />
