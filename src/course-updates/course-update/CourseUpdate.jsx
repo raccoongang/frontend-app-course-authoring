@@ -23,7 +23,7 @@ const CourseUpdate = ({
         {!isDateForUpdateValid(dateForUpdate) && (
           <div className="course-update-header__error">
             <Icon src={ErrorIcon} alt={intl.formatMessage(messages.errorMessage)} />
-            <span className="message-error small">{intl.formatMessage(messages.errorMessage)}</span>
+            <p className="message-error small m-0">{intl.formatMessage(messages.errorMessage)}</p>
           </div>
         )}
         <div className="course-update-header__action">

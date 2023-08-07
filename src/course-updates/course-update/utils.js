@@ -4,7 +4,7 @@ import { COMMA_SEPARATED_DATE_FORMAT } from '../../constants';
 
 /**
  * Check is valid date format in course update
- * @param {string} date - dateForUpdate
+ * @param {string} date - date for update
  * @returns {boolean} - is valid date format
  */
 const isDateForUpdateValid = (date) => {
