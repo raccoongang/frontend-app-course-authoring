@@ -8,6 +8,7 @@ import { getConfig } from '@edx/frontend-platform';
 import { getPagePath } from '../../utils';
 import messages from './messages';
 import HelpSidebarLink from './HelpSidebarLink';
+import { useHelpTokens } from '../../help-tokens/hooks';
 
 const HelpSidebar = ({
   intl,
@@ -51,6 +52,7 @@ const HelpSidebar = ({
     `/course/${courseId}/proctored-exam-settings`,
     getConfig().BASE_URL,
   ).href;
+  const { home: aboutHomeLink } = useHelpTokens(['home']);
 
   const shouldShowLink = (path) => !path.includes(pathname) && !studioHomeDestination.includes(pathname);
 
@@ -60,8 +62,7 @@ const HelpSidebar = ({
       {studioHomeDestination.includes(pathname) && (
         <HelpSidebarLink
           as="span"
-          // TODO: the link will be fetched in the future from the backend response.
-          pathToPage="#"
+          pathToPage={aboutHomeLink}
           title={intl.formatMessage(messages.studioHomeLinkToGettingStarted)}
         />
       )}
