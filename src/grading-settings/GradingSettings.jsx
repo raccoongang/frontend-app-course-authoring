@@ -19,7 +19,6 @@ import {
   getSavingStatus,
   getLoadingStatus,
   getCourseSettings,
-  getProctoringExamSettingsUrl,
 } from './data/selectors';
 import { fetchGradingSettings, sendGradingSetting, fetchCourseSettingsQuery } from './data/thunks';
 import GradingScale from './grading-scale/GradingScale';
@@ -32,7 +31,6 @@ import { useConvertGradeCutoffs, useUpdateGradingData } from './hooks';
 
 const GradingSettings = ({ intl, courseId }) => {
   const gradingSettingsData = useSelector(getGradingSettings);
-  const proctoringExamSettingsUrl = useSelector(getProctoringExamSettingsUrl);
   const courseSettingsData = useSelector(getCourseSettings);
   const courseAssignmentLists = useSelector(getCourseAssignmentLists);
   const savingStatus = useSelector(getSavingStatus);
@@ -209,7 +207,7 @@ const GradingSettings = ({ intl, courseId }) => {
                 <GradingSidebar
                   courseId={courseId}
                   intl={intl}
-                  proctoredExamSettingsUrl={proctoringExamSettingsUrl}
+                  proctoredExamSettingsUrl={courseSettingsData.mfeProctoredExamSettingsUrl}
                 />
               </Layout.Element>
             </Layout>
