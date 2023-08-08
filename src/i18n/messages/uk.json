@@ -754,5 +754,11 @@
   "course-authoring.course-outline.reindex.alert.success.aria.labelledby": "alert-confirmation-title",
   "course-authoring.course-outline.reindex.alert.success.aria.describedby": "alert-confirmation-description",
   "course-authoring.course-outline.reindex.alert.error.title": "There were errors reindexing course.",
+  "course-authoring.course-outline.reindex.alert.error.labelledby": "alert-error-title",
+  "course-authoring.course-outline.reindex.alert.success.title": "Course index",
+  "course-authoring.course-outline.reindex.alert.success.description": "Course has been successfully reindexed.",
+  "course-authoring.course-outline.reindex.alert.success.aria.labelledby": "alert-confirmation-title",
+  "course-authoring.course-outline.reindex.alert.success.aria.describedby": "alert-confirmation-description",
+  "course-authoring.course-outline.reindex.alert.error.title": "There were errors reindexing course.",
   "course-authoring.course-outline.reindex.alert.error.labelledby": "alert-error-title"
 }
