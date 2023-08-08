@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import SectionSubHeader from '../../generic/section-sub-header';
+import ScheduleSubHeader from '../schedule-sub-header';
 import messages from './messages';
 
 const CreditSection = ({ creditRequirements }) => {
@@ -49,7 +49,7 @@ const CreditSection = ({ creditRequirements }) => {
 
   return (
     <section className="section-container credit-section">
-      <SectionSubHeader
+      <ScheduleSubHeader
         title={intl.formatMessage(messages.creditTitle)}
         description={intl.formatMessage(messages.creditDescription)}
       />

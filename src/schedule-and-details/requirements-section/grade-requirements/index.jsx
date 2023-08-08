@@ -21,10 +21,12 @@ const GradeRequirements = ({
     </Form.Label>
     <Stack direction="horizontal" className="w-25">
       <Form.Control
+        type="number"
+        min={1}
+        max={100}
         value={entranceExamMinimumScorePct}
         onChange={(e) => onChange(e.target.value, 'entranceExamMinimumScorePct')}
       />
-      %
     </Stack>
     {errorEffort && (
       <Form.Control.Feedback className="feedback-error">
