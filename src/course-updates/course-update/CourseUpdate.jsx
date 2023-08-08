@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@edx/paragon';
+import { Button, Icon } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { Error as ErrorIcon } from '@edx/paragon/icons/es5';
 import messages from './messages';
+import { isDateForUpdateValid } from './utils';
 
 const CourseUpdate = ({
   dateForUpdate,
@@ -18,6 +20,12 @@ const CourseUpdate = ({
     <div className="course-update" data-testid="course-update">
       <div className="course-update-header">
         <span className="course-update-header__date small font-weight-bold">{dateForUpdate}</span>
+        {!isDateForUpdateValid(dateForUpdate) && (
+          <div className="course-update-header__error">
+            <Icon src={ErrorIcon} alt={intl.formatMessage(messages.errorMessage)} />
+            <p className="message-error small m-0">{intl.formatMessage(messages.errorMessage)}</p>
+          </div>
+        )}
         <div className="course-update-header__action">
           <Button variant="outline-primary" size="sm" onClick={onEdit} disabled={isDisabledButtons}>
             {intl.formatMessage(messages.editButton)}
