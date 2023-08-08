@@ -2,11 +2,15 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
+import { AppProvider } from '@edx/frontend-platform/react';
+import { initializeMockApp } from '@edx/frontend-platform';
 import HelpSidebar from '.';
 import messages from './messages';
+import initializeStore from '../../store';
 
 const mockPathname = '/foo-bar';
 
+let store;
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
@@ -15,18 +19,33 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const RootWrapper = () => (
-  <IntlProvider locale="en">
-    <HelpSidebar
-      courseId="course123"
-      showOtherSettings
-      proctoredExamSettingsUrl=""
-    >
-      <p>Test children</p>
-    </HelpSidebar>
-  </IntlProvider>
+  <AppProvider store={store} messages={{}}>
+    <IntlProvider locale="en">
+      <HelpSidebar
+        courseId="course123"
+        showOtherSettings
+        proctoredExamSettingsUrl=""
+      >
+        <p>Test children</p>
+      </HelpSidebar>
+    </IntlProvider>
+  </AppProvider>
 );
 
 describe('HelpSidebar', () => {
+  beforeEach(() => {
+    initializeMockApp({
+      authenticatedUser: {
+        userId: 3,
+        username: 'abc123',
+        administrator: true,
+        roles: [],
+      },
+    });
+
+    store = initializeStore();
+  });
+
   it('renders children correctly', () => {
     const { getByText } = render(<RootWrapper />);
     expect(getByText('Test children')).toBeTruthy();
