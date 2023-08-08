@@ -13,12 +13,15 @@ import {
   updateError,
   updateIsErrorModalOpen,
   reset,
+  updateLoadingStatus,
 } from './slice';
 import { setExportCookie } from '../utils';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './constants';
+import { RequestStatus } from '../../data/constants';
 
 export function startExportingCourse(courseId) {
   return async (dispatch) => {
+    dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
     try {
       dispatch(reset());
       dispatch(updateExportTriggered(true));
@@ -26,8 +29,10 @@ export function startExportingCourse(courseId) {
       dispatch(updateCurrentStage(exportData.exportStatus));
       setExportCookie(moment().valueOf(), exportData.exportStatus === EXPORT_STAGES.SUCCESS);
 
+      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
+      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };
@@ -35,6 +40,7 @@ export function startExportingCourse(courseId) {
 
 export function fetchExportStatus(courseId) {
   return async (dispatch) => {
+    dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
     try {
       const { exportStatus, exportOutput, exportError } = await getExportStatus(courseId);
       dispatch(updateCurrentStage(Math.abs(exportStatus)));
@@ -57,8 +63,10 @@ export function fetchExportStatus(courseId) {
         dispatch(updateIsErrorModalOpen(true));
       }
 
+      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
+      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };

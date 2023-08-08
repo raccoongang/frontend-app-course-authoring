@@ -9,7 +9,9 @@ import { ArrowCircleDown } from '@edx/paragon/icons';
 import Cookies from 'universal-cookie';
 import messages from './messages';
 import ExportSidebar from './export-sidebar/ExportSidebar';
-import { getCurrentStage, getError, getExportTriggered } from './data/selectors';
+import {
+  getCurrentStage, getError, getExportTriggered, getLoadingStatus,
+} from './data/selectors';
 import { startExportingCourse } from './data/thunks';
 import SubHeader from '../generic/sub-header/SubHeader';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './data/constants';
@@ -17,12 +19,15 @@ import { updateExportTriggered, updateSuccessDate } from './data/slice';
 import ExportModalError from './export-modal-error/ExportModalError';
 import ExportFooter from './export-footer/ExportFooter';
 import ExportStepper from './export-stepper/ExportStepper';
+import InternetConnectionAlert from '../generic/internet-connection-alert';
+import { RequestStatus } from '../data/constants';
 
 const CourseExportPage = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const exportTriggered = useSelector(getExportTriggered);
   const currentStage = useSelector(getCurrentStage);
   const { msg: errorMessage } = useSelector(getError);
+  const loadingStatus = useSelector(getLoadingStatus);
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -34,56 +39,65 @@ const CourseExportPage = ({ intl, courseId }) => {
   }, []);
 
   return (
-    <Container size="xl" className="m-4">
-      <section className="setting-items mb-4">
-        <Layout
-          lg={[{ span: 9 }, { span: 3 }]}
-          md={[{ span: 9 }, { span: 3 }]}
-          sm={[{ span: 9 }, { span: 3 }]}
-          xs={[{ span: 9 }, { span: 3 }]}
-          xl={[{ span: 9 }, { span: 3 }]}
-        >
-          <Layout.Element>
-            <article>
-              <SubHeader
-                title={intl.formatMessage(messages.headingTitle)}
-                subtitle={intl.formatMessage(messages.headingSubtitle)}
-              />
-              <p>{intl.formatMessage(messages.description1)}</p>
-              <p>{intl.formatMessage(messages.description2)}</p>
-              <Card>
-                <Card.Header
-                  className="h3 px-3 text-black mb-4"
-                  title={intl.formatMessage(messages.titleUnderButton)}
-                  size="m"
+    <>
+      <Container size="xl" className="m-4">
+        <section className="setting-items mb-4">
+          <Layout
+            lg={[{ span: 9 }, { span: 3 }]}
+            md={[{ span: 9 }, { span: 3 }]}
+            sm={[{ span: 9 }, { span: 3 }]}
+            xs={[{ span: 9 }, { span: 3 }]}
+            xl={[{ span: 9 }, { span: 3 }]}
+          >
+            <Layout.Element>
+              <article>
+                <SubHeader
+                  title={intl.formatMessage(messages.headingTitle)}
+                  subtitle={intl.formatMessage(messages.headingSubtitle)}
                 />
-                {(!exportTriggered || errorMessage || currentStage === EXPORT_STAGES.SUCCESS)
-                  && (
-                    <Card.Section className="px-3 py-1">
-                      <Button
-                        variant="primary"
-                        size="lg"
-                        block
-                        className="mb-4"
-                        onClick={() => dispatch(startExportingCourse(courseId))}
-                        iconBefore={ArrowCircleDown}
-                      >
-                        {intl.formatMessage(messages.buttonTitle)}
-                      </Button>
-                    </Card.Section>
-                  )}
-              </Card>
-              {exportTriggered && <ExportStepper courseId={courseId} />}
-              <ExportFooter />
-            </article>
-          </Layout.Element>
-          <Layout.Element>
-            <ExportSidebar courseId={courseId} />
-          </Layout.Element>
-        </Layout>
-      </section>
-      <ExportModalError courseId={courseId} />
-    </Container>
+                <p>{intl.formatMessage(messages.description1)}</p>
+                <p>{intl.formatMessage(messages.description2)}</p>
+                <Card>
+                  <Card.Header
+                    className="h3 px-3 text-black mb-4"
+                    title={intl.formatMessage(messages.titleUnderButton)}
+                    size="m"
+                  />
+                  {(!exportTriggered || errorMessage || currentStage === EXPORT_STAGES.SUCCESS)
+                    && (
+                      <Card.Section className="px-3 py-1">
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          block
+                          className="mb-4"
+                          onClick={() => dispatch(startExportingCourse(courseId))}
+                          iconBefore={ArrowCircleDown}
+                        >
+                          {intl.formatMessage(messages.buttonTitle)}
+                        </Button>
+                      </Card.Section>
+                    )}
+                </Card>
+                {exportTriggered && <ExportStepper courseId={courseId} />}
+                <ExportFooter />
+              </article>
+            </Layout.Element>
+            <Layout.Element>
+              <ExportSidebar courseId={courseId} />
+            </Layout.Element>
+          </Layout>
+        </section>
+        <ExportModalError courseId={courseId} />
+      </Container>
+      <div className="alert-toast">
+        <InternetConnectionAlert
+          isFailed={loadingStatus === RequestStatus.FAILED}
+          isQueryPending={loadingStatus === RequestStatus.IN_PROGRESS}
+          onInternetConnectionFailed={() => null}
+        />
+      </div>
+    </>
   );
 };
 

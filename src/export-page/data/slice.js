@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import { RequestStatus } from '../../data/constants';
 
 const initialState = {
   exportTriggered: false,
@@ -8,6 +9,7 @@ const initialState = {
   downloadPath: null,
   successDate: null,
   isErrorModalOpen: false,
+  loadingStatus: RequestStatus.PENDING,
 };
 
 const slice = createSlice({
@@ -33,6 +35,9 @@ const slice = createSlice({
       state.isErrorModalOpen = payload;
     },
     reset: () => initialState,
+    updateLoadingStatus: (state, { payload }) => {
+      state.loadingStatus = payload.status;
+    },
   },
 });
 
@@ -44,6 +49,7 @@ export const {
   updateError,
   updateIsErrorModalOpen,
   reset,
+  updateLoadingStatus,
 } = slice.actions;
 
 export const {
