@@ -9,7 +9,12 @@ import {
 
 import messages from './messages';
 
-const HeaderNavigations = ({ headerNavigationsActions, isReIndexShow, isSectionsExpanded }) => {
+const HeaderNavigations = ({
+  headerNavigationsActions,
+  isReIndexShow,
+  isSectionsExpanded,
+  isReindexButtonDisable,
+}) => {
   const intl = useIntl();
   const {
     handleNewSection, handleReIndex, handleExpandAll, handleViewLive,
@@ -35,15 +40,17 @@ const HeaderNavigations = ({ headerNavigationsActions, isReIndexShow, isSections
       {isReIndexShow && (
         <OverlayTrigger
           placement="bottom"
-          overlay={(
+          overlay={!isReindexButtonDisable ? (
             <Tooltip id={intl.formatMessage(messages.reindexButtonTooltip)}>
               {intl.formatMessage(messages.reindexButtonTooltip)}
             </Tooltip>
-          )}
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+          ) : <></>}
         >
           <Button
             onClick={handleReIndex}
             variant="outline-primary"
+            disabled={isReindexButtonDisable}
           >
             {intl.formatMessage(messages.reindexButton)}
           </Button>
@@ -81,6 +88,7 @@ const HeaderNavigations = ({ headerNavigationsActions, isReIndexShow, isSections
 HeaderNavigations.propTypes = {
   isReIndexShow: PropTypes.bool.isRequired,
   isSectionsExpanded: PropTypes.bool.isRequired,
+  isReindexButtonDisable: PropTypes.bool.isRequired,
   headerNavigationsActions: PropTypes.shape({
     handleNewSection: PropTypes.func.isRequired,
     handleReIndex: PropTypes.func.isRequired,

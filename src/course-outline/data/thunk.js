@@ -1,13 +1,13 @@
+import { RequestStatus } from '../../data/constants';
 import {
   getCourseOutlineIndex,
+  getReindexCourse,
 } from './api';
 import {
   fetchOutlineIndexSuccess,
   updateLoadingOutlineIndexStatus,
 } from './slice';
-import { RequestStatus } from '../../data/constants';
 
-// eslint-disable-next-line import/prefer-default-export
 export function fetchCourseOutlineIndexQuery(courseId) {
   return async (dispatch) => {
     dispatch(updateLoadingOutlineIndexStatus({ status: RequestStatus.IN_PROGRESS }));
@@ -20,6 +20,19 @@ export function fetchCourseOutlineIndexQuery(courseId) {
       return true;
     } catch (error) {
       dispatch(updateLoadingOutlineIndexStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function fetchCourseReindexQuery(courseId, reindexLink) {
+  return async (dispatch) => {
+    try {
+      await getReindexCourse(reindexLink);
+      dispatch(fetchCourseOutlineIndexQuery(courseId));
+
+      return true;
+    } catch (error) {
       return false;
     }
   };
