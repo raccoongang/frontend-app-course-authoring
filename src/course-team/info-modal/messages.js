@@ -21,10 +21,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-team.error-modal.title',
     defaultMessage: 'Error adding user',
   },
-  // errorModalMessage: {
-  //   id: 'course-authoring.course-team.error-modal.message',
-  //   defaultMessage: 'Could not find user by email address {errorEmail}.',
-  // },
   errorModalOkButton: {
     id: 'course-authoring.course-team.error-modal.button.ok',
     defaultMessage: 'Ok',
