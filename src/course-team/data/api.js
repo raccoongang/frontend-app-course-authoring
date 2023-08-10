@@ -1,4 +1,4 @@
-import { getConfig } from '@edx/frontend-platform';
+import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 import { USER_ROLES } from '../../constants';
@@ -16,7 +16,7 @@ export async function getCourseTeam(courseId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseTeamApiUrl(courseId));
 
-  return data;
+  return camelCaseObject(data);
 }
 
 /**

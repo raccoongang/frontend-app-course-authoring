@@ -8,15 +8,15 @@ const slice = createSlice({
     loadingCourseTeamStatus: RequestStatus.IN_PROGRESS,
     savingStatus: '',
     users: [],
-    show_transfer_ownership_hint: false,
-    allow_actions: false,
-    errorEmail: '',
+    showTransferOwnershipHint: false,
+    allowActions: false,
+    errorMessage: '',
   },
   reducers: {
     fetchCourseTeamSuccess: (state, { payload }) => {
       state.users = payload.users;
-      state.show_transfer_ownership_hint = payload.show_transfer_ownership_hint;
-      state.allow_actions = payload.allow_actions;
+      state.showTransferOwnershipHint = payload.showTransferOwnershipHint;
+      state.allowActions = payload.allowActions;
     },
     updateLoadingCourseTeamStatus: (state, { payload }) => {
       state.loadingCourseTeamStatus = payload.status;
@@ -27,8 +27,8 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
-    setErrorEmail: (state, { payload }) => {
-      state.errorEmail = payload;
+    setErrorMessage: (state, { payload }) => {
+      state.errorMessage = payload;
     },
   },
 });
@@ -38,7 +38,7 @@ export const {
   updateLoadingCourseTeamStatus,
   deleteCourseTeamUser,
   updateSavingStatus,
-  setErrorEmail,
+  setErrorMessage,
 } = slice.actions;
 
 export const {
