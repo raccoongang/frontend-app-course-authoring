@@ -8,11 +8,13 @@ import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import messages from './messages';
 import { useCourseOutline } from './hooks';
+import OutlineSection from './outline-section/OutlineSection';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    sectionsList,
     isLoading,
     isReIndexShow,
     isSectionsExpanded,
@@ -51,6 +53,9 @@ const CourseOutline = ({ courseId }) => {
             <article>
               <div>
                 <section className="course-outline-section">
+                  {sectionsList.length ? sectionsList.map((section) => (
+                    <OutlineSection section={section} />
+                  )) : null}
                   {/* TODO add status bar and list of outlines */}
                 </section>
               </div>

@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchCourseOutlineIndexQuery } from './data/thunk';
-import { getLoadingOutlineIndexStatus, getOutlineIndexData } from './data/selectors';
+import {
+  getLoadingOutlineIndexStatus,
+  getOutlineIndexData,
+  getSectionsList,
+} from './data/selectors';
 import { RequestStatus } from '../data/constants';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
   const { reindexLink } = useSelector(getOutlineIndexData);
   const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
+  const sectionsList = useSelector(getSectionsList);
+
+  console.log(sectionsList, '---------- sectionsList');
 
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
 
@@ -36,6 +43,7 @@ const useCourseOutline = ({ courseId }) => {
     isReIndexShow: Boolean(reindexLink),
     isSectionsExpanded,
     headerNavigationsActions,
+    sectionsList,
   };
 };
 

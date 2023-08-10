@@ -8,10 +8,12 @@ const slice = createSlice({
   initialState: {
     loadingOutlineIndexStatus: RequestStatus.IN_PROGRESS,
     outlineIndexData: {},
+    sectionsList: [],
   },
   reducers: {
     fetchOutlineIndexSuccess: (state, { payload }) => {
       state.outlineIndexData = payload;
+      state.sectionsList = payload.courseStructure?.childInfo?.children || [];
     },
     updateLoadingOutlineIndexStatus: (state, { payload }) => {
       state.loadingOutlineIndexStatus = payload.status;
