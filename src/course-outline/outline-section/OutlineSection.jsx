@@ -89,13 +89,14 @@ const OutlineSection = ({ section, children }) => {
             src={MoveVertIcon}
             alt="header-menu"
             iconAs={Icon}
-            variant="light"
+            variant="primary"
           />
           <Dropdown.Menu>
             <Dropdown.Item>{intl.formatMessage(messages.menuEdit)}</Dropdown.Item>
             <Dropdown.Item>{intl.formatMessage(messages.menuPublish)}</Dropdown.Item>
             <Dropdown.Item>{intl.formatMessage(messages.menuConfigure)}</Dropdown.Item>
             <Dropdown.Item>{intl.formatMessage(messages.menuDuplicate)}</Dropdown.Item>
+            <Dropdown.Item>{intl.formatMessage(messages.menuDelete)}</Dropdown.Item>
             <Dropdown.Item>{intl.formatMessage(messages.menuNewSubsection)}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

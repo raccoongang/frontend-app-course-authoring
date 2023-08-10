@@ -37,6 +37,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-outline.section.menu.duplicate',
     defaultMessage: 'Duplicate',
   },
+  menuDelete: {
+    id: 'course-authoring.course-outline.section.menu.delete',
+    defaultMessage: 'Delete',
+  },
   menuNewSubsection: {
     id: 'course-authoring.course-outline.section.menu.new-subsection',
     defaultMessage: 'New Subsection',
