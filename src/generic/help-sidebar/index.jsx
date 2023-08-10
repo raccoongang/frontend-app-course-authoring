@@ -5,10 +5,10 @@ import classNames from 'classnames';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
+import { useHelpUrls } from '../../help-urls/hooks';
 import { getPagePath } from '../../utils';
 import messages from './messages';
 import HelpSidebarLink from './HelpSidebarLink';
-import { useHelpTokens } from '../../help-tokens/hooks';
 
 const HelpSidebar = ({
   intl,
@@ -52,7 +52,7 @@ const HelpSidebar = ({
     `/course/${courseId}/proctored-exam-settings`,
     getConfig().BASE_URL,
   ).href;
-  const { home: aboutHomeLink } = useHelpTokens(['home']);
+  const { home: aboutHomeLink } = useHelpUrls(['home']);
 
   const shouldShowLink = (path) => !path.includes(pathname) && !studioHomeDestination.includes(pathname);
 

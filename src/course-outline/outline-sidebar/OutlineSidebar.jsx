@@ -4,8 +4,8 @@ import { Hyperlink } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import HelpSidebar from '../../generic/help-sidebar';
+import { useHelpUrls } from '../../help-urls/hooks';
 import { getFormattedSidebarMessages } from './utils';
-import { useHelpTokens } from '../../help-tokens/hooks';
 
 const OutlineSideBar = ({ courseId }) => {
   const intl = useIntl();
@@ -14,7 +14,7 @@ const OutlineSideBar = ({ courseId }) => {
     visibility: learnMoreVisibilityUrl,
     grading: learnMoreGradingUrl,
     outline: learnMoreOutlineUrl,
-  } = useHelpTokens(['visibility', 'grading', 'outline']);
+  } = useHelpUrls(['visibility', 'grading', 'outline']);
 
   const sidebarMessages = getFormattedSidebarMessages(
     {

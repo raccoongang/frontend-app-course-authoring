@@ -1,12 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
-import HelpSidebar from '.';
-import messages from './messages';
 import initializeStore from '../../store';
+import messages from './messages';
+import HelpSidebar from '.';
 
 const mockPathname = '/foo-bar';
 

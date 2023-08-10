@@ -1,12 +1,12 @@
 import React from 'react';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { render } from '@testing-library/react';
-
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
+
+import initializeStore from '../../store';
 import messages from './messages';
 import GradingSidebar from '.';
-import initializeStore from '../../store';
 
 let store;
 const mockPathname = '/foo-bar';
