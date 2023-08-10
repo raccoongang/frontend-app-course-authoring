@@ -15,11 +15,11 @@ import {
 import {
   getCourseTeamLoadingStatus,
   getCourseTeamUsers,
-  getErrorEmail,
+  getErrorMessage,
   getIsAllowActions,
   getIsOwnershipHint, getSavingStatus,
 } from './data/selectors';
-import { setErrorEmail } from './data/slice';
+import { setErrorMessage } from './data/slice';
 import { MODAL_TYPES } from './constants';
 
 const useCourseTeam = ({ courseId }) => {
@@ -34,7 +34,7 @@ const useCourseTeam = ({ courseId }) => {
   const [currentEmail, setCurrentEmail] = useState('');
   const [isQueryPending, setIsQueryPending] = useState(false);
   const courseTeamUsers = useSelector(getCourseTeamUsers);
-  const errorEmail = useSelector(getErrorEmail);
+  const errorMessage = useSelector(getErrorMessage);
   const savingStatus = useSelector(getSavingStatus);
   const isAllowActions = useSelector(getIsAllowActions);
   const isOwnershipHint = useSelector(getIsOwnershipHint);
@@ -49,7 +49,7 @@ const useCourseTeam = ({ courseId }) => {
   };
 
   const handleCloseInfoModal = () => {
-    dispatch(setErrorEmail(''));
+    dispatch(setErrorMessage(''));
     closeInfoModal();
   };
 
@@ -67,7 +67,7 @@ const useCourseTeam = ({ courseId }) => {
     dispatch(createCourseTeamQuery(courseId, email)).then((result) => {
       if (result) {
         hideForm();
-        dispatch(setErrorEmail(''));
+        dispatch(setErrorMessage(''));
         return;
       }
 
@@ -103,7 +103,7 @@ const useCourseTeam = ({ courseId }) => {
 
   return {
     modalType,
-    errorEmail,
+    errorMessage,
     courseName: courseDetails?.name || '',
     currentEmail,
     courseTeamUsers,
