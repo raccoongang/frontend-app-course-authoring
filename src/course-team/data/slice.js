@@ -10,7 +10,7 @@ const slice = createSlice({
     users: [],
     show_transfer_ownership_hint: false,
     allow_actions: false,
-    errorEmail: '',
+    errorMessage: '',
   },
   reducers: {
     fetchCourseTeamSuccess: (state, { payload }) => {
@@ -27,8 +27,8 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
-    setErrorEmail: (state, { payload }) => {
-      state.errorEmail = payload;
+    setErrorMessage: (state, { payload }) => {
+      state.errorMessage = payload;
     },
   },
 });
@@ -38,7 +38,7 @@ export const {
   updateLoadingCourseTeamStatus,
   deleteCourseTeamUser,
   updateSavingStatus,
-  setErrorEmail,
+  setErrorMessage,
 } = slice.actions;
 
 export const {

@@ -25,7 +25,7 @@ const CourseTeam = ({ courseId }) => {
 
   const {
     modalType,
-    errorEmail,
+    errorMessage,
     courseName,
     currentEmail,
     courseTeamUsers,
@@ -125,7 +125,7 @@ const CourseTeam = ({ courseId }) => {
                       isOpen={isInfoModalOpen}
                       close={closeInfoModal}
                       currentEmail={currentEmail}
-                      errorEmail={errorEmail}
+                      errorMessage={errorMessage}
                       courseName={courseName}
                       modalType={modalType}
                       onDeleteSubmit={handleDeleteUserSubmit}
