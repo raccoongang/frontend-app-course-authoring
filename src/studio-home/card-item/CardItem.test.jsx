@@ -34,7 +34,7 @@ describe('<CardItem />', () => {
   });
   it('should render course details for non-library course', () => {
     const { getByText } = render(<RootWrapper />);
-    expect(getByText(`${props.org} / ${props.number}`)).toBeInTheDocument();
+    expect(getByText(`${props.org} / ${props.number} / ${props.run}`)).toBeInTheDocument();
   });
   it('should render correct links for non-library course', () => {
     const { getByText } = render(<RootWrapper />);
@@ -50,6 +50,6 @@ describe('<CardItem />', () => {
     const { getByText } = render(<RootWrapper />);
     const courseTitleLink = getByText(props.displayName);
     expect(courseTitleLink).toHaveAttribute('href', `${getConfig().STUDIO_BASE_URL}${props.url}`);
-    expect(getByText(`${props.org} / ${props.number}`)).toBeInTheDocument();
+    expect(getByText(`${props.org} / ${props.number} / ${props.run}`)).toBeInTheDocument();
   });
 });

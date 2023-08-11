@@ -22,7 +22,7 @@ ensureConfig([
 ], 'Header component');
 
 const Header = ({
-  courseId, courseNumber, courseOrg, courseTitle, intl, isHomePage,
+  courseId, courseNumber, courseOrg, courseTitle, intl, hideMainMenu,
 }) => {
   const { authenticatedUser, config } = useContext(AppContext);
 
@@ -164,7 +164,7 @@ const Header = ({
     avatar: authenticatedUser !== null ? authenticatedUser.avatar : null,
     mainMenu,
     userMenu,
-    isHomePage,
+    hideMainMenu,
   };
   return (
     <>
@@ -184,14 +184,14 @@ Header.propTypes = {
   courseOrg: PropTypes.string,
   courseTitle: PropTypes.string,
   intl: intlShape.isRequired,
-  isHomePage: PropTypes.bool,
+  hideMainMenu: PropTypes.bool,
 };
 
 Header.defaultProps = {
   courseId: null,
   courseNumber: null,
   courseOrg: null,
-  isHomePage: false,
+  hideMainMenu: false,
   courseTitle: null,
 };
 
