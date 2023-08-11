@@ -8,7 +8,7 @@ const slice = createSlice({
   initialState: {
     loadingOutlineIndexStatus: RequestStatus.IN_PROGRESS,
     outlineIndexData: {},
-    savingStatus: RequestStatus.IN_PROGRESS,
+    savingStatus: '',
     statusBarData: {
       courseReleaseDate: '',
       highlightsEnabledForMessaging: false,

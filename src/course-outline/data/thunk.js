@@ -13,7 +13,7 @@ import {
   fetchStatusBarSelPacedSuccess,
   updateSavingStatus,
 } from './slice';
-import { getCourseBestPracticesChecklist, getCourseLaunchChecklist } from '../utils/utils';
+import { getCourseBestPracticesChecklist, getCourseLaunchChecklist } from '../utils/getChecklistForStatusBar';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
   return async (dispatch) => {
@@ -74,7 +74,7 @@ export function fetchCourseBestPracticesQuery({
 
 export function enableCourseHighlightsEmailsQuery(courseId) {
   return async (dispatch) => {
-    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
 
     try {
       await enableCourseHighlightsEmails(courseId);

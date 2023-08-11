@@ -40,7 +40,7 @@ import ScheduleSidebar from './schedule-sidebar';
 import messages from './messages';
 import { useSaveValuesPrompt } from './hooks';
 import { STATEFUL_BUTTON_STATES } from '../constants';
-import { useScrollToHashElement } from '../utils';
+import { useScrollToHashElement } from '../hooks';
 
 const ScheduleAndDetails = ({ intl, courseId }) => {
   const courseSettings = useSelector(getCourseSettings);

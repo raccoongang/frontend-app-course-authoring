@@ -32,6 +32,7 @@ const StatusBar = ({
   } = checklist;
 
   const checkListTitle = `${completedCourseLaunchChecks + completedCourseBestPracticesChecks}/${totalCourseLaunchChecks + totalCourseBestPracticesChecks}`;
+  const checklistDestination = new URL(`checklists/${courseId}`, config.STUDIO_BASE_URL).href;
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -62,7 +63,7 @@ const StatusBar = ({
         <h5 className="h5">{intl.formatMessage(messages.checklistTitle)}</h5>
         <Hyperlink
           className="small"
-          destination={`${config.STUDIO_BASE_URL}/checklists/${courseId}`}
+          destination={checklistDestination}
           showLaunchIcon={false}
         >
           {checkListTitle} {intl.formatMessage(messages.checklistCompleted)}

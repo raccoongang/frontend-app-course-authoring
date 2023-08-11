@@ -15,6 +15,7 @@ import {
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
 } from './data/thunk';
+import { updateSavingStatus } from './data/slice';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,6 @@ const useCourseOutline = ({ courseId }) => {
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
-  const [isQueryPending, setIsQueryPending] = useState(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -43,13 +43,13 @@ const useCourseOutline = ({ courseId }) => {
   };
 
   const handleEnableHighlightsSubmit = () => {
-    setIsQueryPending(true);
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(enableCourseHighlightsEmailsQuery(courseId));
     closeEnableHighlightsModal();
   };
 
   const handleInternetConnectionFailed = () => {
-    setIsQueryPending(false);
+    dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
   };
 
   useEffect(() => {
@@ -59,6 +59,7 @@ const useCourseOutline = ({ courseId }) => {
   }, [courseId]);
 
   return {
+    savingStatus,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     isSectionsExpanded,
@@ -68,7 +69,6 @@ const useCourseOutline = ({ courseId }) => {
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
-    isQueryPending,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     handleInternetConnectionFailed,
   };

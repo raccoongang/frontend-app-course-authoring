@@ -4,6 +4,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Container, Layout } from '@edx/paragon';
 
 import SubHeader from '../generic/sub-header/SubHeader';
+import { RequestStatus } from '../data/constants';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
@@ -16,10 +17,10 @@ const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    savingStatus,
     statusBarData,
     isLoading,
     isReIndexShow,
-    isQueryPending,
     isSectionsExpanded,
     isEnableHighlightsModalOpen,
     isInternetConnectionAlertFailed,
@@ -69,7 +70,6 @@ const CourseOutline = ({ courseId }) => {
                       statusBarData={statusBarData}
                       openEnableHighlightsModal={openEnableHighlightsModal}
                     />
-                    {/* TODO add status bar and list of outlines */}
                   </section>
                 </div>
               </article>
@@ -89,7 +89,7 @@ const CourseOutline = ({ courseId }) => {
       <div className="alert-toast">
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
-          isQueryPending={isQueryPending}
+          isQueryPending={savingStatus === RequestStatus.PENDING}
           onInternetConnectionFailed={handleInternetConnectionFailed}
         />
       </div>
