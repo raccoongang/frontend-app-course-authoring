@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
+import { history } from '@edx/frontend-platform';
 
 // eslint-disable-next-line import/prefer-default-export
-export const useScrollToHashElement = () => {
-  const currentURL = window.location.href;
-  const elementID = currentURL.split('#')[1];
-  const element = document.getElementById(elementID);
-
+export const useScrollToHashElement = ({ isLoading }) => {
   useEffect(() => {
-    if (element) {
-      element.scrollIntoView();
-      // eslint-disable-next-line no-restricted-globals
-      history.replaceState({}, document.title, window.location.href.split('#')[0]);
+    const currentHash = window.location.hash;
+
+    if (currentHash) {
+      const element = document.querySelector(currentHash);
+
+      if (element) {
+        element.scrollIntoView();
+        history.replace({ hash: '' });
+      }
     }
-  }, [element]);
+  }, [isLoading]);
 };

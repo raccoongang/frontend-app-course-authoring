@@ -124,7 +124,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
     dispatch(fetchCourseDetailsQuery(courseId));
   }, [courseId]);
 
-  useScrollToHashElement();
+  useScrollToHashElement({ isLoading });
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
