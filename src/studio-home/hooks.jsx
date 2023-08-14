@@ -3,7 +3,6 @@ import { history } from '@edx/frontend-platform';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RequestStatus } from '../data/constants';
-import { redirectToCourseIndex } from './constants';
 import {
   updateSavingStatus,
 } from '../generic/data/slice';
@@ -13,6 +12,7 @@ import {
   getStudioHomeData,
 } from './data/selectors';
 import { fetchStudioHomeData } from './data/thunks';
+import { redirectToCourseIndex } from './constants';
 
 const useStudioHome = () => {
   const dispatch = useDispatch();

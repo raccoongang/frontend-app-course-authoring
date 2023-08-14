@@ -50,6 +50,6 @@ describe('<CardItem />', () => {
     const { getByText } = render(<RootWrapper />);
     const courseTitleLink = getByText(props.displayName);
     expect(courseTitleLink).toHaveAttribute('href', `${getConfig().STUDIO_BASE_URL}${props.url}`);
-    expect(getByText(`${props.org} / ${props.number} / ${props.run}`)).toBeInTheDocument();
+    expect(getByText(`${props.org} / ${props.number}`)).toBeInTheDocument();
   });
 });

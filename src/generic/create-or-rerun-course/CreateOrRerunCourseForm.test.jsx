@@ -1,18 +1,18 @@
-import { getConfig, initializeMockApp } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { AppProvider } from '@edx/frontend-platform/react';
+import React from 'react';
+import MockAdapter from 'axios-mock-adapter';
 import {
   act,
   fireEvent, render,
   waitFor,
 } from '@testing-library/react';
-import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
+import { getConfig, initializeMockApp } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { AppProvider } from '@edx/frontend-platform/react';
 
-import { CreateOrRerunCourseForm } from '.';
 import initializeStore from '../../store';
 import messages from './messages';
+import { CreateOrRerunCourseForm } from '.';
 
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
