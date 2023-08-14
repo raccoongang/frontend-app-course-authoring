@@ -9,6 +9,7 @@ const slice = createSlice({
     loadingOutlineIndexStatus: RequestStatus.IN_PROGRESS,
     outlineIndexData: {},
     sectionsList: [],
+    currentHighlights: [],
   },
   reducers: {
     fetchOutlineIndexSuccess: (state, { payload }) => {
@@ -18,12 +19,16 @@ const slice = createSlice({
     updateLoadingOutlineIndexStatus: (state, { payload }) => {
       state.loadingOutlineIndexStatus = payload.status;
     },
+    setCurrentHighlights: (state, { payload }) => {
+      state.currentHighlights = payload;
+    },
   },
 });
 
 export const {
   fetchOutlineIndexSuccess,
   updateLoadingOutlineIndexStatus,
+  setCurrentHighlights,
 } = slice.actions;
 
 export const {

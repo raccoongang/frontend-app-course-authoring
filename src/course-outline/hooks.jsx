@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useToggle } from '@edx/paragon';
 
 import { fetchCourseOutlineIndexQuery } from './data/thunk';
 import {
@@ -8,14 +9,17 @@ import {
   getSectionsList,
 } from './data/selectors';
 import { RequestStatus } from '../data/constants';
+import { setCurrentHighlights } from './data/slice';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
+
   const { reindexLink } = useSelector(getOutlineIndexData);
   const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
   const sectionsList = useSelector(getSectionsList);
 
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
+  const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -36,12 +40,20 @@ const useCourseOutline = ({ courseId }) => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
   }, [courseId]);
 
+  const handleOpenHighlightsModal = (highlights) => {
+    dispatch(setCurrentHighlights(highlights));
+    openHighlightsModal();
+  };
+
   return {
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     isSectionsExpanded,
     headerNavigationsActions,
     sectionsList,
+    handleOpenHighlightsModal,
+    isHighlightsModalOpen,
+    closeHighlightsModal,
   };
 };
 

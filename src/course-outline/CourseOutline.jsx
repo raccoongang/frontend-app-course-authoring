@@ -9,6 +9,7 @@ import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import { useCourseOutline } from './hooks';
 import SectionCard from './section-card/SectionCard';
 import messages from './messages';
+import HighlightsModal from './highlights-modal/HighlightsModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
@@ -18,7 +19,10 @@ const CourseOutline = ({ courseId }) => {
     isLoading,
     isReIndexShow,
     isSectionsExpanded,
+    isHighlightsModalOpen,
+    closeHighlightsModal,
     headerNavigationsActions,
+    handleOpenHighlightsModal,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -54,7 +58,10 @@ const CourseOutline = ({ courseId }) => {
               <div>
                 <section className="course-outline-section">
                   {sectionsList.length ? sectionsList.map((section) => (
-                    <SectionCard section={section} />
+                    <SectionCard
+                      section={section}
+                      onOpenHighlightsModal={handleOpenHighlightsModal}
+                    />
                   )) : null}
                   {/* TODO add status bar and list of outlines */}
                 </section>
@@ -66,6 +73,11 @@ const CourseOutline = ({ courseId }) => {
           </Layout.Element>
         </Layout>
       </section>
+      <HighlightsModal
+        isOpen={isHighlightsModalOpen}
+        onClose={closeHighlightsModal}
+        onSubmit={() => console.log('submit')}
+      />
     </Container>
   );
 };

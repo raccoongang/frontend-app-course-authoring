@@ -74,4 +74,32 @@ const getSectionStatusBadgeContent = (status, messages, intl) => {
   }
 };
 
-export { getSectionStatus, getSectionStatusBadgeContent };
+const getHighlightsFormValues = (currentHighlights) => {
+  const initialFormValues = {
+    highlight_1: '',
+    highlight_2: '',
+    highlight_3: '',
+    highlight_4: '',
+    highlight_5: '',
+  };
+
+  const formValues = currentHighlights.length
+    ? Object.entries(initialFormValues).reduce((result, [key], index) => {
+      if (currentHighlights[index]) {
+        return {
+          ...result,
+          [key]: currentHighlights[index],
+        };
+      }
+      return result;
+    }, initialFormValues)
+    : initialFormValues;
+
+  return formValues;
+};
+
+export {
+  getSectionStatus,
+  getSectionStatusBadgeContent,
+  getHighlightsFormValues,
+};
