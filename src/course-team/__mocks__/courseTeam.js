@@ -1,5 +1,5 @@
 module.exports = {
-  show_transfer_ownership_hint: true,
+  showTransferOwnershipHint: true,
   users: [
     {
       email: 'staff@example.com',
@@ -20,5 +20,5 @@ module.exports = {
       username: 'Vladislav_Keblysh',
     },
   ],
-  allow_actions: true,
+  allowActions: true,
 };

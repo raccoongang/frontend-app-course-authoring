@@ -12,23 +12,35 @@ import {
 } from '@edx/paragon/icons';
 
 import SubHeader from '../generic/sub-header/SubHeader';
+import { RequestStatus } from '../data/constants';
+import InternetConnectionAlert from '../generic/internet-connection-alert';
 import AlertMessage from '../generic/alert-message';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import messages from './messages';
 import { useCourseOutline } from './hooks';
+import StatusBar from './status-bar/StatusBar';
+import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    savingStatus,
+    statusBarData,
     isLoading,
     isReIndexShow,
     showErrorAlert,
     showSuccessAlert,
     isSectionsExpanded,
+    isEnableHighlightsModalOpen,
+    isInternetConnectionAlertFailed,
     isReindexButtonDisable,
     headerNavigationsActions,
+    openEnableHighlightsModal,
+    closeEnableHighlightsModal,
+    handleEnableHighlightsSubmit,
+    handleInternetConnectionFailed,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -80,7 +92,12 @@ const CourseOutline = ({ courseId }) => {
               <article>
                 <div>
                   <section className="course-outline-section">
-                    {/* TODO add status bar and list of outlines */}
+                    <StatusBar
+                      courseId={courseId}
+                      isLaoding={isLoading}
+                      statusBarData={statusBarData}
+                      openEnableHighlightsModal={openEnableHighlightsModal}
+                    />
                   </section>
                 </div>
               </article>
@@ -89,9 +106,20 @@ const CourseOutline = ({ courseId }) => {
               <OutlineSideBar courseId={courseId} />
             </Layout.Element>
           </Layout>
+          <EnableHighlightsModal
+            isOpen={isEnableHighlightsModalOpen}
+            close={closeEnableHighlightsModal}
+            onEnableHighlightsSubmit={handleEnableHighlightsSubmit}
+            highlightsDocUrl={statusBarData.highlightsDocUrl}
+          />
         </section>
       </Container>
       <div className="alert-toast">
+        <InternetConnectionAlert
+          isFailed={isInternetConnectionAlertFailed}
+          isQueryPending={savingStatus === RequestStatus.PENDING}
+          onInternetConnectionFailed={handleInternetConnectionFailed}
+        />
         {showErrorAlert && (
           <AlertMessage
             key={intl.formatMessage(messages.alertErrorTitle)}
