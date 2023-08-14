@@ -1,5 +1,9 @@
 import { RequestStatus } from '../../data/constants';
 import {
+  getCourseBestPracticesChecklist,
+  getCourseLaunchChecklist,
+} from '../utils/getChecklistForStatusBar';
+import {
   enableCourseHighlightsEmails,
   getCourseBestPractices,
   getCourseLaunch,
@@ -13,7 +17,6 @@ import {
   fetchStatusBarSelPacedSuccess,
   updateSavingStatus,
 } from './slice';
-import { getCourseBestPracticesChecklist, getCourseLaunchChecklist } from '../utils/getChecklistForStatusBar';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
   return async (dispatch) => {
