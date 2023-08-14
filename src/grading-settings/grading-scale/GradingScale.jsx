@@ -144,7 +144,7 @@ const GradingScale = ({
       const updatedLetters = [...prevLetters];
       updatedLetters.splice(updatedLetters.length - 1, 1);
 
-      return updatedLetters.length === 1 ? ['pass'] : updatedLetters;
+      return updatedLetters.length === 1 ? ['Pass'] : updatedLetters;
     });
   };
 
@@ -157,7 +157,7 @@ const GradingScale = ({
 
     setLetters(prevLetters => {
       const updatedLetters = [...prevLetters];
-      const emptyString = '\u200B';
+      const emptyString = ' ';
       updatedLetters[idx - 1] = value || emptyString;
 
       return updatedLetters;
