@@ -157,7 +157,7 @@ const GradingScale = ({
 
     setLetters(prevLetters => {
       const updatedLetters = [...prevLetters];
-      const emptyString = ' ';
+      const emptyString = '\u200B';
       updatedLetters[idx - 1] = value || emptyString;
 
       return updatedLetters;
