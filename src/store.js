@@ -13,6 +13,7 @@ import { reducer as liveReducer } from './pages-and-resources/live/data/slice';
 import { reducer as courseTeamReducer } from './course-team/data/slice';
 import { reducer as CourseUpdatesReducer } from './course-updates/data/slice';
 import { reducer as courseOutlineReducer } from './course-outline/data/slice';
+import { reducer as genericReducer } from './generic/data/slice';
 import { reducer as helpUrlsReducer } from './help-urls/data/slice';
 
 export default function initializeStore(preloadedState = undefined) {
@@ -31,6 +32,7 @@ export default function initializeStore(preloadedState = undefined) {
       courseTeam: courseTeamReducer,
       courseUpdates: CourseUpdatesReducer,
       courseOutline: courseOutlineReducer,
+      generic: genericReducer,
       helpUrls: helpUrlsReducer,
     },
     preloadedState,

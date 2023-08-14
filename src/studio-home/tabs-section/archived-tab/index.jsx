@@ -6,7 +6,7 @@ import CardItem from '../../card-item';
 const ArchivedTab = ({ archivedCoursesData }) => (
   <div className="courses-tab">
     {archivedCoursesData.map(({
-      courseKey, displayName, lmsLink, org, rerunLink, number, url,
+      courseKey, displayName, lmsLink, org, rerunLink, number, run, url,
     }) => (
       <CardItem
         key={courseKey}
@@ -15,6 +15,7 @@ const ArchivedTab = ({ archivedCoursesData }) => (
         rerunLink={rerunLink}
         org={org}
         number={number}
+        run={run}
         url={url}
       />
     ))}

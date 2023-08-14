@@ -1,44 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Container, Layout } from '@edx/paragon';
+import React from 'react';
+import {
+  Button, Container, Layout,
+} from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons/es5';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { useDispatch, useSelector } from 'react-redux';
 
+import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { RequestStatus } from '../data/constants';
 import Loading from '../generic/Loading';
 import Header from '../studio-header/Header';
+import {
+  updateSavingStatus,
+} from '../generic/data/slice';
+import { updateCreateOrRerunCourseQuery } from '../generic/data/thunks';
 import SubHeader from '../generic/sub-header/SubHeader';
 import SettingsSidebar from './settings-sidebar/SettingsSidebar';
 import TabsSection from './tabs-section';
 import OrganizationSection from './organization-section';
+import CreateNewCourseForm from './create-new-course-form';
 import messages from './messages';
-import { getLoadingStatus, getStudioHomeData } from './data/selectors';
-import { fetchStudioHomeData } from './data/thunks';
+import { useStudioHome } from './hooks';
 
 const StudioHome = ({ intl }) => {
-  const studioHomeData = useSelector(getStudioHomeData);
-  const loadingStatus = useSelector(getLoadingStatus);
-  const [studioHomeItems, setStudioHomeItems] = useState(studioHomeData);
-  const dispatch = useDispatch();
-  const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
-
-  useEffect(() => {
-    dispatch(fetchStudioHomeData());
-  }, []);
-
-  useEffect(() => {
-    if (studioHomeData) {
-      setStudioHomeItems(studioHomeData);
-    }
-  }, [studioHomeData]);
+  const {
+    isLoading,
+    savingStatus,
+    newCourseData,
+    studioHomeItems,
+    showNewCourseContainer,
+    dispatch,
+    setShowNewCourseContainer,
+  } = useStudioHome();
 
   if (isLoading) {
     return <Loading />;
   }
 
+  const handleCreateNewCourse = () => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+  };
+
+  const handleQueryProcessing = () => {
+    dispatch(updateCreateOrRerunCourseQuery(newCourseData));
+  };
+
+  const handleInternetConnectionFailed = () => {
+    dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+  };
+
   return (
     <>
-      <Header isHomePage />
+      <Header hideMainMenu />
       <Container size="xl" className="studio-home">
         <section className="mb-4">
           <article className="studio-home-sub-header">
@@ -50,7 +62,8 @@ const StudioHome = ({ intl }) => {
                     variant="outline-primary"
                     iconBefore={AddIcon}
                     size="sm"
-                    disabled
+                    disabled={showNewCourseContainer}
+                    onClick={() => setShowNewCourseContainer(true)}
                   >
                     {intl.formatMessage(messages.addNewCourseBtnText)}
                   </Button>
@@ -67,6 +80,12 @@ const StudioHome = ({ intl }) => {
           >
             <Layout.Element>
               <section>
+                {showNewCourseContainer && (
+                  <CreateNewCourseForm
+                    handleOnClickCancel={() => setShowNewCourseContainer(false)}
+                    handleOnClickCreate={handleCreateNewCourse}
+                  />
+                )}
                 <OrganizationSection />
                 <TabsSection tabsData={studioHomeItems} />
               </section>
@@ -77,6 +96,14 @@ const StudioHome = ({ intl }) => {
           </Layout>
         </section>
       </Container>
+      <div className="alert-toast">
+        <InternetConnectionAlert
+          isFailed={savingStatus === RequestStatus.FAILED}
+          isQueryPending={savingStatus === RequestStatus.PENDING}
+          onQueryProcessing={handleQueryProcessing}
+          onInternetConnectionFailed={handleInternetConnectionFailed}
+        />
+      </div>
     </>
   );
 };
