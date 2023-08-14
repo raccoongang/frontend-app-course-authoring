@@ -153,11 +153,15 @@ const Header = ({
     </OverlayTrigger>
   );
 
+  const logoDestination = process.env.ENABLE_NEW_HOME_PAGE === 'true'
+    ? new URL('home', config.BASE_URL).href
+    : config.STUDIO_BASE_URL;
+
   const props = {
     logo: config.LOGO_URL,
     logoAltText: 'Studio edX',
     siteName: 'edX',
-    logoDestination: process.env.ENABLE_NEW_HOME_PAGE === 'true' ? '/home' : config.STUDIO_BASE_URL,
+    logoDestination,
     courseLockUp,
     courseId,
     username: authenticatedUser !== null ? authenticatedUser.username : null,
