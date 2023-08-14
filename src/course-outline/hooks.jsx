@@ -15,8 +15,6 @@ const useCourseOutline = ({ courseId }) => {
   const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
   const sectionsList = useSelector(getSectionsList);
 
-  console.log(sectionsList, '---------- sectionsList');
-
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
 
   const headerNavigationsActions = {

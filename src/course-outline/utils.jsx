@@ -4,8 +4,7 @@ import {
   EditOutline as EditOutlineIcon,
 } from '@edx/paragon/icons';
 
-import { SECTION_BADGE_STATUTES, STAFF_ONLY } from '../constants';
-import messages from './messages';
+import { SECTION_BADGE_STATUTES, STAFF_ONLY } from './constants';
 
 /**
  * Get section status depended on section info
@@ -45,7 +44,7 @@ const getSectionStatus = ({
  *   badgeIcon: node,
  * }
  */
-const getSectionStatusBadgeContent = (status, intl) => {
+const getSectionStatusBadgeContent = (status, messages, intl) => {
   switch (status) {
   case SECTION_BADGE_STATUTES.live:
     return {
