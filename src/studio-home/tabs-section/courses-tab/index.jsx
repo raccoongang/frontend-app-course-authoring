@@ -11,7 +11,11 @@ const CoursesTab = ({ coursesDataItems }) => {
     );
   }
 
-  return coursesDataItems.map(({
+  const sortedCourses = [...coursesDataItems]
+    .sort((firstCourseData, secondCourseData) => firstCourseData
+      .displayName.localeCompare(secondCourseData.displayName));
+
+  return sortedCourses.map(({
     courseKey, displayName, lmsLink, org, rerunLink, number, run, url,
   }) => (
     <CardItem
