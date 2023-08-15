@@ -9,7 +9,7 @@ import messages from './messages';
 const closeMock = jest.fn();
 const onDeleteSubmitMock = jest.fn();
 const currentEmailMock = 'user@example.com';
-const errorEmailMock = 'error@example.com';
+const errorMessageMock = 'Error text error@example.com';
 const courseNameMock = 'Course Name';
 
 const renderComponent = (props) => render(
@@ -20,7 +20,7 @@ const renderComponent = (props) => render(
       close={closeMock}
       onDeleteSubmit={onDeleteSubmitMock}
       currentEmail={currentEmailMock}
-      errorEmail={errorEmailMock}
+      errorMessage={errorMessageMock}
       courseName={courseNameMock}
       {...props}
     />
@@ -49,10 +49,7 @@ describe('<InfoModal />', () => {
     });
 
     expect(getByText(messages.errorModalTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByText(
-      messages.errorModalMessage.defaultMessage
-        .replace('{errorEmail}', errorEmailMock),
-    )).toBeInTheDocument();
+    expect(getByText(errorMessageMock)).toBeInTheDocument();
     expect(getByRole('button', { name: messages.errorModalOkButton.defaultMessage })).toBeInTheDocument();
   });
 

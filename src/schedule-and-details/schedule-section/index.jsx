@@ -107,7 +107,7 @@ const ScheduleSection = ({
   ];
 
   return (
-    <section className="section-container schedule-section">
+    <section className="section-container schedule-section" id="schedule">
       <SectionSubHeader
         title={intl.formatMessage(messages.scheduleTitle)}
         description={intl.formatMessage(messages.scheduleDescription)}

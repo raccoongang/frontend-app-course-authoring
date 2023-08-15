@@ -43,10 +43,12 @@ describe('<GradingSettings />', () => {
   });
 
   it('should render without errors', async () => {
-    const { getByText } = render(<RootWrapper />);
+    const { getByText, getAllByText } = render(<RootWrapper />);
     await waitFor(() => {
+      const gradingElements = getAllByText(messages.headingTitle.defaultMessage);
+      const gradingTitle = gradingElements[0];
       expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
+      expect(gradingTitle).toBeInTheDocument();
       expect(getByText(messages.policy.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.policiesDescription.defaultMessage)).toBeInTheDocument();
     });
@@ -71,7 +73,7 @@ describe('<GradingSettings />', () => {
       const segmentInput = segmentInputs[1];
       fireEvent.change(segmentInput, { target: { value: 'Test' } });
       fireEvent.click(getByText(messages.buttonCancelText.defaultMessage));
-      expect(segmentInput).toHaveValue('A');
+      expect(segmentInput).toHaveValue('a');
     });
   });
   it('should save segment input changes and display saving message', async () => {

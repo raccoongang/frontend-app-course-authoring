@@ -37,7 +37,7 @@ const TabsSection = ({ intl, tabsData }) => {
         </Tab>,
       );
     }
-    if (archivedCourses.length) {
+    if (archivedCourses?.length) {
       tabs.push(
         <Tab
           key="archived"

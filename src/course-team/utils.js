@@ -2,17 +2,6 @@ import { MODAL_TYPES } from './constants';
 import messages from './info-modal/messages';
 
 /**
- * Get email address from request error message
- * @param {string} message - Message from request error
- * @returns {string} - Email address
- */
-const getErrorEmailFromMessage = (message) => {
-  const regex = /'([^']+)'/g;
-  const match = message.match(regex);
-  return match ? match[0] : '';
-};
-
-/**
  * Create an info modal settings dependent on modal type
  * @param {typeof MODAL_TYPES} modalType - one of MODAL_TYPES
  * @param {string} currentEmail - email in current user
@@ -28,7 +17,7 @@ const getErrorEmailFromMessage = (message) => {
  * }}
  */
 
-const getInfoModalSettings = (modalType, currentEmail, errorEmail, courseName, intl) => {
+const getInfoModalSettings = (modalType, currentEmail, errorMessage, courseName, intl) => {
   switch (modalType) {
   case MODAL_TYPES.delete:
     return {
@@ -42,7 +31,7 @@ const getInfoModalSettings = (modalType, currentEmail, errorEmail, courseName, i
   case MODAL_TYPES.error:
     return {
       title: intl.formatMessage(messages.errorModalTitle),
-      message: intl.formatMessage(messages.errorModalMessage, { errorEmail }),
+      message: errorMessage,
       variant: 'danger',
       closeButtonText: intl.formatMessage(messages.errorModalOkButton),
       closeButtonVariant: 'danger',
@@ -60,7 +49,5 @@ const getInfoModalSettings = (modalType, currentEmail, errorEmail, courseName, i
   }
 };
 
-export {
-  getErrorEmailFromMessage,
-  getInfoModalSettings,
-};
+// eslint-disable-next-line import/prefer-default-export
+export { getInfoModalSettings };
