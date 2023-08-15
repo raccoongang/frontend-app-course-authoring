@@ -5,9 +5,9 @@ import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
-import { exportPageMock } from './__mocks__';
 
 import initializeStore from '../store';
+import { exportPageMock } from './__mocks__';
 import messages from './messages';
 import CourseExportPage from './CourseExportPage';
 import { postExportCourseApiUrl } from './data/api';

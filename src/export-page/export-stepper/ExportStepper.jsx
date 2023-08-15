@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getConfig } from '@edx/frontend-platform';
 import { Button } from '@edx/paragon';
+
 import CourseStepper from '../../generic/course-stepper';
 
 import {

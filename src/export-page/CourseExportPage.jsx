@@ -7,20 +7,21 @@ import {
 } from '@edx/paragon';
 import { ArrowCircleDown } from '@edx/paragon/icons';
 import Cookies from 'universal-cookie';
+
+import InternetConnectionAlert from '../generic/internet-connection-alert';
+import SubHeader from '../generic/sub-header/SubHeader';
+import { RequestStatus } from '../data/constants';
 import messages from './messages';
 import ExportSidebar from './export-sidebar/ExportSidebar';
 import {
   getCurrentStage, getError, getExportTriggered, getLoadingStatus,
 } from './data/selectors';
 import { startExportingCourse } from './data/thunks';
-import SubHeader from '../generic/sub-header/SubHeader';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './data/constants';
 import { updateExportTriggered, updateSuccessDate } from './data/slice';
 import ExportModalError from './export-modal-error/ExportModalError';
 import ExportFooter from './export-footer/ExportFooter';
 import ExportStepper from './export-stepper/ExportStepper';
-import InternetConnectionAlert from '../generic/internet-connection-alert';
-import { RequestStatus } from '../data/constants';
 
 const CourseExportPage = ({ intl, courseId }) => {
   const dispatch = useDispatch();

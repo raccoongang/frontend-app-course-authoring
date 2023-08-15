@@ -4,6 +4,7 @@ import {
   intlShape,
 } from '@edx/frontend-platform/i18n';
 import { Layout } from '@edx/paragon';
+
 import messages from './messages';
 
 const ExportFooter = ({ intl }) => (

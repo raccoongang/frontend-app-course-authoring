@@ -1,6 +1,10 @@
 import Cookies from 'universal-cookie';
 
 import moment from 'moment';
+
+import { setExportCookie } from '../utils';
+import { RequestStatus } from '../../data/constants';
+import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './constants';
 import {
   startCourseExporting,
   getExportStatus,
@@ -15,9 +19,6 @@ import {
   reset,
   updateLoadingStatus,
 } from './slice';
-import { setExportCookie } from '../utils';
-import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './constants';
-import { RequestStatus } from '../../data/constants';
 
 export function startExportingCourse(courseId) {
   return async (dispatch) => {

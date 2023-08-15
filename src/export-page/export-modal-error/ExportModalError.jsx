@@ -3,8 +3,9 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '@edx/frontend-platform';
 import PropTypes from 'prop-types';
-import { getError, getIsErrorModalOpen } from '../data/selectors';
+
 import ModalError from '../../generic/modal-error/ModalError';
+import { getError, getIsErrorModalOpen } from '../data/selectors';
 import { updateIsErrorModalOpen } from '../data/slice';
 import messages from './messages';
 

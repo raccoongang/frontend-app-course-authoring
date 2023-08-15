@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import { Button } from '@edx/paragon';
 import { getConfig } from '@edx/frontend-platform';
+
 import HelpSidebar from '../../generic/help-sidebar';
 import messages from './messages';
 
