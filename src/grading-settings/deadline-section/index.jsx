@@ -55,8 +55,8 @@ DeadlineSection.propTypes = {
   setGradingData: PropTypes.func.isRequired,
   setShowSuccessAlert: PropTypes.func.isRequired,
   gracePeriod: PropTypes.shape({
-    hours: PropTypes.number,
-    minutes: PropTypes.number,
+    hours: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    minutes: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
 };
 
