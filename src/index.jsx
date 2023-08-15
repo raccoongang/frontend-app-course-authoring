@@ -17,6 +17,7 @@ import initializeStore from './store';
 import CourseAuthoringRoutes from './CourseAuthoringRoutes';
 import Head from './head/Head';
 import { StudioHome } from './studio-home';
+import CourseRerun from './course-rerun';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './index.scss';
@@ -51,6 +52,15 @@ const App = () => {
             const { params: { courseId } } = match;
             return (
               <CourseAuthoringRoutes courseId={courseId} />
+            );
+          }}
+        />
+        <Route
+          path="/course_rerun/:courseId"
+          render={({ match }) => {
+            const { params: { courseId } } = match;
+            return (
+              <CourseRerun courseId={courseId} />
             );
           }}
         />

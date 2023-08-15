@@ -22,7 +22,7 @@ ensureConfig([
 ], 'Header component');
 
 const Header = ({
-  courseId, courseNumber, courseOrg, courseTitle, intl, isHomePage,
+  courseId, courseNumber, courseOrg, courseTitle, intl, hideMainMenu,
 }) => {
   const { authenticatedUser, config } = useContext(AppContext);
 
@@ -153,18 +153,22 @@ const Header = ({
     </OverlayTrigger>
   );
 
+  const logoDestination = process.env.ENABLE_NEW_HOME_PAGE === 'true'
+    ? new URL('home', config.BASE_URL).href
+    : config.STUDIO_BASE_URL;
+
   const props = {
     logo: config.LOGO_URL,
     logoAltText: 'Studio edX',
     siteName: 'edX',
-    logoDestination: process.env.ENABLE_NEW_HOME_PAGE === 'true' ? '/home' : config.STUDIO_BASE_URL,
+    logoDestination,
     courseLockUp,
     courseId,
     username: authenticatedUser !== null ? authenticatedUser.username : null,
     avatar: authenticatedUser !== null ? authenticatedUser.avatar : null,
     mainMenu,
     userMenu,
-    isHomePage,
+    hideMainMenu,
   };
   return (
     <>
@@ -184,14 +188,14 @@ Header.propTypes = {
   courseOrg: PropTypes.string,
   courseTitle: PropTypes.string,
   intl: intlShape.isRequired,
-  isHomePage: PropTypes.bool,
+  hideMainMenu: PropTypes.bool,
 };
 
 Header.defaultProps = {
   courseId: null,
   courseNumber: null,
   courseOrg: null,
-  isHomePage: false,
+  hideMainMenu: false,
   courseTitle: null,
 };
 

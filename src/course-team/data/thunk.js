@@ -1,5 +1,4 @@
 import { RequestStatus } from '../../data/constants';
-import { getErrorEmailFromMessage } from '../utils';
 import {
   getCourseTeam,
   deleteTeamUser,
@@ -11,7 +10,7 @@ import {
   updateLoadingCourseTeamStatus,
   deleteCourseTeamUser,
   updateSavingStatus,
-  setErrorEmail,
+  setErrorMessage,
 } from './slice';
 
 export function fetchCourseTeamQuery(courseId) {
@@ -42,8 +41,9 @@ export function createCourseTeamQuery(courseId, email) {
 
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
-    } catch ({ message }) {
-      dispatch(setErrorEmail(getErrorEmailFromMessage(message)));
+    } catch (error) {
+      const message = error?.response?.data?.error || '';
+      dispatch(setErrorMessage(message));
 
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;

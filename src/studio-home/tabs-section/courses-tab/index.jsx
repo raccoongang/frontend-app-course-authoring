@@ -5,14 +5,14 @@ import CardItem from '../../card-item';
 import DefaultSection from './default-section';
 
 const CoursesTab = ({ coursesDataItems }) => {
-  if (!coursesDataItems.length) {
+  if (!coursesDataItems?.length) {
     return (
       <DefaultSection />
     );
   }
 
   return coursesDataItems.map(({
-    courseKey, displayName, lmsLink, org, rerunLink, number, url,
+    courseKey, displayName, lmsLink, org, rerunLink, number, run, url,
   }) => (
     <CardItem
       key={courseKey}
@@ -21,6 +21,7 @@ const CoursesTab = ({ coursesDataItems }) => {
       rerunLink={rerunLink}
       org={org}
       number={number}
+      run={run}
       url={url}
     />
   ));
