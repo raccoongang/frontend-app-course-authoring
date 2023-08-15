@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import { Button } from '@edx/paragon';
 
 import HelpSidebar from '../../generic/help-sidebar';
-import messages from './messages';
 import { useHelpUrls } from '../../help-urls/hooks';
+import messages from './messages';
 
 const ExportSidebar = ({ intl, courseId }) => {
   const { docUrl: exportLearnMoreUrl } = useHelpUrls(['doc_url']);

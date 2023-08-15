@@ -1,10 +1,10 @@
 import Cookies from 'universal-cookie';
-
 import moment from 'moment';
 
-import { setExportCookie } from '../utils';
 import { RequestStatus } from '../../data/constants';
+import { setExportCookie } from '../utils';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './constants';
+
 import {
   startCourseExporting,
   getExportStatus,
@@ -18,11 +18,12 @@ import {
   updateIsErrorModalOpen,
   reset,
   updateLoadingStatus,
+  updateSavingStatus,
 } from './slice';
 
 export function startExportingCourse(courseId) {
   return async (dispatch) => {
-    dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     try {
       dispatch(reset());
       dispatch(updateExportTriggered(true));
@@ -30,10 +31,10 @@ export function startExportingCourse(courseId) {
       dispatch(updateCurrentStage(exportData.exportStatus));
       setExportCookie(moment().valueOf(), exportData.exportStatus === EXPORT_STAGES.SUCCESS);
 
-      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
-      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };

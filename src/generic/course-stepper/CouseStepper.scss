@@ -1,13 +1,3 @@
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .course-stepper {
   .course-stepper__step {
     display: flex;
@@ -53,18 +43,15 @@
     opacity: 1;
 
     & svg {
-      animation: spin 2s infinite linear;
+      animation: rotate 2s infinite linear;
     }
   }
 
   .course-stepper__step.done {
     opacity: 1;
 
+    & svg,
     .course-stepper__step-title {
-      color: $success-500;
-    }
-
-    & svg {
       color: $success-500;
     }
   }

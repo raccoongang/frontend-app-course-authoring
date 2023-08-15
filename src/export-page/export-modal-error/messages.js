@@ -26,7 +26,7 @@ const messages = defineMessages({
     defaultMessage: 'Take me to the main course page',
   },
   errorActionButtonUnit: {
-    id: 'course-authoring.export.modal.error.button.cancel.unit',
+    id: 'course-authoring.export.modal.error.button.action.unit',
     defaultMessage: 'Correct failed component',
   },
 });

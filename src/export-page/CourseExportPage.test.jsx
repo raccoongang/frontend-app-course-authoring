@@ -37,7 +37,7 @@ describe('<CourseExportPage />', () => {
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     axiosMock
-      .onGet(`${postExportCourseApiUrl(courseId)}`)
+      .onGet(postExportCourseApiUrl(courseId))
       .reply(200, exportPageMock);
   });
   it('should render without errors', async () => {

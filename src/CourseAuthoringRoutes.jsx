@@ -121,10 +121,7 @@ const CourseAuthoringRoutes = ({ courseId }) => {
             )}
         </PageRoute>
         <PageRoute path={`${path}/export`}>
-          {process.env.ENABLE_NEW_EXPORT_PAGE === 'true'
-            && (
-              <CourseExportPage courseId={courseId} />
-            )}
+          <CourseExportPage courseId={courseId} />
         </PageRoute>
       </Switch>
     </CourseAuthoringPage>

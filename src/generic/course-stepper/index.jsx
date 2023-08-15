@@ -39,7 +39,7 @@ const CourseStepper = ({
     };
 
     return {
-      StepIcon: getStepIcon(index),
+      stepIcon: getStepIcon(index),
       isPercentShow: Boolean(percent) && percent !== 100 && isActiveStep && !hasError,
       isErrorMessageShow: isErrorStep && errorMessage,
       isActiveClass: isActiveStep && !isLastStep && !hasError,
@@ -52,7 +52,7 @@ const CourseStepper = ({
     <div className="course-stepper">
       {steps.length ? steps.map(({ title, description }, index) => {
         const {
-          StepIcon,
+          stepIcon,
           isPercentShow,
           isErrorMessageShow,
           isActiveClass,
@@ -71,7 +71,7 @@ const CourseStepper = ({
             data-testid="course-stepper__step"
           >
             <div className="course-stepper__step-icon">
-              <Icon src={StepIcon} alt={title} data-testid={`${title}-icon`} />
+              <Icon src={stepIcon} alt={title} data-testid={`${title}-icon`} />
             </div>
             <div className="course-stepper__step-info">
               <h3 className="h4 title course-stepper__step-title font-weight-600">{title}</h3>

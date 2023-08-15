@@ -5,7 +5,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import {
   Container, Layout, Button, Card,
 } from '@edx/paragon';
-import { ArrowCircleDown } from '@edx/paragon/icons';
+import { ArrowCircleDown as ArrowCircleDownIcon } from '@edx/paragon/icons';
 import Cookies from 'universal-cookie';
 
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -14,7 +14,7 @@ import { RequestStatus } from '../data/constants';
 import messages from './messages';
 import ExportSidebar from './export-sidebar/ExportSidebar';
 import {
-  getCurrentStage, getError, getExportTriggered, getLoadingStatus,
+  getCurrentStage, getError, getExportTriggered, getLoadingStatus, getSavingStatus,
 } from './data/selectors';
 import { startExportingCourse } from './data/thunks';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './data/constants';
@@ -29,7 +29,11 @@ const CourseExportPage = ({ intl, courseId }) => {
   const currentStage = useSelector(getCurrentStage);
   const { msg: errorMessage } = useSelector(getError);
   const loadingStatus = useSelector(getLoadingStatus);
+  const savingStatus = useSelector(getSavingStatus);
   const cookies = new Cookies();
+  const isShowExportButton = !exportTriggered || errorMessage || currentStage === EXPORT_STAGES.SUCCESS;
+  const anyRequestFailed = savingStatus === RequestStatus.FAILED || loadingStatus === RequestStatus.FAILED;
+  const anyRequestInProgress = savingStatus === RequestStatus.PENDING || loadingStatus === RequestStatus.IN_PROGRESS;
 
   useEffect(() => {
     const cookieData = cookies.get(LAST_EXPORT_COOKIE_NAME);
@@ -62,23 +66,20 @@ const CourseExportPage = ({ intl, courseId }) => {
                   <Card.Header
                     className="h3 px-3 text-black mb-4"
                     title={intl.formatMessage(messages.titleUnderButton)}
-                    size="m"
                   />
-                  {(!exportTriggered || errorMessage || currentStage === EXPORT_STAGES.SUCCESS)
-                    && (
-                      <Card.Section className="px-3 py-1">
-                        <Button
-                          variant="primary"
-                          size="lg"
-                          block
-                          className="mb-4"
-                          onClick={() => dispatch(startExportingCourse(courseId))}
-                          iconBefore={ArrowCircleDown}
-                        >
-                          {intl.formatMessage(messages.buttonTitle)}
-                        </Button>
-                      </Card.Section>
-                    )}
+                  {isShowExportButton && (
+                    <Card.Section className="px-3 py-1">
+                      <Button
+                        size="lg"
+                        block
+                        className="mb-4"
+                        onClick={() => dispatch(startExportingCourse(courseId))}
+                        iconBefore={ArrowCircleDownIcon}
+                      >
+                        {intl.formatMessage(messages.buttonTitle)}
+                      </Button>
+                    </Card.Section>
+                  )}
                 </Card>
                 {exportTriggered && <ExportStepper courseId={courseId} />}
                 <ExportFooter />
@@ -93,8 +94,8 @@ const CourseExportPage = ({ intl, courseId }) => {
       </Container>
       <div className="alert-toast">
         <InternetConnectionAlert
-          isFailed={loadingStatus === RequestStatus.FAILED}
-          isQueryPending={loadingStatus === RequestStatus.IN_PROGRESS}
+          isFailed={anyRequestFailed}
+          isQueryPending={anyRequestInProgress}
           onInternetConnectionFailed={() => null}
         />
       </div>

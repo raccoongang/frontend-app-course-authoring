@@ -9,15 +9,14 @@ import { getConfig } from '@edx/frontend-platform';
 import { Button } from '@edx/paragon';
 
 import CourseStepper from '../../generic/course-stepper';
-
 import {
   getCurrentStage, getDownloadPath, getError, getLoadingStatus, getSuccessDate,
 } from '../data/selectors';
 import { fetchExportStatus } from '../data/thunks';
-import messages from './messages';
 import { EXPORT_STAGES } from '../data/constants';
 import { getFormattedSuccessDate } from '../utils';
 import { RequestStatus } from '../../data/constants';
+import messages from './messages';
 
 const ExportStepper = ({ intl, courseId }) => {
   const currentStage = useSelector(getCurrentStage);
@@ -26,10 +25,13 @@ const ExportStepper = ({ intl, courseId }) => {
   const loadingStatus = useSelector(getLoadingStatus);
   const { msg: errorMessage } = useSelector(getError);
   const dispatch = useDispatch();
+  const isStopFetching = currentStage === EXPORT_STAGES.SUCCESS
+    || loadingStatus === RequestStatus.FAILED
+    || errorMessage;
 
   useEffect(() => {
     const id = setInterval(() => {
-      if (currentStage === EXPORT_STAGES.SUCCESS || loadingStatus === RequestStatus.FAILED || errorMessage) {
+      if (isStopFetching) {
         clearInterval(id);
       } else {
         dispatch(fetchExportStatus(courseId));
