@@ -5,7 +5,7 @@ import { useToggle } from '@edx/paragon';
 import { RequestStatus } from '../data/constants';
 import { updateSavingStatus } from './data/slice';
 import {
-  getLoadingOutlineIndexStatus,
+  getLoadingStatus,
   getOutlineIndexData,
   getSavingStatus,
   getStatusBarData,
@@ -20,14 +20,15 @@ import {
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
+
   const { reindexLink } = useSelector(getOutlineIndexData);
-  const { outlineIndexLoadingStatus } = useSelector(getLoadingOutlineIndexStatus);
+  const { outlineIndexLoadingStatus, reIndexLoadingStatus } = useSelector(getLoadingStatus);
   const statusBarData = useSelector(getStatusBarData);
   const savingStatus = useSelector(getSavingStatus);
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
-  const [isReindexButtonDisable, setIsReindexButtonDisable] = useState(false);
+  const [isDisabledReindexButton, setDisableReindexButton] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
@@ -36,18 +37,12 @@ const useCourseOutline = ({ courseId }) => {
       // TODO add handler
     },
     handleReIndex: () => {
-      setIsReindexButtonDisable(true);
+      setDisableReindexButton(true);
       setShowSuccessAlert(false);
       setShowErrorAlert(false);
 
-      dispatch(fetchCourseReindexQuery(courseId, reindexLink)).then((result) => {
-        if (result) {
-          setShowSuccessAlert(true);
-        } else {
-          setShowErrorAlert(true);
-        }
-
-        setIsReindexButtonDisable(false);
+      dispatch(fetchCourseReindexQuery(courseId, reindexLink)).then(() => {
+        setDisableReindexButton(false);
       });
     },
     handleExpandAll: () => {
@@ -74,13 +69,23 @@ const useCourseOutline = ({ courseId }) => {
     dispatch(fetchCourseLaunchQuery({ courseId }));
   }, [courseId]);
 
+  useEffect(() => {
+    if (reIndexLoadingStatus === RequestStatus.FAILED) {
+      setShowErrorAlert(true);
+    }
+
+    if (reIndexLoadingStatus === RequestStatus.SUCCESSFUL) {
+      setShowSuccessAlert(true);
+    }
+  }, [reIndexLoadingStatus]);
+
   return {
     savingStatus,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
     showErrorAlert,
-    isReindexButtonDisable,
+    isDisabledReindexButton,
     isSectionsExpanded,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,

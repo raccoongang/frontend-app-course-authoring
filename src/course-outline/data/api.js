@@ -90,11 +90,11 @@ export async function enableCourseHighlightsEmails(courseId) {
 }
 
 /**
- * Get reindex course
+ * Restart reindex course
  * @param {string} reindexLink
  * @returns {Promise<Object>}
  */
-export async function getReindexCourse(reindexLink) {
+export async function restartIndexingOnCourse(reindexLink) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseReindexApiUrl(reindexLink));
 

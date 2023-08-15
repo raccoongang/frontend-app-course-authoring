@@ -13,7 +13,7 @@ const HeaderNavigations = ({
   headerNavigationsActions,
   isReIndexShow,
   isSectionsExpanded,
-  isReindexButtonDisable,
+  isDisabledReindexButton,
 }) => {
   const intl = useIntl();
   const {
@@ -40,17 +40,16 @@ const HeaderNavigations = ({
       {isReIndexShow && (
         <OverlayTrigger
           placement="bottom"
-          overlay={!isReindexButtonDisable ? (
+          overlay={!isDisabledReindexButton ? (
             <Tooltip id={intl.formatMessage(messages.reindexButtonTooltip)}>
               {intl.formatMessage(messages.reindexButtonTooltip)}
             </Tooltip>
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-          ) : <></>}
+          ) : <React.Fragment key="reindex close" />}
         >
           <Button
             onClick={handleReIndex}
             variant="outline-primary"
-            disabled={isReindexButtonDisable}
+            disabled={isDisabledReindexButton}
           >
             {intl.formatMessage(messages.reindexButton)}
           </Button>
@@ -88,7 +87,7 @@ const HeaderNavigations = ({
 HeaderNavigations.propTypes = {
   isReIndexShow: PropTypes.bool.isRequired,
   isSectionsExpanded: PropTypes.bool.isRequired,
-  isReindexButtonDisable: PropTypes.bool.isRequired,
+  isDisabledReindexButton: PropTypes.bool.isRequired,
   headerNavigationsActions: PropTypes.shape({
     handleNewSection: PropTypes.func.isRequired,
     handleReIndex: PropTypes.func.isRequired,

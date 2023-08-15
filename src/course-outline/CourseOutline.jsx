@@ -35,7 +35,7 @@ const CourseOutline = ({ courseId }) => {
     isSectionsExpanded,
     isEnableHighlightsModalOpen,
     isInternetConnectionAlertFailed,
-    isReindexButtonDisable,
+    isDisabledReindexButton,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -77,7 +77,7 @@ const CourseOutline = ({ courseId }) => {
                 isReIndexShow={isReIndexShow}
                 isSectionsExpanded={isSectionsExpanded}
                 headerNavigationsActions={headerNavigationsActions}
-                isReindexButtonDisable={isReindexButtonDisable}
+                isDisabledReindexButton={isDisabledReindexButton}
               />
             )}
           />
