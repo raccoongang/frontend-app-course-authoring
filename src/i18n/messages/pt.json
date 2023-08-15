@@ -801,5 +801,12 @@
   "course-authoring.course-rerun.sidebar.section-2.description": "The new course has the same course outline and content as the original course. All problems, videos, announcements, and other files are duplicated to the new course.",
   "course-authoring.course-rerun.sidebar.section-3.title": "What does not transfer from the original course?",
   "course-authoring.course-rerun.sidebar.section-3.description": "You are the only member of the new course's staff. No students are enrolled in the course, and there is no student data. There is no content in the discussion topics or wiki.",
-  "course-authoring.course-rerun.sidebar.section-4.link": "Learn more about course re-runs"
+  "course-authoring.course-rerun.sidebar.section-4.link": "Learn more about course re-runs",
+  "course-authoring.course-outline.sidebar.section-4.link": "Learn more about content visibility settings",
+  "course-authoring.course-outline.reindex.alert.success.title": "Course index",
+  "course-authoring.course-outline.reindex.alert.success.description": "Course has been successfully reindexed.",
+  "course-authoring.course-outline.reindex.alert.success.aria.labelledby": "alert-confirmation-title",
+  "course-authoring.course-outline.reindex.alert.success.aria.describedby": "alert-confirmation-description",
+  "course-authoring.course-outline.reindex.alert.error.title": "There were errors reindexing course.",
+  "course-authoring.course-outline.reindex.alert.error.labelledby": "alert-error-title"
 }
