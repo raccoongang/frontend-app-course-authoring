@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CardItem from '../../card-item';
+import { sortAlphabeticallyArray } from '../utils';
 
 const ArchivedTab = ({ archivedCoursesData }) => (
   <div className="courses-tab">
-    {archivedCoursesData.map(({
+    {sortAlphabeticallyArray(archivedCoursesData).map(({
       courseKey, displayName, lmsLink, org, rerunLink, number, run, url,
     }) => (
       <CardItem
