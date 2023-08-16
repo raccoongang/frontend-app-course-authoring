@@ -127,7 +127,7 @@ describe('<CourseTeam />', () => {
       .onGet(getCourseTeamApiUrl(courseId))
       .reply(200, {
         ...courseTeamWithOneUser,
-        allow_actions: false,
+        allowActions: false,
       });
 
     const { queryByRole, queryByTestId } = render(<RootWrapper />);

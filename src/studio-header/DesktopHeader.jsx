@@ -87,7 +87,7 @@ class DesktopHeader extends React.Component {
       logoAltText,
       logoDestination,
       intl,
-      isHomePage,
+      hideMainMenu,
     } = this.props;
     const logoProps = { src: logo, alt: logoAltText, href: logoDestination };
 
@@ -97,8 +97,8 @@ class DesktopHeader extends React.Component {
           <div className="nav-container position-relative d-flex align-items-center">
             {logoDestination === null ? <Logo className="logo" src={logo} alt={logoAltText} /> : <LinkedLogo className="logo" {...logoProps} />}
             {/* This lockup HTML was copied from edx/frontend-app-learning/src/course-header/Header.jsx. */}
-            {!isHomePage && this.props.courseLockUp}
-            {!isHomePage && (
+            {!hideMainMenu && this.props.courseLockUp}
+            {!hideMainMenu && (
               <nav
                 aria-label={intl.formatMessage(messages['header.label.main.nav'])}
                 className="nav main-nav"
@@ -136,7 +136,7 @@ DesktopHeader.propTypes = {
   avatar: PropTypes.string,
   username: PropTypes.string,
   loggedIn: PropTypes.bool,
-  isHomePage: PropTypes.bool,
+  hideMainMenu: PropTypes.bool,
   courseLockUp: PropTypes.node.isRequired,
 
   // i18n
@@ -153,7 +153,7 @@ DesktopHeader.defaultProps = {
   avatar: null,
   username: null,
   loggedIn: false,
-  isHomePage: false,
+  hideMainMenu: false,
 };
 
 export default injectIntl(DesktopHeader);

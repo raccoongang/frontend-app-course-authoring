@@ -43,7 +43,7 @@ const messages = defineMessages({
   },
   menuNewSubsection: {
     id: 'course-authoring.course-outline.section.menu.new-subsection',
-    defaultMessage: 'New Subsection',
+    defaultMessage: 'New subsection',
   },
 });
 

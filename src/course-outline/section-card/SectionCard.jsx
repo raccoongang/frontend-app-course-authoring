@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Badge, Button } from '@edx/paragon';
-import { getSectionStatus } from '../utils';
 import CardHeader from '../card-header/CardHeader';
+import { getSectionStatus } from '../utils';
 
 const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -65,7 +65,6 @@ SectionCard.defaultProps = {
   children: null,
 };
 
-// TODO: add new props
 SectionCard.propTypes = {
   section: PropTypes.shape({
     displayName: PropTypes.string.isRequired,

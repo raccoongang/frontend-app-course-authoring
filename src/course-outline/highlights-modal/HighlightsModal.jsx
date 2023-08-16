@@ -20,6 +20,7 @@ const HighlightsModal = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <ModalDialog
+      className="highlights-modal"
       title="My dialog"
       isOpen={isOpen}
       onClose={onClose}
@@ -27,7 +28,7 @@ const HighlightsModal = ({ isOpen, onClose, onSubmit }) => {
       hasCloseButton
       isFullscreenOnMobile
     >
-      <ModalDialog.Header>
+      <ModalDialog.Header className="highlights-modal__header">
         <ModalDialog.Title>{intl.formatMessage(messages.title)}</ModalDialog.Title>
       </ModalDialog.Header>
       <Formik initialValues={initialFormValues} onSubmit={onSubmit}>

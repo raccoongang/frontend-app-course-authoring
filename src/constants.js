@@ -17,3 +17,9 @@ export const BADGE_STATES = {
   danger: 'danger',
   secondary: 'secondary',
 };
+
+export const NOTIFICATION_MESSAGES = {
+  saving: 'saving',
+  duplicating: 'duplicating',
+  deleting: 'deleting',
+};

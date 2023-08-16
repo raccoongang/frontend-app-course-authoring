@@ -73,7 +73,6 @@ const CardHeader = ({
           src={MoveVertIcon}
           alt="section-card-header__menu"
           iconAs={Icon}
-          variant="primary"
         />
         <Dropdown.Menu>
           <Dropdown.Item>{intl.formatMessage(messages.menuEdit)}</Dropdown.Item>

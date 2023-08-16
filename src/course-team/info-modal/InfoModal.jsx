@@ -16,7 +16,7 @@ const InfoModal = ({
   close,
   onDeleteSubmit,
   currentEmail,
-  errorEmail,
+  errorMessage,
   courseName,
 }) => {
   const intl = useIntl();
@@ -28,15 +28,15 @@ const InfoModal = ({
     closeButtonText,
     submitButtonText,
     closeButtonVariant,
-  } = getInfoModalSettings(modalType, currentEmail, errorEmail, courseName, intl);
+  } = getInfoModalSettings(modalType, currentEmail, errorMessage, courseName, intl);
 
-  const isEmptyErrorEmail = modalType === MODAL_TYPES.error && !errorEmail;
+  const isEmptyErrorMessage = modalType === MODAL_TYPES.error && !errorMessage;
 
   return (
     <AlertModal
       title={title}
       variant={variant}
-      isOpen={isOpen && !isEmptyErrorEmail}
+      isOpen={isOpen && !isEmptyErrorMessage}
       onClose={close}
       footerNode={(
         <ActionRow>
@@ -67,7 +67,7 @@ InfoModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   currentEmail: PropTypes.string.isRequired,
-  errorEmail: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   courseName: PropTypes.string.isRequired,
   onDeleteSubmit: PropTypes.func.isRequired,
 };

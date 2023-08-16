@@ -7,9 +7,10 @@ import { getConfig } from '@edx/frontend-platform';
 import messages from '../messages';
 
 const CardItem = ({
-  intl, displayName, lmsLink, rerunLink, org, number, isLibraries, url,
+  intl, displayName, lmsLink, rerunLink, org, number, run, isLibraries, url,
 }) => {
   const courseUrl = new URL(url, getConfig().STUDIO_BASE_URL);
+  const subtitle = isLibraries ? `${org} / ${number}` : `${org} / ${number} / ${run}`;
 
   return (
     <Card className="card-item">
@@ -22,7 +23,7 @@ const CardItem = ({
             {displayName}
           </Hyperlink>
         )}
-        subtitle={`${org} / ${number}`}
+        subtitle={subtitle}
         actions={!isLibraries && (
           <ActionRow>
             <Hyperlink className="small" destination={rerunLink}>
@@ -42,6 +43,7 @@ CardItem.defaultProps = {
   isLibraries: false,
   rerunLink: '',
   lmsLink: '',
+  run: '',
 };
 
 CardItem.propTypes = {
@@ -50,6 +52,7 @@ CardItem.propTypes = {
   lmsLink: PropTypes.string,
   rerunLink: PropTypes.string,
   org: PropTypes.string.isRequired,
+  run: PropTypes.string,
   number: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   isLibraries: PropTypes.bool,

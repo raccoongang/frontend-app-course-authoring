@@ -40,7 +40,9 @@ describe('<TabsSection />', () => {
   it('should render specific course details', () => {
     const { getByText } = render(<RootWrapper />);
     expect(getByText(studioHomeMock.courses[0].displayName)).toBeVisible();
-    expect(getByText(`${studioHomeMock.courses[0].org} / ${studioHomeMock.courses[0].number}`)).toBeVisible();
+    expect(getByText(
+      `${studioHomeMock.courses[0].org} / ${studioHomeMock.courses[0].number} / ${studioHomeMock.courses[0].run}`,
+    )).toBeVisible();
   });
   it('should switch to Libraries tab and render specific library details', () => {
     const { getByText } = render(<RootWrapper />);
@@ -54,7 +56,9 @@ describe('<TabsSection />', () => {
     const archivedTab = getByText(messages.archivedTabTitle.defaultMessage);
     fireEvent.click(archivedTab);
     expect(getByText(studioHomeMock.archivedCourses[0].displayName)).toBeVisible();
-    expect(getByText(`${studioHomeMock.archivedCourses[0].org} / ${studioHomeMock.archivedCourses[0].number}`)).toBeVisible();
+    expect(getByText(
+      `${studioHomeMock.archivedCourses[0].org} / ${studioHomeMock.archivedCourses[0].number} / ${studioHomeMock.archivedCourses[0].run}`,
+    )).toBeVisible();
   });
   it('should hide Libraries tab when libraries are disabled', () => {
     studioHomeMock.librariesEnabled = false;
