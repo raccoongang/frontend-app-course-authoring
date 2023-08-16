@@ -80,7 +80,6 @@ const CardHeader = ({
           <Dropdown.Item>{intl.formatMessage(messages.menuConfigure)}</Dropdown.Item>
           <Dropdown.Item>{intl.formatMessage(messages.menuDuplicate)}</Dropdown.Item>
           <Dropdown.Item>{intl.formatMessage(messages.menuDelete)}</Dropdown.Item>
-          <Dropdown.Item>{intl.formatMessage(messages.menuNewSubsection)}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </div>
