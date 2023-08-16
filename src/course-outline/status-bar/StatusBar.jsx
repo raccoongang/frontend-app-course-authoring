@@ -11,6 +11,7 @@ const StatusBar = ({
   statusBarData,
   isLoading,
   courseId,
+  learnMoreVisibilityUrl,
   openEnableHighlightsModal,
 }) => {
   const intl = useIntl();
@@ -19,7 +20,6 @@ const StatusBar = ({
   const {
     courseReleaseDate,
     highlightsEnabledForMessaging,
-    highlightsDocUrl,
     checklist,
     isSelfPaced,
   } = statusBarData;
@@ -81,7 +81,7 @@ const StatusBar = ({
           )}
           <Hyperlink
             className="small ml-2"
-            destination={highlightsDocUrl}
+            destination={learnMoreVisibilityUrl}
             target="_blank"
             showLaunchIcon={false}
           >
@@ -109,6 +109,7 @@ StatusBar.propTypes = {
     highlightsEnabledForMessaging: PropTypes.bool.isRequired,
     highlightsDocUrl: PropTypes.string.isRequired,
   }).isRequired,
+  learnMoreVisibilityUrl: PropTypes.string.isRequired,
 };
 
 export default StatusBar;

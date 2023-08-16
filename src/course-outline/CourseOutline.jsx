@@ -23,6 +23,7 @@ import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsMod
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
 import messages from './messages';
+import ProcessingNotification from '../generic/processing-notification';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
@@ -31,11 +32,14 @@ const CourseOutline = ({ courseId }) => {
     savingStatus,
     statusBarData,
     sectionsList,
-    currentHighlights,
+    currentSection,
     isLoading,
     isReIndexShow,
     showErrorAlert,
     showSuccessAlert,
+    learnMoreVisibilityUrl,
+    learnMoreGradingUrl,
+    learnMoreOutlineUrl,
     isSectionsExpanded,
     isEnableHighlightsModalOpen,
     isInternetConnectionAlertFailed,
@@ -119,7 +123,12 @@ const CourseOutline = ({ courseId }) => {
               </article>
             </Layout.Element>
             <Layout.Element>
-              <OutlineSideBar courseId={courseId} />
+              <OutlineSideBar
+                courseId={courseId}
+                learnMoreVisibilityUrl={learnMoreVisibilityUrl}
+                learnMoreGradingUrl={learnMoreGradingUrl}
+                learnMoreOutlineUrl={learnMoreOutlineUrl}
+              />
             </Layout.Element>
           </Layout>
           <EnableHighlightsModal
@@ -131,12 +140,14 @@ const CourseOutline = ({ courseId }) => {
         </section>
         <HighlightsModal
           isOpen={isHighlightsModalOpen}
+          learnMoreVisibilityUrl={learnMoreVisibilityUrl}
           onClose={closeHighlightsModal}
-          currentHighlights={currentHighlights}
+          currentSection={currentSection}
           onSubmit={handleHighlightsFormSubmit}
         />
       </Container>
       <div className="alert-toast">
+        <ProcessingNotification isShow={savingStatus === RequestStatus.IN_PROGRESS} />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
           isQueryPending={savingStatus === RequestStatus.PENDING}

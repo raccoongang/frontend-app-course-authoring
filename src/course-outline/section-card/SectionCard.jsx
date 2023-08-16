@@ -9,7 +9,6 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const {
-    id,
     displayName,
     published,
     releasedToStudents,
@@ -44,7 +43,7 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
           <Button
             className="section-card__highlights"
             variant="tertiary"
-            onClick={() => onOpenHighlightsModal(id, highlights)}
+            onClick={() => onOpenHighlightsModal(section)}
           >
             <Badge className="highlights-badge" variant="primary">{highlights.length}</Badge>
             <p className="m-0 text-black">Section highlights</p>

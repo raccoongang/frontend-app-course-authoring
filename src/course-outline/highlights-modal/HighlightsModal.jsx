@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  ModalDialog, Button, ActionRow, Hyperlink,
+  ModalDialog,
+  Button,
+  ActionRow,
+  Hyperlink,
 } from '@edx/paragon';
 import { Formik } from 'formik';
 
@@ -14,10 +17,12 @@ const HighlightsModal = ({
   isOpen,
   onClose,
   onSubmit,
-  currentHighlights,
+  currentSection,
+  learnMoreVisibilityUrl,
 }) => {
   const intl = useIntl();
-  const initialFormValues = getHighlightsFormValues(currentHighlights);
+  const { highlights, displayName } = currentSection;
+  const initialFormValues = getHighlightsFormValues(highlights || []);
 
   return (
     <ModalDialog
@@ -30,7 +35,11 @@ const HighlightsModal = ({
       isFullscreenOnMobile
     >
       <ModalDialog.Header className="highlights-modal__header">
-        <ModalDialog.Title>{intl.formatMessage(messages.title)}</ModalDialog.Title>
+        <ModalDialog.Title>
+          {intl.formatMessage(messages.title, {
+            title: displayName,
+          })}
+        </ModalDialog.Title>
       </ModalDialog.Header>
       <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
         {({ values, dirty, handleSubmit }) => (
@@ -38,8 +47,10 @@ const HighlightsModal = ({
             <ModalDialog.Body>
               <p className="mb-4.5 pb-2">
                 {intl.formatMessage(messages.description, {
-                  // TODO add link when help token will merged
-                  documentation: <Hyperlink destination="">{intl.formatMessage(messages.documentationLink)}</Hyperlink>,
+                  documentation: (
+                    <Hyperlink destination={learnMoreVisibilityUrl} target="_blank" showLaunchIcon={false}>
+                      {intl.formatMessage(messages.documentationLink)}
+                    </Hyperlink>),
                 })}
               </p>
               {Object.entries(initialFormValues).map(([key]) => (
@@ -52,7 +63,7 @@ const HighlightsModal = ({
                 />
               ))}
             </ModalDialog.Body>
-            <ModalDialog.Footer>
+            <ModalDialog.Footer className="pt-1">
               <ActionRow>
                 <ModalDialog.CloseButton variant="tertiary">
                   {intl.formatMessage(messages.cancelButton)}
@@ -70,10 +81,14 @@ const HighlightsModal = ({
 };
 
 HighlightsModal.propTypes = {
+  currentSection: PropTypes.shape({
+    highlights: PropTypes.arrayOf(PropTypes.string).isRequired,
+    displayName: PropTypes.string.isRequired,
+  }).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  currentHighlights: PropTypes.arrayOf(PropTypes.string).isRequired,
+  learnMoreVisibilityUrl: PropTypes.string.isRequired,
 };
 
 export default HighlightsModal;

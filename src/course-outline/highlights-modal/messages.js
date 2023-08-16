@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   title: {
     id: 'course-authoring.course-outline.highlights-modal.title',
-    defaultMessage: 'Highlights for Introduction',
+    defaultMessage: 'Highlights for {title}',
   },
   description: {
     id: 'course-authoring.course-outline.highlights-modal.description',

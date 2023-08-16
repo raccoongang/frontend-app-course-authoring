@@ -27,9 +27,9 @@ export function fetchCourseOutlineIndexQuery(courseId) {
 
     try {
       const outlineIndex = await getCourseOutlineIndex(courseId);
-      const { courseReleaseDate, courseStructure: { highlightsEnabledForMessaging, highlightsDocUrl } } = outlineIndex;
+      const { courseReleaseDate, courseStructure: { highlightsEnabledForMessaging } } = outlineIndex;
       dispatch(fetchOutlineIndexSuccess(outlineIndex));
-      dispatch(updateStatusBar({ courseReleaseDate, highlightsEnabledForMessaging, highlightsDocUrl }));
+      dispatch(updateStatusBar({ courseReleaseDate, highlightsEnabledForMessaging }));
 
       dispatch(updateOutlineIndexLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
@@ -102,7 +102,6 @@ export function fetchCourseReindexQuery(courseId, reindexLink) {
     try {
       await restartIndexingOnCourse(reindexLink);
       dispatch(updateReindexLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
-      // dispatch(fetchCourseOutlineIndexQuery(courseId));
 
       return true;
     } catch (error) {
@@ -114,7 +113,7 @@ export function fetchCourseReindexQuery(courseId, reindexLink) {
 
 export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
   return async (dispatch) => {
-    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
 
     try {
       await updateCourseSectionHighlights(sectionId, highlights);

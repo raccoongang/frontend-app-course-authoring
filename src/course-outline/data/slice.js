@@ -15,7 +15,6 @@ const slice = createSlice({
     statusBarData: {
       courseReleaseDate: '',
       highlightsEnabledForMessaging: false,
-      highlightsDocUrl: '',
       isSelfPaced: false,
       checklist: {
         totalCourseLaunchChecks: 0,

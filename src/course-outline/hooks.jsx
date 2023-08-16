@@ -19,6 +19,7 @@ import {
   fetchCourseReindexQuery,
   updateCourseSectionHighlightsQuery,
 } from './data/thunk';
+import { useHelpUrls } from '../help-urls/hooks';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
@@ -35,8 +36,7 @@ const useCourseOutline = ({ courseId }) => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
-  const [currentSectionId, setCurrentSectionId] = useState('');
-  const [currentHighlights, setCurrentHighlights] = useState([]);
+  const [currentSection, setCurrentSection] = useState({});
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -69,6 +69,18 @@ const useCourseOutline = ({ courseId }) => {
     dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
   };
 
+  const handleOpenHighlightsModal = (section) => {
+    setCurrentSection(section);
+    openHighlightsModal();
+  };
+
+  const handleHighlightsFormSubmit = (highlights) => {
+    const dataToSend = Object.values(highlights).filter((item) => Boolean(item));
+    dispatch(updateCourseSectionHighlightsQuery(currentSection.id, dataToSend));
+
+    closeHighlightsModal();
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -85,27 +97,23 @@ const useCourseOutline = ({ courseId }) => {
     }
   }, [reIndexLoadingStatus]);
 
-  const handleOpenHighlightsModal = (sectionId, highlights) => {
-    setCurrentHighlights(highlights);
-    setCurrentSectionId(sectionId);
-    openHighlightsModal();
-  };
-
-  const handleHighlightsFormSubmit = (highlights) => {
-    const dataToSend = Object.values(highlights).filter((item) => Boolean(item));
-    dispatch(updateCourseSectionHighlightsQuery(currentSectionId, dataToSend));
-
-    closeHighlightsModal();
-  };
+  const {
+    visibility: learnMoreVisibilityUrl,
+    grading: learnMoreGradingUrl,
+    outline: learnMoreOutlineUrl,
+  } = useHelpUrls(['visibility', 'grading', 'outline']);
 
   return {
     savingStatus,
     sectionsList,
-    currentHighlights,
+    currentSection,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
     showErrorAlert,
+    learnMoreVisibilityUrl,
+    learnMoreGradingUrl,
+    learnMoreOutlineUrl,
     isDisabledReindexButton,
     isSectionsExpanded,
     headerNavigationsActions,
