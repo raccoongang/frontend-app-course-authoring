@@ -42,7 +42,7 @@ describe('<CardHeader />', () => {
   it('render status badge as published_not_live', () => {
     const { getByText } = renderComponent({
       ...cardHeaderProps,
-      sectionStatus: SECTION_BADGE_STATUTES.published_not_live,
+      sectionStatus: SECTION_BADGE_STATUTES.publishedNotLive,
     });
 
     expect(getByText(messages.statusBadgePublishedNotLive.defaultMessage)).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('<CardHeader />', () => {
   it('render status badge as staff_only', () => {
     const { getByText } = renderComponent({
       ...cardHeaderProps,
-      sectionStatus: SECTION_BADGE_STATUTES.staff_only,
+      sectionStatus: SECTION_BADGE_STATUTES.staffOnly,
     });
 
     expect(getByText(messages.statusBadgeStuffOnly.defaultMessage)).toBeInTheDocument();

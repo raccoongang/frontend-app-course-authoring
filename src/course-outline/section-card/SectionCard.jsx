@@ -36,17 +36,16 @@ const SectionCard = ({ section, children }) => {
         isExpanded={isExpanded}
         handleExpand={handleExpandContent}
       />
-      {isExpanded && (
-        <div className="section-card__content" data-testid="section-card__content">
-          <div className="outline-section__status">
-            {/* TODO: add section highlight widget */}
-            <h4 className="h4 font-weight-normal">Section status</h4>
-          </div>
-          {children && (
-            <div className="section-card__subsections">
-              {children}
-            </div>
-          )}
+      <div className="section-card__content" data-testid="section-card__content">
+        <div className="outline-section__status">
+          {/* TODO: add section highlight widget */}
+          <h4 className="h4 font-weight-normal">Section status</h4>
+        </div>
+      </div>
+      {isExpanded && children && (
+        <div className="section-card__subsections">
+          {children}
+          <h4>children</h4>
         </div>
       )}
     </div>
