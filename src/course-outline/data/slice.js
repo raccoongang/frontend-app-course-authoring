@@ -25,7 +25,6 @@ const slice = createSlice({
       },
     },
     sectionsList: [],
-    currentHighlights: [],
   },
   reducers: {
     fetchOutlineIndexSuccess: (state, { payload }) => {
@@ -62,8 +61,13 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
-    setCurrentHighlights: (state, { payload }) => {
-      state.currentHighlights = payload;
+    updateSectionList: (state, { payload }) => {
+      state.sectionsList = state.sectionsList.map((section) => {
+        if (section.id === payload.id) {
+          return payload;
+        }
+        return section;
+      });
     },
   },
 });
@@ -76,7 +80,7 @@ export const {
   fetchStatusBarChecklistSuccess,
   fetchStatusBarSelPacedSuccess,
   updateSavingStatus,
-  setCurrentHighlights,
+  updateSectionList,
 } = slice.actions;
 
 export const {

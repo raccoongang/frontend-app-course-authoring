@@ -5,17 +5,18 @@ import {
   ModalDialog, Button, ActionRow, Hyperlink,
 } from '@edx/paragon';
 import { Formik } from 'formik';
-import { useSelector } from 'react-redux';
 
 import FormikControl from '../../generic/FormikControl';
-import { getCurrentHighlights } from '../data/selectors';
 import { getHighlightsFormValues } from '../utils';
 import messages from './messages';
 
-const HighlightsModal = ({ isOpen, onClose, onSubmit }) => {
+const HighlightsModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  currentHighlights,
+}) => {
   const intl = useIntl();
-
-  const currentHighlights = useSelector(getCurrentHighlights);
   const initialFormValues = getHighlightsFormValues(currentHighlights);
 
   return (
@@ -32,7 +33,7 @@ const HighlightsModal = ({ isOpen, onClose, onSubmit }) => {
         <ModalDialog.Title>{intl.formatMessage(messages.title)}</ModalDialog.Title>
       </ModalDialog.Header>
       <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
-        {({ values, dirty }) => (
+        {({ values, dirty, handleSubmit }) => (
           <>
             <ModalDialog.Body>
               <p className="mb-4.5 pb-2">
@@ -56,7 +57,7 @@ const HighlightsModal = ({ isOpen, onClose, onSubmit }) => {
                 <ModalDialog.CloseButton variant="tertiary">
                   {intl.formatMessage(messages.cancelButton)}
                 </ModalDialog.CloseButton>
-                <Button variant="primary" disabled={!dirty}>
+                <Button variant="primary" disabled={!dirty} onClick={handleSubmit}>
                   {intl.formatMessage(messages.saveButton)}
                 </Button>
               </ActionRow>
@@ -72,6 +73,7 @@ HighlightsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  currentHighlights: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default HighlightsModal;

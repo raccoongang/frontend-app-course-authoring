@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
 import { RequestStatus } from '../data/constants';
-import { updateSavingStatus, setCurrentHighlights } from './data/slice';
+import { updateSavingStatus } from './data/slice';
 import {
   getLoadingStatus,
   getOutlineIndexData,
@@ -17,6 +17,7 @@ import {
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
   fetchCourseReindexQuery,
+  updateCourseSectionHighlightsQuery,
 } from './data/thunk';
 
 const useCourseOutline = ({ courseId }) => {
@@ -34,6 +35,8 @@ const useCourseOutline = ({ courseId }) => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
+  const [currentSectionId, setCurrentSectionId] = useState('');
+  const [currentHighlights, setCurrentHighlights] = useState([]);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -82,13 +85,22 @@ const useCourseOutline = ({ courseId }) => {
     }
   }, [reIndexLoadingStatus]);
 
-  const handleOpenHighlightsModal = (highlights) => {
-    dispatch(setCurrentHighlights(highlights));
+  const handleOpenHighlightsModal = (sectionId, highlights) => {
+    setCurrentHighlights(highlights);
+    setCurrentSectionId(sectionId);
     openHighlightsModal();
+  };
+
+  const handleHighlightsFormSubmit = (highlights) => {
+    const dataToSend = Object.values(highlights).filter((item) => Boolean(item));
+    dispatch(updateCourseSectionHighlightsQuery(currentSectionId, dataToSend));
+
+    closeHighlightsModal();
   };
 
   return {
     savingStatus,
+    currentHighlights,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
@@ -97,6 +109,7 @@ const useCourseOutline = ({ courseId }) => {
     isSectionsExpanded,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
+    handleHighlightsFormSubmit,
     statusBarData,
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,

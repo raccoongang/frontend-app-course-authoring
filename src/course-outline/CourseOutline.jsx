@@ -31,6 +31,7 @@ const CourseOutline = ({ courseId }) => {
     savingStatus,
     statusBarData,
     sectionsList,
+    currentHighlights,
     isLoading,
     isReIndexShow,
     showErrorAlert,
@@ -47,6 +48,7 @@ const CourseOutline = ({ courseId }) => {
     handleEnableHighlightsSubmit,
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
+    handleHighlightsFormSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -130,7 +132,8 @@ const CourseOutline = ({ courseId }) => {
         <HighlightsModal
           isOpen={isHighlightsModalOpen}
           onClose={closeHighlightsModal}
-          onSubmit={() => console.log('submit')}
+          currentHighlights={currentHighlights}
+          onSubmit={handleHighlightsFormSubmit}
         />
       </Container>
       <div className="alert-toast">

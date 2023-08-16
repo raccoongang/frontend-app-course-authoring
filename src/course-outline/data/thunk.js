@@ -7,8 +7,8 @@ import {
   enableCourseHighlightsEmails,
   getCourseBestPractices,
   getCourseLaunch,
-  getCourseOutlineIndex,
-  restartIndexingOnCourse,
+  getCourseOutlineIndex, getCourseSection,
+  restartIndexingOnCourse, updateCourseSectionHighlights,
 } from './api';
 import {
   fetchOutlineIndexSuccess,
@@ -18,6 +18,7 @@ import {
   fetchStatusBarChecklistSuccess,
   fetchStatusBarSelPacedSuccess,
   updateSavingStatus,
+  updateSectionList,
 } from './slice';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
@@ -106,6 +107,25 @@ export function fetchCourseReindexQuery(courseId, reindexLink) {
       return true;
     } catch (error) {
       dispatch(updateReindexLoadingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    try {
+      await updateCourseSectionHighlights(sectionId, highlights);
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+
+      const data = await getCourseSection(sectionId);
+      dispatch(updateSectionList(data));
+
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };

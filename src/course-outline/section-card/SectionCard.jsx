@@ -9,6 +9,7 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const {
+    id,
     displayName,
     published,
     releasedToStudents,
@@ -44,7 +45,7 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
             <Button
               className="section-card__highlights"
               variant="tertiary"
-              onClick={() => onOpenHighlightsModal(highlights)}
+              onClick={() => onOpenHighlightsModal(id, highlights)}
             >
               <Badge className="highlights-badge" variant="primary">{highlights.length}</Badge>
               <p className="m-0 text-black">Section highlights</p>
@@ -67,6 +68,7 @@ SectionCard.defaultProps = {
 
 SectionCard.propTypes = {
   section: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
     published: PropTypes.bool.isRequired,
     releasedToStudents: PropTypes.bool.isRequired,

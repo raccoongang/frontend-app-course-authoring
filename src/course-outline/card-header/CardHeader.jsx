@@ -28,6 +28,8 @@ const CardHeader = ({
 
   const { badgeTitle, badgeIcon } = getSectionStatusBadgeContent(sectionStatus, messages, intl);
 
+  console.log(title);
+
   return (
     <div className="section-card-header" data-testid="section-card-header">
       <OverlayTrigger
@@ -50,7 +52,9 @@ const CardHeader = ({
           })}
           onClick={() => handleExpand((prevState) => !prevState)}
         >
-          <Truncate lines={1} className="h3 mb-0">{title}</Truncate>
+          {title && (
+            <Truncate lines={1} className="h3 mb-0">{title}</Truncate>
+          )}
           {badgeTitle && (
             <div className="section-card-header__badge-status" data-testid="section-card-header__badge-status">
               {badgeIcon && (
