@@ -21,8 +21,8 @@ import { useCourseOutline } from './hooks';
 import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
-import messages from './messages';
 import HighlightsModal from './highlights-modal/HighlightsModal';
+import messages from './messages';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();

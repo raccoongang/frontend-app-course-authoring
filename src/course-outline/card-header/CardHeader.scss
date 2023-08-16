@@ -19,7 +19,7 @@
       height: 1.5rem;
     }
 
-    &.collapsed .pgn__icon {
+    &.collapsed > .pgn__icon {
       transform: rotate(180deg);
     }
   }

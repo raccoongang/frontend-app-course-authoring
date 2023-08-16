@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
 import { Badge, Button } from '@edx/paragon';
+
 import CardHeader from '../card-header/CardHeader';
 import { getSectionStatus } from '../utils';
 
@@ -39,23 +39,22 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
         isExpanded={isExpanded}
         handleExpand={handleExpandContent}
       />
-      {isExpanded && (
-        <div className="section-card__content" data-testid="section-card__content">
-          <div className="outline-section__status">
-            <Button
-              className="section-card__highlights"
-              variant="tertiary"
-              onClick={() => onOpenHighlightsModal(id, highlights)}
-            >
-              <Badge className="highlights-badge" variant="primary">{highlights.length}</Badge>
-              <p className="m-0 text-black">Section highlights</p>
-            </Button>
-          </div>
-          {children && (
-            <div className="section-card__subsections">
-              {children}
-            </div>
-          )}
+      <div className="section-card__content" data-testid="section-card__content">
+        <div className="outline-section__status">
+          <Button
+            className="section-card__highlights"
+            variant="tertiary"
+            onClick={() => onOpenHighlightsModal(id, highlights)}
+          >
+            <Badge className="highlights-badge" variant="primary">{highlights.length}</Badge>
+            <p className="m-0 text-black">Section highlights</p>
+          </Button>
+        </div>
+      </div>
+      {isExpanded && children && (
+        <div className="section-card__subsections">
+          {children}
+          <h4>children</h4>
         </div>
       )}
     </div>

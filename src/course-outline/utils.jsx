@@ -26,9 +26,9 @@ const getSectionStatus = ({
   case published && releasedToStudents:
     return SECTION_BADGE_STATUTES.live;
   case published && !releasedToStudents:
-    return SECTION_BADGE_STATUTES.published_not_live;
+    return SECTION_BADGE_STATUTES.publishedNotLive;
   case visibleToStaffOnly && staffOnlyMessage && visibilityState === STAFF_ONLY:
-    return SECTION_BADGE_STATUTES.staff_only;
+    return SECTION_BADGE_STATUTES.staffOnly;
   case !published:
     return SECTION_BADGE_STATUTES.draft;
   default:
@@ -51,12 +51,12 @@ const getSectionStatusBadgeContent = (status, messages, intl) => {
       badgeTitle: intl.formatMessage(messages.statusBadgeLive),
       badgeIcon: CheckCircleIcon,
     };
-  case SECTION_BADGE_STATUTES.published_not_live:
+  case SECTION_BADGE_STATUTES.publishedNotLive:
     return {
       badgeTitle: intl.formatMessage(messages.statusBadgePublishedNotLive),
       badgeIcon: '',
     };
-  case SECTION_BADGE_STATUTES.staff_only:
+  case SECTION_BADGE_STATUTES.staffOnly:
     return {
       badgeTitle: intl.formatMessage(messages.statusBadgeStuffOnly),
       badgeIcon: LockIcon,

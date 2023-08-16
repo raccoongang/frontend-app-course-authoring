@@ -100,6 +100,7 @@ const useCourseOutline = ({ courseId }) => {
 
   return {
     savingStatus,
+    sectionsList,
     currentHighlights,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
@@ -116,7 +117,6 @@ const useCourseOutline = ({ courseId }) => {
     closeEnableHighlightsModal,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     handleInternetConnectionFailed,
-    sectionsList,
     handleOpenHighlightsModal,
     isHighlightsModalOpen,
     closeHighlightsModal,
