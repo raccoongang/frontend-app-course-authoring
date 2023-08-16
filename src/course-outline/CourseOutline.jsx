@@ -11,19 +11,19 @@ import {
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
 
-import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
+import SubHeader from '../generic/sub-header/SubHeader';
+import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import AlertMessage from '../generic/alert-message';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
-import { useCourseOutline } from './hooks';
 import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
+import { useCourseOutline } from './hooks';
 import messages from './messages';
-import ProcessingNotification from '../generic/processing-notification';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
