@@ -63,7 +63,6 @@ const CourseOutline = ({ courseId }) => {
                       onOpenHighlightsModal={handleOpenHighlightsModal}
                     />
                   )) : null}
-                  {/* TODO add status bar and list of outlines */}
                 </section>
               </div>
             </article>
