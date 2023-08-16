@@ -7,8 +7,10 @@ import {
   enableCourseHighlightsEmails,
   getCourseBestPractices,
   getCourseLaunch,
-  getCourseOutlineIndex, getCourseSection,
-  restartIndexingOnCourse, updateCourseSectionHighlights,
+  getCourseOutlineIndex,
+  getCourseSection,
+  restartIndexingOnCourse,
+  updateCourseSectionHighlights,
 } from './api';
 import {
   fetchOutlineIndexSuccess,

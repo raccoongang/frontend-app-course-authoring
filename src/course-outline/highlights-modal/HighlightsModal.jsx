@@ -10,6 +10,7 @@ import {
 import { Formik } from 'formik';
 
 import FormikControl from '../../generic/FormikControl';
+import { HIGHLIGHTS_FIELD_MAX_LENGTH } from '../constants';
 import { getHighlightsFormValues } from '../utils';
 import messages from './messages';
 
@@ -27,7 +28,6 @@ const HighlightsModal = ({
   return (
     <ModalDialog
       className="highlights-modal"
-      title="My dialog"
       isOpen={isOpen}
       onClose={onClose}
       size="md"
@@ -59,7 +59,7 @@ const HighlightsModal = ({
                   name={key}
                   value={values[key]}
                   floatingLabel={intl.formatMessage(messages[key])}
-                  maxLength={250}
+                  maxLength={HIGHLIGHTS_FIELD_MAX_LENGTH}
                 />
               ))}
             </ModalDialog.Body>
@@ -68,7 +68,7 @@ const HighlightsModal = ({
                 <ModalDialog.CloseButton variant="tertiary">
                   {intl.formatMessage(messages.cancelButton)}
                 </ModalDialog.CloseButton>
-                <Button variant="primary" disabled={!dirty} onClick={handleSubmit}>
+                <Button disabled={!dirty} onClick={handleSubmit}>
                   {intl.formatMessage(messages.saveButton)}
                 </Button>
               </ActionRow>

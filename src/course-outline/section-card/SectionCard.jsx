@@ -45,7 +45,7 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
             variant="tertiary"
             onClick={() => onOpenHighlightsModal(section)}
           >
-            <Badge className="highlights-badge" variant="primary">{highlights.length}</Badge>
+            <Badge className="highlights-badge">{highlights.length}</Badge>
             <p className="m-0 text-black">Section highlights</p>
           </Button>
         </div>

@@ -74,6 +74,17 @@ const getSectionStatusBadgeContent = (status, messages, intl) => {
   }
 };
 
+/**
+ * Get formatted highlights form values
+ * @param {Array<string>} currentHighlights - section highlights
+ * @returns {
+ *   highlight_1: string,
+ *   highlight_2: string,
+ *   highlight_3: string,
+ *   highlight_4: string,
+ *   highlight_5: string,
+ * }
+ */
 const getHighlightsFormValues = (currentHighlights) => {
   const initialFormValues = {
     highlight_1: '',

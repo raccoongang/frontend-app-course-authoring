@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
+import { useHelpUrls } from '../help-urls/hooks';
 import { RequestStatus } from '../data/constants';
 import { updateSavingStatus } from './data/slice';
 import {
@@ -19,7 +20,6 @@ import {
   fetchCourseReindexQuery,
   updateCourseSectionHighlightsQuery,
 } from './data/thunk';
-import { useHelpUrls } from '../help-urls/hooks';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
