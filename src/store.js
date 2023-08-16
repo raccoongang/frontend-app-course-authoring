@@ -15,6 +15,7 @@ import { reducer as CourseUpdatesReducer } from './course-updates/data/slice';
 import { reducer as courseOutlineReducer } from './course-outline/data/slice';
 import { reducer as genericReducer } from './generic/data/slice';
 import { reducer as helpUrlsReducer } from './help-urls/data/slice';
+import { reducer as courseExportReducer } from './export-page/data/slice';
 
 export default function initializeStore(preloadedState = undefined) {
   return configureStore({
@@ -34,6 +35,7 @@ export default function initializeStore(preloadedState = undefined) {
       courseOutline: courseOutlineReducer,
       generic: genericReducer,
       helpUrls: helpUrlsReducer,
+      courseExport: courseExportReducer,
     },
     preloadedState,
   });
