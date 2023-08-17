@@ -829,5 +829,8 @@
   "course-authoring.course-outline.reindex.alert.error.labelledby": "alert-error-title",
   "course-authoring.course-outline.empty-placeholder.title": "You haven't added any content to this course yet.",
   "course-authoring.course-outline.empty-placeholder.button.new-section": "New section",
+  "course-authoring.course-outline.empty-placeholder.button.tooltip": "Click to add a new section",
+  "course-authoring.course-outline.empty-placeholder.title": "You haven't added any content to this course yet.",
+  "course-authoring.course-outline.empty-placeholder.button.new-section": "New section",
   "course-authoring.course-outline.empty-placeholder.button.tooltip": "Click to add a new section"
 }
