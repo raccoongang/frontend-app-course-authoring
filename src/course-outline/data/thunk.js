@@ -21,6 +21,7 @@ import {
   fetchStatusBarSelPacedSuccess,
   updateSavingStatus,
   updateSectionList,
+  updateFetchSectionLoadingStatus,
 } from './slice';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
@@ -113,17 +114,35 @@ export function fetchCourseReindexQuery(courseId, reindexLink) {
   };
 }
 
+export function fetchCourseSectionQuery(sectionId) {
+  return async (dispatch) => {
+    dispatch(updateFetchSectionLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      const data = await getCourseSection(sectionId);
+      dispatch(updateSectionList(data));
+      dispatch(updateFetchSectionLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
+
+      return true;
+    } catch (error) {
+      dispatch(updateFetchSectionLoadingStatus({ status: RequestStatus.FAILED }));
+
+      return false;
+    }
+  };
+}
+
 export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
 
     try {
-      await updateCourseSectionHighlights(sectionId, highlights);
-      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-
-      const data = await getCourseSection(sectionId);
-      dispatch(updateSectionList(data));
-
+      await updateCourseSectionHighlights(sectionId, highlights).then(async (result) => {
+        if (result) {
+          await dispatch(fetchCourseSectionQuery(sectionId));
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
       return true;
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));

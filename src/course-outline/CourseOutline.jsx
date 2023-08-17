@@ -32,14 +32,10 @@ const CourseOutline = ({ courseId }) => {
     savingStatus,
     statusBarData,
     sectionsList,
-    currentSection,
     isLoading,
     isReIndexShow,
     showErrorAlert,
     showSuccessAlert,
-    learnMoreVisibilityUrl,
-    learnMoreGradingUrl,
-    learnMoreOutlineUrl,
     isSectionsExpanded,
     isEnableHighlightsModalOpen,
     isInternetConnectionAlertFailed,
@@ -123,12 +119,7 @@ const CourseOutline = ({ courseId }) => {
               </article>
             </Layout.Element>
             <Layout.Element>
-              <OutlineSideBar
-                courseId={courseId}
-                learnMoreVisibilityUrl={learnMoreVisibilityUrl}
-                learnMoreGradingUrl={learnMoreGradingUrl}
-                learnMoreOutlineUrl={learnMoreOutlineUrl}
-              />
+              <OutlineSideBar courseId={courseId} />
             </Layout.Element>
           </Layout>
           <EnableHighlightsModal
@@ -140,9 +131,7 @@ const CourseOutline = ({ courseId }) => {
         </section>
         <HighlightsModal
           isOpen={isHighlightsModalOpen}
-          learnMoreVisibilityUrl={learnMoreVisibilityUrl}
           onClose={closeHighlightsModal}
-          currentSection={currentSection}
           onSubmit={handleHighlightsFormSubmit}
         />
       </Container>

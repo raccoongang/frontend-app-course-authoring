@@ -8,8 +8,11 @@ import {
   Hyperlink,
 } from '@edx/paragon';
 import { Formik } from 'formik';
+import { useSelector } from 'react-redux';
 
+import { useHelpUrls } from '../../help-urls/hooks';
 import FormikControl from '../../generic/FormikControl';
+import { getCurrentSection } from '../data/selectors';
 import { HIGHLIGHTS_FIELD_MAX_LENGTH } from '../constants';
 import { getHighlightsFormValues } from '../utils';
 import messages from './messages';
@@ -18,19 +21,21 @@ const HighlightsModal = ({
   isOpen,
   onClose,
   onSubmit,
-  currentSection,
-  learnMoreVisibilityUrl,
 }) => {
   const intl = useIntl();
-  const { highlights, displayName } = currentSection;
-  const initialFormValues = getHighlightsFormValues(highlights || []);
+  const { highlights = [], displayName } = useSelector(getCurrentSection);
+  const initialFormValues = getHighlightsFormValues(highlights);
+
+  const {
+    visibility: learnMoreVisibilityUrl,
+  } = useHelpUrls(['visibility']);
 
   return (
     <ModalDialog
+      title={displayName}
       className="highlights-modal"
       isOpen={isOpen}
       onClose={onClose}
-      size="md"
       hasCloseButton
       isFullscreenOnMobile
     >
@@ -53,12 +58,12 @@ const HighlightsModal = ({
                     </Hyperlink>),
                 })}
               </p>
-              {Object.entries(initialFormValues).map(([key]) => (
+              {Object.entries(initialFormValues).map(([key], index) => (
                 <FormikControl
                   key={key}
                   name={key}
                   value={values[key]}
-                  floatingLabel={intl.formatMessage(messages[key])}
+                  floatingLabel={intl.formatMessage(messages.highlight, { index: index + 1 })}
                   maxLength={HIGHLIGHTS_FIELD_MAX_LENGTH}
                 />
               ))}
@@ -81,14 +86,9 @@ const HighlightsModal = ({
 };
 
 HighlightsModal.propTypes = {
-  currentSection: PropTypes.shape({
-    highlights: PropTypes.arrayOf(PropTypes.string).isRequired,
-    displayName: PropTypes.string.isRequired,
-  }).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  learnMoreVisibilityUrl: PropTypes.string.isRequired,
 };
 
 export default HighlightsModal;

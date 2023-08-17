@@ -4,13 +4,16 @@ import { useToggle } from '@edx/paragon';
 
 import { useHelpUrls } from '../help-urls/hooks';
 import { RequestStatus } from '../data/constants';
-import { updateSavingStatus } from './data/slice';
+import {
+  setCurrentSection,
+  updateSavingStatus,
+} from './data/slice';
 import {
   getLoadingStatus,
   getOutlineIndexData,
   getSavingStatus,
   getStatusBarData,
-  getSectionsList,
+  getSectionsList, getCurrentSection,
 } from './data/selectors';
 import {
   enableCourseHighlightsEmailsQuery,
@@ -29,6 +32,7 @@ const useCourseOutline = ({ courseId }) => {
   const statusBarData = useSelector(getStatusBarData);
   const savingStatus = useSelector(getSavingStatus);
   const sectionsList = useSelector(getSectionsList);
+  const currentSection = useSelector(getCurrentSection);
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
@@ -36,7 +40,6 @@ const useCourseOutline = ({ courseId }) => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
-  const [currentSection, setCurrentSection] = useState({});
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -70,12 +73,12 @@ const useCourseOutline = ({ courseId }) => {
   };
 
   const handleOpenHighlightsModal = (section) => {
-    setCurrentSection(section);
+    dispatch(setCurrentSection(section));
     openHighlightsModal();
   };
 
   const handleHighlightsFormSubmit = (highlights) => {
-    const dataToSend = Object.values(highlights).filter((item) => Boolean(item));
+    const dataToSend = Object.values(highlights).filter(Boolean);
     dispatch(updateCourseSectionHighlightsQuery(currentSection.id, dataToSend));
 
     closeHighlightsModal();
@@ -106,7 +109,6 @@ const useCourseOutline = ({ courseId }) => {
   return {
     savingStatus,
     sectionsList,
-    currentSection,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,

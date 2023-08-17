@@ -6,12 +6,12 @@ import { AppContext } from '@edx/frontend-platform/react';
 
 import { getPagePath } from '../../utils';
 import messages from './messages';
+import { useHelpUrls } from '../../help-urls/hooks';
 
 const StatusBar = ({
   statusBarData,
   isLoading,
   courseId,
-  learnMoreVisibilityUrl,
   openEnableHighlightsModal,
 }) => {
   const intl = useIntl();
@@ -33,6 +33,10 @@ const StatusBar = ({
 
   const checkListTitle = `${completedCourseLaunchChecks + completedCourseBestPracticesChecks}/${totalCourseLaunchChecks + totalCourseBestPracticesChecks}`;
   const checklistDestination = new URL(`checklists/${courseId}`, config.STUDIO_BASE_URL).href;
+
+  const {
+    visibility: learnMoreVisibilityUrl,
+  } = useHelpUrls(['visibility']);
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -109,7 +113,6 @@ StatusBar.propTypes = {
     highlightsEnabledForMessaging: PropTypes.bool.isRequired,
     highlightsDocUrl: PropTypes.string.isRequired,
   }).isRequired,
-  learnMoreVisibilityUrl: PropTypes.string.isRequired,
 };
 
 export default StatusBar;

@@ -3,44 +3,81 @@ import {
   render, fireEvent, act, waitFor,
 } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { useSelector } from 'react-redux';
+import { initializeMockApp } from '@edx/frontend-platform';
+import MockAdapter from 'axios-mock-adapter';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { AppProvider } from '@edx/frontend-platform/react';
 
+import initializeStore from '../../store';
 import HighlightsModal from './HighlightsModal';
 import messages from './messages';
 
-const onSubmitMock = jest.fn();
-const onCloseMock = jest.fn();
+// eslint-disable-next-line no-unused-vars
+let axiosMock;
+let store;
+const mockPathname = '/foo-bar';
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({
+    pathname: mockPathname,
+  }),
+}));
 
 const currentSectionMock = {
-  displayName: 'Title',
-  highlights: ['highlight1', 'highlight2'],
+  highlights: ['Highlight 1', 'Highlight 2'],
+  displayName: 'Test Section',
 };
 
-const renderComponent = (props) => render(
-  <IntlProvider locale="en">
-    <HighlightsModal
-      isOpen
-      onClose={onCloseMock}
-      onSubmit={onSubmitMock}
-      currentSection={currentSectionMock}
-      learnMoreVisibilityUrl="https://example.com"
-      {...props}
-    />
-  </IntlProvider>,
+const onCloseMock = jest.fn();
+const onSubmitMock = jest.fn();
+
+const renderComponent = () => render(
+  <AppProvider store={store}>
+    <IntlProvider locale="en">
+      <HighlightsModal
+        isOpen
+        onClose={onCloseMock}
+        onSubmit={onSubmitMock}
+      />
+    </IntlProvider>,
+  </AppProvider>,
 );
 
 describe('<HighlightsModal />', () => {
+  beforeEach(() => {
+    initializeMockApp({
+      authenticatedUser: {
+        userId: 3,
+        username: 'abc123',
+        administrator: true,
+        roles: [],
+      },
+    });
+
+    store = initializeStore();
+    axiosMock = new MockAdapter(getAuthenticatedHttpClient());
+    useSelector.mockReturnValue(currentSectionMock);
+  });
+
   it('renders HighlightsModal component correctly', () => {
     const { getByText, getByRole, getByLabelText } = renderComponent();
 
-    expect(getByText(/Highlights for Title/i)).toBeInTheDocument();
+    expect(getByText(`Highlights for ${currentSectionMock.displayName}`)).toBeInTheDocument();
     expect(getByText(/Enter 3-5 highlights to include in the email message that learners receive for this section/i)).toBeInTheDocument();
     expect(getByText(/For more information and an example of the email template, read our/i)).toBeInTheDocument();
     expect(getByText(messages.documentationLink.defaultMessage)).toBeInTheDocument();
-    expect(getByLabelText(messages.highlight_1.defaultMessage)).toBeInTheDocument();
-    expect(getByLabelText(messages.highlight_2.defaultMessage)).toBeInTheDocument();
-    expect(getByLabelText(messages.highlight_3.defaultMessage)).toBeInTheDocument();
-    expect(getByLabelText(messages.highlight_4.defaultMessage)).toBeInTheDocument();
-    expect(getByLabelText(messages.highlight_5.defaultMessage)).toBeInTheDocument();
+    expect(getByLabelText(messages.highlight.defaultMessage.replace('{index}', '1'))).toBeInTheDocument();
+    expect(getByLabelText(messages.highlight.defaultMessage.replace('{index}', '2'))).toBeInTheDocument();
+    expect(getByLabelText(messages.highlight.defaultMessage.replace('{index}', '3'))).toBeInTheDocument();
+    expect(getByLabelText(messages.highlight.defaultMessage.replace('{index}', '4'))).toBeInTheDocument();
+    expect(getByLabelText(messages.highlight.defaultMessage.replace('{index}', '5'))).toBeInTheDocument();
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage })).toBeInTheDocument();
     expect(getByRole('button', { name: messages.saveButton.defaultMessage })).toBeInTheDocument();
   });
@@ -56,10 +93,10 @@ describe('<HighlightsModal />', () => {
   it('calls the onSubmit function with correct values when the save button is clicked', async () => {
     const { getByRole, getByLabelText } = renderComponent();
 
-    const field1 = getByLabelText(messages.highlight_1.defaultMessage);
-    const field2 = getByLabelText(messages.highlight_2.defaultMessage);
-    fireEvent.change(field1, { target: { value: 'Highlights 1' } });
-    fireEvent.change(field2, { target: { value: 'Highlights 2' } });
+    const field1 = getByLabelText(messages.highlight.defaultMessage.replace('{index}', '1'));
+    const field2 = getByLabelText(messages.highlight.defaultMessage.replace('{index}', '2'));
+    fireEvent.change(field1, { target: { value: 'New highlight 1' } });
+    fireEvent.change(field2, { target: { value: 'New highlight 2' } });
 
     const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
 
@@ -71,8 +108,8 @@ describe('<HighlightsModal />', () => {
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
       expect(onSubmitMock).toHaveBeenCalledWith(
         {
-          highlight_1: 'Highlights 1',
-          highlight_2: 'Highlights 2',
+          highlight_1: 'New highlight 1',
+          highlight_2: 'New highlight 2',
           highlight_3: '',
           highlight_4: '',
           highlight_5: '',
