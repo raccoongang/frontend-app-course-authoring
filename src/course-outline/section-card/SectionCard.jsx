@@ -2,10 +2,18 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Button } from '@edx/paragon';
 
+import { useDispatch } from 'react-redux';
 import CardHeader from '../card-header/CardHeader';
 import { getSectionStatus } from '../utils';
+import { setCurrentSection } from '../data/slice';
 
-const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
+const SectionCard = ({
+  section,
+  children,
+  onOpenHighlightsModal,
+  onOpenPublishModal,
+}) => {
+  const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(true);
 
   const {
@@ -30,13 +38,19 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
     setIsExpanded((prevState) => !prevState);
   };
 
+  const handleMenuButtonClick = () => {
+    dispatch(setCurrentSection(section));
+  };
+
   return (
     <div className="section-card">
       <CardHeader
         title={displayName}
         sectionStatus={sectionStatus}
         isExpanded={isExpanded}
-        handleExpand={handleExpandContent}
+        onExpand={handleExpandContent}
+        onMenuButtonClick={handleMenuButtonClick}
+        onPublishClick={onOpenPublishModal}
       />
       <div className="section-card__content" data-testid="section-card__content">
         <div className="outline-section__status">
@@ -51,7 +65,7 @@ const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
         </div>
       </div>
       {isExpanded && children && (
-        <div className="section-card__subsections">
+        <div className="section-card__subsections" data-testid="section-card__subsections">
           {children}
           <h4>children</h4>
         </div>
@@ -66,7 +80,6 @@ SectionCard.defaultProps = {
 
 SectionCard.propTypes = {
   section: PropTypes.shape({
-    id: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
     published: PropTypes.bool.isRequired,
     releasedToStudents: PropTypes.bool.isRequired,
@@ -77,6 +90,7 @@ SectionCard.propTypes = {
   }).isRequired,
   children: PropTypes.node,
   onOpenHighlightsModal: PropTypes.func.isRequired,
+  onOpenPublishModal: PropTypes.func.isRequired,
 };
 
 export default SectionCard;
