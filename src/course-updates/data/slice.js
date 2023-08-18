@@ -2,12 +2,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { sortBy } from 'lodash';
 
+const initialState = {
+  courseUpdates: [],
+  courseHandouts: {},
+  savingStatuses: {
+    createCourseUpdateQuery: '',
+    editCourseUpdateQuery: '',
+    deleteCourseUpdateQuery: '',
+    editCourseHandoutsQuery: '',
+  },
+  loadingStatuses: {
+    fetchCourseUpdatesQuery: '',
+    fetchCourseHandoutsQuery: '',
+  },
+};
+
 const slice = createSlice({
   name: 'courseUpdates',
-  initialState: {
-    courseUpdates: [],
-    courseHandouts: {},
-  },
+  initialState,
   reducers: {
     fetchCourseUpdatesSuccess: (state, { payload }) => {
       state.courseUpdates = payload;
@@ -35,6 +47,12 @@ const slice = createSlice({
         ...payload,
       };
     },
+    updateSavingStatuses: (state, { payload }) => {
+      state.savingStatuses = { ...state.savingStatuses, ...payload };
+    },
+    updateLoadingStatuses: (state, { payload }) => {
+      state.loadingStatuses = { ...state.loadingStatuses, ...payload };
+    },
   },
 });
 
@@ -45,6 +63,8 @@ export const {
   deleteCourseUpdate,
   fetchCourseHandoutsSuccess,
   editCourseHandouts,
+  updateSavingStatuses,
+  updateLoadingStatuses,
 } = slice.actions;
 
 export const {
