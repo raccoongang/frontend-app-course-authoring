@@ -132,3 +132,17 @@ export async function updateCourseSectionHighlights(sectionId, highlights) {
 
   return data;
 }
+
+/**
+ * Update publish course section
+ * @param {string} sectionId
+ * @returns {Promise<Object>}
+ */
+export async function publishCourseSection(sectionId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getUpdateCourseSectionApiUrl(sectionId), {
+      publish: 'make_public',
+    });
+
+  return data;
+}

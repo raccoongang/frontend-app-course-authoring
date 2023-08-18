@@ -24,6 +24,7 @@ import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
+import PublishModal from './publish-modal/PublishModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
@@ -41,7 +42,10 @@ const CourseOutline = ({ courseId }) => {
     isInternetConnectionAlertFailed,
     isDisabledReindexButton,
     isHighlightsModalOpen,
+    isPublishModalOpen,
     closeHighlightsModal,
+    closePublishModal,
+    handlePublishModalOpen,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -49,6 +53,7 @@ const CourseOutline = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
+    handlePublishSectionSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -111,6 +116,7 @@ const CourseOutline = ({ courseId }) => {
                         <SectionCard
                           section={section}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
+                          onOpenPublishModal={handlePublishModalOpen}
                         />
                       )) : null}
                     </div>
@@ -133,6 +139,11 @@ const CourseOutline = ({ courseId }) => {
           isOpen={isHighlightsModalOpen}
           onClose={closeHighlightsModal}
           onSubmit={handleHighlightsFormSubmit}
+        />
+        <PublishModal
+          isOpen={isPublishModalOpen}
+          onClose={closePublishModal}
+          onPublishSubmit={handlePublishSectionSubmit}
         />
       </Container>
       <div className="alert-toast">
