@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ActionRow, AlertModal, Button } from '@edx/paragon';
-import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
 const ModalError = ({
-  intl, isOpen, title, message, handleCancel, handleAction, cancelButtonText, actionButtonText,
+  isOpen, title, message, handleCancel, handleAction, cancelButtonText, actionButtonText,
 }) => (
   <AlertModal
     title={title}
@@ -22,7 +21,13 @@ const ModalError = ({
 );
 
 ModalError.propTypes = {
-  intl: intlShape.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  handleCancel: PropTypes.func.isRequired,
+  handleAction: PropTypes.func.isRequired,
+  cancelButtonText: PropTypes.string.isRequired,
+  actionButtonText: PropTypes.string.isRequired,
 };
 
-export default injectIntl(ModalError);
+export default ModalError;
