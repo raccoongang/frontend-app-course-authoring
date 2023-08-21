@@ -117,6 +117,10 @@ const CourseOutline = ({ courseId }) => {
                           section={section}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={handlePublishModalOpen}
+                          // TODO add handler in Edit section feature
+                          onEditClick={null}
+                          // TODO add handler in Add new subsection feature
+                          onNewSubsectionClick={null}
                         />
                       )) : null}
                     </div>

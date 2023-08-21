@@ -11,6 +11,7 @@ import {
 import {
   ArrowDropDown as ArrowDownIcon,
   MoreVert as MoveVertIcon,
+  EditOutline as EditIcon,
 } from '@edx/paragon/icons';
 import classNames from 'classnames';
 
@@ -25,6 +26,7 @@ const CardHeader = ({
   onExpand,
   onPublishClick,
   onMenuButtonClick,
+  onEditClick,
 }) => {
   const intl = useIntl();
 
@@ -69,7 +71,14 @@ const CardHeader = ({
           )}
         </Button>
       </OverlayTrigger>
-      <Dropdown data-testid="section-card-header__menu" className="ml-auto" onClick={onMenuButtonClick}>
+      <IconButton
+        data-testid="edit-button"
+        alt={intl.formatMessage(messages.altButtonEdit)}
+        iconAs={EditIcon}
+        className="ml-auto"
+        onClick={onEditClick}
+      />
+      <Dropdown data-testid="section-card-header__menu" onClick={onMenuButtonClick}>
         <Dropdown.Toggle
           className="section-card-header__menu"
           id="section-card-header__menu"
@@ -80,7 +89,6 @@ const CardHeader = ({
           iconAs={Icon}
         />
         <Dropdown.Menu>
-          <Dropdown.Item>{intl.formatMessage(messages.menuEdit)}</Dropdown.Item>
           <Dropdown.Item
             disabled={isDisabledPublish}
             onClick={onPublishClick}
@@ -103,6 +111,7 @@ CardHeader.propTypes = {
   onExpand: PropTypes.func.isRequired,
   onPublishClick: PropTypes.func.isRequired,
   onMenuButtonClick: PropTypes.func.isRequired,
+  onEditClick: PropTypes.func.isRequired,
 };
 
 export default CardHeader;
