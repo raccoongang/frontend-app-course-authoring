@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
-import { getPagePath } from '../../utils';
 import { useHelpUrls } from '../../help-urls/hooks';
 import HelpSidebarLink from './HelpSidebarLink';
 import { otherLinkURLParams } from './constants';
