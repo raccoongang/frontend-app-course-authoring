@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form, Dropdown } from '@edx/paragon';
 
-import SectionSubHeader from '../../generic/section-sub-header';
+import ScheduleSubHeader from '../schedule-sub-header';
 import messages from './messages';
 
 const DetailsSection = ({
@@ -17,7 +17,7 @@ const DetailsSection = ({
 
   return (
     <section className="section-container details-section">
-      <SectionSubHeader
+      <ScheduleSubHeader
         title={intl.formatMessage(messages.detailsTitle)}
         description={intl.formatMessage(messages.detailsDescription)}
       />

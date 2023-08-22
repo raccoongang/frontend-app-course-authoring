@@ -14,6 +14,7 @@ import { getCourseDetailsApiUrl, getCourseSettingsApiUrl } from './data/api';
 import { DATE_FORMAT } from '../constants';
 import creditMessages from './credit-section/messages';
 import pacingMessages from './pacing-section/messages';
+import basicMessages from './basic-section/messages';
 import scheduleMessages from './schedule-section/messages';
 import genericMessages from '../generic/help-sidebar/messages';
 import messages from './messages';
@@ -92,6 +93,9 @@ describe('<ScheduleAndDetails />', () => {
       ).toBeInTheDocument();
       expect(
         getByText(messages.headingTitle.defaultMessage),
+      ).toBeInTheDocument();
+      expect(
+        getByText(basicMessages.basicTitle.defaultMessage),
       ).toBeInTheDocument();
       expect(
         getByText(creditMessages.creditTitle.defaultMessage),
