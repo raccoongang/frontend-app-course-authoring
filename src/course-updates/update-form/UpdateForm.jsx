@@ -18,8 +18,8 @@ import {
   isValidDate,
 } from '../../utils';
 import { DATE_FORMAT, DEFAULT_EMPTY_WYSIWYG_VALUE } from '../../constants';
-import { REQUEST_TYPES } from '../constants';
 import { WysiwygEditor } from '../../generic/WysiwygEditor';
+import { REQUEST_TYPES } from '../constants';
 import { geUpdateFormSettings } from './utils';
 import messages from './messages';
 
