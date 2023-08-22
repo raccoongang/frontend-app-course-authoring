@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
@@ -15,6 +15,10 @@ const DeadlineSection = ({
 
   const timeStampValue = gracePeriod.hours && `${formatTime(gracePeriod.hours)}:${formatTime(gracePeriod.minutes)}`;
   const inputValue = newDeadlineValue || timeStampValue;
+
+  useEffect(() => {
+    setNewDeadlineValue(timeStampValue);
+  }, [gracePeriod]);
 
   const handleDeadlineChange = (e) => {
     const { value } = e.target;
