@@ -19,6 +19,8 @@ const getEnableHighlightsEmailsApiUrl = (courseId) => {
   return `${getApiBaseUrl()}/xblock/block-v1:${formattedCourseId}+type@course+block@course`;
 };
 export const getCourseReindexApiUrl = (reindexLink) => `${getApiBaseUrl()}${reindexLink}`;
+export const getUpdateCourseSectionApiUrl = (sectionId) => `${getApiBaseUrl()}/xblock/${sectionId}`;
+export const getCourseSectionApiUrl = (sectionId) => `${getApiBaseUrl()}/xblock/outline/${sectionId}`;
 
 /**
  * Get course outline index.
@@ -99,4 +101,34 @@ export async function restartIndexingOnCourse(reindexLink) {
     .get(getCourseReindexApiUrl(reindexLink));
 
   return camelCaseObject(data);
+}
+
+/**
+ * Get course section
+ * @param {string} sectionId
+ * @returns {Promise<Object>}
+ */
+export async function getCourseSection(sectionId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getCourseSectionApiUrl(sectionId));
+
+  return camelCaseObject(data);
+}
+
+/**
+ * Update course section highlights
+ * @param {string} sectionId
+ * @param {Array<string>} highlights
+ * @returns {Promise<Object>}
+ */
+export async function updateCourseSectionHighlights(sectionId, highlights) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getUpdateCourseSectionApiUrl(sectionId), {
+      publish: 'republish',
+      metadata: {
+        highlights,
+      },
+    });
+
+  return data;
 }
