@@ -50,6 +50,7 @@ const UpdateForm = ({
       <Formik
         initialValues={courseUpdatesInitialValues}
         validationSchema={validationSchema}
+        validateOnMount
         validateOnBlur
         onSubmit={onSubmit}
       >
@@ -88,7 +89,7 @@ const UpdateForm = ({
                     }}
                   />
                 </div>
-                {(!isValid || !isValidDate(values.date)) && (
+                {!isValid && (
                   <div className="datepicker-field-error">
                     <Icon src={ErrorIcon} alt={intl.formatMessage(messages.updateFormErrorAltText)} />
                     <span className="message-error">{intl.formatMessage(messages.updateFormInValid)}</span>
