@@ -808,5 +808,8 @@
   "course-authoring.course-outline.highlights-modal.documentation-link": "documentation",
   "course-authoring.course-outline.highlights-modal.highlight": "Highlight {index}",
   "course-authoring.course-outline.highlights-modal.button.cancel": "Cancel",
-  "course-authoring.course-outline.highlights-modal.button.save": "Save highlights"
+  "course-authoring.course-outline.highlights-modal.button.save": "Save highlights",
+  "course-authoring.create-or-rerun-course.org.no-options": "No options",
+  "course-authoring.studio-home.organization.input.placeholder": "For example, MITx",
+  "course-authoring.studio-home.organization.input.no-options": "No options"
 }

@@ -3,13 +3,14 @@ import { v4 as uuid } from 'uuid';
 import { Hyperlink } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { useHelpUrls } from '../../help-urls/hooks';
 import HelpSidebar from '../../generic/help-sidebar';
 import messages from './messages';
 
 const CourseRerunSideBar = () => {
   const intl = useIntl();
-  // temporary solution until implementation https://github.com/raccoongang/frontend-app-course-authoring/pull/45
-  const learnMoreUrl = 'https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/index.html';
+  const { default: learnMoreUrl } = useHelpUrls(['default']);
+
   const sidebarMessages = [
     {
       title: intl.formatMessage(messages.sectionTitle1),

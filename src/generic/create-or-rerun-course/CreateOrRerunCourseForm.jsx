@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 import {
   Form, Button, ActionRow, StatefulButton, TransitionReplace,
 } from '@edx/paragon';
+import { TypeaheadDropdown } from '@edx/frontend-lib-content-components';
 import { Info as InfoIcon } from '@edx/paragon/icons';
 
 import AlertMessage from '../alert-message';
@@ -194,7 +194,7 @@ const CreateOrRerunCourseForm = ({
             <Form.Label>{field.label}</Form.Label>
             {!field.isDropdown ? (
               <Form.Control
-                value={values[field.name]}
+                value={field.value}
                 placeholder={field.placeholder}
                 name={field.name}
                 onChange={handleChange}
@@ -204,21 +204,20 @@ const CreateOrRerunCourseForm = ({
                 ref={field?.ref}
               />
             ) : (
-              <Form.Autosuggest
-                value={values[field.name]}
+              <TypeaheadDropdown
+                readOnly={false}
                 name={field.name}
+                value={field.value}
+                controlClassName={classNames({ 'is-invalid': hasErrorField(field.name) })}
+                options={field.options}
                 placeholder={field.placeholder}
-                onSelected={(value) => setFieldValue(field.name, value)}
-                onBlur={handleCustomBlurForDropdown}
-                isInvalid={hasErrorField(field.name)}
-                key={uuid()}
-              >
-                {field?.options?.map((option) => (
-                  <Form.AutosuggestOption key={option}>
-                    {option}
-                  </Form.AutosuggestOption>
-                ))}
-              </Form.Autosuggest>
+                handleBlur={handleCustomBlurForDropdown}
+                handleChange={(value) => setFieldValue(field.name, value)}
+                noOptionsMessage={intl.formatMessage(messages.courseOrgNoOptions)}
+                helpMessage=""
+                errorMessage=""
+                floatingLabel=""
+              />
             )}
             <Form.Text>{field.helpText}</Form.Text>
             {hasErrorField(field.name) && (

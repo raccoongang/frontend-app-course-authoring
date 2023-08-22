@@ -1,39 +1,34 @@
 import { useEffect, useState } from 'react';
 import { history } from '@edx/frontend-platform';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RequestStatus } from '../data/constants';
-import {
-  updateSavingStatus,
-} from '../generic/data/slice';
+import { COURSE_CREATOR_STATUSES } from '../constants';
+import { updateSavingStatus } from '../generic/data/slice';
 import { getCourseData, getRedirectUrlObj, getSavingStatus } from '../generic/data/selectors';
+import { redirectToCourseIndex } from './constants';
+import { fetchStudioHomeData } from './data/thunks';
 import {
   getLoadingStatus,
   getStudioHomeData,
 } from './data/selectors';
-import { fetchStudioHomeData } from './data/thunks';
-import { redirectToCourseIndex } from './constants';
 
 const useStudioHome = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
-  const studioHomeData = useSelector(getStudioHomeData);
+  const studioHomeItems = useSelector(getStudioHomeData);
   const loadingStatus = useSelector(getLoadingStatus);
   const savingStatus = useSelector(getSavingStatus);
   const newCourseData = useSelector(getCourseData);
   const redirectUrlObj = useSelector(getRedirectUrlObj);
-  const [studioHomeItems, setStudioHomeItems] = useState(studioHomeData);
   const [showNewCourseContainer, setShowNewCourseContainer] = useState(false);
   const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
 
   useEffect(() => {
-    dispatch(fetchStudioHomeData());
-  }, []);
-
-  useEffect(() => {
-    if (studioHomeData) {
-      setStudioHomeItems(studioHomeData);
-    }
-  }, [studioHomeData]);
+    dispatch(fetchStudioHomeData(location.search ?? ''));
+    setShowNewCourseContainer(false);
+  }, [location.search]);
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
@@ -44,12 +39,21 @@ const useStudioHome = () => {
       }
     }
   }, [savingStatus]);
+
+  const {
+    optimizationEnabled,
+    courseCreatorStatus,
+  } = studioHomeItems;
+
+  const showOrganizationDropdown = optimizationEnabled && courseCreatorStatus === COURSE_CREATOR_STATUSES.granted;
+
   return {
     isLoading,
     savingStatus,
     newCourseData,
     studioHomeItems,
     showNewCourseContainer,
+    showOrganizationDropdown,
     dispatch,
     setShowNewCourseContainer,
   };

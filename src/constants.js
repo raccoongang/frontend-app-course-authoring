@@ -23,3 +23,10 @@ export const NOTIFICATION_MESSAGES = {
   duplicating: 'Duplicating',
   deleting: 'Deleting',
 };
+
+export const COURSE_CREATOR_STATUSES = {
+  unrequested: 'unrequested',
+  pending: 'pending',
+  granted: 'granted',
+  denied: 'denied',
+};
