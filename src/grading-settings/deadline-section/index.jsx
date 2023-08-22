@@ -44,6 +44,7 @@ const DeadlineSection = ({
         {intl.formatMessage(messages.gracePeriodOnDeadlineLabel)}
       </Form.Label>
       <Form.Control
+        data-testid="deadline-period-input"
         value={inputValue.trim()}
         onChange={handleDeadlineChange}
         placeholder="HH:MM"
