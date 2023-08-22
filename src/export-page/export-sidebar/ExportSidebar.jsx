@@ -11,7 +11,7 @@ import { useHelpUrls } from '../../help-urls/hooks';
 import messages from './messages';
 
 const ExportSidebar = ({ intl, courseId }) => {
-  const { docUrl: exportLearnMoreUrl } = useHelpUrls(['doc_url']);
+  const { exportCourse: exportLearnMoreUrl } = useHelpUrls(['exportCourse']);
   return (
     <HelpSidebar courseId={courseId}>
       <h4 className="help-sidebar-about-title">{intl.formatMessage(messages.title1)}</h4>
