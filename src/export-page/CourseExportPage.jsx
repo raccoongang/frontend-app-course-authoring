@@ -19,7 +19,7 @@ import {
 } from './data/selectors';
 import { startExportingCourse } from './data/thunks';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './data/constants';
-import { updateExportTriggered, updateSuccessDate } from './data/slice';
+import { updateExportTriggered, updateSavingStatus, updateSuccessDate } from './data/slice';
 import ExportModalError from './export-modal-error/ExportModalError';
 import ExportFooter from './export-footer/ExportFooter';
 import ExportStepper from './export-stepper/ExportStepper';
@@ -39,6 +39,7 @@ const CourseExportPage = ({ intl, courseId }) => {
   useEffect(() => {
     const cookieData = cookies.get(LAST_EXPORT_COOKIE_NAME);
     if (cookieData) {
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       dispatch(updateExportTriggered(true));
       dispatch(updateSuccessDate(cookieData.date));
     }
@@ -46,7 +47,7 @@ const CourseExportPage = ({ intl, courseId }) => {
 
   return (
     <>
-      <Container size="xl" className="m-4">
+      <Container size="xl" className="m-4 export">
         <section className="setting-items mb-4">
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}
