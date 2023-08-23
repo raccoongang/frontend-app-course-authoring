@@ -51,6 +51,7 @@ const useCreateOrRerunCourse = (initialValues) => {
   } = useFormik({
     initialValues,
     enableReinitialize: true,
+    validateOnBlur: false,
     validationSchema,
   });
 

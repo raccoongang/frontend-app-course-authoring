@@ -5,6 +5,7 @@ import { Button, Hyperlink, Stack } from '@edx/paragon';
 import { AppContext } from '@edx/frontend-platform/react';
 
 import { getPagePath } from '../../utils';
+import { useHelpUrls } from '../../help-urls/hooks';
 import messages from './messages';
 
 const StatusBar = ({
@@ -19,7 +20,6 @@ const StatusBar = ({
   const {
     courseReleaseDate,
     highlightsEnabledForMessaging,
-    highlightsDocUrl,
     checklist,
     isSelfPaced,
   } = statusBarData;
@@ -33,6 +33,10 @@ const StatusBar = ({
 
   const checkListTitle = `${completedCourseLaunchChecks + completedCourseBestPracticesChecks}/${totalCourseLaunchChecks + totalCourseBestPracticesChecks}`;
   const checklistDestination = new URL(`checklists/${courseId}`, config.STUDIO_BASE_URL).href;
+
+  const {
+    visibility: learnMoreVisibilityUrl,
+  } = useHelpUrls(['visibility']);
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -81,7 +85,7 @@ const StatusBar = ({
           )}
           <Hyperlink
             className="small ml-2"
-            destination={highlightsDocUrl}
+            destination={learnMoreVisibilityUrl}
             target="_blank"
             showLaunchIcon={false}
           >

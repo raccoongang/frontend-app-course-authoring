@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Hyperlink } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import HelpSidebar from '../../generic/help-sidebar';
 import { useHelpUrls } from '../../help-urls/hooks';
+import HelpSidebar from '../../generic/help-sidebar';
 import { getFormattedSidebarMessages } from './utils';
 
 const OutlineSideBar = ({ courseId }) => {

@@ -8,7 +8,7 @@ export const getStudioHomeApiUrl = () => `${getApiBaseUrl()}/api/contentstore/v1
  * Get's studio home data.
  * @returns {Promise<Object>}
  */
-export async function getStudioHomeData() {
-  const { data } = await getAuthenticatedHttpClient().get(getStudioHomeApiUrl());
+export async function getStudioHomeData(search) {
+  const { data } = await getAuthenticatedHttpClient().get(`${getStudioHomeApiUrl()}${search}`);
   return camelCaseObject(data);
 }

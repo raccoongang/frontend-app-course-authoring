@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Badge, Button } from '@edx/paragon';
 
 import CardHeader from '../card-header/CardHeader';
 import { getSectionStatus } from '../utils';
 
-const SectionCard = ({ section, children }) => {
+const SectionCard = ({ section, children, onOpenHighlightsModal }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const {
@@ -14,6 +15,7 @@ const SectionCard = ({ section, children }) => {
     visibleToStaffOnly,
     visibilityState,
     staffOnlyMessage,
+    highlights,
   } = section;
 
   const sectionStatus = getSectionStatus({
@@ -38,8 +40,14 @@ const SectionCard = ({ section, children }) => {
       />
       <div className="section-card__content" data-testid="section-card__content">
         <div className="outline-section__status">
-          {/* TODO: add section highlight widget */}
-          <h4 className="h4 font-weight-normal">Section status</h4>
+          <Button
+            className="section-card__highlights"
+            variant="tertiary"
+            onClick={() => onOpenHighlightsModal(section)}
+          >
+            <Badge className="highlights-badge">{highlights.length}</Badge>
+            <p className="m-0 text-black">Section highlights</p>
+          </Button>
         </div>
       </div>
       {isExpanded && children && (
@@ -58,14 +66,17 @@ SectionCard.defaultProps = {
 
 SectionCard.propTypes = {
   section: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
     published: PropTypes.bool.isRequired,
     releasedToStudents: PropTypes.bool.isRequired,
     visibleToStaffOnly: PropTypes.bool.isRequired,
     visibilityState: PropTypes.string.isRequired,
     staffOnlyMessage: PropTypes.bool.isRequired,
+    highlights: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   children: PropTypes.node,
+  onOpenHighlightsModal: PropTypes.func.isRequired,
 };
 
 export default SectionCard;

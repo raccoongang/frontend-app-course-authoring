@@ -28,6 +28,7 @@ const StudioHome = ({ intl }) => {
     newCourseData,
     studioHomeItems,
     showNewCourseContainer,
+    showOrganizationDropdown,
     dispatch,
     setShowNewCourseContainer,
   } = useStudioHome();
@@ -86,7 +87,7 @@ const StudioHome = ({ intl }) => {
                     handleOnClickCreate={handleCreateNewCourse}
                   />
                 )}
-                <OrganizationSection />
+                {showOrganizationDropdown && <OrganizationSection />}
                 <TabsSection tabsData={studioHomeItems} />
               </section>
             </Layout.Element>

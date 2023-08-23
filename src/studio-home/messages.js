@@ -65,6 +65,14 @@ const messages = defineMessages({
     id: 'course-authoring.studio-home.organization.btn.submit.text',
     defaultMessage: 'Submit',
   },
+  organizationInputPlaceholder: {
+    id: 'course-authoring.studio-home.organization.input.placeholder',
+    defaultMessage: 'For example, MITx',
+  },
+  organizationInputNoOptions: {
+    id: 'course-authoring.studio-home.organization.input.no-options',
+    defaultMessage: 'No options',
+  },
 });
 
 export default messages;

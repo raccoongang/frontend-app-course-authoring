@@ -8,7 +8,9 @@ import {
   getCourseBestPractices,
   getCourseLaunch,
   getCourseOutlineIndex,
+  getCourseSection,
   restartIndexingOnCourse,
+  updateCourseSectionHighlights,
 } from './api';
 import {
   fetchOutlineIndexSuccess,
@@ -18,6 +20,8 @@ import {
   fetchStatusBarChecklistSuccess,
   fetchStatusBarSelPacedSuccess,
   updateSavingStatus,
+  updateSectionList,
+  updateFetchSectionLoadingStatus,
 } from './slice';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
@@ -26,9 +30,9 @@ export function fetchCourseOutlineIndexQuery(courseId) {
 
     try {
       const outlineIndex = await getCourseOutlineIndex(courseId);
-      const { courseReleaseDate, courseStructure: { highlightsEnabledForMessaging, highlightsDocUrl } } = outlineIndex;
+      const { courseReleaseDate, courseStructure: { highlightsEnabledForMessaging } } = outlineIndex;
       dispatch(fetchOutlineIndexSuccess(outlineIndex));
-      dispatch(updateStatusBar({ courseReleaseDate, highlightsEnabledForMessaging, highlightsDocUrl }));
+      dispatch(updateStatusBar({ courseReleaseDate, highlightsEnabledForMessaging }));
 
       dispatch(updateOutlineIndexLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
@@ -101,11 +105,47 @@ export function fetchCourseReindexQuery(courseId, reindexLink) {
     try {
       await restartIndexingOnCourse(reindexLink);
       dispatch(updateReindexLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
-      // dispatch(fetchCourseOutlineIndexQuery(courseId));
 
       return true;
     } catch (error) {
       dispatch(updateReindexLoadingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function fetchCourseSectionQuery(sectionId) {
+  return async (dispatch) => {
+    dispatch(updateFetchSectionLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      const data = await getCourseSection(sectionId);
+      dispatch(updateSectionList(data));
+      dispatch(updateFetchSectionLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
+
+      return true;
+    } catch (error) {
+      dispatch(updateFetchSectionLoadingStatus({ status: RequestStatus.FAILED }));
+
+      return false;
+    }
+  };
+}
+
+export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      await updateCourseSectionHighlights(sectionId, highlights).then(async (result) => {
+        if (result) {
+          await dispatch(fetchCourseSectionQuery(sectionId));
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };

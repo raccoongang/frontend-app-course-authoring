@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { isEmpty } from 'lodash';
+import { history } from '@edx/frontend-platform';
 import { Button, Form, FormLabel } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { TypeaheadDropdown } from '@edx/frontend-lib-content-components';
 
+import { getOrganizations } from '../../generic/data/selectors';
+import { fetchOrganizationsQuery } from '../../generic/data/thunks';
 import messages from '../messages';
 
-// TODO: This component will be finalized in the task (https://youtrack.raccoongang.com/issue/2U-47).
 const OrganizationSection = ({ intl }) => {
-  const [value, setValue] = useState('');
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const fieldName = 'org';
+  const searchParams = new URLSearchParams(location.search);
+  const orgURLValue = searchParams.get(fieldName) || '';
+  const [inputValue, setInputValue] = useState('');
+  const organizations = useSelector(getOrganizations);
 
-  const handleSettingsChange = (e) => {
-    setValue(e.target.value);
+  useEffect(() => {
+    if (isEmpty(organizations)) {
+      dispatch(fetchOrganizationsQuery());
+    }
+  }, []);
+
+  // We have to set value only after the list of organizations to be received to display the initial state correctly.
+  useEffect(() => {
+    if (organizations.length) {
+      setInputValue(orgURLValue);
+    }
+  }, [orgURLValue, organizations]);
+
+  const handleSubmit = () => {
+    history.push({
+      pathname: '/home',
+      search: `?${fieldName}=${inputValue}`,
+    });
   };
 
   return (
@@ -17,18 +45,25 @@ const OrganizationSection = ({ intl }) => {
       <h3 className="organization-section-title">
         {intl.formatMessage(messages.organizationTitle)}
       </h3>
-      <Form.Group className="organization-section-form d-flex align-items-center">
-        <FormLabel className="organization-section-form-label">
+      <Form.Group className="organization-section-form d-flex align-items-baseline">
+        <FormLabel className="organization-section-form-label w-50">
           {intl.formatMessage(messages.organizationLabel)}
         </FormLabel>
-        <Form.Control
-          className="organization-section-form-control"
-          onChange={handleSettingsChange}
-          value={value}
-          placeholder="Label"
+        <TypeaheadDropdown
+          readOnly={false}
+          name="organizationSearch"
+          value={inputValue}
+          options={organizations}
+          placeholder={intl.formatMessage(messages.organizationInputPlaceholder)}
+          handleBlur={(e) => setInputValue(e.target.value)}
+          handleChange={(value) => setInputValue(value)}
+          noOptionsMessage={intl.formatMessage(messages.organizationInputNoOptions)}
+          helpMessage=""
+          errorMessage=""
+          floatingLabel=""
         />
       </Form.Group>
-      <Button>
+      <Button onClick={handleSubmit}>
         {intl.formatMessage(messages.organizationSubmitBtnText)}
       </Button>
     </div>
