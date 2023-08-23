@@ -675,6 +675,7 @@
   "course-authoring.grading-settings.assignment.alert.warning.usage.title": "Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:",
   "course-authoring.grading-settings.assignment.alert.warning.title": "Warning: The number of {type} assignments defined here does not match the current number of {type} assignments in the course:",
   "course-authoring.grading-settings.assignment.alert.success.title": "The number of {type} assignments in the course matches the number defined here.",
+  "course-authoring.grading-settings.deadline.error.message": "Grace period must be specified in {timeFormat} format.",
   "course-authoring.studio-home.heading.title": "Studio home",
   "course-authoring.studio-home.add-new-course.btn.text": "New course",
   "course-authoring.studio-home.add-new-library.btn.text": "New library",

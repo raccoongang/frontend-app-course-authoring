@@ -11,7 +11,7 @@ const messages = defineMessages({
   },
   gracePeriodOnDeadlineErrorMsg: {
     id: 'course-authoring.grading-settings.deadline.error.message',
-    defaultMessage: 'Grace period must be specified in HH:MM format.',
+    defaultMessage: 'Grace period must be specified in {timeFormat} format.',
   },
 });
 

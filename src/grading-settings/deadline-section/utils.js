@@ -18,24 +18,10 @@ export function formatTime(time) {
  */
 export function timerValidation(inputStr, setShowSavePrompt, setIsError) {
   const timePattern = /^\d{2,3}:\d{2}$/;
-  const EMPTY_STR = '';
 
-  if (inputStr.trim() === EMPTY_STR) {
-    setShowSavePrompt(false);
-    setIsError(true);
+  const isValid = timePattern.test(inputStr);
+  setShowSavePrompt(isValid);
+  setIsError(!isValid);
 
-    return false;
-  }
-
-  if (timePattern.test(inputStr)) {
-    setShowSavePrompt(true);
-    setIsError(false);
-
-    return true;
-  }
-
-  setShowSavePrompt(false);
-  setIsError(true);
-
-  return false;
+  return isValid;
 }

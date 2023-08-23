@@ -4,17 +4,16 @@ import { Form } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import classNames from 'classnames';
 
+import { TIME_FORMAT } from '../../constants';
 import { formatTime, timerValidation } from './utils';
 import messages from './messages';
 
 const DeadlineSection = ({
   intl, setShowSavePrompt, gracePeriod, setGradingData, setShowSuccessAlert,
 }) => {
-  const [newDeadlineValue, setNewDeadlineValue] = useState('');
-  const [isError, setIsError] = useState(false);
-
   const timeStampValue = gracePeriod.hours && `${formatTime(gracePeriod.hours)}:${formatTime(gracePeriod.minutes)}`;
-  const inputValue = newDeadlineValue || timeStampValue;
+  const [newDeadlineValue, setNewDeadlineValue] = useState(timeStampValue);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     setNewDeadlineValue(timeStampValue);
@@ -23,9 +22,8 @@ const DeadlineSection = ({
   const handleDeadlineChange = (e) => {
     const { value } = e.target;
     const [hours, minutes] = value.split(':');
-    const EMPTY_STR = ' ';
 
-    setNewDeadlineValue(value || EMPTY_STR);
+    setNewDeadlineValue(value);
 
     if (timerValidation(value, setShowSavePrompt, setIsError)) {
       setGradingData(prevData => ({
@@ -49,16 +47,16 @@ const DeadlineSection = ({
       </Form.Label>
       <Form.Control
         data-testid="deadline-period-input"
-        value={inputValue.trim()}
+        value={newDeadlineValue}
         onChange={handleDeadlineChange}
-        placeholder="HH:MM"
+        placeholder={TIME_FORMAT.toUpperCase()}
       />
       <Form.Control.Feedback className="grading-description">
         {intl.formatMessage(messages.gracePeriodOnDeadlineDescription)}
       </Form.Control.Feedback>
       {isError && (
         <Form.Control.Feedback className="feedback-error" type="invalid">
-          {intl.formatMessage(messages.gracePeriodOnDeadlineErrorMsg)}
+          {intl.formatMessage(messages.gracePeriodOnDeadlineErrorMsg, { timeFormat: TIME_FORMAT.toUpperCase() })}
         </Form.Control.Feedback>
       )}
     </Form.Group>
