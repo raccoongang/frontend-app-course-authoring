@@ -29,6 +29,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-outline.reindex.alert.error.title',
     defaultMessage: 'There were errors reindexing course.',
   },
+  addNewSectionBtnTest: {
+    id: 'course-authoring.course-outline.add-new-section.btn.text',
+    defaultMessage: 'New section',
+  },
 });
 
 export default messages;

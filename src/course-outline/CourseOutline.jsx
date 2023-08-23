@@ -5,10 +5,12 @@ import {
   Container,
   Layout,
   TransitionReplace,
+  Button,
 } from '@edx/paragon';
 import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
+  Add as AddIcon,
 } from '@edx/paragon/icons';
 
 import { RequestStatus } from '../data/constants';
@@ -106,14 +108,27 @@ const CourseOutline = ({ courseId }) => {
                       statusBarData={statusBarData}
                       openEnableHighlightsModal={openEnableHighlightsModal}
                     />
-                    <div className="pt-4">
-                      {sectionsList.length ? sectionsList.map((section) => (
-                        <SectionCard
-                          section={section}
-                          onOpenHighlightsModal={handleOpenHighlightsModal}
-                        />
-                      )) : null}
-                    </div>
+                    {sectionsList.length ? (
+                      <>
+                        <div className="pt-4">
+                          {sectionsList.map((section) => (
+                            <SectionCard
+                              section={section}
+                              onOpenHighlightsModal={handleOpenHighlightsModal}
+                            />
+                          ))}
+                        </div>
+                        <Button
+                          variant="outline-primary"
+                          iconBefore={AddIcon}
+                          // TODO: button functionality will be implemented in [Tool Bar: New Section](https://youtrack.raccoongang.com/issue/2U-312)
+                          onClick={() => {}}
+                          block
+                        >
+                          {intl.formatMessage(messages.addNewSectionBtnTest)}
+                        </Button>
+                      </>
+                    ) : null}
                   </section>
                 </div>
               </article>

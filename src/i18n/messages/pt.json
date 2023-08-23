@@ -750,6 +750,7 @@
   "course-authoring.course-outline.status-bar.modal.link": "Learn more",
   "course-authoring.course-outline.status-bar.modal.cancelButton": "Not yet",
   "course-authoring.course-outline.status-bar.modal.submitButton": "Enable",
+  "course-authoring.course-outline.add-new-section.btn.text": "New section",
   "course-authoring.create-or-rerun-course.display-name.label": "Course name",
   "course-authoring.create-or-rerun-course.display-name.placeholder": "e.g. Introduction to Computer Science",
   "course-authoring.create-or-rerun-course.create.display-name.help-text": "The public display name for your course. This cannot be changed, but you can set a different display name in advanced settings later.",

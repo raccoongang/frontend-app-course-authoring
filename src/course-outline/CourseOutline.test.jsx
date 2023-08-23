@@ -45,18 +45,25 @@ describe('<CourseOutline />', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-  });
-
-  it('render CourseOutline component correctly', async () => {
     axiosMock
       .onGet(getCourseOutlineIndexApiUrl(courseId))
       .reply(200, courseOutlineIndexMock);
+  });
 
+  it('render CourseOutline component correctly', async () => {
     const { getByText } = render(<RootWrapper />);
 
     await waitFor(() => {
       expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
+    });
+  });
+
+  it('render New section button component correctly', async () => {
+    const { getByText } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(getByText(messages.addNewSectionBtnTest.defaultMessage)).toBeInTheDocument();
     });
   });
 });
