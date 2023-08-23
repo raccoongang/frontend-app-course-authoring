@@ -146,3 +146,14 @@ export async function publishCourseSection(sectionId) {
 
   return data;
 }
+
+export async function editCourseSection(sectionId, displayName) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getUpdateCourseSectionApiUrl(sectionId), {
+      metadata: {
+        display_name: displayName,
+      },
+    });
+
+  return data;
+}

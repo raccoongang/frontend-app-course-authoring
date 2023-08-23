@@ -16,6 +16,7 @@ import {
   getSectionsList, getCurrentSection,
 } from './data/selectors';
 import {
+  editCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
@@ -95,6 +96,10 @@ const useCourseOutline = ({ courseId }) => {
     closePublishModal();
   };
 
+  const handleEditSectionSubmit = (sectionId, displayName) => {
+    dispatch(editCourseSectionQuery(sectionId, displayName));
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -136,6 +141,7 @@ const useCourseOutline = ({ courseId }) => {
     handleEnableHighlightsSubmit,
     handleHighlightsFormSubmit,
     handlePublishSectionSubmit,
+    handleEditSectionSubmit,
     statusBarData,
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,

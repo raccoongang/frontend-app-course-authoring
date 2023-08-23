@@ -15,6 +15,7 @@ let axiosMock;
 let store;
 
 const section = {
+  id: '123',
   displayName: 'Section Name',
   published: true,
   releasedToStudents: true,
@@ -35,6 +36,8 @@ const renderComponent = (props) => render(
         onOpenHighlightsModal={jest.fn()}
         onNewSubsectionClick={onNewSubsectionClickMock}
         onEditClick={jest.fn()}
+        savingStatus=""
+        onEditSectionSubmit={jest.fn()}
         {...props}
       >
         <span>children</span>

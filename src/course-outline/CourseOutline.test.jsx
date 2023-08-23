@@ -7,8 +7,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 import initializeStore from '../store';
+import { executeThunk } from '../utils';
+import { getCourseOutlineIndexApiUrl, getUpdateCourseSectionApiUrl } from './data/api';
+import { editCourseSectionQuery } from './data/thunk';
 import { courseOutlineIndexMock } from './__mocks__';
-import { getCourseOutlineIndexApiUrl } from './data/api';
 import CourseOutline from './CourseOutline';
 import messages from './messages';
 
@@ -45,18 +47,40 @@ describe('<CourseOutline />', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-  });
 
-  it('render CourseOutline component correctly', async () => {
     axiosMock
       .onGet(getCourseOutlineIndexApiUrl(courseId))
       .reply(200, courseOutlineIndexMock);
+  });
 
-    const { getByText } = render(<RootWrapper />);
+  it('render CourseOutline component correctly', async () => {
+    const { getByText, debug } = render(<RootWrapper />);
 
     await waitFor(() => {
+      debug();
       expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
+    });
+  });
+
+  it('check updated section when edit query is successfully', async () => {
+    const { getByText } = render(<RootWrapper />);
+    const newDisplayName = 'New section name';
+
+    const section = courseOutlineIndexMock.courseStructure.childInfo.children[0];
+
+    axiosMock
+      .onPost(getUpdateCourseSectionApiUrl(section.id, {
+        metadata: {
+          display_name: newDisplayName,
+        },
+      }))
+      .reply(200);
+
+    await executeThunk(editCourseSectionQuery(section.id, newDisplayName), store.dispatch);
+
+    await waitFor(() => {
+      expect(getByText(section.displayName)).toBeInTheDocument();
     });
   });
 });

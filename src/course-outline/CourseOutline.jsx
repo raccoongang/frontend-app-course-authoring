@@ -11,6 +11,7 @@ import {
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
 
+import { NOTIFICATION_MESSAGES } from '../constants';
 import { RequestStatus } from '../data/constants';
 import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
@@ -54,6 +55,7 @@ const CourseOutline = ({ courseId }) => {
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
     handlePublishSectionSubmit,
+    handleEditSectionSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -115,10 +117,10 @@ const CourseOutline = ({ courseId }) => {
                       {sectionsList.length ? sectionsList.map((section) => (
                         <SectionCard
                           section={section}
+                          savingStatus={savingStatus}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={handlePublishModalOpen}
-                          // TODO add handler in Edit section feature
-                          onEditClick={null}
+                          onEditSectionSubmit={handleEditSectionSubmit}
                           // TODO add handler in Add new subsection feature
                           onNewSubsectionClick={null}
                         />
@@ -151,7 +153,10 @@ const CourseOutline = ({ courseId }) => {
         />
       </Container>
       <div className="alert-toast">
-        <ProcessingNotification isShow={savingStatus === RequestStatus.IN_PROGRESS} />
+        <ProcessingNotification
+          isShow={savingStatus === RequestStatus.IN_PROGRESS}
+          title={NOTIFICATION_MESSAGES.saving}
+        />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
           isQueryPending={savingStatus === RequestStatus.PENDING}
