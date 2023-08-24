@@ -147,6 +147,12 @@ export async function publishCourseSection(sectionId) {
   return data;
 }
 
+/**
+ * Edit course section
+ * @param {string} sectionId
+ * @param {string} displayName
+ * @returns {Promise<Object>}
+ */
 export async function editCourseSection(sectionId, displayName) {
   const { data } = await getAuthenticatedHttpClient()
     .post(getUpdateCourseSectionApiUrl(sectionId), {
