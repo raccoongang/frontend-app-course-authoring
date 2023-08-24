@@ -157,3 +157,15 @@ export async function editCourseSection(sectionId, displayName) {
 
   return data;
 }
+
+/**
+ * Delete course section
+ * @param {string} sectionId
+ * @returns {Promise<Object>}
+ */
+export async function deleteCourseSection(sectionId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .delete(getUpdateCourseSectionApiUrl(sectionId));
+
+  return data;
+}

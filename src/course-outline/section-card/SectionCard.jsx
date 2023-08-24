@@ -4,8 +4,8 @@ import { Badge, Button, useToggle } from '@edx/paragon';
 import { Add as IconAdd } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { getSectionStatus } from '../utils';
 
+import { getSectionStatus } from '../utils';
 import { RequestStatus } from '../../data/constants';
 import { setCurrentSection } from '../data/slice';
 import CardHeader from '../card-header/CardHeader';
@@ -19,6 +19,7 @@ const SectionCard = ({
   onNewSubsectionClick,
   onEditSectionSubmit,
   savingStatus,
+  onOpenDeleteModal,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const SectionCard = ({
         onExpand={handleExpandContent}
         onMenuButtonClick={handleMenuButtonClick}
         onPublishClick={onOpenPublishModal}
+        onDeleteClick={onOpenDeleteModal}
         onEditClick={openForm}
         isFormOpen={isFormOpen}
         closeForm={closeForm}
@@ -138,6 +140,7 @@ SectionCard.propTypes = {
   onNewSubsectionClick: PropTypes.func.isRequired,
   onEditSectionSubmit: PropTypes.func.isRequired,
   savingStatus: PropTypes.string.isRequired,
+  onOpenDeleteModal: PropTypes.func.isRequired,
 };
 
 export default SectionCard;

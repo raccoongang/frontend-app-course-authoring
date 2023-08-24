@@ -10,6 +10,7 @@ const onExpandMock = jest.fn();
 const onMenuButtonClickMock = jest.fn();
 const onPublishClickMock = jest.fn();
 const onEditClickMock = jest.fn();
+const onDeleteClickMock = jest.fn();
 
 const cardHeaderProps = {
   title: 'Some title',
@@ -23,6 +24,7 @@ const cardHeaderProps = {
   onEditSubmit: jest.fn(),
   closeForm: jest.fn(),
   isDisabledEditField: false,
+  onDeleteClick: onDeleteClickMock,
 };
 
 const renderComponent = (props) => render(
@@ -144,5 +146,16 @@ describe('<CardHeader />', () => {
     });
 
     expect(getByTestId('edit field')).toBeDisabled();
+  });
+
+  it('calls onDeleteClick when item is clicked', () => {
+    const { getByText, getByTestId } = renderComponent();
+
+    const menuButton = getByTestId('section-card-header__menu-button');
+    fireEvent.click(menuButton);
+
+    const deleteMenuItem = getByText(messages.menuDelete.defaultMessage);
+    fireEvent.click(deleteMenuItem);
+    expect(onDeleteClickMock).toHaveBeenCalled();
   });
 });

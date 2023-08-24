@@ -1,9 +1,11 @@
 import { RequestStatus } from '../../data/constants';
+import { NOTIFICATION_MESSAGES } from '../../constants';
 import {
   getCourseBestPracticesChecklist,
   getCourseLaunchChecklist,
 } from '../utils/getChecklistForStatusBar';
 import {
+  deleteCourseSection,
   editCourseSection,
   enableCourseHighlightsEmails,
   getCourseBestPractices,
@@ -24,6 +26,8 @@ import {
   updateSavingStatus,
   updateSectionList,
   updateFetchSectionLoadingStatus,
+  deleteSection,
+  updateSavingProcess,
 } from './slice';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
@@ -156,6 +160,7 @@ export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
 export function publishCourseSectionQuery(sectionId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingProcess(NOTIFICATION_MESSAGES.saving));
 
     try {
       await publishCourseSection(sectionId).then(async (result) => {
@@ -175,6 +180,7 @@ export function publishCourseSectionQuery(sectionId) {
 export function editCourseSectionQuery(sectionId, displayName) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingProcess(NOTIFICATION_MESSAGES.saving));
 
     try {
       await editCourseSection(sectionId, displayName).then(async (result) => {
@@ -187,6 +193,22 @@ export function editCourseSectionQuery(sectionId, displayName) {
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
+    }
+  };
+}
+
+export function deleteCourseSectionQuery(sectionId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingProcess(NOTIFICATION_MESSAGES.deleting));
+
+    try {
+      await deleteCourseSection(sectionId);
+      dispatch(deleteSection(sectionId));
+
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
     }
   };
 }

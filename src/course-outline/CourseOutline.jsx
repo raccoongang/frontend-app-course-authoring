@@ -11,11 +11,10 @@ import {
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
 
-import { NOTIFICATION_MESSAGES } from '../constants';
 import { RequestStatus } from '../data/constants';
 import SubHeader from '../generic/sub-header/SubHeader';
-import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
+import ProcessingNotification from '../generic/processing-notification';
 import AlertMessage from '../generic/alert-message';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
@@ -23,15 +22,17 @@ import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
+import PublishModal from './publish-modal/PublishModal';
+import DeleteModal from './delete-modal/DeleteModal';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
-import PublishModal from './publish-modal/PublishModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
     savingStatus,
+    savingProcess,
     statusBarData,
     sectionsList,
     isLoading,
@@ -44,8 +45,11 @@ const CourseOutline = ({ courseId }) => {
     isDisabledReindexButton,
     isHighlightsModalOpen,
     isPublishModalOpen,
+    isDeleteModalOpen,
     closeHighlightsModal,
     closePublishModal,
+    closeDeleteModal,
+    openDeleteModal,
     handlePublishModalOpen,
     headerNavigationsActions,
     openEnableHighlightsModal,
@@ -56,6 +60,7 @@ const CourseOutline = ({ courseId }) => {
     handleHighlightsFormSubmit,
     handlePublishSectionSubmit,
     handleEditSectionSubmit,
+    handleDeleteSectionSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -120,6 +125,7 @@ const CourseOutline = ({ courseId }) => {
                           savingStatus={savingStatus}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={handlePublishModalOpen}
+                          onOpenDeleteModal={openDeleteModal}
                           onEditSectionSubmit={handleEditSectionSubmit}
                           // TODO add handler in Add new subsection feature
                           onNewSubsectionClick={null}
@@ -151,11 +157,16 @@ const CourseOutline = ({ courseId }) => {
           onClose={closePublishModal}
           onPublishSubmit={handlePublishSectionSubmit}
         />
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          close={closeDeleteModal}
+          onDeleteSubmit={handleDeleteSectionSubmit}
+        />
       </Container>
       <div className="alert-toast">
         <ProcessingNotification
           isShow={savingStatus === RequestStatus.IN_PROGRESS}
-          title={NOTIFICATION_MESSAGES.saving}
+          title={savingProcess}
         />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}

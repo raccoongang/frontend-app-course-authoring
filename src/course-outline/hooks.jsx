@@ -13,9 +13,12 @@ import {
   getOutlineIndexData,
   getSavingStatus,
   getStatusBarData,
-  getSectionsList, getCurrentSection,
+  getSectionsList,
+  getCurrentSection,
+  getSavingProcess,
 } from './data/selectors';
 import {
+  deleteCourseSectionQuery,
   editCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
@@ -34,6 +37,7 @@ const useCourseOutline = ({ courseId }) => {
   const savingStatus = useSelector(getSavingStatus);
   const sectionsList = useSelector(getSectionsList);
   const currentSection = useSelector(getCurrentSection);
+  const savingProcess = useSelector(getSavingProcess);
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
@@ -42,6 +46,7 @@ const useCourseOutline = ({ courseId }) => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
   const [isPublishModalOpen, openPublishModal, closePublishModal] = useToggle(false);
+  const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -100,6 +105,11 @@ const useCourseOutline = ({ courseId }) => {
     dispatch(editCourseSectionQuery(sectionId, displayName));
   };
 
+  const handleDeleteSectionSubmit = () => {
+    dispatch(deleteCourseSectionQuery(currentSection.id));
+    closeDeleteModal();
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -124,6 +134,7 @@ const useCourseOutline = ({ courseId }) => {
 
   return {
     savingStatus,
+    savingProcess,
     sectionsList,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
@@ -151,6 +162,10 @@ const useCourseOutline = ({ courseId }) => {
     handleOpenHighlightsModal,
     isHighlightsModalOpen,
     closeHighlightsModal,
+    isDeleteModalOpen,
+    closeDeleteModal,
+    openDeleteModal,
+    handleDeleteSectionSubmit,
   };
 };
 

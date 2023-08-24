@@ -9,7 +9,7 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import initializeStore from '../store';
 import { executeThunk } from '../utils';
 import { getCourseOutlineIndexApiUrl, getUpdateCourseSectionApiUrl } from './data/api';
-import { editCourseSectionQuery } from './data/thunk';
+import { deleteCourseSectionQuery, editCourseSectionQuery } from './data/thunk';
 import { courseOutlineIndexMock } from './__mocks__';
 import CourseOutline from './CourseOutline';
 import messages from './messages';
@@ -81,6 +81,18 @@ describe('<CourseOutline />', () => {
 
     await waitFor(() => {
       expect(getByText(section.displayName)).toBeInTheDocument();
+    });
+  });
+
+  it('check delete section when edit query is successfully', async () => {
+    const { queryByText } = render(<RootWrapper />);
+    const section = courseOutlineIndexMock.courseStructure.childInfo.children[1];
+
+    axiosMock.onDelete(getUpdateCourseSectionApiUrl(section.id)).reply(200);
+    await executeThunk(deleteCourseSectionQuery(section.id), store.dispatch);
+
+    await waitFor(() => {
+      expect(queryByText(section.displayName)).not.toBeInTheDocument();
     });
   });
 });

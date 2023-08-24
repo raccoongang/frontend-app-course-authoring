@@ -34,6 +34,7 @@ const renderComponent = (props) => render(
         section={section}
         onOpenPublishModal={jest.fn()}
         onOpenHighlightsModal={jest.fn()}
+        onOpenDeleteModal={jest.fn()}
         onNewSubsectionClick={onNewSubsectionClickMock}
         onEditClick={jest.fn()}
         savingStatus=""
