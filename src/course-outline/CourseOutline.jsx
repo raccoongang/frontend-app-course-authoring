@@ -120,7 +120,7 @@ const CourseOutline = ({ courseId }) => {
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={openPublishModal}
                           // TODO add handler in Add new subsection feature
-                          onClickNewSubsection={null}
+                          onClickNewSubsection={() => ({})}
                         />
                       )) : (
                         <EmptyPlaceholder onCreateNewSection={() => ({})} />
