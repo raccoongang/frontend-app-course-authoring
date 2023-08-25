@@ -20,6 +20,7 @@ const SectionCard = ({
   onEditSectionSubmit,
   savingStatus,
   onOpenDeleteModal,
+  onDuplicateSubmit,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ const SectionCard = ({
         closeForm={closeForm}
         onEditSubmit={handleEditSubmit}
         isDisabledEditField={savingStatus === RequestStatus.IN_PROGRESS}
+        onDuplicateClick={onDuplicateSubmit}
       />
       <div className="section-card__content" data-testid="section-card__content">
         <div className="outline-section__status">
@@ -141,6 +143,7 @@ SectionCard.propTypes = {
   onEditSectionSubmit: PropTypes.func.isRequired,
   savingStatus: PropTypes.string.isRequired,
   onOpenDeleteModal: PropTypes.func.isRequired,
+  onDuplicateSubmit: PropTypes.func.isRequired,
 };
 
 export default SectionCard;

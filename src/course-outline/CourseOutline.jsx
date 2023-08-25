@@ -61,6 +61,7 @@ const CourseOutline = ({ courseId }) => {
     handlePublishSectionSubmit,
     handleEditSectionSubmit,
     handleDeleteSectionSubmit,
+    handleDuplicateSectionSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -127,6 +128,7 @@ const CourseOutline = ({ courseId }) => {
                           onOpenPublishModal={handlePublishModalOpen}
                           onOpenDeleteModal={openDeleteModal}
                           onEditSectionSubmit={handleEditSectionSubmit}
+                          onDuplicateSubmit={handleDuplicateSectionSubmit}
                           // TODO add handler in Add new subsection feature
                           onNewSubsectionClick={null}
                         />

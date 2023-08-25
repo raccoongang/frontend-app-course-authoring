@@ -21,6 +21,7 @@ const getEnableHighlightsEmailsApiUrl = (courseId) => {
 export const getCourseReindexApiUrl = (reindexLink) => `${getApiBaseUrl()}${reindexLink}`;
 export const getUpdateCourseSectionApiUrl = (sectionId) => `${getApiBaseUrl()}/xblock/${sectionId}`;
 export const getCourseSectionApiUrl = (sectionId) => `${getApiBaseUrl()}/xblock/outline/${sectionId}`;
+export const getCourseSectionDuplicateApiUrl = () => `${getApiBaseUrl()}/xblock/`;
 
 /**
  * Get course outline index.
@@ -169,3 +170,29 @@ export async function deleteCourseSection(sectionId) {
 
   return data;
 }
+
+/**
+ * Duplicate course section
+ * @param {string} sectionId
+ * @param {string} courseBlockId
+ * @returns {Promise<Object>}
+ */
+export async function duplicateCourseSection(sectionId, courseBlockId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getCourseSectionDuplicateApiUrl(), {
+      duplicate_source_locator: sectionId,
+      parent_locator: courseBlockId,
+    });
+
+  return data;
+}
+
+const obj = {
+  duplicate_source_locator: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@d8a6192ade314473a78242dfeedfbf5b',
+  parent_locator: 'block-v1:edX+DemoX+Demo_Course+type@course+block@course',
+};
+
+const obj1 = {
+  duplicate_source_locator: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@graded_interactions',
+  parent_locator: 'course-v1:edX+DemoX+Demo_Course',
+};

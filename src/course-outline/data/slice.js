@@ -81,6 +81,12 @@ const slice = createSlice({
     deleteSection: (state, { payload }) => {
       state.sectionsList = state.sectionsList.filter(({ id }) => id !== payload);
     },
+    duplicateSection: (state, { payload }) => {
+      const duplicateElement = state.sectionsList.filter(({ id }) => id === payload.id);
+      const duplicateIndex = state.sectionsList.indexOf(duplicateElement);
+
+      state.sectionsList = state.sectionsList.splice(duplicateIndex + 1, 0, payload.duplicatedSection);
+    },
   },
 });
 
@@ -97,6 +103,7 @@ export const {
   setCurrentSection,
   deleteSection,
   updateSavingProcess,
+  duplicateSection,
 } = slice.actions;
 
 export const {

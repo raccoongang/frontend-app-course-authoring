@@ -18,7 +18,7 @@ import {
   getSavingProcess,
 } from './data/selectors';
 import {
-  deleteCourseSectionQuery,
+  deleteCourseSectionQuery, duplicateCourseSectionQuery,
   editCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
@@ -31,7 +31,7 @@ import {
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
 
-  const { reindexLink } = useSelector(getOutlineIndexData);
+  const { reindexLink, courseStructure } = useSelector(getOutlineIndexData);
   const { outlineIndexLoadingStatus, reIndexLoadingStatus } = useSelector(getLoadingStatus);
   const statusBarData = useSelector(getStatusBarData);
   const savingStatus = useSelector(getSavingStatus);
@@ -110,6 +110,10 @@ const useCourseOutline = ({ courseId }) => {
     closeDeleteModal();
   };
 
+  const handleDuplicateSectionSubmit = () => {
+    dispatch(duplicateCourseSectionQuery(currentSection.id, courseStructure.id));
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -166,6 +170,7 @@ const useCourseOutline = ({ courseId }) => {
     closeDeleteModal,
     openDeleteModal,
     handleDeleteSectionSubmit,
+    handleDuplicateSectionSubmit,
   };
 };
 

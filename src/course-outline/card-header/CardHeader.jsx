@@ -36,6 +36,7 @@ const CardHeader = ({
   closeForm,
   isDisabledEditField,
   onDeleteClick,
+  onDuplicateClick,
 }) => {
   const intl = useIntl();
   const [titleValue, setTitleValue] = useState(title);
@@ -136,7 +137,7 @@ const CardHeader = ({
               {intl.formatMessage(messages.menuPublish)}
             </Dropdown.Item>
             <Dropdown.Item>{intl.formatMessage(messages.menuConfigure)}</Dropdown.Item>
-            <Dropdown.Item>{intl.formatMessage(messages.menuDuplicate)}</Dropdown.Item>
+            <Dropdown.Item onClick={onDuplicateClick}>{intl.formatMessage(messages.menuDuplicate)}</Dropdown.Item>
             <Dropdown.Item onClick={onDeleteClick}>{intl.formatMessage(messages.menuDelete)}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -158,6 +159,7 @@ CardHeader.propTypes = {
   closeForm: PropTypes.func.isRequired,
   isDisabledEditField: PropTypes.bool.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
+  onDuplicateClick: PropTypes.func.isRequired,
 };
 
 export default CardHeader;
