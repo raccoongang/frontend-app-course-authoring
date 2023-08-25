@@ -17,7 +17,7 @@ export const useScrollToHashElement = ({ isLoading }) => {
   }, [isLoading]);
 };
 
-export const useEscapeClick = ({ onEscape }) => {
+export const useEscapeClick = ({ onEscape, dependency }) => {
   useEffect(() => {
     const handleEscapeClick = (event) => {
       if (event.key === 'Escape') {
@@ -30,5 +30,5 @@ export const useEscapeClick = ({ onEscape }) => {
     return () => {
       window.removeEventListener('keydown', handleEscapeClick);
     };
-  }, []);
+  }, [dependency]);
 };

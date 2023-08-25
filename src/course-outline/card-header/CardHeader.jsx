@@ -44,12 +44,12 @@ const CardHeader = ({
     || sectionStatus === SECTION_BADGE_STATUTES.publishedNotLive;
 
   useEscapeClick({
-    onEscape: () => closeForm(),
+    onEscape: () => {
+      setTitleValue(title);
+      closeForm();
+    },
+    dependency: title,
   });
-
-  useEffect(() => {
-    setTitleValue(title);
-  }, [title]);
 
   return (
     <div className="section-card-header" data-testid="section-card-header">
