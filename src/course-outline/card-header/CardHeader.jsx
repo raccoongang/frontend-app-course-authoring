@@ -23,8 +23,8 @@ const CardHeader = ({
   sectionStatus,
   isExpanded,
   onExpand,
-  onPublishClick,
-  onMenuButtonClick,
+  onClickPublish,
+  onClickMenuButton,
 }) => {
   const intl = useIntl();
 
@@ -72,7 +72,7 @@ const CardHeader = ({
       <Dropdown
         data-testid="section-card-header__menu"
         className="ml-auto"
-        onClick={onMenuButtonClick}
+        onClick={onClickMenuButton}
       >
         <Dropdown.Toggle
           className="section-card-header__menu"
@@ -87,7 +87,7 @@ const CardHeader = ({
           <Dropdown.Item>{intl.formatMessage(messages.menuEdit)}</Dropdown.Item>
           <Dropdown.Item
             disabled={isDisabledPublish}
-            onClick={onPublishClick}
+            onClick={onClickPublish}
           >
             {intl.formatMessage(messages.menuPublish)}
           </Dropdown.Item>
@@ -105,8 +105,8 @@ CardHeader.propTypes = {
   sectionStatus: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool.isRequired,
   onExpand: PropTypes.func.isRequired,
-  onPublishClick: PropTypes.func.isRequired,
-  onMenuButtonClick: PropTypes.func.isRequired,
+  onClickPublish: PropTypes.func.isRequired,
+  onClickMenuButton: PropTypes.func.isRequired,
 };
 
 export default CardHeader;

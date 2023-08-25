@@ -7,16 +7,16 @@ import CardHeader from './CardHeader';
 import messages from './messages';
 
 const onExpandMock = jest.fn();
-const onMenuButtonClickMock = jest.fn();
-const onPublishClickMock = jest.fn();
+const onClickMenuButtonMock = jest.fn();
+const onClickPublishMock = jest.fn();
 
 const cardHeaderProps = {
   title: 'Some title',
   sectionStatus: SECTION_BADGE_STATUTES.live,
   isExpanded: true,
   onExpand: onExpandMock,
-  onMenuButtonClick: onMenuButtonClickMock,
-  onPublishClick: onPublishClickMock,
+  onClickMenuButton: onClickMenuButtonMock,
+  onClickPublish: onClickPublishMock,
 };
 
 const renderComponent = (props) => render(
@@ -94,10 +94,10 @@ describe('<CardHeader />', () => {
 
     const menuButton = getByTestId('section-card-header__menu-button');
     fireEvent.click(menuButton);
-    expect(onMenuButtonClickMock).toHaveBeenCalled();
+    expect(onClickMenuButtonMock).toHaveBeenCalled();
   });
 
-  it('calls onPublishClick when item is clicked', () => {
+  it('calls onClickPublish when item is clicked', () => {
     const { getByText, getByTestId } = renderComponent({
       ...cardHeaderProps,
       sectionStatus: SECTION_BADGE_STATUTES.draft,
@@ -108,6 +108,6 @@ describe('<CardHeader />', () => {
 
     const publishMenuItem = getByText(messages.menuPublish.defaultMessage);
     fireEvent.click(publishMenuItem);
-    expect(onPublishClickMock).toHaveBeenCalled();
+    expect(onClickPublishMock).toHaveBeenCalled();
   });
 });

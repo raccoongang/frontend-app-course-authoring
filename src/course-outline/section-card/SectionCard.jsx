@@ -38,7 +38,7 @@ const SectionCard = ({
     setIsExpanded((prevState) => !prevState);
   };
 
-  const handleMenuButtonClick = () => {
+  const handleClickMenuButton = () => {
     dispatch(setCurrentSection(section));
   };
 
@@ -49,8 +49,8 @@ const SectionCard = ({
         sectionStatus={sectionStatus}
         isExpanded={isExpanded}
         onExpand={handleExpandContent}
-        onMenuButtonClick={handleMenuButtonClick}
-        onPublishClick={onOpenPublishModal}
+        onClickMenuButton={handleClickMenuButton}
+        onClickPublish={onOpenPublishModal}
       />
       <div className="section-card__content" data-testid="section-card__content">
         <div className="outline-section__status">

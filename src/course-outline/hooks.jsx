@@ -85,11 +85,7 @@ const useCourseOutline = ({ courseId }) => {
     closeHighlightsModal();
   };
 
-  const handlePublishModalOpen = () => {
-    openPublishModal();
-  };
-
-  const handlePublishSectionSubmit = () => {
+  const handleSubmitPublishSection = () => {
     dispatch(publishCourseSectionQuery(currentSection.id));
 
     closePublishModal();
@@ -130,12 +126,12 @@ const useCourseOutline = ({ courseId }) => {
     isDisabledReindexButton,
     isSectionsExpanded,
     isPublishModalOpen,
-    handlePublishModalOpen,
+    openPublishModal,
     closePublishModal,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
     handleHighlightsFormSubmit,
-    handlePublishSectionSubmit,
+    handleSubmitPublishSection,
     statusBarData,
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,

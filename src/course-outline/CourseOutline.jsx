@@ -46,7 +46,7 @@ const CourseOutline = ({ courseId }) => {
     isPublishModalOpen,
     closeHighlightsModal,
     closePublishModal,
-    handlePublishModalOpen,
+    openPublishModal,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -54,7 +54,7 @@ const CourseOutline = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
-    handlePublishSectionSubmit,
+    handleSubmitPublishSection,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -118,7 +118,7 @@ const CourseOutline = ({ courseId }) => {
                         <SectionCard
                           section={section}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
-                          onOpenPublishModal={handlePublishModalOpen}
+                          onOpenPublishModal={openPublishModal}
                         />
                       )) : (
                         <EmptyPlaceholder onCreateNewSection={() => ({})} />
@@ -147,11 +147,11 @@ const CourseOutline = ({ courseId }) => {
         <PublishModal
           isOpen={isPublishModalOpen}
           onClose={closePublishModal}
-          onPublishSubmit={handlePublishSectionSubmit}
+          onPublishSubmit={handleSubmitPublishSection}
         />
       </Container>
       <div className="alert-toast">
-        <ProcessingNotification isShow={savingStatus === RequestStatus.IN_PROGRESS} />
+        <ProcessingNotification isShow={savingStatus === RequestStatus.PENDING} />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
           isQueryPending={savingStatus === RequestStatus.PENDING}

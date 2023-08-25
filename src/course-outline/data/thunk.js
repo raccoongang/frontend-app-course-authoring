@@ -153,7 +153,7 @@ export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
 
 export function publishCourseSectionQuery(sectionId) {
   return async (dispatch) => {
-    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
 
     try {
       await publishCourseSection(sectionId).then(async (result) => {
