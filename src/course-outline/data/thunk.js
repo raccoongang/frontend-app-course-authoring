@@ -8,7 +8,7 @@ import {
   getCourseBestPractices,
   getCourseLaunch,
   getCourseOutlineIndex,
-  getCourseSection,
+  getCourseSection, publishCourseSection,
   restartIndexingOnCourse,
   updateCourseSectionHighlights,
 } from './api';
@@ -138,6 +138,25 @@ export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
 
     try {
       await updateCourseSectionHighlights(sectionId, highlights).then(async (result) => {
+        if (result) {
+          await dispatch(fetchCourseSectionQuery(sectionId));
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function publishCourseSectionQuery(sectionId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    try {
+      await publishCourseSection(sectionId).then(async (result) => {
         if (result) {
           await dispatch(fetchCourseSectionQuery(sectionId));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));

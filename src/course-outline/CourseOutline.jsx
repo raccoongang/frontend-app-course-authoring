@@ -25,6 +25,7 @@ import HighlightsModal from './highlights-modal/HighlightsModal';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
+import PublishModal from './publish-modal/PublishModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
@@ -42,7 +43,10 @@ const CourseOutline = ({ courseId }) => {
     isInternetConnectionAlertFailed,
     isDisabledReindexButton,
     isHighlightsModalOpen,
+    isPublishModalOpen,
     closeHighlightsModal,
+    closePublishModal,
+    openPublishModal,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -50,6 +54,7 @@ const CourseOutline = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
+    handleSubmitPublishSection,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -113,6 +118,7 @@ const CourseOutline = ({ courseId }) => {
                         <SectionCard
                           section={section}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
+                          onOpenPublishModal={openPublishModal}
                         />
                       )) : (
                         <EmptyPlaceholder onCreateNewSection={() => ({})} />
@@ -138,9 +144,14 @@ const CourseOutline = ({ courseId }) => {
           onClose={closeHighlightsModal}
           onSubmit={handleHighlightsFormSubmit}
         />
+        <PublishModal
+          isOpen={isPublishModalOpen}
+          onClose={closePublishModal}
+          onPublishSubmit={handleSubmitPublishSection}
+        />
       </Container>
       <div className="alert-toast">
-        <ProcessingNotification isShow={savingStatus === RequestStatus.IN_PROGRESS} />
+        <ProcessingNotification isShow={savingStatus === RequestStatus.PENDING} />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
           isQueryPending={savingStatus === RequestStatus.PENDING}

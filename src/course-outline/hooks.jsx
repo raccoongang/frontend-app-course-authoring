@@ -20,7 +20,7 @@ import {
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
-  fetchCourseReindexQuery,
+  fetchCourseReindexQuery, publishCourseSectionQuery,
   updateCourseSectionHighlightsQuery,
 } from './data/thunk';
 
@@ -40,6 +40,7 @@ const useCourseOutline = ({ courseId }) => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
+  const [isPublishModalOpen, openPublishModal, closePublishModal] = useToggle(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -84,6 +85,12 @@ const useCourseOutline = ({ courseId }) => {
     closeHighlightsModal();
   };
 
+  const handleSubmitPublishSection = () => {
+    dispatch(publishCourseSectionQuery(currentSection.id));
+
+    closePublishModal();
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -118,9 +125,13 @@ const useCourseOutline = ({ courseId }) => {
     learnMoreOutlineUrl,
     isDisabledReindexButton,
     isSectionsExpanded,
+    isPublishModalOpen,
+    openPublishModal,
+    closePublishModal,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
     handleHighlightsFormSubmit,
+    handleSubmitPublishSection,
     statusBarData,
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,
