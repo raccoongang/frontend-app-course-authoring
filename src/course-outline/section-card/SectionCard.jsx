@@ -77,7 +77,7 @@ const SectionCard = ({
       )}
       {isExpanded && (
         <Button
-          data-testid="new subsection button"
+          data-testid="new-subsection-button"
           className="mt-4"
           variant="outline-primary"
           iconBefore={IconAdd}

@@ -71,7 +71,7 @@ describe('<SectionCard />', () => {
     const expandButton = getByTestId('section-card-header__expanded-btn');
     fireEvent.click(expandButton);
     expect(queryByTestId('section-card__subsections')).not.toBeInTheDocument();
-    expect(queryByTestId('new subsection button')).not.toBeInTheDocument();
+    expect(queryByTestId('new-subsection-button')).not.toBeInTheDocument();
 
     fireEvent.click(expandButton);
     expect(queryByTestId('section-card__subsections')).toBeInTheDocument();
