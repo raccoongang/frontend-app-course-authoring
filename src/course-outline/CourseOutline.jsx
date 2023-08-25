@@ -115,7 +115,7 @@ const CourseOutline = ({ courseId }) => {
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                         />
                       )) : (
-                        <EmptyPlaceholder onCreateNewSection={null} />
+                        <EmptyPlaceholder onCreateNewSection={() => ({})} />
                       )}
                     </div>
                   </section>
