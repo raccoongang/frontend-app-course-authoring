@@ -22,8 +22,8 @@ import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
-import { useCourseOutline } from './hooks';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
+import { useCourseOutline } from './hooks';
 import messages from './messages';
 
 const CourseOutline = ({ courseId }) => {
