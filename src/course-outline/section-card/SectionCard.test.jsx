@@ -75,7 +75,7 @@ describe('<SectionCard />', () => {
 
     fireEvent.click(expandButton);
     expect(queryByTestId('section-card__subsections')).toBeInTheDocument();
-    expect(queryByTestId('new subsection button')).toBeInTheDocument();
+    expect(queryByTestId('new-subsection-button')).toBeInTheDocument();
   });
 
   it('calls the onClickNewSubsection function when the button is clicked', () => {
