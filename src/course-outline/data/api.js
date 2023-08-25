@@ -186,13 +186,3 @@ export async function duplicateCourseSection(sectionId, courseBlockId) {
 
   return data;
 }
-
-const obj = {
-  duplicate_source_locator: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@d8a6192ade314473a78242dfeedfbf5b',
-  parent_locator: 'block-v1:edX+DemoX+Demo_Course+type@course+block@course',
-};
-
-const obj1 = {
-  duplicate_source_locator: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@graded_interactions',
-  parent_locator: 'course-v1:edX+DemoX+Demo_Course',
-};

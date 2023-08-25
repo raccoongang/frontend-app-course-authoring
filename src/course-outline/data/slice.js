@@ -82,8 +82,8 @@ const slice = createSlice({
       state.sectionsList = state.sectionsList.filter(({ id }) => id !== payload);
     },
     duplicateSection: (state, { payload }) => {
-      const duplicateElement = state.sectionsList.filter(({ id }) => id === payload.id);
-      const duplicateIndex = state.sectionsList.indexOf(duplicateElement);
+      const duplicatedElement = state.sectionsList.filter(({ id }) => id === payload.id);
+      const duplicateIndex = state.sectionsList.indexOf(duplicatedElement);
 
       state.sectionsList = state.sectionsList.splice(duplicateIndex + 1, 0, payload.duplicatedSection);
     },
