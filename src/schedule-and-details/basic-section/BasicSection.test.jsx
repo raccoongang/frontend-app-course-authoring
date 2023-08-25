@@ -26,6 +26,10 @@ describe('<BasicSection />', () => {
 
   it('renders basic section successfully', () => {
     const { getByText } = render(<RootWrapper {...props} />);
+    expect(getByText(messages.basicTitle.defaultMessage)).toBeInTheDocument();
+    expect(
+      getByText(messages.basicDescription.defaultMessage),
+    ).toBeInTheDocument();
     expect(
       getByText(messages.courseOrganization.defaultMessage),
     ).toBeInTheDocument();

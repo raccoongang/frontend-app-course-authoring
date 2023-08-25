@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CardItem from '../../card-item';
+import { sortAlphabeticallyArray } from '../utils';
 import DefaultSection from './default-section';
 
 const CoursesTab = ({ coursesDataItems }) => {
@@ -11,7 +12,7 @@ const CoursesTab = ({ coursesDataItems }) => {
     );
   }
 
-  return coursesDataItems.map(({
+  return sortAlphabeticallyArray(coursesDataItems).map(({
     courseKey, displayName, lmsLink, org, rerunLink, number, run, url,
   }) => (
     <CardItem

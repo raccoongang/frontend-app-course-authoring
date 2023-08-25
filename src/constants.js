@@ -19,7 +19,14 @@ export const BADGE_STATES = {
 };
 
 export const NOTIFICATION_MESSAGES = {
-  saving: 'saving',
-  duplicating: 'duplicating',
-  deleting: 'deleting',
+  saving: 'Saving',
+  duplicating: 'Duplicating',
+  deleting: 'Deleting',
+};
+
+export const COURSE_CREATOR_STATUSES = {
+  unrequested: 'unrequested',
+  pending: 'pending',
+  granted: 'granted',
+  denied: 'denied',
 };

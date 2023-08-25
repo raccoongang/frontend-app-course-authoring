@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
+import { useHelpUrls } from '../help-urls/hooks';
 import { RequestStatus } from '../data/constants';
-import { updateSavingStatus } from './data/slice';
+import {
+  setCurrentSection,
+  updateSavingStatus,
+} from './data/slice';
 import {
   getLoadingStatus,
   getOutlineIndexData,
   getSavingStatus,
   getStatusBarData,
-  getSectionsList,
+  getSectionsList, getCurrentSection,
 } from './data/selectors';
 import {
   enableCourseHighlightsEmailsQuery,
@@ -17,6 +21,7 @@ import {
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
   fetchCourseReindexQuery,
+  updateCourseSectionHighlightsQuery,
 } from './data/thunk';
 
 const useCourseOutline = ({ courseId }) => {
@@ -27,12 +32,14 @@ const useCourseOutline = ({ courseId }) => {
   const statusBarData = useSelector(getStatusBarData);
   const savingStatus = useSelector(getSavingStatus);
   const sectionsList = useSelector(getSectionsList);
+  const currentSection = useSelector(getCurrentSection);
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
   const [isDisabledReindexButton, setDisableReindexButton] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -65,6 +72,18 @@ const useCourseOutline = ({ courseId }) => {
     dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
   };
 
+  const handleOpenHighlightsModal = (section) => {
+    dispatch(setCurrentSection(section));
+    openHighlightsModal();
+  };
+
+  const handleHighlightsFormSubmit = (highlights) => {
+    const dataToSend = Object.values(highlights).filter(Boolean);
+    dispatch(updateCourseSectionHighlightsQuery(currentSection.id, dataToSend));
+
+    closeHighlightsModal();
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -81,23 +100,36 @@ const useCourseOutline = ({ courseId }) => {
     }
   }, [reIndexLoadingStatus]);
 
+  const {
+    visibility: learnMoreVisibilityUrl,
+    grading: learnMoreGradingUrl,
+    outline: learnMoreOutlineUrl,
+  } = useHelpUrls(['visibility', 'grading', 'outline']);
+
   return {
     savingStatus,
+    sectionsList,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
     showErrorAlert,
+    learnMoreVisibilityUrl,
+    learnMoreGradingUrl,
+    learnMoreOutlineUrl,
     isDisabledReindexButton,
     isSectionsExpanded,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
+    handleHighlightsFormSubmit,
     statusBarData,
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     handleInternetConnectionFailed,
-    sectionsList,
+    handleOpenHighlightsModal,
+    isHighlightsModalOpen,
+    closeHighlightsModal,
   };
 };
 

@@ -11,16 +11,18 @@ import {
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
 
-import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
+import SubHeader from '../generic/sub-header/SubHeader';
+import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import AlertMessage from '../generic/alert-message';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
-import { useCourseOutline } from './hooks';
 import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
+import HighlightsModal from './highlights-modal/HighlightsModal';
+import { useCourseOutline } from './hooks';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import messages from './messages';
 
@@ -39,11 +41,15 @@ const CourseOutline = ({ courseId }) => {
     isEnableHighlightsModalOpen,
     isInternetConnectionAlertFailed,
     isDisabledReindexButton,
+    isHighlightsModalOpen,
+    closeHighlightsModal,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
     handleEnableHighlightsSubmit,
     handleInternetConnectionFailed,
+    handleOpenHighlightsModal,
+    handleHighlightsFormSubmit,
   } = useCourseOutline({ courseId });
 
   if (isLoading) {
@@ -104,7 +110,10 @@ const CourseOutline = ({ courseId }) => {
                     <div className="pt-4">
                       {/* TODO add create new section handler in EmptyPlaceholder */}
                       {sectionsList.length ? sectionsList.map((section) => (
-                        <SectionCard section={section} />
+                        <SectionCard
+                          section={section}
+                          onOpenHighlightsModal={handleOpenHighlightsModal}
+                        />
                       )) : (
                         <EmptyPlaceholder onCreateNewSection={null} />
                       )}
@@ -124,8 +133,14 @@ const CourseOutline = ({ courseId }) => {
             highlightsDocUrl={statusBarData.highlightsDocUrl}
           />
         </section>
+        <HighlightsModal
+          isOpen={isHighlightsModalOpen}
+          onClose={closeHighlightsModal}
+          onSubmit={handleHighlightsFormSubmit}
+        />
       </Container>
       <div className="alert-toast">
+        <ProcessingNotification isShow={savingStatus === RequestStatus.IN_PROGRESS} />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
           isQueryPending={savingStatus === RequestStatus.PENDING}

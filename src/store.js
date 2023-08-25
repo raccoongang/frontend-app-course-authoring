@@ -13,9 +13,11 @@ import { reducer as liveReducer } from './pages-and-resources/live/data/slice';
 import { reducer as courseTeamReducer } from './course-team/data/slice';
 import { reducer as CourseUpdatesReducer } from './course-updates/data/slice';
 import { reducer as courseOutlineReducer } from './course-outline/data/slice';
+import { reducer as processingNotificationReducer } from './generic/processing-notification/data/slice';
 import { reducer as genericReducer } from './generic/data/slice';
 import { reducer as helpUrlsReducer } from './help-urls/data/slice';
 import { reducer as courseExportReducer } from './export-page/data/slice';
+import { reducer as filesReducer } from './files-and-uploads/data/slice';
 
 export default function initializeStore(preloadedState = undefined) {
   return configureStore({
@@ -23,6 +25,7 @@ export default function initializeStore(preloadedState = undefined) {
       courseDetail: courseDetailReducer,
       customPages: customPagesReducer,
       discussions: discussionsReducer,
+      assets: filesReducer,
       pagesAndResources: pagesAndResourcesReducer,
       scheduleAndDetails: scheduleAndDetailsReducer,
       advancedSettings: advancedSettingsReducer,
@@ -33,6 +36,7 @@ export default function initializeStore(preloadedState = undefined) {
       courseTeam: courseTeamReducer,
       courseUpdates: CourseUpdatesReducer,
       courseOutline: courseOutlineReducer,
+      processingNotification: processingNotificationReducer,
       generic: genericReducer,
       helpUrls: helpUrlsReducer,
       courseExport: courseExportReducer,

@@ -17,12 +17,11 @@ import {
   convertToDateFromString,
   isValidDate,
 } from '../../utils';
-
-import messages from './messages';
-import { REQUEST_TYPES } from '../constants';
 import { DATE_FORMAT, DEFAULT_EMPTY_WYSIWYG_VALUE } from '../../constants';
 import { WysiwygEditor } from '../../generic/WysiwygEditor';
+import { REQUEST_TYPES } from '../constants';
 import { geUpdateFormSettings } from './utils';
+import messages from './messages';
 
 const UpdateForm = ({
   close,
@@ -51,6 +50,7 @@ const UpdateForm = ({
       <Formik
         initialValues={courseUpdatesInitialValues}
         validationSchema={validationSchema}
+        validateOnMount
         validateOnBlur
         onSubmit={onSubmit}
       >
@@ -73,7 +73,7 @@ const UpdateForm = ({
                   <DatePicker
                     name="date"
                     data-testid="course-updates-datepicker"
-                    selected={convertToDateFromString(values.date)}
+                    selected={isValidDate(values.date) ? convertToDateFromString(values.date) : ''}
                     dateFormat={DATE_FORMAT}
                     className={classNames('datepicker-custom-control', {
                       'datepicker-custom-control_isInvalid': !isValid,

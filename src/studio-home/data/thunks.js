@@ -6,12 +6,12 @@ import {
 } from './slice';
 
 // eslint-disable-next-line import/prefer-default-export
-export function fetchStudioHomeData() {
+export function fetchStudioHomeData(search) {
   return async (dispatch) => {
     dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
 
     try {
-      const studioHomeData = await getStudioHomeData();
+      const studioHomeData = await getStudioHomeData(search);
       dispatch(fetchStudioHomeDataSuccess(studioHomeData));
       dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
