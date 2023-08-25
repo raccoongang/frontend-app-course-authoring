@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Button } from '@edx/paragon';
-
 import { useDispatch } from 'react-redux';
+
 import CardHeader from '../card-header/CardHeader';
-import { getSectionStatus } from '../utils';
 import { setCurrentSection } from '../data/slice';
+import { getSectionStatus } from '../utils';
 
 const SectionCard = ({
   section,

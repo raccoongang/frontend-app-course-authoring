@@ -69,7 +69,11 @@ const CardHeader = ({
           )}
         </Button>
       </OverlayTrigger>
-      <Dropdown data-testid="section-card-header__menu" className="ml-auto" onClick={onMenuButtonClick}>
+      <Dropdown
+        data-testid="section-card-header__menu"
+        className="ml-auto"
+        onClick={onMenuButtonClick}
+      >
         <Dropdown.Toggle
           className="section-card-header__menu"
           id="section-card-header__menu"
