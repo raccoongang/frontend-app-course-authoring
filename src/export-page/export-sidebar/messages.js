@@ -7,7 +7,7 @@ const messages = defineMessages({
   },
   description1: {
     id: 'course-authoring.export.sidebar.description1',
-    defaultMessage: 'You may want to edit the XML in your course directly, outside of Studio. You may want to create a backup copy of your course. Or, you may want to create a copy of your course that you can later import into another course instance and customize.',
+    defaultMessage: 'You may want to edit the XML in your course directly, outside of {studioShortName}. You may want to create a backup copy of your course. Or, you may want to create a copy of your course that you can later import into another course instance and customize.',
   },
   exportedContent: {
     id: 'course-authoring.export.sidebar.exportedContent',

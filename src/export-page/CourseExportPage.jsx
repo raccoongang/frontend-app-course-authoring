@@ -7,6 +7,7 @@ import {
 } from '@edx/paragon';
 import { ArrowCircleDown as ArrowCircleDownIcon } from '@edx/paragon/icons';
 import Cookies from 'universal-cookie';
+import { getConfig } from '@edx/frontend-platform';
 
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import SubHeader from '../generic/sub-header/SubHeader';
@@ -60,7 +61,7 @@ const CourseExportPage = ({ intl, courseId }) => {
                   title={intl.formatMessage(messages.headingTitle)}
                   subtitle={intl.formatMessage(messages.headingSubtitle)}
                 />
-                <p>{intl.formatMessage(messages.description1)}</p>
+                <p>{intl.formatMessage(messages.description1, { studioShortName: getConfig().STUDIO_SHORT_NAME })}</p>
                 <p>{intl.formatMessage(messages.description2)}</p>
                 <Card>
                   <Card.Header
