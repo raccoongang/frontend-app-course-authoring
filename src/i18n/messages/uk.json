@@ -803,5 +803,11 @@
   "course-authoring.course-outline.highlights-modal.button.save": "Save highlights",
   "course-authoring.create-or-rerun-course.org.no-options": "No options",
   "course-authoring.studio-home.organization.input.placeholder": "For example, MITx",
-  "course-authoring.studio-home.organization.input.no-options": "No options"
+  "course-authoring.studio-home.organization.input.no-options": "No options",
+  "course-authoring.course-outline.empty-placeholder.title": "You haven't added any content to this course yet.",
+  "course-authoring.course-outline.empty-placeholder.button.new-section": "New section",
+  "course-authoring.course-outline.empty-placeholder.button.tooltip": "Click to add a new section",
+  "course-authoring.course-outline.empty-placeholder.title": "You haven't added any content to this course yet.",
+  "course-authoring.course-outline.empty-placeholder.button.new-section": "New section",
+  "course-authoring.course-outline.empty-placeholder.button.tooltip": "Click to add a new section"
 }

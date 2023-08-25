@@ -22,6 +22,7 @@ import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
+import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
 
@@ -107,12 +108,15 @@ const CourseOutline = ({ courseId }) => {
                       openEnableHighlightsModal={openEnableHighlightsModal}
                     />
                     <div className="pt-4">
+                      {/* TODO add create new section handler in EmptyPlaceholder */}
                       {sectionsList.length ? sectionsList.map((section) => (
                         <SectionCard
                           section={section}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                         />
-                      )) : null}
+                      )) : (
+                        <EmptyPlaceholder onCreateNewSection={() => ({})} />
+                      )}
                     </div>
                   </section>
                 </div>
