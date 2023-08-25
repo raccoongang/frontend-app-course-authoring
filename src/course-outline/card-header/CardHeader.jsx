@@ -25,6 +25,7 @@ const CardHeader = ({
   onExpand,
   onClickPublish,
   onClickMenuButton,
+  onEditClick,
 }) => {
   const intl = useIntl();
 
@@ -69,6 +70,13 @@ const CardHeader = ({
           )}
         </Button>
       </OverlayTrigger>
+      <IconButton
+        data-testid="edit-button"
+        alt={intl.formatMessage(messages.altButtonEdit)}
+        iconAs={EditIcon}
+        className="ml-auto"
+        onClick={onEditClick}
+      />
       <Dropdown
         data-testid="section-card-header__menu"
         className="ml-auto"
@@ -84,7 +92,6 @@ const CardHeader = ({
           iconAs={Icon}
         />
         <Dropdown.Menu>
-          <Dropdown.Item>{intl.formatMessage(messages.menuEdit)}</Dropdown.Item>
           <Dropdown.Item
             disabled={isDisabledPublish}
             onClick={onClickPublish}
@@ -107,6 +114,7 @@ CardHeader.propTypes = {
   onExpand: PropTypes.func.isRequired,
   onClickPublish: PropTypes.func.isRequired,
   onClickMenuButton: PropTypes.func.isRequired,
+  onEditClick: PropTypes.func.isRequired,
 };
 
 export default CardHeader;
