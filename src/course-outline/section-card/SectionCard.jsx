@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Badge, Button } from '@edx/paragon';
 import { Add as IconAdd } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
-
 import { useIntl } from '@edx/frontend-platform/i18n';
-import CardHeader from '../card-header/CardHeader';
+
 import { setCurrentSection } from '../data/slice';
+import CardHeader from '../card-header/CardHeader';
 import { getSectionStatus } from '../utils';
 import messages from './messages';
 
@@ -15,8 +15,7 @@ const SectionCard = ({
   children,
   onOpenHighlightsModal,
   onOpenPublishModal,
-  onEditClick,
-  onNewSubsectionClick,
+  onClickNewSubsection,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -57,7 +56,7 @@ const SectionCard = ({
         onExpand={handleExpandContent}
         onClickMenuButton={handleClickMenuButton}
         onClickPublish={onOpenPublishModal}
-        onEditClick={onEditClick}
+        onClickEdit={() => ({})}
       />
       <div className="section-card__content" data-testid="section-card__content">
         <div className="outline-section__status">
@@ -82,7 +81,7 @@ const SectionCard = ({
           className="mt-4"
           variant="outline-primary"
           iconBefore={IconAdd}
-          onClick={onNewSubsectionClick}
+          onClick={onClickNewSubsection}
           block
         >
           {intl.formatMessage(messages.newSubsectionButton)}
@@ -109,7 +108,7 @@ SectionCard.propTypes = {
   children: PropTypes.node,
   onOpenHighlightsModal: PropTypes.func.isRequired,
   onOpenPublishModal: PropTypes.func.isRequired,
-  onNewSubsectionClick: PropTypes.func.isRequired,
+  onClickNewSubsection: PropTypes.func.isRequired,
 };
 
 export default SectionCard;

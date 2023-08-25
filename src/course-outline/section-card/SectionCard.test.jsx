@@ -24,7 +24,7 @@ const section = {
   highlights: ['highlight 1', 'highlight 2'],
 };
 
-const onNewSubsectionClickMock = jest.fn();
+const onClickNewSubsectionMock = jest.fn();
 
 const renderComponent = (props) => render(
   <AppProvider store={store}>
@@ -33,7 +33,7 @@ const renderComponent = (props) => render(
         section={section}
         onOpenPublishModal={jest.fn()}
         onOpenHighlightsModal={jest.fn()}
-        onNewSubsectionClick={onNewSubsectionClickMock}
+        onClickNewSubsection={onClickNewSubsectionMock}
         onEditClick={jest.fn()}
         {...props}
       >
@@ -78,11 +78,11 @@ describe('<SectionCard />', () => {
     expect(queryByTestId('new subsection button')).toBeInTheDocument();
   });
 
-  it('calls the onNewSubsectionClick function when the button is clicked', () => {
+  it('calls the onClickNewSubsection function when the button is clicked', () => {
     const { getByRole } = renderComponent();
 
     const newSubsectionButton = getByRole('button', { name: messages.newSubsectionButton.defaultMessage });
     fireEvent.click(newSubsectionButton);
-    expect(onNewSubsectionClickMock).toHaveBeenCalledTimes(1);
+    expect(onClickNewSubsectionMock).toHaveBeenCalledTimes(1);
   });
 });
