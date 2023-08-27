@@ -167,7 +167,7 @@ const CourseOutline = ({ courseId }) => {
       </Container>
       <div className="alert-toast">
         <ProcessingNotification
-          isShow={savingStatus === RequestStatus.IN_PROGRESS}
+          isShow={savingStatus === RequestStatus.PENDING}
           title={savingProcess}
         />
         <InternetConnectionAlert

@@ -18,13 +18,15 @@ import {
   getSavingProcess,
 } from './data/selectors';
 import {
-  deleteCourseSectionQuery, duplicateCourseSectionQuery,
+  deleteCourseSectionQuery,
+  duplicateCourseSectionQuery,
   editCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
-  fetchCourseReindexQuery, publishCourseSectionQuery,
+  fetchCourseReindexQuery,
+  publishCourseSectionQuery,
   updateCourseSectionHighlightsQuery,
 } from './data/thunk';
 

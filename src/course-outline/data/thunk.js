@@ -217,13 +217,13 @@ export function deleteCourseSectionQuery(sectionId) {
 
 export function duplicateCourseSectionQuery(sectionId, courseBlockId) {
   return async (dispatch) => {
-    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(updateSavingProcess(NOTIFICATION_MESSAGES.saving));
 
     try {
       await duplicateCourseSection(sectionId, courseBlockId).then(async (result) => {
         if (result) {
-          const duplicatedSection = await dispatch(fetchCourseSectionQuery(result.locator));
+          const duplicatedSection = await getCourseSection(result.locator);
           dispatch(duplicateSection({ id: sectionId, duplicatedSection }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
         }
