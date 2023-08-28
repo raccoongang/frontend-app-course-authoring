@@ -5,10 +5,9 @@ import classNames from 'classnames';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
-import { useHelpUrls } from '../../help-urls/hooks';
-import HelpSidebarLink from './HelpSidebarLink';
 import { otherLinkURLParams } from './constants';
 import messages from './messages';
+import HelpSidebarLink from './HelpSidebarLink';
 
 const HelpSidebar = ({
   intl,
@@ -25,7 +24,6 @@ const HelpSidebar = ({
     advancedSettings,
     scheduleAndDetails,
     groupConfigurations,
-    studioHome,
   } = otherLinkURLParams;
 
   const showOtherLink = (params) => !pathname.includes(params);
@@ -34,10 +32,7 @@ const HelpSidebar = ({
     return referObj.href;
   };
 
-  const { home: aboutHomeLink } = useHelpUrls(['home']);
-
   const scheduleAndDetailsDestination = generateLegacyURL(scheduleAndDetails);
-  const studioHomeDestination = generateLegacyURL(studioHome);
   const gradingDestination = generateLegacyURL(grading);
   const courseTeamDestination = generateLegacyURL(courseTeam);
   const advancedSettingsDestination = generateLegacyURL(advancedSettings);
@@ -46,13 +41,6 @@ const HelpSidebar = ({
   return (
     <aside className={classNames('help-sidebar', className)}>
       <div className="help-sidebar-about">{children}</div>
-      {studioHomeDestination.includes(pathname) && (
-        <HelpSidebarLink
-          as="span"
-          pathToPage={aboutHomeLink}
-          title={intl.formatMessage(messages.studioHomeLinkToGettingStarted)}
-        />
-      )}
       {showOtherSettings && (
         <>
           <hr />

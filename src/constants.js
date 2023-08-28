@@ -4,8 +4,9 @@ export const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss\\Z';
 export const COMMA_SEPARATED_DATE_FORMAT = 'MMMM D, YYYY';
 export const DEFAULT_EMPTY_WYSIWYG_VALUE = '<p>&nbsp;</p>';
 export const STATEFUL_BUTTON_STATES = {
-  pending: 'pending',
   default: 'default',
+  pending: 'pending',
+  error: 'error',
 };
 
 export const USER_ROLES = {
@@ -24,9 +25,10 @@ export const NOTIFICATION_MESSAGES = {
   deleting: 'Deleting',
 };
 
-export const COURSE_CREATOR_STATUSES = {
+export const COURSE_CREATOR_STATES = {
   unrequested: 'unrequested',
   pending: 'pending',
   granted: 'granted',
   denied: 'denied',
+  disallowedForThisSite: 'disallowed_for_this_site',
 };

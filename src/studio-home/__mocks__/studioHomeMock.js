@@ -1,7 +1,7 @@
 module.exports = {
   activeTab: 'courses',
   allowCourseReruns: true,
-  allowedOrganizations: [],
+  allowedOrganizations: ['edx', 'org'],
   archivedCourses: [
     {
       courseKey: 'course-v1:MachineLearning+123+2023',
@@ -58,7 +58,9 @@ module.exports = {
   splitStudioHome: false,
   studioName: 'Studio',
   studioShortName: 'Studio',
-  studioRequestEmail: '',
+  studioRequestEmail: 'request@email.com',
   techSupportEmail: 'technical@example.com',
   platformName: 'Your Platform Name Here',
+  userIsActive: true,
+  allowToCreateNewOrg: false,
 };

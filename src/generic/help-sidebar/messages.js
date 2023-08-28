@@ -35,11 +35,6 @@ const messages = defineMessages({
     defaultMessage: 'Advanced settings',
     description: 'Link to Advanced Settings',
   },
-  studioHomeLinkToGettingStarted: {
-    id: 'course-authoring.help-sidebar.links.studio-home.getting-started',
-    defaultMessage: 'Getting started with studio',
-    description: 'Link to Getting started',
-  },
 });
 
 export default messages;

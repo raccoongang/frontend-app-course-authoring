@@ -4,7 +4,7 @@ import { Hyperlink } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { useHelpUrls } from '../../help-urls/hooks';
-import HelpSidebar from '../../generic/help-sidebar';
+import { HelpSidebar } from '../../generic/help-sidebar';
 import messages from './messages';
 
 const CourseRerunSideBar = () => {
@@ -48,7 +48,7 @@ const CourseRerunSideBar = () => {
             {!!link && (
               <Hyperlink
                 className="small"
-                destination={link.href}
+                destination={link.href || ''}
                 target="_blank"
                 showLaunchIcon={false}
               >

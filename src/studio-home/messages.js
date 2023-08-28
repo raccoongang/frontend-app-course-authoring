@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   headingTitle: {
     id: 'course-authoring.studio-home.heading.title',
-    defaultMessage: 'Studio home',
+    defaultMessage: '{studioShortName} home',
   },
   addNewCourseBtnText: {
     id: 'course-authoring.studio-home.add-new-course.btn.text',
@@ -12,6 +12,10 @@ const messages = defineMessages({
   addNewLibraryBtnText: {
     id: 'course-authoring.studio-home.add-new-library.btn.text',
     defaultMessage: 'New library',
+  },
+  emailStaffBtnText: {
+    id: 'course-authoring.studio-home.email-staff.btn.text',
+    defaultMessage: 'Email staff to create course',
   },
   coursesTabTitle: {
     id: 'course-authoring.studio-home.courses.tab.title',
@@ -27,11 +31,11 @@ const messages = defineMessages({
   },
   defaultSection_1_Title: {
     id: 'course-authoring.studio-home.default-section-1.title',
-    defaultMessage: 'Are you staff on an exiting Studio course?',
+    defaultMessage: 'Are you staff on an exiting {studioShortName} course?',
   },
   defaultSection_1_Description: {
     id: 'course-authoring.studio-home.default-section-1.description',
-    defaultMessage: 'The course creator must give you access to the course. Contact the course creator or administrator for the course tou are helping to author.',
+    defaultMessage: 'The course creator must give you access to the course. Contact the course creator or administrator for the course you are helping to author.',
   },
   defaultSection_2_Title: {
     id: 'course-authoring.studio-home.default-section-2.title',

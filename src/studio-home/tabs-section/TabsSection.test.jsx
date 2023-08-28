@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
@@ -8,6 +9,13 @@ import initializeStore from '../../store';
 import { studioHomeMock } from '../__mocks__';
 import messages from '../messages';
 import TabsSection from '.';
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}));
+
+const { studioShortName } = studioHomeMock;
 
 let store;
 
@@ -30,6 +38,7 @@ describe('<TabsSection />', () => {
       },
     });
     store = initializeStore();
+    useSelector.mockReturnValue(studioHomeMock);
   });
   it('should render all tabs correctly', () => {
     const { getByText } = render(<RootWrapper />);
@@ -78,7 +87,7 @@ describe('<TabsSection />', () => {
   it('should render default sections when courses are empty', () => {
     studioHomeMock.courses = [];
     const { getByText, getByRole } = render(<RootWrapper />);
-    expect(getByText(messages.defaultSection_1_Title.defaultMessage)).toBeInTheDocument();
+    expect(getByText(`Are you staff on an exiting ${studioShortName} course?`)).toBeInTheDocument();
     expect(getByText(messages.defaultSection_1_Description.defaultMessage)).toBeInTheDocument();
     expect(getByRole('button', { name: messages.defaultSection_2_Title.defaultMessage })).toBeInTheDocument();
     expect(getByText(messages.defaultSection_2_Description.defaultMessage)).toBeInTheDocument();

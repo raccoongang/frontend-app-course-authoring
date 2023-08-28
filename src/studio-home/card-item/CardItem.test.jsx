@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
@@ -8,6 +9,11 @@ import { studioHomeMock } from '../__mocks__';
 import messages from '../messages';
 import initializeStore from '../../store';
 import CardItem from '.';
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}));
 
 let store;
 const props = studioHomeMock.archivedCourses[0];
@@ -31,6 +37,7 @@ describe('<CardItem />', () => {
       },
     });
     store = initializeStore();
+    useSelector.mockReturnValue(studioHomeMock);
   });
   it('should render course details for non-library course', () => {
     const { getByText } = render(<RootWrapper />);
@@ -51,5 +58,10 @@ describe('<CardItem />', () => {
     const courseTitleLink = getByText(props.displayName);
     expect(courseTitleLink).toHaveAttribute('href', `${getConfig().STUDIO_BASE_URL}${props.url}`);
     expect(getByText(`${props.org} / ${props.number}`)).toBeInTheDocument();
+  });
+  it('should hide rerun button if disallowed', () => {
+    useSelector.mockReturnValue({ ...studioHomeMock, allowCourseReruns: false });
+    const { queryByText } = render(<RootWrapper />);
+    expect(queryByText(messages.btnReRunText.defaultMessage)).not.toBeInTheDocument();
   });
 });

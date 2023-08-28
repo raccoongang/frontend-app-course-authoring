@@ -5,7 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { CreateOrRerunCourseForm } from '../../generic/create-or-rerun-course';
 import messages from './messages';
 
-const CourseRerunForm = ({ initialFormValues, handleOnClickCancel, handleOnClickCreate }) => {
+const CourseRerunForm = ({ initialFormValues, handleOnClickCancel }) => {
   const intl = useIntl();
   return (
     <div className="mb-4.5">
@@ -17,7 +17,6 @@ const CourseRerunForm = ({ initialFormValues, handleOnClickCancel, handleOnClick
       </div>
       <CreateOrRerunCourseForm
         initialValues={initialFormValues}
-        onClickCreate={handleOnClickCreate}
         onClickCancel={handleOnClickCancel}
       />
     </div>
@@ -32,7 +31,6 @@ CourseRerunForm.propTypes = {
     run: PropTypes.string,
   }).isRequired,
   handleOnClickCancel: PropTypes.func.isRequired,
-  handleOnClickCreate: PropTypes.func.isRequired,
 };
 
 export default CourseRerunForm;

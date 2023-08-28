@@ -6,16 +6,22 @@ import { RequestStatus } from '../../data/constants';
 const slice = createSlice({
   name: 'studioHome',
   initialState: {
-    loadingStatus: RequestStatus.IN_PROGRESS,
-    savingStatus: '',
+    loadingStatuses: {
+      studioHomeLoadingStatus: RequestStatus.IN_PROGRESS,
+      courseNotificationLoadingStatus: RequestStatus.IN_PROGRESS,
+    },
+    savingStatuses: {
+      courseCreatorSavingStatus: '',
+      deleteNotificationSavingStatus: '',
+    },
     studioHomeData: {},
   },
   reducers: {
-    updateLoadingStatus: (state, { payload }) => {
-      state.loadingStatus = payload.status;
+    updateLoadingStatuses: (state, { payload }) => {
+      state.loadingStatuses = { ...state.loadingStatuses, ...payload };
     },
-    updateSavingStatus: (state, { payload }) => {
-      state.savingStatus = payload.status;
+    updateSavingStatuses: (state, { payload }) => {
+      state.savingStatuses = { ...state.savingStatuses, ...payload };
     },
     fetchStudioHomeDataSuccess: (state, { payload }) => {
       Object.assign(state.studioHomeData, payload);
@@ -24,8 +30,8 @@ const slice = createSlice({
 });
 
 export const {
-  updateLoadingStatus,
-  updateSavingStatus,
+  updateSavingStatuses,
+  updateLoadingStatuses,
   fetchStudioHomeDataSuccess,
 } = slice.actions;
 
