@@ -24,8 +24,8 @@ import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import { useCourseOutline } from './hooks';
-import messages from './messages';
 import PublishModal from './publish-modal/PublishModal';
+import messages from './messages';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
@@ -119,6 +119,8 @@ const CourseOutline = ({ courseId }) => {
                           section={section}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={openPublishModal}
+                          // TODO add handler in Add new subsection feature
+                          onClickNewSubsection={() => ({})}
                         />
                       )) : (
                         <EmptyPlaceholder onCreateNewSection={() => ({})} />
