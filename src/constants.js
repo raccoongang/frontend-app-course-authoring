@@ -30,3 +30,5 @@ export const COURSE_CREATOR_STATUSES = {
   granted: 'granted',
   denied: 'denied',
 };
+
+export const DEFAULT_TIME_STAMP = '00:00';
