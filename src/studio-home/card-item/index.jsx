@@ -19,8 +19,9 @@ const CardItem = ({
   } = useSelector(getStudioHomeData);
   const courseUrl = new URL(url, getConfig().STUDIO_BASE_URL);
   const subtitle = isLibraries ? `${org} / ${number}` : `${org} / ${number} / ${run}`;
-  // eslint-disable-next-line max-len
-  const isShowRerunLink = allowCourseReruns && rerunCreatorStatus && courseCreatorStatus === COURSE_CREATOR_STATES.granted;
+  const isShowRerunLink = allowCourseReruns
+    && rerunCreatorStatus
+    && courseCreatorStatus === COURSE_CREATOR_STATES.granted;
 
   return (
     <Card className="card-item">

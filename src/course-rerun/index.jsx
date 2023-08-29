@@ -71,7 +71,7 @@ const CourseRerun = ({ courseId }) => {
             <Layout.Element>
               <CourseRerunForm
                 initialFormValues={initialFormValues}
-                handleOnClickCancel={handleRerunCourseCancel}
+                onClickCancel={handleRerunCourseCancel}
               />
             </Layout.Element>
             <Layout.Element>

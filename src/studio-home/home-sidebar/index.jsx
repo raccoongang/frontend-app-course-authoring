@@ -22,7 +22,8 @@ const HomeSidebar = () => {
   const { home: aboutHomeLink } = useHelpUrls(['home']);
 
   // eslint-disable-next-line max-len
-  const isShowMailToGetInstruction = courseCreatorStatus === COURSE_CREATOR_STATES.disallowedForThisSite && !!studioRequestEmail;
+  const isShowMailToGetInstruction = courseCreatorStatus === COURSE_CREATOR_STATES.disallowedForThisSite
+    && !!studioRequestEmail;
   const isShowUnrequestedInstruction = courseCreatorStatus === COURSE_CREATOR_STATES.unrequested;
   const isShowDeniedInstruction = courseCreatorStatus === COURSE_CREATOR_STATES.denied;
 

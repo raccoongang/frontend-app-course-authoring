@@ -12,7 +12,7 @@ const ProcessingCourses = () => {
   const { inProcessCourseActions } = useSelector(getStudioHomeData);
 
   return (
-    <div>
+    <>
       <p className="text-gray-300">
         {intl.formatMessage(messages.processingTitle)}
       </p>
@@ -25,7 +25,7 @@ const ProcessingCourses = () => {
           />
         ))}
       </Stack>
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  Button, Container, Layout, MailtoLink,
+  Button,
+  Container,
+  Layout,
+  MailtoLink,
 } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons/es5';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';

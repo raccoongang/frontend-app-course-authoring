@@ -39,12 +39,12 @@ const CollapsibleStateWithAction = ({ state, className }) => {
     disabledStates: [STATEFUL_BUTTON_STATES.pending, STATEFUL_BUTTON_STATES.error],
   };
 
-  // eslint-disable-next-line no-nested-ternary
-  const requestButtonCurrentState = courseCreatorSavingStatus === RequestStatus.PENDING
-    ? STATEFUL_BUTTON_STATES.pending
-    : courseCreatorSavingStatus === RequestStatus.FAILED
-      ? STATEFUL_BUTTON_STATES.error
-      : STATEFUL_BUTTON_STATES.default;
+  const statusButtonMap = {
+    [RequestStatus.PENDING]: STATEFUL_BUTTON_STATES.pending,
+    [RequestStatus.FAILED]: STATEFUL_BUTTON_STATES.error,
+  };
+
+  const requestButtonCurrentState = statusButtonMap[courseCreatorSavingStatus] || STATEFUL_BUTTON_STATES.default;
 
   function getTextForStatus() {
     const matchTextAction = {
