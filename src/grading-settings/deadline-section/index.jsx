@@ -4,14 +4,16 @@ import { Form } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import classNames from 'classnames';
 
-import { TIME_FORMAT } from '../../constants';
+import { DEFAULT_TIME_STAMP, TIME_FORMAT } from '../../constants';
 import { formatTime, timerValidation } from './utils';
 import messages from './messages';
 
 const DeadlineSection = ({
   intl, setShowSavePrompt, gracePeriod, setGradingData, setShowSuccessAlert,
 }) => {
-  const timeStampValue = gracePeriod.hours && `${formatTime(gracePeriod.hours)}:${formatTime(gracePeriod.minutes)}`;
+  const timeStampValue = gracePeriod
+    ? gracePeriod.hours && `${formatTime(gracePeriod.hours)}:${formatTime(gracePeriod.minutes)}`
+    : DEFAULT_TIME_STAMP;
   const [newDeadlineValue, setNewDeadlineValue] = useState(timeStampValue);
   const [isError, setIsError] = useState(false);
 

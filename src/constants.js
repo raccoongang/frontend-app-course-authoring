@@ -32,3 +32,5 @@ export const COURSE_CREATOR_STATES = {
   denied: 'denied',
   disallowedForThisSite: 'disallowed_for_this_site',
 };
+
+export const DEFAULT_TIME_STAMP = '00:00';

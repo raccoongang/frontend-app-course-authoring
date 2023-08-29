@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
+import { DEFAULT_TIME_STAMP } from '../../constants';
 import DeadlineSection from '.';
 import messages from './messages';
 
@@ -19,7 +20,6 @@ const RootWrapper = (props = {}) => (
   <IntlProvider locale="en">
     <DeadlineSection
       setShowSavePrompt={jest.fn()}
-      gracePeriod={gracePeriodDefaultTime}
       setGradingData={jest.fn()}
       setShowSuccessAlert={jest.fn()}
       {...props}
@@ -29,20 +29,30 @@ const RootWrapper = (props = {}) => (
 
 describe('<DeadlineSection />', () => {
   it('checking deadline label and description text', async () => {
-    const { getByText } = render(<RootWrapper />);
+    const { getByText } = render(<RootWrapper gracePeriod={gracePeriodDefaultTime} />);
     await waitFor(() => {
       expect(getByText(messages.gracePeriodOnDeadlineLabel.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.gracePeriodOnDeadlineDescription.defaultMessage)).toBeInTheDocument();
     });
   });
   it('checking deadline input value', async () => {
-    const { getByTestId } = render(<RootWrapper setGradingData={setGradingData} />);
+    const { getByTestId } = render(<RootWrapper
+      gracePeriod={gracePeriodDefaultTime}
+      setGradingData={setGradingData}
+    />);
     await waitFor(() => {
       const inputElement = getByTestId('deadline-period-input');
       expect(inputElement.value).toBe('12:12');
       fireEvent.change(inputElement, { target: { value: '13:13' } });
       expect(testObj.gracePeriod.hours).toBe(13);
       expect(testObj.gracePeriod.minutes).toBe(13);
+    });
+  });
+  it('checking deadline input value if grace Period equal null', async () => {
+    const { getByTestId } = render(<RootWrapper gracePeriod={null} setGradingData={setGradingData} />);
+    await waitFor(() => {
+      const inputElement = getByTestId('deadline-period-input');
+      expect(inputElement.value).toBe(DEFAULT_TIME_STAMP);
     });
   });
 });
