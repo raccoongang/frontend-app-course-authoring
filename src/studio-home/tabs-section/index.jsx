@@ -8,7 +8,9 @@ import LibrariesTab from './libraries-tab';
 import ArchivedTab from './archived-tab';
 import CoursesTab from './courses-tab';
 
-const TabsSection = ({ intl, tabsData }) => {
+const TabsSection = ({
+  intl, tabsData, showNewCourseContainer, onClickNewCourse,
+}) => {
   const {
     activeTab, courses, librariesEnabled, libraries, archivedCourses,
   } = tabsData;
@@ -23,7 +25,11 @@ const TabsSection = ({ intl, tabsData }) => {
         eventKey="courses"
         title={intl.formatMessage(messages.coursesTabTitle)}
       >
-        <CoursesTab coursesDataItems={courses} />
+        <CoursesTab
+          coursesDataItems={courses}
+          showNewCourseContainer={showNewCourseContainer}
+          onClickNewCourse={onClickNewCourse}
+        />
       </Tab>,
     );
     if (librariesEnabled) {
@@ -50,7 +56,7 @@ const TabsSection = ({ intl, tabsData }) => {
     }
 
     return tabs;
-  }, [archivedCourses, librariesEnabled]);
+  }, [archivedCourses, librariesEnabled, showNewCourseContainer]);
 
   return (
     <Tabs
@@ -95,6 +101,8 @@ TabsSection.propTypes = {
     ).isRequired,
     librariesEnabled: PropTypes.bool.isRequired,
   }).isRequired,
+  showNewCourseContainer: PropTypes.bool.isRequired,
+  onClickNewCourse: PropTypes.func.isRequired,
 };
 
 export default injectIntl(TabsSection);

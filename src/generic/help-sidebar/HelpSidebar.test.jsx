@@ -5,7 +5,7 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import initializeStore from '../../store';
 import messages from './messages';
-import HelpSidebar from '.';
+import { HelpSidebar } from '.';
 
 const mockPathname = '/foo-bar';
 
@@ -77,7 +77,7 @@ describe('HelpSidebar', () => {
   });
 
   it('should render proctored mfe url only if passed not empty value', () => {
-    const initialProps = { ...props, proctoredExamSettingsUrl: 'http:/link-to' };
+    const initialProps = { ...props, showOtherSettings: true, proctoredExamSettingsUrl: 'http:/link-to' };
     const { getByText } = render(<RootWrapper {...initialProps} />);
     expect(getByText(messages.sidebarLinkToProctoredExamSettings.defaultMessage)).toBeTruthy();
   });

@@ -1,16 +1,27 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ActionRow, Card, Hyperlink } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
+import { COURSE_CREATOR_STATES } from '../../constants';
+import { getStudioHomeData } from '../data/selectors';
 import messages from '../messages';
 
 const CardItem = ({
   intl, displayName, lmsLink, rerunLink, org, number, run, isLibraries, url,
 }) => {
+  const {
+    allowCourseReruns,
+    courseCreatorStatus,
+    rerunCreatorStatus,
+  } = useSelector(getStudioHomeData);
   const courseUrl = new URL(url, getConfig().STUDIO_BASE_URL);
   const subtitle = isLibraries ? `${org} / ${number}` : `${org} / ${number} / ${run}`;
+  const isShowRerunLink = allowCourseReruns
+    && rerunCreatorStatus
+    && courseCreatorStatus === COURSE_CREATOR_STATES.granted;
 
   return (
     <Card className="card-item">
@@ -26,9 +37,11 @@ const CardItem = ({
         subtitle={subtitle}
         actions={!isLibraries && (
           <ActionRow>
-            <Hyperlink className="small" destination={rerunLink}>
-              {intl.formatMessage(messages.btnReRunText)}
-            </Hyperlink>
+            {isShowRerunLink && (
+              <Hyperlink className="small" destination={rerunLink}>
+                {intl.formatMessage(messages.btnReRunText)}
+              </Hyperlink>
+            )}
             <Hyperlink className="small ml-3" destination={lmsLink}>
               {intl.formatMessage(messages.viewLiveBtnText)}
             </Hyperlink>

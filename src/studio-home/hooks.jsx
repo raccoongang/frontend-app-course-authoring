@@ -1,29 +1,31 @@
 import { useEffect, useState } from 'react';
-import { history } from '@edx/frontend-platform';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RequestStatus } from '../data/constants';
-import { COURSE_CREATOR_STATUSES } from '../constants';
-import { updateSavingStatus } from '../generic/data/slice';
-import { getCourseData, getRedirectUrlObj, getSavingStatus } from '../generic/data/selectors';
-import { redirectToCourseIndex } from './constants';
+import { COURSE_CREATOR_STATES } from '../constants';
+import { getCourseData, getSavingStatus } from '../generic/data/selectors';
 import { fetchStudioHomeData } from './data/thunks';
 import {
-  getLoadingStatus,
+  getLoadingStatuses,
+  getSavingStatuses,
   getStudioHomeData,
 } from './data/selectors';
+import { updateSavingStatuses } from './data/slice';
 
 const useStudioHome = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const studioHomeItems = useSelector(getStudioHomeData);
-  const loadingStatus = useSelector(getLoadingStatus);
-  const savingStatus = useSelector(getSavingStatus);
+  const studioHomeData = useSelector(getStudioHomeData);
   const newCourseData = useSelector(getCourseData);
-  const redirectUrlObj = useSelector(getRedirectUrlObj);
+  const { studioHomeLoadingStatus } = useSelector(getLoadingStatuses);
+  const savingCreateRerunStatus = useSelector(getSavingStatus);
+  const {
+    courseCreatorSavingStatus,
+    deleteNotificationSavingStatus,
+  } = useSelector(getSavingStatuses);
   const [showNewCourseContainer, setShowNewCourseContainer] = useState(false);
-  const isLoading = loadingStatus === RequestStatus.IN_PROGRESS;
+  const isLoadingPage = studioHomeLoadingStatus === RequestStatus.IN_PROGRESS;
 
   useEffect(() => {
     dispatch(fetchStudioHomeData(location.search ?? ''));
@@ -31,29 +33,52 @@ const useStudioHome = () => {
   }, [location.search]);
 
   useEffect(() => {
-    if (savingStatus === RequestStatus.SUCCESSFUL) {
-      dispatch(updateSavingStatus({ status: '' }));
-      const { url } = redirectUrlObj;
-      if (url) {
-        history.push(redirectToCourseIndex(url));
-      }
+    if (courseCreatorSavingStatus === RequestStatus.SUCCESSFUL) {
+      dispatch(updateSavingStatuses({ courseCreatorSavingStatus: '' }));
+      dispatch(fetchStudioHomeData());
     }
-  }, [savingStatus]);
+  }, [courseCreatorSavingStatus]);
+
+  useEffect(() => {
+    if (deleteNotificationSavingStatus === RequestStatus.SUCCESSFUL) {
+      dispatch(updateSavingStatuses({ courseCreatorSavingStatus: '' }));
+      dispatch(fetchStudioHomeData());
+    } else if (deleteNotificationSavingStatus === RequestStatus.FAILED) {
+      dispatch(updateSavingStatuses({ deleteNotificationSavingStatus: '' }));
+    }
+  }, [deleteNotificationSavingStatus]);
 
   const {
+    allowCourseReruns,
+    rerunCreatorStatus,
     optimizationEnabled,
+    studioRequestEmail,
+    inProcessCourseActions,
     courseCreatorStatus,
-  } = studioHomeItems;
+  } = studioHomeData;
 
-  const showOrganizationDropdown = optimizationEnabled && courseCreatorStatus === COURSE_CREATOR_STATUSES.granted;
+  const isShowOrganizationDropdown = optimizationEnabled && courseCreatorStatus === COURSE_CREATOR_STATES.granted;
+  const isShowEmailStaff = courseCreatorStatus === COURSE_CREATOR_STATES.disallowedForThisSite && !!studioRequestEmail;
+  const isShowProcessing = allowCourseReruns && rerunCreatorStatus && inProcessCourseActions.length > 0;
+  const hasAbilityToCreateNewCourse = courseCreatorStatus === COURSE_CREATOR_STATES.granted;
+  const anyQueryIsPending = [deleteNotificationSavingStatus, courseCreatorSavingStatus, savingCreateRerunStatus]
+    .includes(RequestStatus.PENDING);
+  const anyQueryIsFailed = [deleteNotificationSavingStatus, courseCreatorSavingStatus, savingCreateRerunStatus]
+    .includes(RequestStatus.FAILED);
 
   return {
-    isLoading,
-    savingStatus,
+    isLoadingPage,
     newCourseData,
-    studioHomeItems,
+    studioHomeData,
+    isShowProcessing,
+    anyQueryIsFailed,
+    isShowEmailStaff,
+    anyQueryIsPending,
     showNewCourseContainer,
-    showOrganizationDropdown,
+    courseCreatorSavingStatus,
+    isShowOrganizationDropdown,
+    hasAbilityToCreateNewCourse,
+    deleteNotificationSavingStatus,
     dispatch,
     setShowNewCourseContainer,
   };
