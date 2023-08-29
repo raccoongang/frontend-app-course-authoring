@@ -10,8 +10,10 @@ import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
+import { useSelector } from 'react-redux';
 
 import { RequestStatus } from '../data/constants';
+import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -56,6 +58,11 @@ const CourseOutline = ({ courseId }) => {
     handleHighlightsFormSubmit,
     handleSubmitPublishSection,
   } = useCourseOutline({ courseId });
+
+  const {
+    isShow: isShowProcessingNotification,
+    title: processingNotificationTitle,
+  } = useSelector(getProcessingNotification);
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -153,7 +160,10 @@ const CourseOutline = ({ courseId }) => {
         />
       </Container>
       <div className="alert-toast">
-        <ProcessingNotification isShow={savingStatus === RequestStatus.PENDING} />
+        <ProcessingNotification
+          isShow={isShowProcessingNotification}
+          title={processingNotificationTitle}
+        />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}
           isQueryPending={savingStatus === RequestStatus.PENDING}
