@@ -153,10 +153,7 @@ const Header = ({
     </OverlayTrigger>
   );
 
-  const logoDestination = process.env.ENABLE_NEW_HOME_PAGE === 'true'
-    ? new URL('home', config.BASE_URL).href
-    : config.STUDIO_BASE_URL;
-
+  const logoDestination = `${config.BASE_URL}/home`;
   const props = {
     logo: config.LOGO_URL,
     logoAltText: 'Studio edX',
