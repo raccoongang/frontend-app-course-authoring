@@ -10,6 +10,7 @@ import {
 } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import Placeholder from '@edx/frontend-lib-content-components';
+import { Helmet } from 'react-helmet';
 
 import { useScrollToHashElement } from '../hooks';
 import { RequestStatus } from '../data/constants';
@@ -159,6 +160,14 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            courseName: courseDisplayName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="schedule-and-details m-4">
         <div className="mt-5">
           <AlertMessage

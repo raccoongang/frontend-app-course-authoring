@@ -7,6 +7,7 @@ import {
   Layout,
 } from '@edx/paragon';
 import { Add as IconAdd } from '@edx/paragon/icons';
+import { Helmet } from 'react-helmet';
 
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import SubHeader from '../generic/sub-header/SubHeader';
@@ -58,6 +59,14 @@ const CourseTeam = ({ courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            courseName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="course-team m-4">
         <section className="course-team-container mb-4">
           <Layout

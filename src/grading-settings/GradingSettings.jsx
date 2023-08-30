@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { Helmet } from 'react-helmet';
 import {
   Container, Layout, Button, StatefulButton,
 } from '@edx/paragon';
@@ -110,6 +111,14 @@ const GradingSettings = ({ intl, courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            courseName: courseSettingsData.courseDisplayName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="grading m-4">
         <div className="mt-5">
           <AlertMessage

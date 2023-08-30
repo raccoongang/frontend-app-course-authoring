@@ -7,6 +7,7 @@ import {
 import { CheckCircle, Info, Warning } from '@edx/paragon/icons';
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import Placeholder from '@edx/frontend-lib-content-components';
+import { Helmet } from 'react-helmet';
 
 import AlertProctoringError from '../generic/AlertProctoringError';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -125,6 +126,14 @@ const AdvancedSettings = ({ intl, courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            courseName: advancedSettingsData.displayName.value,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="advanced-settings px-4">
         <div className="setting-header mt-5">
           {(proctoringErrors?.length > 0) && (

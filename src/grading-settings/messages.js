@@ -1,6 +1,10 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
+  pageTitle: {
+    id: 'course-authoring.grading-settings.page.title',
+    defaultMessage: 'Grading settings | {courseName} | {siteName}',
+  },
   headingTitle: {
     id: 'course-authoring.grading-settings.heading.title',
     defaultMessage: 'Grading',
