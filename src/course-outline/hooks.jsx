@@ -27,7 +27,7 @@ import {
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
 
-  const { reindexLink } = useSelector(getOutlineIndexData);
+  const { reindexLink, courseStructure } = useSelector(getOutlineIndexData);
   const { outlineIndexLoadingStatus, reIndexLoadingStatus } = useSelector(getLoadingStatus);
   const statusBarData = useSelector(getStatusBarData);
   const savingStatus = useSelector(getSavingStatus);
@@ -141,6 +141,7 @@ const useCourseOutline = ({ courseId }) => {
     handleOpenHighlightsModal,
     isHighlightsModalOpen,
     closeHighlightsModal,
+    courseName: courseStructure?.displayName,
   };
 };
 

@@ -7,10 +7,12 @@ import {
   Container, Layout,
 } from '@edx/paragon';
 import Cookies from 'universal-cookie';
+import { Helmet } from 'react-helmet';
 
 import SubHeader from '../generic/sub-header/SubHeader';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { RequestStatus } from '../data/constants';
+import { useModel } from '../generic/model-store';
 import {
   updateFileName, updateImportTriggered, updateSavingStatus, updateSuccessDate,
 } from './data/slice';
@@ -24,6 +26,7 @@ import messages from './messages';
 const CourseImportPage = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const cookies = new Cookies();
+  const courseDetails = useModel('courseDetails', courseId);
   const importTriggered = useSelector(getImportTriggered);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
@@ -42,6 +45,15 @@ const CourseImportPage = ({ intl, courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
+            courseName: courseDetails?.name,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="m-4 import">
         <section className="setting-items mb-4">
           <Layout

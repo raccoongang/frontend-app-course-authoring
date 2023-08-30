@@ -4,8 +4,9 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
 import { COURSE_CREATOR_STATES } from '../constants';
@@ -82,5 +83,13 @@ describe('<StudioHome />', () => {
 
     const { getByRole } = render(<RootWrapper />);
     expect(getByRole('button', { name: messages.addNewCourseBtnText.defaultMessage })).toBeInTheDocument();
+  });
+
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      expect(helmet.title).toEqual(`${studioShortName} home | ${process.env.SITE_NAME}`);
+    });
   });
 });

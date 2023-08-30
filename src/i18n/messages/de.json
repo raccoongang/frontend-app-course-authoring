@@ -788,6 +788,7 @@
   "course-authoring.course-rerun.sidebar.section-3.title": "What does not transfer from the original course?",
   "course-authoring.course-rerun.sidebar.section-3.description": "You are the only member of the new course's staff. No students are enrolled in the course, and there is no student data. There is no content in the discussion topics or wiki.",
   "course-authoring.course-rerun.sidebar.section-4.link": "Learn more about course re-runs",
+  "course-authoring.course-outline.page.title": "{headingTitle} | {courseName} | {siteName}",
   "course-authoring.course-outline.reindex.alert.success.title": "Course index",
   "course-authoring.course-outline.reindex.alert.success.description": "Course has been successfully reindexed.",
   "course-authoring.course-outline.reindex.alert.success.aria.labelledby": "alert-confirmation-title",
@@ -808,6 +809,7 @@
   "course-authoring.course-outline.publish-modal.button.cancel": "Cancel",
   "course-authoring.course-outline.publish-modal.button.label": "Publish",
   "course-authoring.create-or-rerun-course.org.no-options": "No options",
+  "course-authoring.studio-home.page.title": "{headingTitle} | {siteName}",
   "course-authoring.studio-home.organization.input.placeholder": "For example, MITx",
   "course-authoring.studio-home.organization.input.no-options": "No options",
   "course-authoring.studio-home.collapsible.denied.title": "Your course creator request status",
@@ -927,5 +929,7 @@
   "course-authoring.import.heading.subtitle": "Tools",
   "course-authoring.import.description1": "Be sure you want to import a course before continuing. The contents of the imported course will replace the contents of the existing course. You cannot undo a course import. Before you proceed, we recommend that you export the current course, so that you have a backup copy of it.",
   "course-authoring.import.description2": "The course that you import must be in a .tar.gz file (that is, a .tar file compressed with GNU Zip). This .tar.gz file must contain a course.xml file. It may also contain other files.",
-  "course-authoring.import.description3": "The import process has five stages. During the first two stages, you must stay on this page. You can leave this page after the unpacking stage has completed. We recommend, however, that you don't make important changes to your course until the import operation has completed."
+  "course-authoring.import.description3": "The import process has five stages. During the first two stages, you must stay on this page. You can leave this page after the unpacking stage has completed. We recommend, however, that you don't make important changes to your course until the import operation has completed.",
+  "course-authoring.export.page.title": "{headingTitle} | {courseName} | {siteName}",
+  "course-authoring.import.page.title": "{headingTitle} | {courseName} | {siteName}"
 }

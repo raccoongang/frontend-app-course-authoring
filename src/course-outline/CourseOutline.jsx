@@ -11,6 +11,7 @@ import {
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import { RequestStatus } from '../data/constants';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
@@ -33,6 +34,7 @@ const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    courseName,
     savingStatus,
     statusBarData,
     sectionsList,
@@ -71,6 +73,15 @@ const CourseOutline = ({ courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
+            courseName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="m-4">
         <section className="course-outline-container mb-4 mt-5">
           <TransitionReplace>
