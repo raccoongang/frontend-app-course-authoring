@@ -114,6 +114,7 @@ const GradingSettings = ({ intl, courseId }) => {
       <Helmet>
         <title>
           {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
             courseName: courseSettingsData.courseDisplayName,
             siteName: process.env.SITE_NAME,
           })}

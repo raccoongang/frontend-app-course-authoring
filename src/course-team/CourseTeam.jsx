@@ -62,6 +62,7 @@ const CourseTeam = ({ courseId }) => {
       <Helmet>
         <title>
           {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
             courseName,
             siteName: process.env.SITE_NAME,
           })}

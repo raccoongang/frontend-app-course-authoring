@@ -129,6 +129,7 @@ const AdvancedSettings = ({ intl, courseId }) => {
       <Helmet>
         <title>
           {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
             courseName: advancedSettingsData.displayName.value,
             siteName: process.env.SITE_NAME,
           })}

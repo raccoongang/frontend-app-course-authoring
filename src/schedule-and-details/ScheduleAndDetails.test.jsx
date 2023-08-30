@@ -7,6 +7,7 @@ import {
   act, render, waitFor, fireEvent,
 } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
 import { courseDetailsMock, courseSettingsMock } from './__mocks__';
@@ -83,6 +84,17 @@ describe('<ScheduleAndDetails />', () => {
     axiosMock
       .onGet(getCourseSettingsApiUrl(courseId))
       .reply(200, courseSettingsMock);
+  });
+
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      const { courseDisplayName } = courseSettingsMock;
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} | ${courseDisplayName} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
 
   it('should render without errors', async () => {

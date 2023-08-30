@@ -5,6 +5,7 @@ import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
 import { executeThunk } from '../utils';
@@ -58,6 +59,16 @@ describe('<AdvancedSettings />', () => {
     axiosMock
       .onGet(`${getCourseAdvancedSettingsApiUrl(courseId)}?fetch_all=0`)
       .reply(200, advancedSettingsMock);
+  });
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      const { displayName } = advancedSettingsMock;
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} | ${displayName.value} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
   it('should render without errors', async () => {
     const { getByText } = render(<RootWrapper />);

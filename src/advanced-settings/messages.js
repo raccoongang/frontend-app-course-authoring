@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   pageTitle: {
     id: 'course-authoring.advanced-settings.page.title',
-    defaultMessage: 'Advanced settings | {courseName} | {siteName}',
+    defaultMessage: '{headingTitle} | {courseName} | {siteName}',
   },
   headingTitle: {
     id: 'course-authoring.advanced-settings.heading.title',

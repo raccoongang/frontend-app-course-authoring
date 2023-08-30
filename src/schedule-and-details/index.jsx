@@ -163,6 +163,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
       <Helmet>
         <title>
           {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
             courseName: courseDisplayName,
             siteName: process.env.SITE_NAME,
           })}

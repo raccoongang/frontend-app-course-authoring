@@ -5,10 +5,11 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { render, waitFor, fireEvent } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
-import { getGradingSettingsApiUrl } from './data/api';
-import gradingSettings from './__mocks__/gradingSettings';
+import { getCourseSettingsApiUrl, getGradingSettingsApiUrl } from './data/api';
+import { gradingSettings, courseSettings } from './__mocks__';
 import GradingSettings from './GradingSettings';
 import messages from './messages';
 
@@ -40,6 +41,20 @@ describe('<GradingSettings />', () => {
     axiosMock
       .onGet(getGradingSettingsApiUrl(courseId))
       .reply(200, gradingSettings);
+    axiosMock
+      .onGet(getCourseSettingsApiUrl(courseId))
+      .reply(200, courseSettings);
+  });
+
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      const { courseDisplayName } = courseSettings;
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} settings | ${courseDisplayName} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
 
   it('should render without errors', async () => {

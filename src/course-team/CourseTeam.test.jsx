@@ -10,6 +10,7 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
 import { courseTeamMock, courseTeamWithOneUser } from './__mocks__';
@@ -21,11 +22,18 @@ let axiosMock;
 let store;
 const mockPathname = '/foo-bar';
 const courseId = '123';
+const courseName = 'About Node JS';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
     pathname: mockPathname,
+  }),
+}));
+
+jest.mock('../generic/model-store', () => ({
+  useModel: jest.fn().mockReturnValue({
+    name: courseName,
   }),
 }));
 
@@ -50,6 +58,16 @@ describe('<CourseTeam />', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
+  });
+
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} settings | ${courseName} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
 
   it('render CourseTeam component with 3 team members correctly', async () => {

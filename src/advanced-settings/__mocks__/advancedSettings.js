@@ -13,4 +13,11 @@ module.exports = {
     hide_on_enabled_publisher: false,
     value: true,
   },
+  displayName: {
+    deprecated: true,
+    display_name: 'Python',
+    help: 'Python Django course.',
+    hide_on_enabled_publisher: false,
+    value: 'Python course',
+  },
 };
