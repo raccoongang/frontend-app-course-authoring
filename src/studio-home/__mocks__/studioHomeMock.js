@@ -37,6 +37,16 @@ module.exports = {
       run: '2023',
       url: '/course/course-v1:HarvardX+123+2023',
     },
+    {
+      courseKey: 'org.0/course_0/Run_0',
+      displayName: 'Run 0',
+      lmsLink: null,
+      number: 'course_0',
+      org: 'org.0',
+      rerunLink: null,
+      run: 'Run_0',
+      url: null,
+    },
   ],
   inProcessCourseActions: [],
   libraries: [
