@@ -49,6 +49,14 @@ const messages = defineMessages({
     id: 'course-authoring.import.sidebar.content7',
     defaultMessage: 'The course team',
   },
+  warningTitle: {
+    id: 'course-authoring.import.sidebar.warningTitle',
+    defaultMessage: 'Warning: importing while a course is running',
+  },
+  warningDescription: {
+    id: 'course-authoring.import.sidebar.warningDescription',
+    defaultMessage: 'If you perform an import while your course is running, and you change the URL names (or url_name nodes) of any problem components, the student data associated with those problem components may be lost. This data includes students\' problem scores.',
+  },
   learnMoreButtonTitle: {
     id: 'course-authoring.import.sidebar.learnMoreButtonTitle',
     defaultMessage: 'Learn more about importing a course',

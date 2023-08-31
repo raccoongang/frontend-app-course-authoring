@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@edx/paragon';
 import { history } from '@edx/frontend-platform';
 
+import { getFormattedSuccessDate } from '../../export-page/utils';
 import { RequestStatus } from '../../data/constants';
 import CourseStepper from '../../generic/course-stepper';
 import { IMPORT_STAGES } from '../data/constants';
 import { fetchImportStatus } from '../data/thunks';
 import {
-  getCurrentStage, getError, getFileName, getLoadingStatus, getProgress, getSavingStatus,
+  getCurrentStage, getError, getFileName, getLoadingStatus, getProgress, getSavingStatus, getSuccessDate,
 } from '../data/selectors';
 import messages from './messages';
 
@@ -25,6 +26,7 @@ const ImportStepper = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const loadingStatus = useSelector(getLoadingStatus);
   const savingStatus = useSelector(getSavingStatus);
+  const successDate = useSelector(getSuccessDate);
   const isStopFetching = currentStage === IMPORT_STAGES.SUCCESS
     || loadingStatus === RequestStatus.FAILED
     || savingStatus === RequestStatus.FAILED
@@ -35,12 +37,18 @@ const ImportStepper = ({ intl, courseId }) => {
     const id = setInterval(() => {
       if (isStopFetching) {
         clearInterval(id);
-      } else if (fileName && savingStatus === RequestStatus.SUCCESSFUL) {
+      } else if (fileName) {
         dispatch(fetchImportStatus(courseId, fileName));
       }
     }, 3000);
     return () => clearInterval(id);
   });
+
+  let successTitle = intl.formatMessage(messages.stepperSuccessTitle);
+  const formattedSuccessDate = getFormattedSuccessDate(successDate);
+  if (currentStage === IMPORT_STAGES.SUCCESS && formattedSuccessDate) {
+    successTitle += formattedSuccessDate;
+  }
 
   const handleRedirectCourseOutline = () => history.push(`/course/${courseId}/outline`);
 
@@ -62,7 +70,7 @@ const ImportStepper = ({ intl, courseId }) => {
       description: intl.formatMessage(messages.stepperUpdatingDescription),
       key: IMPORT_STAGES.UPDATING,
     }, {
-      title: intl.formatMessage(messages.stepperSuccessTitle),
+      title: successTitle,
       description: intl.formatMessage(messages.stepperSuccessDescription),
       key: IMPORT_STAGES.SUCCESS,
     },

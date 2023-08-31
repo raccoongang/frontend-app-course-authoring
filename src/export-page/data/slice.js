@@ -20,7 +20,9 @@ const slice = createSlice({
       state.exportTriggered = payload;
     },
     updateCurrentStage: (state, { payload }) => {
-      state.currentStage = payload;
+      if (payload >= state.currentStage) {
+        state.currentStage = payload;
+      }
     },
     updateDownloadPath: (state, { payload }) => {
       state.downloadPath = payload;
