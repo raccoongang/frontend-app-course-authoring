@@ -5,6 +5,7 @@ import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
 import { exportPageMock } from './__mocks__';
@@ -15,6 +16,13 @@ import { postExportCourseApiUrl } from './data/api';
 let store;
 let axiosMock;
 const courseId = '123';
+const courseName = 'About Node JS';
+
+jest.mock('../generic/model-store', () => ({
+  useModel: jest.fn().mockReturnValue({
+    name: courseName,
+  }),
+}));
 
 const RootWrapper = () => (
   <AppProvider store={store}>
@@ -39,6 +47,15 @@ describe('<CourseExportPage />', () => {
     axiosMock
       .onGet(postExportCourseApiUrl(courseId))
       .reply(200, exportPageMock);
+  });
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} | ${courseName} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
   it('should render without errors', async () => {
     const { getByText } = render(<RootWrapper />);

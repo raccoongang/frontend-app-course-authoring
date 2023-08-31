@@ -3,6 +3,7 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { render, waitFor } from '@testing-library/react';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
 import messages from './messages';
@@ -10,6 +11,13 @@ import CourseImportPage from './CourseImportPage';
 
 let store;
 const courseId = '123';
+const courseName = 'About Node JS';
+
+jest.mock('../generic/model-store', () => ({
+  useModel: jest.fn().mockReturnValue({
+    name: courseName,
+  }),
+}));
 
 const RootWrapper = () => (
   <AppProvider store={store}>
@@ -30,6 +38,15 @@ describe('<CourseImportPage />', () => {
       },
     });
     store = initializeStore();
+  });
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} | ${courseName} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
   it('should render without errors', async () => {
     const { getByText } = render(<RootWrapper />);
