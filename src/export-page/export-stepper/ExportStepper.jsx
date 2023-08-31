@@ -10,7 +10,7 @@ import { Button } from '@edx/paragon';
 
 import CourseStepper from '../../generic/course-stepper';
 import {
-  getCurrentStage, getDownloadPath, getError, getLoadingStatus, getSavingStatus, getSuccessDate,
+  getCurrentStage, getDownloadPath, getError, getLoadingStatus, getSuccessDate,
 } from '../data/selectors';
 import { fetchExportStatus } from '../data/thunks';
 import { EXPORT_STAGES } from '../data/constants';
@@ -23,7 +23,6 @@ const ExportStepper = ({ intl, courseId }) => {
   const downloadPath = useSelector(getDownloadPath);
   const successDate = useSelector(getSuccessDate);
   const loadingStatus = useSelector(getLoadingStatus);
-  const savingStatus = useSelector(getSavingStatus);
   const { msg: errorMessage } = useSelector(getError);
   const dispatch = useDispatch();
   const isStopFetching = currentStage === EXPORT_STAGES.SUCCESS
@@ -34,7 +33,7 @@ const ExportStepper = ({ intl, courseId }) => {
     const id = setInterval(() => {
       if (isStopFetching) {
         clearInterval(id);
-      } else if (savingStatus === RequestStatus.SUCCESSFUL) {
+      } else {
         dispatch(fetchExportStatus(courseId));
       }
     }, 3000);
@@ -43,7 +42,7 @@ const ExportStepper = ({ intl, courseId }) => {
 
   let successTitle = intl.formatMessage(messages.stepperSuccessTitle);
   const formattedSuccessDate = getFormattedSuccessDate(successDate);
-  if (formattedSuccessDate) {
+  if (formattedSuccessDate && currentStage === EXPORT_STAGES.SUCCESS) {
     successTitle += formattedSuccessDate;
   }
   const steps = [

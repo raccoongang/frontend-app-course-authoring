@@ -48,7 +48,7 @@ describe('<CourseExportPage />', () => {
         selector: 'h2.sub-header-title',
       });
       expect(exportPageElement).toBeInTheDocument();
-      expect(getByText(messages.description1.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.titleUnderButton.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.description2.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.buttonTitle.defaultMessage)).toBeInTheDocument();
     });

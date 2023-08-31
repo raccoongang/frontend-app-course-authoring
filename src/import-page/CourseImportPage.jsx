@@ -11,7 +11,9 @@ import Cookies from 'universal-cookie';
 import SubHeader from '../generic/sub-header/SubHeader';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { RequestStatus } from '../data/constants';
-import { updateFileName, updateImportTriggered, updateSavingStatus } from './data/slice';
+import {
+  updateFileName, updateImportTriggered, updateSavingStatus, updateSuccessDate,
+} from './data/slice';
 import ImportStepper from './import-stepper/ImportStepper';
 import { getImportTriggered, getLoadingStatus, getSavingStatus } from './data/selectors';
 import { LAST_IMPORT_COOKIE_NAME } from './data/constants';
@@ -34,6 +36,7 @@ const CourseImportPage = ({ intl, courseId }) => {
       dispatch(updateSavingStatus(RequestStatus.SUCCESSFUL));
       dispatch(updateImportTriggered(true));
       dispatch(updateFileName(cookieData.fileName));
+      dispatch(updateSuccessDate(cookieData.date));
     }
   }, []);
 

@@ -7,7 +7,7 @@ import { setImportCookie } from '../utils';
 import { getImportStatus, startCourseImporting } from './api';
 import {
   reset, updateCurrentStage, updateError, updateFileName,
-  updateImportTriggered, updateLoadingStatus, updateSavingStatus,
+  updateImportTriggered, updateLoadingStatus, updateSavingStatus, updateSuccessDate,
 } from './slice';
 import { IMPORT_STAGES, LAST_IMPORT_COOKIE_NAME } from './constants';
 
@@ -19,12 +19,15 @@ export function fetchImportStatus(courseId, fileName) {
       dispatch(updateCurrentStage(Math.abs(importStatus)));
       const cookies = new Cookies();
       const cookieData = cookies.get(LAST_IMPORT_COOKIE_NAME);
-      if (!cookieData?.completed) {
-        setImportCookie(moment().valueOf(), importStatus === IMPORT_STAGES.SUCCESS, fileName);
-      }
 
       if (importStatus < 0) {
         dispatch(updateError({ hasError: true, message }));
+      } else if (importStatus === IMPORT_STAGES.SUCCESS && !cookieData?.completed) {
+        dispatch(updateSuccessDate(moment().valueOf()));
+      }
+
+      if (!cookieData?.completed) {
+        setImportCookie(moment().valueOf(), importStatus === IMPORT_STAGES.SUCCESS, fileName);
       }
       dispatch(updateLoadingStatus(RequestStatus.SUCCESSFUL));
       return true;

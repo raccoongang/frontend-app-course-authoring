@@ -35,6 +35,9 @@ const ImportSidebar = ({ intl, courseId }) => {
         <li className="help-sidebar-about-descriptions">{intl.formatMessage(messages.content7)}</li>
       </ul>
       <hr />
+      <h4 className="help-sidebar-about-title">{intl.formatMessage(messages.warningTitle)}</h4>
+      <p className="help-sidebar-about-descriptions">{intl.formatMessage(messages.warningDescription)}</p>
+      <hr />
       <Button
         href={importLearnMoreUrl}
         target="_blank"

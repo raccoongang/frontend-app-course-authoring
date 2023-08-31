@@ -9,6 +9,7 @@ const initialState = {
   fileName: null,
   loadingStatus: '',
   savingStatus: '',
+  successDate: null,
 };
 
 const slice = createSlice({
@@ -16,7 +17,9 @@ const slice = createSlice({
   initialState,
   reducers: {
     updateCurrentStage: (state, { payload }) => {
-      state.currentStage = payload;
+      if (payload >= state.currentStage) {
+        state.currentStage = payload;
+      }
     },
     updateError: (state, { payload }) => {
       state.error = { ...state.error, ...payload };
@@ -37,6 +40,9 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload;
     },
+    updateSuccessDate: (state, { payload }) => {
+      state.successDate = payload;
+    },
   },
 });
 
@@ -49,6 +55,7 @@ export const {
   reset,
   updateLoadingStatus,
   updateSavingStatus,
+  updateSuccessDate,
 } = slice.actions;
 
 export const {
