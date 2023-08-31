@@ -80,7 +80,6 @@ const StudioHome = ({ intl }) => {
         <title>
           {intl.formatMessage(messages.pageTitle, {
             headingTitle: intl.formatMessage(messages.headingTitle, { studioShortName }),
-            studioShortName,
             siteName: process.env.SITE_NAME,
           })}
         </title>
