@@ -87,7 +87,7 @@ describe('<TabsSection />', () => {
   it('should render default sections when courses are empty', () => {
     studioHomeMock.courses = [];
     const { getByText, getByRole } = render(<RootWrapper />);
-    expect(getByText(`Are you staff on an exiting ${studioShortName} course?`)).toBeInTheDocument();
+    expect(getByText(`Are you staff on an existing ${studioShortName} course?`)).toBeInTheDocument();
     expect(getByText(messages.defaultSection_1_Description.defaultMessage)).toBeInTheDocument();
     expect(getByRole('button', { name: messages.defaultSection_2_Title.defaultMessage })).toBeInTheDocument();
     expect(getByText(messages.defaultSection_2_Description.defaultMessage)).toBeInTheDocument();
