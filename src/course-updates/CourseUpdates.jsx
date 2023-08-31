@@ -8,6 +8,7 @@ import {
 } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import ProcessingNotification from '../generic/processing-notification';
@@ -28,6 +29,7 @@ const CourseUpdates = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    courseName,
     requestType,
     courseUpdates,
     courseHandouts,
@@ -58,6 +60,15 @@ const CourseUpdates = ({ courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
+            courseName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="m-4">
         <section className="setting-items mb-4 mt-5">
           <Layout

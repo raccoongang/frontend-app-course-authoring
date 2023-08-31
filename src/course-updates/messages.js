@@ -1,6 +1,10 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
+  pageTitle: {
+    id: 'course-authoring.course-updates.page.title',
+    defaultMessage: '{headingTitle} | {courseName} | {siteName}',
+  },
   headingTitle: {
     id: 'course-authoring.course-updates.header.title',
     defaultMessage: 'Course updates',

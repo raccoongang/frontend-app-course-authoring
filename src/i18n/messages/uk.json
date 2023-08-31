@@ -588,6 +588,7 @@
   "course-authoring.schedule-section.license.creative-commons.option.SA.label": "Share alike",
   "course-authoring.schedule-section.license.creative-commons.option.SA.description": "Allow others to distribute derivative works only under a license identical to the license that governs your work. This option is incompatible with 'No Derivatives'.",
   "course-authoring.schedule.alert.button.saving": "Saving",
+  "course-authoring.course-updates.page.title": "{headingTitle} | {courseName} | {siteName}",
   "course-authoring.course-updates.header.title": "Course updates",
   "course-authoring.course-updates.header.subtitle": "Content",
   "course-authoring.course-updates.section-info": "Use course updates to notify students of important dates or exams, highlight particular discussions in the forums, announce schedule changes, and respond to student questions. You add or edit updates in HTML.",

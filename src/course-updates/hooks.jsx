@@ -3,6 +3,7 @@ import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
 import { useToggle } from '@edx/paragon';
 
+import { useModel } from '../generic/model-store';
 import { COMMA_SEPARATED_DATE_FORMAT } from '../constants';
 import { getCourseHandouts, getCourseUpdates } from './data/selectors';
 import { REQUEST_TYPES } from './constants';
@@ -23,6 +24,7 @@ const useCourseUpdates = ({ courseId }) => {
   const [isUpdateFormOpen, openUpdateForm, closeUpdateForm] = useToggle(false);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [currentUpdate, setCurrentUpdate] = useState(initialUpdate);
+  const courseDetails = useModel('courseDetails', courseId);
 
   const courseUpdates = useSelector(getCourseUpdates);
   const courseHandouts = useSelector(getCourseHandouts);
@@ -93,6 +95,7 @@ const useCourseUpdates = ({ courseId }) => {
   }, [courseId]);
 
   return {
+    courseName: courseDetails?.name,
     requestType,
     courseUpdates,
     courseHandouts,
