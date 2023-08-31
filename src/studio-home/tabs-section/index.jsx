@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Tab, Tabs } from '@edx/paragon';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 
+import { getStudioHomeData } from '../data/selectors';
 import messages from '../messages';
 import LibrariesTab from './libraries-tab';
 import ArchivedTab from './archived-tab';
@@ -11,6 +13,15 @@ import CoursesTab from './courses-tab';
 const TabsSection = ({
   intl, tabsData, showNewCourseContainer, onClickNewCourse,
 }) => {
+  const TABS_LIST = {
+    courses: 'courses',
+    libraries: 'libraries',
+    archived: 'archived',
+  };
+  const {
+    libraryAuthoringMfeUrl,
+    redirectToLibraryAuthoringMfe,
+  } = useSelector(getStudioHomeData);
   const {
     activeTab, courses, librariesEnabled, libraries, archivedCourses,
   } = tabsData;
@@ -21,8 +32,8 @@ const TabsSection = ({
     const tabs = [];
     tabs.push(
       <Tab
-        key="courses"
-        eventKey="courses"
+        key={TABS_LIST.courses}
+        eventKey={TABS_LIST.courses}
         title={intl.formatMessage(messages.coursesTabTitle)}
       >
         <CoursesTab
@@ -35,19 +46,19 @@ const TabsSection = ({
     if (librariesEnabled) {
       tabs.push(
         <Tab
-          key="libraries"
-          eventKey="libraries"
+          key={TABS_LIST.libraries}
+          eventKey={TABS_LIST.libraries}
           title={intl.formatMessage(messages.librariesTabTitle)}
         >
-          <LibrariesTab libraries={libraries} />
+          {!redirectToLibraryAuthoringMfe && <LibrariesTab libraries={libraries} />}
         </Tab>,
       );
     }
     if (archivedCourses?.length) {
       tabs.push(
         <Tab
-          key="archived"
-          eventKey="archived"
+          key={TABS_LIST.archived}
+          eventKey={TABS_LIST.archived}
           title={intl.formatMessage(messages.archivedTabTitle)}
         >
           <ArchivedTab archivedCoursesData={archivedCourses} />
@@ -58,11 +69,18 @@ const TabsSection = ({
     return tabs;
   }, [archivedCourses, librariesEnabled, showNewCourseContainer]);
 
+  const handleSelectTab = (tab) => {
+    if (tab === TABS_LIST.libraries && redirectToLibraryAuthoringMfe) {
+      window.location.href = libraryAuthoringMfeUrl;
+    }
+  };
+
   return (
     <Tabs
       className="studio-home-tabs"
       variant="tabs"
       defaultActiveKey={activeTab}
+      onSelect={handleSelectTab}
     >
       {visibleTabs}
     </Tabs>
