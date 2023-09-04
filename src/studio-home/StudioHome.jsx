@@ -7,6 +7,7 @@ import {
 } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons/es5';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { Helmet } from 'react-helmet';
 
 import Loading from '../generic/Loading';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -75,6 +76,14 @@ const StudioHome = ({ intl }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle, { studioShortName }),
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Header hideMainMenu />
       <Container size="xl" className="studio-home">
         <section className="mb-4">

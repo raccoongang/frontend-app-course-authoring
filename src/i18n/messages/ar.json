@@ -678,6 +678,7 @@
   "course-authoring.grading-settings.assignment.type-name.error.message-2": "For grading to work, you must change all {initialAssignmentName} subsections to {value}.",
   "course-authoring.grading-settings.default.pass.text": "Pass",
   "course-authoring.grading-settings.deadline.error.message": "Grace period must be specified in {timeFormat} format.",
+  "course-authoring.studio-home.page.title": "{headingTitle} | {siteName}",
   "course-authoring.studio-home.heading.title": "Studio home",
   "course-authoring.studio-home.add-new-course.btn.text": "New course",
   "course-authoring.studio-home.add-new-library.btn.text": "New library",
@@ -694,6 +695,7 @@
   "course-authoring.studio-home.organization.label": "Show all courses in organization:",
   "course-authoring.studio-home.organization.btn.submit.text": "Submit",
   "course-authoring.studio-home.btn.re-run.text": "Re-run course",
+  "course-authoring.course-outline.page.title": "{headingTitle} | {courseName} | {siteName}",
   "course-authoring.course-outline.headingTitle": "Course outline",
   "course-authoring.course-outline.headingSubtitle": "Content",
   "course-authoring.course-outline.header-navigations.button.new-section": "New section",
@@ -927,5 +929,7 @@
   "course-authoring.import.heading.subtitle": "Tools",
   "course-authoring.import.description1": "Be sure you want to import a course before continuing. The contents of the imported course will replace the contents of the existing course. You cannot undo a course import. Before you proceed, we recommend that you export the current course, so that you have a backup copy of it.",
   "course-authoring.import.description2": "The course that you import must be in a .tar.gz file (that is, a .tar file compressed with GNU Zip). This .tar.gz file must contain a course.xml file. It may also contain other files.",
-  "course-authoring.import.description3": "The import process has five stages. During the first two stages, you must stay on this page. You can leave this page after the unpacking stage has completed. We recommend, however, that you don't make important changes to your course until the import operation has completed."
+  "course-authoring.import.description3": "The import process has five stages. During the first two stages, you must stay on this page. You can leave this page after the unpacking stage has completed. We recommend, however, that you don't make important changes to your course until the import operation has completed.",
+  "course-authoring.export.page.title": "{headingTitle} | {courseName} | {siteName}",
+  "course-authoring.import.page.title": "{headingTitle} | {courseName} | {siteName}"
 }
