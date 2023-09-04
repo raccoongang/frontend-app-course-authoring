@@ -35,7 +35,7 @@ const messages = defineMessages({
   },
   defaultSection_1_Title: {
     id: 'course-authoring.studio-home.default-section-1.title',
-    defaultMessage: 'Are you staff on an exiting {studioShortName} course?',
+    defaultMessage: 'Are you staff on an existing {studioShortName} course?',
   },
   defaultSection_1_Description: {
     id: 'course-authoring.studio-home.default-section-1.description',
