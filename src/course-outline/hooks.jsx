@@ -18,6 +18,7 @@ import {
 import {
   deleteCourseSectionQuery,
   editCourseSectionQuery,
+  duplicateCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
@@ -104,6 +105,10 @@ const useCourseOutline = ({ courseId }) => {
     closeDeleteModal();
   };
 
+  const handleDuplicateSectionSubmit = () => {
+    dispatch(duplicateCourseSectionQuery(currentSection.id, courseStructure.id));
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -151,6 +156,7 @@ const useCourseOutline = ({ courseId }) => {
     closeDeleteModal,
     openDeleteModal,
     handleDeleteSectionSubmit,
+    handleDuplicateSectionSubmit,
   };
 };
 
