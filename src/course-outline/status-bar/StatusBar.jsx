@@ -35,8 +35,8 @@ const StatusBar = ({
   const checklistDestination = new URL(`checklists/${courseId}`, config.STUDIO_BASE_URL).href;
 
   const {
-    visibility: learnMoreVisibilityUrl,
-  } = useHelpUrls(['visibility']);
+    contentHighlights: contentHighlightsUrl,
+  } = useHelpUrls(['contentHighlights']);
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -85,7 +85,7 @@ const StatusBar = ({
           )}
           <Hyperlink
             className="small ml-2"
-            destination={learnMoreVisibilityUrl}
+            destination={contentHighlightsUrl}
             target="_blank"
             showLaunchIcon={false}
           >

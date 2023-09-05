@@ -27,8 +27,8 @@ const HighlightsModal = ({
   const initialFormValues = getHighlightsFormValues(highlights);
 
   const {
-    visibility: learnMoreVisibilityUrl,
-  } = useHelpUrls(['visibility']);
+    contentHighlights: contentHighlightsUrl,
+  } = useHelpUrls(['contentHighlights']);
 
   return (
     <ModalDialog
@@ -53,7 +53,7 @@ const HighlightsModal = ({
               <p className="mb-4.5 pb-2">
                 {intl.formatMessage(messages.description, {
                   documentation: (
-                    <Hyperlink destination={learnMoreVisibilityUrl} target="_blank" showLaunchIcon={false}>
+                    <Hyperlink destination={contentHighlightsUrl} target="_blank" showLaunchIcon={false}>
                       {intl.formatMessage(messages.documentationLink)}
                     </Hyperlink>),
                 })}
