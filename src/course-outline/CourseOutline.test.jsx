@@ -143,20 +143,20 @@ describe('<CourseOutline />', () => {
       .onGet(getCourseOutlineIndexApiUrl(courseId))
       .reply(200, courseOutlineIndexMock);
 
-    const { getByText } = render(<RootWrapper />);
+    const { getAllByTestId } = render(<RootWrapper />);
     const section = courseOutlineIndexMock.courseStructure.childInfo.children[0];
     const courseBlockId = courseOutlineIndexMock.courseStructure.id;
 
     axiosMock
-      .onPost(getCourseSectionDuplicateApiUrl({
+      .onPost(getCourseSectionDuplicateApiUrl())
+      .reply(200, {
         duplicate_source_locator: section.id,
         parent_locator: courseBlockId,
-      }))
-      .reply(200);
+      });
     await executeThunk(duplicateCourseSectionQuery(section.id, courseBlockId), store.dispatch);
 
     await waitFor(() => {
-      expect(getByText(`Duplicate of '${section.displayName}'`)).toBeInTheDocument();
+      expect(getAllByTestId('section-card')).toHaveLength(4);
     });
   });
 });

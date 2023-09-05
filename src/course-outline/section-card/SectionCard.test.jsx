@@ -39,7 +39,7 @@ const renderComponent = (props) => render(
         onEditClick={jest.fn()}
         savingStatus=""
         onEditSectionSubmit={jest.fn()}
-        onDuplicateSectionSubmit={jest.fn()}
+        onDuplicateSubmit={jest.fn()}
         {...props}
       >
         <span>children</span>

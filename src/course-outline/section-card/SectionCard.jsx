@@ -70,7 +70,7 @@ const SectionCard = ({
   }, [savingStatus]);
 
   return (
-    <div className="section-card">
+    <div className="section-card" data-testid="section-card">
       <CardHeader
         sectionId={id}
         title={displayName}
