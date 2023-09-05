@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
-import { useHelpUrls } from '../help-urls/hooks';
 import { RequestStatus } from '../data/constants';
 import {
   setCurrentSection,
@@ -13,7 +12,8 @@ import {
   getOutlineIndexData,
   getSavingStatus,
   getStatusBarData,
-  getSectionsList, getCurrentSection,
+  getSectionsList,
+  getCurrentSection,
 } from './data/selectors';
 import {
   editCourseSectionQuery,
@@ -21,14 +21,15 @@ import {
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
-  fetchCourseReindexQuery, publishCourseSectionQuery,
+  fetchCourseReindexQuery,
+  publishCourseSectionQuery,
   updateCourseSectionHighlightsQuery,
 } from './data/thunk';
 
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
 
-  const { reindexLink } = useSelector(getOutlineIndexData);
+  const { reindexLink, courseStructure } = useSelector(getOutlineIndexData);
   const { outlineIndexLoadingStatus, reIndexLoadingStatus } = useSelector(getLoadingStatus);
   const statusBarData = useSelector(getStatusBarData);
   const savingStatus = useSelector(getSavingStatus);
@@ -86,10 +87,6 @@ const useCourseOutline = ({ courseId }) => {
     closeHighlightsModal();
   };
 
-  const handlePublishModalOpen = () => {
-    openPublishModal();
-  };
-
   const handlePublishSectionSubmit = () => {
     dispatch(publishCourseSectionQuery(currentSection.id));
 
@@ -116,12 +113,6 @@ const useCourseOutline = ({ courseId }) => {
     }
   }, [reIndexLoadingStatus]);
 
-  const {
-    visibility: learnMoreVisibilityUrl,
-    grading: learnMoreGradingUrl,
-    outline: learnMoreOutlineUrl,
-  } = useHelpUrls(['visibility', 'grading', 'outline']);
-
   return {
     savingStatus,
     sectionsList,
@@ -129,13 +120,10 @@ const useCourseOutline = ({ courseId }) => {
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
     showErrorAlert,
-    learnMoreVisibilityUrl,
-    learnMoreGradingUrl,
-    learnMoreOutlineUrl,
     isDisabledReindexButton,
     isSectionsExpanded,
     isPublishModalOpen,
-    handlePublishModalOpen,
+    openPublishModal,
     closePublishModal,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
@@ -151,6 +139,7 @@ const useCourseOutline = ({ courseId }) => {
     handleOpenHighlightsModal,
     isHighlightsModalOpen,
     closeHighlightsModal,
+    courseName: courseStructure?.displayName,
   };
 };
 

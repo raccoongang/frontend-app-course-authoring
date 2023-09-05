@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Container,
@@ -10,10 +11,9 @@ import {
 import { history } from '@edx/frontend-platform';
 
 import Header from '../studio-header/Header';
+import { getLoadingStatuses } from '../generic/data/selectors';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { RequestStatus } from '../data/constants';
-import { updateSavingStatus } from '../generic/data/slice';
-import { updateCreateOrRerunCourseQuery } from '../generic/data/thunks';
 import CourseRerunForm from './course-rerun-form';
 import CourseRerunSideBar from './course-rerun-sidebar';
 import messages from './messages';
@@ -22,28 +22,20 @@ import { useCourseRerun } from './hooks';
 const CourseRerun = ({ courseId }) => {
   const {
     intl,
-    courseData,
     displayName,
     savingStatus,
     initialFormValues,
     originalCourseData,
-    dispatch,
   } = useCourseRerun(courseId);
+  const { organizationLoadingStatus } = useSelector(getLoadingStatuses);
+
+  if (organizationLoadingStatus === RequestStatus.IN_PROGRESS) {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
   const handleRerunCourseCancel = () => {
     history.push('/home');
-  };
-
-  const handleCreateRerunCourse = () => {
-    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
-  };
-
-  const handleQueryProcessing = () => {
-    dispatch(updateCreateOrRerunCourseQuery(courseData));
-  };
-
-  const handleInternetConnectionFailed = () => {
-    dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
   };
 
   return (
@@ -79,8 +71,7 @@ const CourseRerun = ({ courseId }) => {
             <Layout.Element>
               <CourseRerunForm
                 initialFormValues={initialFormValues}
-                handleOnClickCancel={handleRerunCourseCancel}
-                handleOnClickCreate={handleCreateRerunCourse}
+                onClickCancel={handleRerunCourseCancel}
               />
             </Layout.Element>
             <Layout.Element>
@@ -93,8 +84,8 @@ const CourseRerun = ({ courseId }) => {
         <InternetConnectionAlert
           isFailed={savingStatus === RequestStatus.FAILED}
           isQueryPending={savingStatus === RequestStatus.PENDING}
-          onQueryProcessing={handleQueryProcessing}
-          onInternetConnectionFailed={handleInternetConnectionFailed}
+          onQueryProcessing={() => ({})}
+          onInternetConnectionFailed={() => ({})}
         />
       </div>
     </>

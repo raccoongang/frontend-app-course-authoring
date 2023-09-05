@@ -58,7 +58,7 @@ const CourseTeam = ({ courseId }) => {
 
   return (
     <>
-      <Container size="xl" className="m-4">
+      <Container size="xl" className="course-team m-4">
         <section className="course-team-container mb-4">
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}

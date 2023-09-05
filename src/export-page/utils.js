@@ -1,8 +1,8 @@
 import Cookies from 'universal-cookie';
 import moment from 'moment';
 
-import { DATE_FORMAT, TIME_FORMAT } from '../constants';
-import { LAST_EXPORT_COOKIE_NAME } from './data/constants';
+import { TIME_FORMAT } from '../constants';
+import { LAST_EXPORT_COOKIE_NAME, SUCCESS_DATE_FORMAT } from './data/constants';
 
 /**
  * Sets an export-related cookie with the provided information.
@@ -23,7 +23,7 @@ export const setExportCookie = (date, completed) => {
  * @returns {string|null} Formatted success date string, including date and time in UTC, or null if the input is falsy.
  */
 export const getFormattedSuccessDate = (unixDate) => {
-  const formattedDate = moment(unixDate).utc().format(DATE_FORMAT);
+  const formattedDate = moment(unixDate).utc().format(SUCCESS_DATE_FORMAT);
   const formattedTime = moment(unixDate).utc().format(TIME_FORMAT);
   return unixDate ? ` (${formattedDate} at ${formattedTime} UTC)` : null;
 };

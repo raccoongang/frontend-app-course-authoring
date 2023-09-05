@@ -25,6 +25,10 @@ const messages = defineMessages({
     id: 'course-authoring.create-or-rerun-course.org.placeholder',
     defaultMessage: 'e.g. UniversityX or OrganizationX',
   },
+  courseOrgNoOptions: {
+    id: 'course-authoring.create-or-rerun-course.org.no-options',
+    defaultMessage: 'No options',
+  },
   courseOrgCreateHelpText: {
     id: 'course-authoring.create-or-rerun-course.create.org.help-text',
     defaultMessage: 'The name of the organization sponsoring the course. {strong} This cannot be changed, but you can set a different display name in advanced settings later.',

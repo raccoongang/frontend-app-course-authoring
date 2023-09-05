@@ -1,7 +1,7 @@
 module.exports = {
   activeTab: 'courses',
   allowCourseReruns: true,
-  allowedOrganizations: [],
+  allowedOrganizations: ['edx', 'org'],
   archivedCourses: [
     {
       courseKey: 'course-v1:MachineLearning+123+2023',
@@ -37,6 +37,16 @@ module.exports = {
       run: '2023',
       url: '/course/course-v1:HarvardX+123+2023',
     },
+    {
+      courseKey: 'org.0/course_0/Run_0',
+      displayName: 'Run 0',
+      lmsLink: null,
+      number: 'course_0',
+      org: 'org.0',
+      rerunLink: null,
+      run: 'Run_0',
+      url: null,
+    },
   ],
   inProcessCourseActions: [],
   libraries: [
@@ -58,7 +68,9 @@ module.exports = {
   splitStudioHome: false,
   studioName: 'Studio',
   studioShortName: 'Studio',
-  studioRequestEmail: '',
+  studioRequestEmail: 'request@email.com',
   techSupportEmail: 'technical@example.com',
   platformName: 'Your Platform Name Here',
+  userIsActive: true,
+  allowToCreateNewOrg: false,
 };

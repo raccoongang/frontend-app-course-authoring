@@ -1,12 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
-import { render, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
+import { Helmet } from 'react-helmet';
 
 import initializeStore from '../store';
+import { COURSE_CREATOR_STATES } from '../constants';
 import { studioHomeMock } from './__mocks__';
 import { getStudioHomeApiUrl } from './data/api';
 import messages from './messages';
@@ -15,6 +18,15 @@ import { StudioHome } from '.';
 let axiosMock;
 let store;
 const mockPathname = '/foo-bar';
+const {
+  studioShortName,
+  studioRequestEmail,
+} = studioHomeMock;
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn(),
+}));
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -43,13 +55,41 @@ describe('<StudioHome />', () => {
     });
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    axiosMock
-      .onGet(getStudioHomeApiUrl())
-      .reply(200, studioHomeMock);
+    axiosMock.onGet(getStudioHomeApiUrl()).reply(200, studioHomeMock);
+    useSelector.mockReturnValue(studioHomeMock);
   });
+
   it('should render page and page title correctly', async () => {
-    const { getByText, getByRole } = render(<RootWrapper />);
-    await waitForElementToBeRemoved(() => getByRole('status'));
-    expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
+    const { getByText } = render(<RootWrapper />);
+    expect(getByText(`${studioShortName} home`)).toBeInTheDocument();
+  });
+
+  it('should render email staff header button', async () => {
+    useSelector.mockReturnValue({
+      ...studioHomeMock,
+      courseCreatorStatus: COURSE_CREATOR_STATES.disallowedForThisSite,
+    });
+
+    const { getByRole } = render(<RootWrapper />);
+    expect(getByRole('link', { name: messages.emailStaffBtnText.defaultMessage }))
+      .toHaveAttribute('href', `mailto:${studioRequestEmail}`);
+  });
+
+  it('should render create new course button', async () => {
+    useSelector.mockReturnValue({
+      ...studioHomeMock,
+      courseCreatorStatus: COURSE_CREATOR_STATES.granted,
+    });
+
+    const { getByRole } = render(<RootWrapper />);
+    expect(getByRole('button', { name: messages.addNewCourseBtnText.defaultMessage })).toBeInTheDocument();
+  });
+
+  it('should render page title correctly', async () => {
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      expect(helmet.title).toEqual(`${studioShortName} home | ${process.env.SITE_NAME}`);
+    });
   });
 });

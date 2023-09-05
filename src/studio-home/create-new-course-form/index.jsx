@@ -5,7 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { CreateOrRerunCourseForm } from '../../generic/create-or-rerun-course';
 import messages from './messages';
 
-const CreateNewCourseForm = ({ handleOnClickCancel, handleOnClickCreate }) => {
+const CreateNewCourseForm = ({ handleOnClickCancel }) => {
   const intl = useIntl();
   const initialNewCourseData = {
     displayName: '',
@@ -19,7 +19,6 @@ const CreateNewCourseForm = ({ handleOnClickCancel, handleOnClickCreate }) => {
       <CreateOrRerunCourseForm
         title={intl.formatMessage(messages.createNewCourse)}
         initialValues={initialNewCourseData}
-        onClickCreate={handleOnClickCreate}
         onClickCancel={handleOnClickCancel}
         isCreateNewCourse
       />
@@ -29,7 +28,6 @@ const CreateNewCourseForm = ({ handleOnClickCancel, handleOnClickCreate }) => {
 
 CreateNewCourseForm.propTypes = {
   handleOnClickCancel: PropTypes.func.isRequired,
-  handleOnClickCreate: PropTypes.func.isRequired,
 };
 
 export default CreateNewCourseForm;

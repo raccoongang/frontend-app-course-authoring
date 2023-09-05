@@ -117,8 +117,8 @@ export async function getCourseSection(sectionId) {
 
 /**
  * Update course section highlights
- * @param {Array<string>} highlights
  * @param {string} sectionId
+ * @param {Array<string>} highlights
  * @returns {Promise<Object>}
  */
 export async function updateCourseSectionHighlights(sectionId, highlights) {
@@ -134,7 +134,7 @@ export async function updateCourseSectionHighlights(sectionId, highlights) {
 }
 
 /**
- * Update publish course section
+ * Publish course section
  * @param {string} sectionId
  * @returns {Promise<Object>}
  */

@@ -10,9 +10,11 @@ import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
+import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
-import { NOTIFICATION_MESSAGES } from '../constants';
 import { RequestStatus } from '../data/constants';
+import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -23,14 +25,16 @@ import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
+import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
+import PublishModal from './publish-modal/PublishModal';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
-import PublishModal from './publish-modal/PublishModal';
 
 const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    courseName,
     savingStatus,
     statusBarData,
     sectionsList,
@@ -46,7 +50,7 @@ const CourseOutline = ({ courseId }) => {
     isPublishModalOpen,
     closeHighlightsModal,
     closePublishModal,
-    handlePublishModalOpen,
+    openPublishModal,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -54,9 +58,14 @@ const CourseOutline = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
-    handlePublishSectionSubmit,
+    handleSubmitPublishSection,
     handleEditSectionSubmit,
   } = useCourseOutline({ courseId });
+
+  const {
+    isShow: isShowProcessingNotification,
+    title: processingNotificationTitle,
+  } = useSelector(getProcessingNotification);
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -65,6 +74,15 @@ const CourseOutline = ({ courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
+            courseName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="m-4">
         <section className="course-outline-container mb-4 mt-5">
           <TransitionReplace>
@@ -114,17 +132,20 @@ const CourseOutline = ({ courseId }) => {
                       openEnableHighlightsModal={openEnableHighlightsModal}
                     />
                     <div className="pt-4">
+                      {/* TODO add create new section handler in EmptyPlaceholder */}
                       {sectionsList.length ? sectionsList.map((section) => (
                         <SectionCard
                           section={section}
                           savingStatus={savingStatus}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
-                          onOpenPublishModal={handlePublishModalOpen}
+                          onOpenPublishModal={openPublishModal}
                           onEditSectionSubmit={handleEditSectionSubmit}
                           // TODO add handler in Add new subsection feature
-                          onNewSubsectionClick={null}
+                          onClickNewSubsection={() => ({})}
                         />
-                      )) : null}
+                      )) : (
+                        <EmptyPlaceholder onCreateNewSection={() => ({})} />
+                      )}
                     </div>
                   </section>
                 </div>
@@ -149,13 +170,13 @@ const CourseOutline = ({ courseId }) => {
         <PublishModal
           isOpen={isPublishModalOpen}
           onClose={closePublishModal}
-          onPublishSubmit={handlePublishSectionSubmit}
+          onPublishSubmit={handleSubmitPublishSection}
         />
       </Container>
       <div className="alert-toast">
         <ProcessingNotification
-          isShow={savingStatus === RequestStatus.IN_PROGRESS}
-          title={NOTIFICATION_MESSAGES.saving}
+          isShow={isShowProcessingNotification}
+          title={processingNotificationTitle}
         />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}

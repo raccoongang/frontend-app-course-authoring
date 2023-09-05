@@ -27,10 +27,10 @@ const CardHeader = ({
   title,
   sectionStatus,
   isExpanded,
+  onClickPublish,
+  onClickMenuButton,
+  onClickEdit,
   onExpand,
-  onPublishClick,
-  onMenuButtonClick,
-  onEditClick,
   isFormOpen,
   onEditSubmit,
   closeForm,
@@ -114,10 +114,10 @@ const CardHeader = ({
             data-testid="edit-button"
             alt={intl.formatMessage(messages.altButtonEdit)}
             iconAs={EditIcon}
-            onClick={onEditClick}
+            onClick={onClickEdit}
           />
         )}
-        <Dropdown data-testid="section-card-header__menu" onClick={onMenuButtonClick}>
+        <Dropdown data-testid="section-card-header__menu" onClick={onClickMenuButton}>
           <Dropdown.Toggle
             className="section-card-header__menu"
             id="section-card-header__menu"
@@ -130,7 +130,7 @@ const CardHeader = ({
           <Dropdown.Menu>
             <Dropdown.Item
               disabled={isDisabledPublish}
-              onClick={onPublishClick}
+              onClick={onClickPublish}
             >
               {intl.formatMessage(messages.menuPublish)}
             </Dropdown.Item>
@@ -149,9 +149,9 @@ CardHeader.propTypes = {
   sectionStatus: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool.isRequired,
   onExpand: PropTypes.func.isRequired,
-  onPublishClick: PropTypes.func.isRequired,
-  onMenuButtonClick: PropTypes.func.isRequired,
-  onEditClick: PropTypes.func.isRequired,
+  onClickPublish: PropTypes.func.isRequired,
+  onClickMenuButton: PropTypes.func.isRequired,
+  onClickEdit: PropTypes.func.isRequired,
   isFormOpen: PropTypes.bool.isRequired,
   onEditSubmit: PropTypes.func.isRequired,
   closeForm: PropTypes.func.isRequired,

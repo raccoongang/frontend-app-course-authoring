@@ -5,8 +5,8 @@ import { Button, Hyperlink, Stack } from '@edx/paragon';
 import { AppContext } from '@edx/frontend-platform/react';
 
 import { getPagePath } from '../../utils';
-import messages from './messages';
 import { useHelpUrls } from '../../help-urls/hooks';
+import messages from './messages';
 
 const StatusBar = ({
   statusBarData,

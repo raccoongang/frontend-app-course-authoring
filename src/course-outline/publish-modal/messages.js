@@ -9,10 +9,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-outline.publish-modal.description',
     defaultMessage: 'Publish all unpublished changes for this section?',
   },
-  label: {
-    id: 'course-authoring.course-outline.publish-modal.label',
-    defaultMessage: 'Draft sub section',
-  },
   cancelButton: {
     id: 'course-authoring.course-outline.publish-modal.button.cancel',
     defaultMessage: 'Cancel',
