@@ -42,7 +42,7 @@ const ExportStepper = ({ intl, courseId }) => {
 
   let successTitle = intl.formatMessage(messages.stepperSuccessTitle);
   const formattedSuccessDate = getFormattedSuccessDate(successDate);
-  if (formattedSuccessDate) {
+  if (formattedSuccessDate && currentStage === EXPORT_STAGES.SUCCESS) {
     successTitle += formattedSuccessDate;
   }
   const steps = [

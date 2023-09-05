@@ -6,7 +6,10 @@ import { RequestStatus } from '../../data/constants';
 const slice = createSlice({
   name: 'generic',
   initialState: {
-    loadingStatus: RequestStatus.IN_PROGRESS,
+    loadingStatuses: {
+      organizationLoadingStatus: RequestStatus.IN_PROGRESS,
+      courseRerunLoadingStatus: RequestStatus.IN_PROGRESS,
+    },
     savingStatus: '',
     organizations: [],
     createOrRerunCourse: {
@@ -20,8 +23,8 @@ const slice = createSlice({
     fetchOrganizations: (state, { payload }) => {
       state.organizations = payload;
     },
-    updateLoadingStatus: (state, { payload }) => {
-      state.loadingStatus = payload.status;
+    updateLoadingStatuses: (state, { payload }) => {
+      state.loadingStatuses = { ...state.loadingStatuses, ...payload };
     },
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
@@ -45,7 +48,7 @@ export const {
   fetchOrganizations,
   updatePostErrors,
   updateCourseRerunData,
-  updateLoadingStatus,
+  updateLoadingStatuses,
   updateSavingStatus,
   updateCourseData,
   updateRedirectUrlObj,

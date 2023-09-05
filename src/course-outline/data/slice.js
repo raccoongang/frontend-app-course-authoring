@@ -13,7 +13,6 @@ const slice = createSlice({
     },
     outlineIndexData: {},
     savingStatus: '',
-    savingProcess: '',
     statusBarData: {
       courseReleaseDate: '',
       highlightsEnabledForMessaging: false,
@@ -69,9 +68,6 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
-    updateSavingProcess: (state, { payload }) => {
-      state.savingProcess = payload;
-    },
     updateSectionList: (state, { payload }) => {
       state.sectionsList = state.sectionsList.map((section) => (section.id === payload.id ? payload : section));
     },
@@ -104,7 +100,6 @@ export const {
   updateSectionList,
   setCurrentSection,
   deleteSection,
-  updateSavingProcess,
   duplicateSection,
 } = slice.actions;
 

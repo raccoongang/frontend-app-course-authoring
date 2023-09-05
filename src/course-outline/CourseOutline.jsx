@@ -10,11 +10,14 @@ import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
 } from '@edx/paragon/icons';
+import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
+import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import { RequestStatus } from '../data/constants';
 import SubHeader from '../generic/sub-header/SubHeader';
-import InternetConnectionAlert from '../generic/internet-connection-alert';
 import ProcessingNotification from '../generic/processing-notification';
+import InternetConnectionAlert from '../generic/internet-connection-alert';
 import AlertMessage from '../generic/alert-message';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
@@ -22,6 +25,7 @@ import StatusBar from './status-bar/StatusBar';
 import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsModal';
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
+import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import PublishModal from './publish-modal/PublishModal';
 import DeleteModal from './delete-modal/DeleteModal';
 import { useCourseOutline } from './hooks';
@@ -31,8 +35,8 @@ const CourseOutline = ({ courseId }) => {
   const intl = useIntl();
 
   const {
+    courseName,
     savingStatus,
-    savingProcess,
     statusBarData,
     sectionsList,
     isLoading,
@@ -49,8 +53,8 @@ const CourseOutline = ({ courseId }) => {
     closeHighlightsModal,
     closePublishModal,
     closeDeleteModal,
+    openPublishModal,
     openDeleteModal,
-    handlePublishModalOpen,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -64,6 +68,11 @@ const CourseOutline = ({ courseId }) => {
     handleDuplicateSectionSubmit,
   } = useCourseOutline({ courseId });
 
+  const {
+    isShow: isShowProcessingNotification,
+    title: processingNotificationTitle,
+  } = useSelector(getProcessingNotification);
+
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
@@ -71,6 +80,15 @@ const CourseOutline = ({ courseId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
+            courseName,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
       <Container size="xl" className="m-4">
         <section className="course-outline-container mb-4 mt-5">
           <TransitionReplace>
@@ -120,19 +138,22 @@ const CourseOutline = ({ courseId }) => {
                       openEnableHighlightsModal={openEnableHighlightsModal}
                     />
                     <div className="pt-4">
+                      {/* TODO add create new section handler in EmptyPlaceholder */}
                       {sectionsList.length ? sectionsList.map((section) => (
                         <SectionCard
                           section={section}
                           savingStatus={savingStatus}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
-                          onOpenPublishModal={handlePublishModalOpen}
+                          onOpenPublishModal={openPublishModal}
                           onOpenDeleteModal={openDeleteModal}
                           onEditSectionSubmit={handleEditSectionSubmit}
                           onDuplicateSubmit={handleDuplicateSectionSubmit}
                           // TODO add handler in Add new subsection feature
-                          onNewSubsectionClick={null}
+                          onClickNewSubsection={() => ({})}
                         />
-                      )) : null}
+                      )) : (
+                        <EmptyPlaceholder onCreateNewSection={() => ({})} />
+                      )}
                     </div>
                   </section>
                 </div>
@@ -167,8 +188,8 @@ const CourseOutline = ({ courseId }) => {
       </Container>
       <div className="alert-toast">
         <ProcessingNotification
-          isShow={savingStatus === RequestStatus.PENDING}
-          title={savingProcess}
+          isShow={isShowProcessingNotification}
+          title={processingNotificationTitle}
         />
         <InternetConnectionAlert
           isFailed={isInternetConnectionAlertFailed}

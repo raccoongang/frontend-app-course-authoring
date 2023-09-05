@@ -5,6 +5,7 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { Helmet } from 'react-helmet';
 
 import {
   getCourseOutlineIndexApiUrl,
@@ -17,8 +18,8 @@ import {
   editCourseSectionQuery,
 } from './data/thunk';
 import initializeStore from '../store';
+import { courseOutlineIndexMock, courseOutlineIndexWithoutSections } from './__mocks__';
 import { executeThunk } from '../utils';
-import { courseOutlineIndexMock } from './__mocks__';
 import CourseOutline from './CourseOutline';
 import messages from './messages';
 
@@ -55,23 +56,52 @@ describe('<CourseOutline />', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
+  });
 
+  it('should render page title correctly', async () => {
     axiosMock
       .onGet(getCourseOutlineIndexApiUrl(courseId))
       .reply(200, courseOutlineIndexMock);
+    render(<RootWrapper />);
+    await waitFor(() => {
+      const helmet = Helmet.peek();
+      const { displayName } = courseOutlineIndexMock.courseStructure;
+      expect(helmet.title).toEqual(
+        `${messages.headingTitle.defaultMessage} | ${displayName} | ${process.env.SITE_NAME}`,
+      );
+    });
   });
 
   it('render CourseOutline component correctly', async () => {
-    const { getByText, debug } = render(<RootWrapper />);
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexMock);
+
+    const { getByText } = render(<RootWrapper />);
 
     await waitFor(() => {
-      debug();
       expect(getByText(messages.headingTitle.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.headingSubtitle.defaultMessage)).toBeInTheDocument();
     });
   });
 
-  it('check updated section when edit query is successfully', async () => {
+  it('render CourseOutline component without sections correctly', async () => {
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexWithoutSections);
+
+    const { getByTestId } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(getByTestId('empty-placeholder')).toBeInTheDocument();
+    });
+  });
+
+  it('check edit section when edit query is successfully', async () => {
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexMock);
+
     const { getByText } = render(<RootWrapper />);
     const newDisplayName = 'New section name';
 
@@ -93,6 +123,10 @@ describe('<CourseOutline />', () => {
   });
 
   it('check delete section when edit query is successfully', async () => {
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexMock);
+
     const { queryByText } = render(<RootWrapper />);
     const section = courseOutlineIndexMock.courseStructure.childInfo.children[1];
 
@@ -105,6 +139,10 @@ describe('<CourseOutline />', () => {
   });
 
   it('check duplicate section when duplicate query is successfully', async () => {
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexMock);
+
     const { getByText } = render(<RootWrapper />);
     const section = courseOutlineIndexMock.courseStructure.childInfo.children[0];
     const courseBlockId = courseOutlineIndexMock.courseStructure.id;

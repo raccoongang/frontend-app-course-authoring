@@ -3,17 +3,24 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 import {
-  Form, Button, ActionRow, StatefulButton, TransitionReplace,
+  Form,
+  Button,
+  Dropdown,
+  ActionRow,
+  StatefulButton,
+  TransitionReplace,
 } from '@edx/paragon';
 import { Info as InfoIcon } from '@edx/paragon/icons';
+import { TypeaheadDropdown } from '@edx/frontend-lib-content-components';
 
 import AlertMessage from '../alert-message';
 import { STATEFUL_BUTTON_STATES } from '../../constants';
 import { RequestStatus } from '../../data/constants';
 import { getSavingStatus } from '../data/selectors';
-import { updateCourseData, updatePostErrors } from '../data/slice';
+import { getStudioHomeData } from '../../studio-home/data/selectors';
+import { updatePostErrors } from '../data/slice';
+import { updateCreateOrRerunCourseQuery } from '../data/thunks';
 import { useCreateOrRerunCourse } from './hooks';
 import messages from './messages';
 
@@ -21,11 +28,11 @@ const CreateOrRerunCourseForm = ({
   title,
   isCreateNewCourse,
   initialValues,
-  onClickCreate,
   onClickCancel,
 }) => {
   const { courseId } = useParams();
   const savingStatus = useSelector(getSavingStatus);
+  const { allowToCreateNewOrg } = useSelector(getStudioHomeData);
   const runFieldReference = useRef(null);
   const displayNameFieldReference = useRef(null);
 
@@ -55,7 +62,6 @@ const CreateOrRerunCourseForm = ({
       ),
       name: 'displayName',
       value: values.displayName,
-      isDropdown: false,
       placeholder: intl.formatMessage(messages.courseDisplayNamePlaceholder),
       disabled: false,
       ref: displayNameFieldReference,
@@ -78,7 +84,6 @@ const CreateOrRerunCourseForm = ({
         }),
       name: 'org',
       value: values.org,
-      isDropdown: true,
       options: organizations,
       placeholder: intl.formatMessage(messages.courseOrgPlaceholder),
       disabled: false,
@@ -96,7 +101,6 @@ const CreateOrRerunCourseForm = ({
         : intl.formatMessage(messages.courseNumberRerunHelpText),
       name: 'number',
       value: values.number,
-      isDropdown: false,
       placeholder: intl.formatMessage(messages.courseNumberPlaceholder),
       disabled: !isCreateNewCourse,
     },
@@ -122,7 +126,6 @@ const CreateOrRerunCourseForm = ({
         }),
       name: 'run',
       value: values.run,
-      isDropdown: false,
       placeholder: intl.formatMessage(messages.courseRunPlaceholder),
       disabled: false,
       ref: runFieldReference,
@@ -139,8 +142,7 @@ const CreateOrRerunCourseForm = ({
 
   const handleOnClickCreate = () => {
     const courseData = isCreateNewCourse ? values : { ...values, sourceCourseKey: courseId };
-    dispatch(updateCourseData(courseData));
-    onClickCreate();
+    dispatch(updateCreateOrRerunCourseQuery(courseData));
   };
 
   const handleOnClickCancel = () => {
@@ -154,6 +156,39 @@ const CreateOrRerunCourseForm = ({
     setFieldValue(name, value);
     handleBlur(e);
   };
+
+  const renderOrgField = (field) => (allowToCreateNewOrg ? (
+    <TypeaheadDropdown
+      readOnly={false}
+      name={field.name}
+      value={field.value}
+      controlClassName={classNames({ 'is-invalid': hasErrorField(field.name) })}
+      options={field.options}
+      placeholder={field.placeholder}
+      handleBlur={handleCustomBlurForDropdown}
+      handleChange={(value) => setFieldValue(field.name, value)}
+      noOptionsMessage={intl.formatMessage(messages.courseOrgNoOptions)}
+      helpMessage=""
+      errorMessage=""
+      floatingLabel=""
+    />
+  ) : (
+    <Dropdown className="mr-2">
+      <Dropdown.Toggle id={`${field.name}-dropdown`} variant="outline-primary">
+        {field.value || intl.formatMessage(messages.courseOrgNoOptions)}
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        {field.options?.map((value) => (
+          <Dropdown.Item
+            key={value}
+            onClick={() => setFieldValue(field.name, value)}
+          >
+            {value}
+          </Dropdown.Item>
+        ))}
+      </Dropdown.Menu>
+    </Dropdown>
+  ));
 
   useEffect(() => {
     // it needs to display the initial focus for the field depending on the current page
@@ -192,9 +227,9 @@ const CreateOrRerunCourseForm = ({
             key={field.label}
           >
             <Form.Label>{field.label}</Form.Label>
-            {!field.isDropdown ? (
+            {field.name !== 'org' ? (
               <Form.Control
-                value={values[field.name]}
+                value={field.value}
                 placeholder={field.placeholder}
                 name={field.name}
                 onChange={handleChange}
@@ -203,23 +238,7 @@ const CreateOrRerunCourseForm = ({
                 disabled={field.disabled}
                 ref={field?.ref}
               />
-            ) : (
-              <Form.Autosuggest
-                value={values[field.name]}
-                name={field.name}
-                placeholder={field.placeholder}
-                onSelected={(value) => setFieldValue(field.name, value)}
-                onBlur={handleCustomBlurForDropdown}
-                isInvalid={hasErrorField(field.name)}
-                key={uuid()}
-              >
-                {field?.options?.map((option) => (
-                  <Form.AutosuggestOption key={option}>
-                    {option}
-                  </Form.AutosuggestOption>
-                ))}
-              </Form.Autosuggest>
-            )}
+            ) : renderOrgField(field)}
             <Form.Text>{field.helpText}</Form.Text>
             {hasErrorField(field.name) && (
               <Form.Control.Feedback
@@ -271,7 +290,6 @@ CreateOrRerunCourseForm.propTypes = {
     run: PropTypes.string.isRequired,
   }).isRequired,
   isCreateNewCourse: PropTypes.bool,
-  onClickCreate: PropTypes.func.isRequired,
   onClickCancel: PropTypes.func.isRequired,
 };
 

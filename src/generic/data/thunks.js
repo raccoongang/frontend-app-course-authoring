@@ -3,7 +3,7 @@ import { createOrRerunCourse, getOrganizations, getCourseRerun } from './api';
 import {
   fetchOrganizations,
   updatePostErrors,
-  updateLoadingStatus,
+  updateLoadingStatuses,
   updateRedirectUrlObj,
   updateCourseRerunData,
   updateSavingStatus,
@@ -14,9 +14,9 @@ export function fetchOrganizationsQuery() {
     try {
       const organizations = await getOrganizations();
       dispatch(fetchOrganizations(organizations));
-      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(updateLoadingStatuses({ organizationLoadingStatus: RequestStatus.SUCCESSFUL }));
     } catch (error) {
-      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
+      dispatch(updateLoadingStatuses({ organizationLoadingStatus: RequestStatus.FAILED }));
     }
   };
 }
@@ -26,9 +26,9 @@ export function fetchCourseRerunQuery(courseId) {
     try {
       const courseRerun = await getCourseRerun(courseId);
       dispatch(updateCourseRerunData(courseRerun));
-      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(updateLoadingStatuses({ courseRerunLoadingStatus: RequestStatus.SUCCESSFUL }));
     } catch (error) {
-      dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
+      dispatch(updateLoadingStatuses({ courseRerunLoadingStatus: RequestStatus.FAILED }));
     }
   };
 }

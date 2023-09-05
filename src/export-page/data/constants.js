@@ -5,3 +5,4 @@ export const EXPORT_STAGES = {
   COMPRESSING: 2,
   SUCCESS: 3,
 };
+export const SUCCESS_DATE_FORMAT = 'MM/DD/yyyy';

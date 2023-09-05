@@ -61,7 +61,7 @@ const Header = ({
       submenuContent: (
         <>
           <div className="mb-1 small">
-            <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_SCHEDULE_DETAILS_PAGE, 'settings/details')}>{intl.formatMessage(messages['header.links.scheduleAndDetails'])}</a>
+            <a rel="noopener" href={`${config.STUDIO_BASE_URL}/settings/details/${courseId}`}>{intl.formatMessage(messages['header.links.scheduleAndDetails'])}</a>
           </div>
           <div className="mb-1 small">
             <a rel="noopener" href={getPagePath(courseId, process.env.ENABLE_NEW_GRADING_PAGE, 'settings/grading')}>{intl.formatMessage(messages['header.links.grading'])}</a>
@@ -153,10 +153,7 @@ const Header = ({
     </OverlayTrigger>
   );
 
-  const logoDestination = process.env.ENABLE_NEW_HOME_PAGE === 'true'
-    ? new URL('home', config.BASE_URL).href
-    : config.STUDIO_BASE_URL;
-
+  const logoDestination = `${config.BASE_URL}/home`;
   const props = {
     logo: config.LOGO_URL,
     logoAltText: 'Studio edX',

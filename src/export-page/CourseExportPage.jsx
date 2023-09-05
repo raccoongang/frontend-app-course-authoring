@@ -7,10 +7,13 @@ import {
 } from '@edx/paragon';
 import { ArrowCircleDown as ArrowCircleDownIcon } from '@edx/paragon/icons';
 import Cookies from 'universal-cookie';
+import { getConfig } from '@edx/frontend-platform';
+import { Helmet } from 'react-helmet';
 
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
+import { useModel } from '../generic/model-store';
 import messages from './messages';
 import ExportSidebar from './export-sidebar/ExportSidebar';
 import {
@@ -18,7 +21,7 @@ import {
 } from './data/selectors';
 import { startExportingCourse } from './data/thunks';
 import { EXPORT_STAGES, LAST_EXPORT_COOKIE_NAME } from './data/constants';
-import { updateExportTriggered, updateSuccessDate } from './data/slice';
+import { updateExportTriggered, updateSavingStatus, updateSuccessDate } from './data/slice';
 import ExportModalError from './export-modal-error/ExportModalError';
 import ExportFooter from './export-footer/ExportFooter';
 import ExportStepper from './export-stepper/ExportStepper';
@@ -26,6 +29,7 @@ import ExportStepper from './export-stepper/ExportStepper';
 const CourseExportPage = ({ intl, courseId }) => {
   const dispatch = useDispatch();
   const exportTriggered = useSelector(getExportTriggered);
+  const courseDetails = useModel('courseDetails', courseId);
   const currentStage = useSelector(getCurrentStage);
   const { msg: errorMessage } = useSelector(getError);
   const loadingStatus = useSelector(getLoadingStatus);
@@ -38,6 +42,7 @@ const CourseExportPage = ({ intl, courseId }) => {
   useEffect(() => {
     const cookieData = cookies.get(LAST_EXPORT_COOKIE_NAME);
     if (cookieData) {
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       dispatch(updateExportTriggered(true));
       dispatch(updateSuccessDate(cookieData.date));
     }
@@ -45,7 +50,16 @@ const CourseExportPage = ({ intl, courseId }) => {
 
   return (
     <>
-      <Container size="xl" className="m-4">
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.pageTitle, {
+            headingTitle: intl.formatMessage(messages.headingTitle),
+            courseName: courseDetails?.name,
+            siteName: process.env.SITE_NAME,
+          })}
+        </title>
+      </Helmet>
+      <Container size="xl" className="m-4 export">
         <section className="setting-items mb-4">
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}
@@ -60,7 +74,7 @@ const CourseExportPage = ({ intl, courseId }) => {
                   title={intl.formatMessage(messages.headingTitle)}
                   subtitle={intl.formatMessage(messages.headingSubtitle)}
                 />
-                <p>{intl.formatMessage(messages.description1)}</p>
+                <p>{intl.formatMessage(messages.description1, { studioShortName: getConfig().STUDIO_SHORT_NAME })}</p>
                 <p>{intl.formatMessage(messages.description2)}</p>
                 <Card>
                   <Card.Header

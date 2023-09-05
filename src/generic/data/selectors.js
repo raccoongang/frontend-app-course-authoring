@@ -1,4 +1,4 @@
-export const getLoadingStatus = (state) => state.generic.loadingStatus;
+export const getLoadingStatuses = (state) => state.generic.loadingStatuses;
 export const getSavingStatus = (state) => state.generic.savingStatus;
 export const getOrganizations = (state) => state.generic.organizations;
 export const getCourseData = (state) => state.generic.createOrRerunCourse.courseData;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -27,16 +27,16 @@ const CardHeader = ({
   title,
   sectionStatus,
   isExpanded,
+  onClickPublish,
+  onClickMenuButton,
+  onClickEdit,
   onExpand,
-  onPublishClick,
-  onMenuButtonClick,
-  onEditClick,
   isFormOpen,
   onEditSubmit,
   closeForm,
   isDisabledEditField,
-  onDeleteClick,
-  onDuplicateClick,
+  onClickDelete,
+  onClickDuplicate,
 }) => {
   const intl = useIntl();
   const [titleValue, setTitleValue] = useState(title);
@@ -46,12 +46,12 @@ const CardHeader = ({
     || sectionStatus === SECTION_BADGE_STATUTES.publishedNotLive;
 
   useEscapeClick({
-    onEscape: () => closeForm(),
+    onEscape: () => {
+      setTitleValue(title);
+      closeForm();
+    },
+    dependency: title,
   });
-
-  useEffect(() => {
-    setTitleValue(title);
-  }, [title]);
 
   return (
     <div className="section-card-header" data-testid="section-card-header">
@@ -116,10 +116,10 @@ const CardHeader = ({
             data-testid="edit-button"
             alt={intl.formatMessage(messages.altButtonEdit)}
             iconAs={EditIcon}
-            onClick={onEditClick}
+            onClick={onClickEdit}
           />
         )}
-        <Dropdown data-testid="section-card-header__menu" onClick={onMenuButtonClick}>
+        <Dropdown data-testid="section-card-header__menu" onClick={onClickMenuButton}>
           <Dropdown.Toggle
             className="section-card-header__menu"
             id="section-card-header__menu"
@@ -132,13 +132,13 @@ const CardHeader = ({
           <Dropdown.Menu>
             <Dropdown.Item
               disabled={isDisabledPublish}
-              onClick={onPublishClick}
+              onClick={onClickPublish}
             >
               {intl.formatMessage(messages.menuPublish)}
             </Dropdown.Item>
             <Dropdown.Item>{intl.formatMessage(messages.menuConfigure)}</Dropdown.Item>
-            <Dropdown.Item onClick={onDuplicateClick}>{intl.formatMessage(messages.menuDuplicate)}</Dropdown.Item>
-            <Dropdown.Item onClick={onDeleteClick}>{intl.formatMessage(messages.menuDelete)}</Dropdown.Item>
+            <Dropdown.Item onClick={onClickDuplicate}>{intl.formatMessage(messages.menuDuplicate)}</Dropdown.Item>
+            <Dropdown.Item onClick={onClickDelete}>{intl.formatMessage(messages.menuDelete)}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -151,15 +151,15 @@ CardHeader.propTypes = {
   sectionStatus: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool.isRequired,
   onExpand: PropTypes.func.isRequired,
-  onPublishClick: PropTypes.func.isRequired,
-  onMenuButtonClick: PropTypes.func.isRequired,
-  onEditClick: PropTypes.func.isRequired,
+  onClickPublish: PropTypes.func.isRequired,
+  onClickMenuButton: PropTypes.func.isRequired,
+  onClickEdit: PropTypes.func.isRequired,
   isFormOpen: PropTypes.bool.isRequired,
   onEditSubmit: PropTypes.func.isRequired,
   closeForm: PropTypes.func.isRequired,
   isDisabledEditField: PropTypes.bool.isRequired,
-  onDeleteClick: PropTypes.func.isRequired,
-  onDuplicateClick: PropTypes.func.isRequired,
+  onClickDelete: PropTypes.func.isRequired,
+  onClickDuplicate: PropTypes.func.isRequired,
 };
 
 export default CardHeader;

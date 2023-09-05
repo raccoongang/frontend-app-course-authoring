@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
-import { useHelpUrls } from '../help-urls/hooks';
 import { RequestStatus } from '../data/constants';
 import {
   setCurrentSection,
@@ -15,12 +14,11 @@ import {
   getStatusBarData,
   getSectionsList,
   getCurrentSection,
-  getSavingProcess,
 } from './data/selectors';
 import {
   deleteCourseSectionQuery,
-  duplicateCourseSectionQuery,
   editCourseSectionQuery,
+  duplicateCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
@@ -39,7 +37,6 @@ const useCourseOutline = ({ courseId }) => {
   const savingStatus = useSelector(getSavingStatus);
   const sectionsList = useSelector(getSectionsList);
   const currentSection = useSelector(getCurrentSection);
-  const savingProcess = useSelector(getSavingProcess);
 
   const [isEnableHighlightsModalOpen, openEnableHighlightsModal, closeEnableHighlightsModal] = useToggle(false);
   const [isSectionsExpanded, setSectionsExpanded] = useState(false);
@@ -93,10 +90,6 @@ const useCourseOutline = ({ courseId }) => {
     closeHighlightsModal();
   };
 
-  const handlePublishModalOpen = () => {
-    openPublishModal();
-  };
-
   const handlePublishSectionSubmit = () => {
     dispatch(publishCourseSectionQuery(currentSection.id));
 
@@ -132,27 +125,17 @@ const useCourseOutline = ({ courseId }) => {
     }
   }, [reIndexLoadingStatus]);
 
-  const {
-    visibility: learnMoreVisibilityUrl,
-    grading: learnMoreGradingUrl,
-    outline: learnMoreOutlineUrl,
-  } = useHelpUrls(['visibility', 'grading', 'outline']);
-
   return {
     savingStatus,
-    savingProcess,
     sectionsList,
     isLoading: outlineIndexLoadingStatus === RequestStatus.IN_PROGRESS,
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
     showErrorAlert,
-    learnMoreVisibilityUrl,
-    learnMoreGradingUrl,
-    learnMoreOutlineUrl,
     isDisabledReindexButton,
     isSectionsExpanded,
     isPublishModalOpen,
-    handlePublishModalOpen,
+    openPublishModal,
     closePublishModal,
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
@@ -168,6 +151,7 @@ const useCourseOutline = ({ courseId }) => {
     handleOpenHighlightsModal,
     isHighlightsModalOpen,
     closeHighlightsModal,
+    courseName: courseStructure?.displayName,
     isDeleteModalOpen,
     closeDeleteModal,
     openDeleteModal,

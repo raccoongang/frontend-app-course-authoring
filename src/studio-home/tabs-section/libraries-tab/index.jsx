@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CardItem from '../../card-item';
+import { sortAlphabeticallyArray } from '../utils';
 
 const LibrariesTab = ({ libraries }) => (
   <div className="courses-tab">
-    {libraries.map(({
+    {sortAlphabeticallyArray(libraries).map(({
       displayName, org, number, url,
     }) => (
       <CardItem

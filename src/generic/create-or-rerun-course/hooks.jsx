@@ -1,22 +1,37 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { history } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { getOrganizations, getPostErrors } from '../data/selectors';
-import { updatePostErrors } from '../data/slice';
+import { RequestStatus } from '../../data/constants';
+import { getStudioHomeData } from '../../studio-home/data/selectors';
+import {
+  getRedirectUrlObj,
+  getOrganizations,
+  getPostErrors,
+  getSavingStatus,
+} from '../data/selectors';
+import { updateSavingStatus, updatePostErrors } from '../data/slice';
 import { fetchOrganizationsQuery } from '../data/thunks';
+import { redirectToCourseIndex } from './constants';
 import messages from './messages';
 
 const useCreateOrRerunCourse = (initialValues) => {
   const intl = useIntl();
   const dispatch = useDispatch();
+  const redirectUrlObj = useSelector(getRedirectUrlObj);
+  const createOrRerunCourseSavingStatus = useSelector(getSavingStatus);
+  const allOrganizations = useSelector(getOrganizations);
+  const postErrors = useSelector(getPostErrors);
+  const {
+    allowToCreateNewOrg,
+    allowedOrganizations,
+  } = useSelector(getStudioHomeData);
   const [isFormFilled, setFormFilled] = useState(false);
   const [showErrorBanner, setShowErrorBanner] = useState(false);
-  const organizations = useSelector(getOrganizations);
-  const postErrors = useSelector(getPostErrors);
-
+  const organizations = allowToCreateNewOrg ? allOrganizations : allowedOrganizations;
   const specialCharsRule = /^[a-zA-Z0-9_\-.'*~\s]+$/;
   const noSpaceRule = /^\S*$/;
   const validationSchema = Yup.object().shape({
@@ -51,11 +66,14 @@ const useCreateOrRerunCourse = (initialValues) => {
   } = useFormik({
     initialValues,
     enableReinitialize: true,
+    validateOnBlur: false,
     validationSchema,
   });
 
   useEffect(() => {
-    dispatch(fetchOrganizationsQuery());
+    if (allowToCreateNewOrg) {
+      dispatch(fetchOrganizationsQuery());
+    }
   }, []);
 
   useEffect(() => {
@@ -66,6 +84,18 @@ const useCreateOrRerunCourse = (initialValues) => {
   useEffect(() => {
     setShowErrorBanner(!!postErrors.errMsg);
   }, [postErrors]);
+
+  useEffect(() => {
+    if (createOrRerunCourseSavingStatus === RequestStatus.SUCCESSFUL) {
+      dispatch(updateSavingStatus({ status: '' }));
+      const { url } = redirectUrlObj;
+      if (url) {
+        history.push(redirectToCourseIndex(url));
+      }
+    } else if (createOrRerunCourseSavingStatus === RequestStatus.FAILED) {
+      dispatch(updateSavingStatus({ status: '' }));
+    }
+  }, [createOrRerunCourseSavingStatus]);
 
   const hasErrorField = (fieldName) => !!errors[fieldName] && !!touched[fieldName];
   const isFormInvalid = Object.keys(errors).length;

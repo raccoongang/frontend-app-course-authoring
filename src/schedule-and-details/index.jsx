@@ -6,15 +6,16 @@ import {
 } from '@edx/paragon';
 import {
   CheckCircle as CheckCircleIcon,
-  WarningFilled as WarningFilledIcon,
+  Warning as WarningIcon,
 } from '@edx/paragon/icons';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import Placeholder from '@edx/frontend-lib-content-components';
 
+import { useScrollToHashElement } from '../hooks';
 import { RequestStatus } from '../data/constants';
 import AlertMessage from '../generic/alert-message';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
-import SubHeader from '../generic/sub-header/SubHeader';
-
+import { STATEFUL_BUTTON_STATES } from '../constants';
 import {
   fetchCourseSettingsQuery,
   fetchCourseDetailsQuery,
@@ -39,8 +40,6 @@ import LicenseSection from './license-section';
 import ScheduleSidebar from './schedule-sidebar';
 import messages from './messages';
 import { useSaveValuesPrompt } from './hooks';
-import { STATEFUL_BUTTON_STATES } from '../constants';
-import { useScrollToHashElement } from '../hooks';
 
 const ScheduleAndDetails = ({ intl, courseId }) => {
   const courseSettings = useSelector(getCourseSettings);
@@ -85,6 +84,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
     isPrerequisiteCoursesEnabled,
     mfeProctoredExamSettingsUrl,
     possiblePreRequisiteCourses,
+    canShowCertificateAvailableDateField,
   } = courseSettings;
 
   const {
@@ -131,6 +131,14 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
     return <></>;
   }
 
+  if (loadingDetailsStatus === RequestStatus.DENIED || loadingSettingsStatus === RequestStatus.DENIED) {
+    return (
+      <div className="row justify-content-center m-6">
+        <Placeholder />
+      </div>
+    );
+  }
+
   const showCreditSection = creditEligibilityEnabled && isCreditCourse;
   const showRequirementsSection = aboutPageEditable || isPrerequisiteCoursesEnabled || isEntranceExamsEnabled;
   const hasErrors = !!Object.keys(errorFields).length;
@@ -139,7 +147,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
       default: intl.formatMessage(messages.buttonSaveText),
       pending: intl.formatMessage(messages.buttonSavingText),
     },
-    disabledStates: ['pending'],
+    disabledStates: [STATEFUL_BUTTON_STATES.pending],
   };
   const alertWhileSavingTitle = hasErrors
     ? intl.formatMessage(messages.alertWarningOnSaveWithError)
@@ -151,7 +159,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
 
   return (
     <>
-      <Container size="xl" className="m-4">
+      <Container size="xl" className="schedule-and-details m-4">
         <div className="mt-5">
           <AlertMessage
             show={showSuccessfulAlert}
@@ -166,6 +174,14 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
               messages.alertSuccessAriaDescribedby,
             )}
           />
+          <header>
+            <span className="small text-gray-700">
+              {intl.formatMessage(messages.headingSubtitle)}
+            </span>
+            <h2 className="mb-4 pb-1">
+              {intl.formatMessage(messages.headingTitle)}
+            </h2>
+          </header>
         </div>
         <section className="setting-items mb-4">
           <Layout
@@ -178,12 +194,6 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
             <Layout.Element>
               <article>
                 <div>
-                  <SubHeader
-                    title={intl.formatMessage(messages.headingTitle)}
-                    subtitle={intl.formatMessage(messages.headingSubtitle)}
-                    contentTitle={intl.formatMessage(messages.basicTitle)}
-                    description={intl.formatMessage(messages.basicDescription)}
-                  />
                   <BasicSection
                     org={org}
                     courseNumber={courseNumber}
@@ -214,6 +224,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
                     enrollmentEndEditable={enrollmentEndEditable}
                     certificateAvailableDate={certificateAvailableDate}
                     certificatesDisplayBehavior={certificatesDisplayBehavior}
+                    canShowCertificateAvailableDateField={canShowCertificateAvailableDateField}
                     onChange={handleValuesChange}
                   />
                   {aboutPageEditable && (
@@ -330,7 +341,7 @@ const ScheduleAndDetails = ({ intl, courseId }) => {
             />,
           ].filter(Boolean)}
           variant="warning"
-          icon={WarningFilledIcon}
+          icon={WarningIcon}
           title={alertWhileSavingTitle}
           description={alertWhileSavingDescription}
         />

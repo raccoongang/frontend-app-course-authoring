@@ -5,6 +5,7 @@ import { Button, Hyperlink, Stack } from '@edx/paragon';
 import { AppContext } from '@edx/frontend-platform/react';
 
 import { getPagePath } from '../../utils';
+import { useHelpUrls } from '../../help-urls/hooks';
 import messages from './messages';
 import { useHelpUrls } from '../../help-urls/hooks';
 
@@ -111,7 +112,6 @@ StatusBar.propTypes = {
       completedCourseBestPracticesChecks: PropTypes.number.isRequired,
     }),
     highlightsEnabledForMessaging: PropTypes.bool.isRequired,
-    highlightsDocUrl: PropTypes.string.isRequired,
   }).isRequired,
 };
 

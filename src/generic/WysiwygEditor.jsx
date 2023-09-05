@@ -30,7 +30,6 @@ const Editor = connect(mapStateToProps)(TinyMceWidget);
 export const WysiwygEditor = ({
   initialValue, editorType, onChange, minHeight,
 }) => {
-  // default initial string returned onEditorChange if empty input
   const { editorRef, refReady, setEditorRef } = prepareEditorRef();
 
   const isEquivalentCodeExtraSpaces = (first, second) => {
@@ -45,6 +44,7 @@ export const WysiwygEditor = ({
     return normalizeQuotes(first) === normalizeQuotes(second);
   };
 
+  // default initial string returned onEditorChange if empty input
   const needToChange = (value) => !isEquivalentCodeQuotes(initialValue, value)
     && !isEquivalentCodeExtraSpaces(initialValue, value)
     && (initialValue !== DEFAULT_EMPTY_WYSIWYG_VALUE || value !== '');
@@ -71,6 +71,7 @@ export const WysiwygEditor = ({
         editorType={editorType}
         initialValue={initialValue}
         minHeight={minHeight}
+        editorContentHtml={initialValue}
         setEditorRef={setEditorRef}
         updateContent={handleUpdate}
         initializeEditor={() => ({})}

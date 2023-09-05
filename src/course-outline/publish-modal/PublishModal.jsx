@@ -18,6 +18,7 @@ const PublishModal = ({
 }) => {
   const intl = useIntl();
   const { displayName, childInfo } = useSelector(getCurrentSection);
+  const subSections = childInfo?.children || [];
 
   return (
     <ModalDialog
@@ -34,10 +35,23 @@ const PublishModal = ({
       </ModalDialog.Header>
       <ModalDialog.Body>
         <p className="small">{intl.formatMessage(messages.description)}</p>
-        <span className="small text-gray-400">{intl.formatMessage(messages.label)}</span>
-        {childInfo?.children?.length ? childInfo.children.map((item) => (
-          <div className="small border border-light-400 p-2 publish-modal__subsection">{item.displayName}</div>
-        )) : null}
+        {subSections.length ? subSections.map((subSection) => {
+          const units = subSection.childInfo.children;
+
+          return units.length ? (
+            <React.Fragment key={subSection.id}>
+              <span className="small text-gray-400">{subSection.displayName}</span>
+              {units.map((unit) => (
+                <div
+                  key={unit.id}
+                  className="small border border-light-400 p-2 publish-modal__subsection"
+                >
+                  {unit.displayName}
+                </div>
+              ))}
+            </React.Fragment>
+          ) : null;
+        }) : null}
       </ModalDialog.Body>
       <ModalDialog.Footer className="pt-1">
         <ActionRow>

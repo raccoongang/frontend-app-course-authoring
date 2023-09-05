@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import SectionSubHeader from '../../generic/section-sub-header';
+import ScheduleSubHeader from '../schedule-sub-header';
 import { ScheduleRow, SCHEDULE_ROW_TYPES } from './schedule-row';
 import { CertificateDisplayRow } from './certificate-display-row';
 import messages from './messages';
@@ -18,6 +18,7 @@ const ScheduleSection = ({
   enrollmentEndEditable,
   certificateAvailableDate,
   certificatesDisplayBehavior,
+  canShowCertificateAvailableDateField,
   onChange,
 }) => {
   const intl = useIntl();
@@ -56,6 +57,7 @@ const ScheduleSection = ({
       errorFeedback: errorFields?.endDate,
     },
     {
+      skip: !canShowCertificateAvailableDateField,
       key: 'certificate-display-row',
       rowType: SCHEDULE_ROW_TYPES.dropdown,
       certificateAvailableDate,
@@ -107,8 +109,8 @@ const ScheduleSection = ({
   ];
 
   return (
-    <section className="section-container schedule-section" id="schedule">
-      <SectionSubHeader
+    <section className="section-container schedule-section">
+      <ScheduleSubHeader
         title={intl.formatMessage(messages.scheduleTitle)}
         description={intl.formatMessage(messages.scheduleDescription)}
       />
@@ -161,6 +163,7 @@ ScheduleSection.propTypes = {
   enrollmentEndEditable: PropTypes.bool.isRequired,
   certificateAvailableDate: PropTypes.string,
   certificatesDisplayBehavior: PropTypes.string.isRequired,
+  canShowCertificateAvailableDateField: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
