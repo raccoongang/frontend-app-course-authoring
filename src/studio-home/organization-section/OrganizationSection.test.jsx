@@ -4,8 +4,8 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 
-import messages from '../messages';
 import initializeStore from '../../store';
+import messages from '../messages';
 import OrganizationSection from '.';
 
 let store;
@@ -30,6 +30,7 @@ describe('<OrganizationSection />', () => {
     });
     store = initializeStore();
   });
+
   it('renders text content correctly', () => {
     const { getByText } = render(<RootWrapper />);
     expect(getByText(messages.organizationTitle.defaultMessage)).toBeInTheDocument();

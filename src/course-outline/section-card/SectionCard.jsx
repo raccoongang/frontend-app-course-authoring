@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Button, useToggle } from '@edx/paragon';
-import { Add as IconAdd } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { Badge, Button, useToggle } from '@edx/paragon';
+import { Add as IconAdd } from '@edx/paragon/icons';
 
-import { getSectionStatus } from '../utils';
-import { RequestStatus } from '../../data/constants';
 import { setCurrentSection } from '../data/slice';
+import { RequestStatus } from '../../data/constants';
 import CardHeader from '../card-header/CardHeader';
+import { getSectionStatus } from '../utils';
 import messages from './messages';
 
 const SectionCard = ({
@@ -16,14 +16,13 @@ const SectionCard = ({
   children,
   onOpenHighlightsModal,
   onOpenPublishModal,
-  onNewSubsectionClick,
+  onClickNewSubsection,
   onEditSectionSubmit,
   savingStatus,
   onOpenDeleteModal,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
-
   const [isExpanded, setIsExpanded] = useState(true);
   const [isFormOpen, openForm, closeForm] = useToggle(false);
 
@@ -50,7 +49,7 @@ const SectionCard = ({
     setIsExpanded((prevState) => !prevState);
   };
 
-  const handleMenuButtonClick = () => {
+  const handleClickMenuButton = () => {
     dispatch(setCurrentSection(section));
   };
 
@@ -77,10 +76,10 @@ const SectionCard = ({
         sectionStatus={sectionStatus}
         isExpanded={isExpanded}
         onExpand={handleExpandContent}
-        onMenuButtonClick={handleMenuButtonClick}
-        onPublishClick={onOpenPublishModal}
-        onDeleteClick={onOpenDeleteModal}
-        onEditClick={openForm}
+        onClickMenuButton={handleClickMenuButton}
+        onClickPublish={onOpenPublishModal}
+        onClickEdit={openForm}
+        onClickDelete={onOpenDeleteModal}
         isFormOpen={isFormOpen}
         closeForm={closeForm}
         onEditSubmit={handleEditSubmit}
@@ -105,11 +104,11 @@ const SectionCard = ({
       )}
       {isExpanded && (
         <Button
-          data-testid="new subsection button"
+          data-testid="new-subsection-button"
           className="mt-4"
           variant="outline-primary"
           iconBefore={IconAdd}
-          onClick={onNewSubsectionClick}
+          onClick={onClickNewSubsection}
           block
         >
           {intl.formatMessage(messages.newSubsectionButton)}
@@ -137,7 +136,7 @@ SectionCard.propTypes = {
   children: PropTypes.node,
   onOpenHighlightsModal: PropTypes.func.isRequired,
   onOpenPublishModal: PropTypes.func.isRequired,
-  onNewSubsectionClick: PropTypes.func.isRequired,
+  onClickNewSubsection: PropTypes.func.isRequired,
   onEditSectionSubmit: PropTypes.func.isRequired,
   savingStatus: PropTypes.string.isRequired,
   onOpenDeleteModal: PropTypes.func.isRequired,

@@ -35,7 +35,7 @@ describe('getFormattedSuccessDate', () => {
 
     const unixDate = 1679787000;
 
-    const expectedFormattedDate = ' (01/Tu/1970 at 10:36 UTC)';
+    const expectedFormattedDate = ' (01/20/1970 at 10:36 UTC)';
 
     const result = getFormattedSuccessDate(unixDate);
     expect(result).toBe(expectedFormattedDate);

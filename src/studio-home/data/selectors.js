@@ -1,3 +1,3 @@
-export const getLoadingStatus = (state) => state.studioHome.loadingStatus;
 export const getStudioHomeData = state => state.studioHome.studioHomeData;
-export const getSavingStatus = (state) => state.studioHome.savingStatus;
+export const getLoadingStatuses = (state) => state.studioHome.loadingStatuses;
+export const getSavingStatuses = (state) => state.studioHome.savingStatuses;

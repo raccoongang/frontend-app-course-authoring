@@ -18,7 +18,7 @@ import messages from './messages';
 const geUpdateFormSettings = (requestType, courseUpdatesInitialValues, intl) => {
   const updatesValidationSchema = Yup.object().shape({
     id: Yup.number().required(),
-    date: Yup.string().min(1).required(),
+    date: Yup.date().required(),
     content: Yup.string(),
   });
 

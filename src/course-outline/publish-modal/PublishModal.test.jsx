@@ -29,11 +29,37 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const currentSectionMock = {
-  displayName: 'Test Section',
+  displayName: 'Publish',
   childInfo: {
+    displayName: 'Subsection',
     children: [
       {
-        displayName: 'Children',
+        displayName: 'Subsection 1',
+        childInfo: {
+          displayName: 'Unit',
+          children: [
+            {
+              displayName: 'Subsection_1 Unit 1',
+            },
+          ],
+        },
+      },
+      {
+        displayName: 'Subsection 2',
+        childInfo: {
+          displayName: 'Unit',
+          children: [
+            {
+              displayName: 'Subsection_2 Unit 1',
+            },
+          ],
+        },
+      },
+      {
+        displayName: 'Subsection 3',
+        childInfo: {
+          children: [],
+        },
       },
     ],
   },
@@ -71,12 +97,15 @@ describe('<PublishModal />', () => {
   });
 
   it('renders PublishModal component correctly', () => {
-    const { getByText, getByRole } = renderComponent();
+    const { getByText, getByRole, queryByText } = renderComponent();
 
     expect(getByText(`Publish ${currentSectionMock.displayName}`)).toBeInTheDocument();
     expect(getByText(messages.description.defaultMessage)).toBeInTheDocument();
-    expect(getByText(messages.label.defaultMessage)).toBeInTheDocument();
-    expect(getByText(/Children/i)).toBeInTheDocument();
+    expect(getByText(/Subsection 1/i)).toBeInTheDocument();
+    expect(getByText(/Subsection_1 Unit 1/i)).toBeInTheDocument();
+    expect(getByText(/Subsection 2/i)).toBeInTheDocument();
+    expect(getByText(/Subsection_2 Unit 1/i)).toBeInTheDocument();
+    expect(queryByText(/Subsection 3/i)).not.toBeInTheDocument();
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage })).toBeInTheDocument();
     expect(getByRole('button', { name: messages.publishButton.defaultMessage })).toBeInTheDocument();
   });

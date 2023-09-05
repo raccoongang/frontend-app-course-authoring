@@ -7,24 +7,24 @@ import CardHeader from './CardHeader';
 import messages from './messages';
 
 const onExpandMock = jest.fn();
-const onMenuButtonClickMock = jest.fn();
-const onPublishClickMock = jest.fn();
-const onEditClickMock = jest.fn();
-const onDeleteClickMock = jest.fn();
+const onClickMenuButtonMock = jest.fn();
+const onClickPublishMock = jest.fn();
+const onClickEditMock = jest.fn();
+const onClickDeleteMock = jest.fn();
 
 const cardHeaderProps = {
   title: 'Some title',
   sectionStatus: SECTION_BADGE_STATUTES.live,
   isExpanded: true,
   onExpand: onExpandMock,
-  onMenuButtonClick: onMenuButtonClickMock,
-  onPublishClick: onPublishClickMock,
-  onEditClick: onEditClickMock,
+  onClickMenuButton: onClickMenuButtonMock,
+  onClickPublish: onClickPublishMock,
+  onClickEdit: onClickEditMock,
   isFormOpen: false,
   onEditSubmit: jest.fn(),
   closeForm: jest.fn(),
   isDisabledEditField: false,
-  onDeleteClick: onDeleteClickMock,
+  nDeleteClick: onClickDeleteMock,
 };
 
 const renderComponent = (props) => render(
@@ -98,15 +98,15 @@ describe('<CardHeader />', () => {
     expect(onExpandMock).toHaveBeenCalled();
   });
 
-  it('calls onMenuButtonClick when menu is clicked', () => {
+  it('calls onClickMenuButton when menu is clicked', () => {
     const { getByTestId } = renderComponent();
 
     const menuButton = getByTestId('section-card-header__menu-button');
     fireEvent.click(menuButton);
-    expect(onMenuButtonClickMock).toHaveBeenCalled();
+    expect(onClickMenuButtonMock).toHaveBeenCalled();
   });
 
-  it('calls onPublishClick when item is clicked', () => {
+  it('calls onClickPublish when item is clicked', () => {
     const { getByText, getByTestId } = renderComponent({
       ...cardHeaderProps,
       sectionStatus: SECTION_BADGE_STATUTES.draft,
@@ -117,15 +117,23 @@ describe('<CardHeader />', () => {
 
     const publishMenuItem = getByText(messages.menuPublish.defaultMessage);
     fireEvent.click(publishMenuItem);
-    expect(onPublishClickMock).toHaveBeenCalled();
+    expect(onClickPublishMock).toHaveBeenCalled();
   });
 
-  it('calls onEditClick when the button is clicked', () => {
+  it('calls onClickEdit when the button is clicked', () => {
     const { getByTestId } = renderComponent();
 
     const editButton = getByTestId('edit-button');
     fireEvent.click(editButton);
-    expect(onEditClickMock).toHaveBeenCalled();
+    expect(onClickEditMock).toHaveBeenCalled();
+  });
+
+  it('calls onClickEdit when the button is clicked', () => {
+    const { getByTestId } = renderComponent();
+
+    const editButton = getByTestId('edit-button');
+    fireEvent.click(editButton);
+    expect(onClickEditMock).toHaveBeenCalled();
   });
 
   it('check is field visible when isFormOpen is true', () => {
@@ -148,7 +156,7 @@ describe('<CardHeader />', () => {
     expect(getByTestId('edit field')).toBeDisabled();
   });
 
-  it('calls onDeleteClick when item is clicked', () => {
+  it('calls onClickDelete when item is clicked', () => {
     const { getByText, getByTestId } = renderComponent();
 
     const menuButton = getByTestId('section-card-header__menu-button');
@@ -156,6 +164,6 @@ describe('<CardHeader />', () => {
 
     const deleteMenuItem = getByText(messages.menuDelete.defaultMessage);
     fireEvent.click(deleteMenuItem);
-    expect(onDeleteClickMock).toHaveBeenCalled();
+    expect(onClickDeleteMock).toHaveBeenCalled();
   });
 });

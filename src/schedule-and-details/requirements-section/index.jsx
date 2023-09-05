@@ -4,7 +4,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form, Dropdown } from '@edx/paragon';
 
 import { TIME_FORMAT } from '../../constants';
-import SectionSubHeader from '../../generic/section-sub-header';
+import ScheduleSubHeader from '../schedule-sub-header';
 import EntranceExam from './entrance-exam';
 import messages from './messages';
 
@@ -61,7 +61,7 @@ const RequirementsSection = ({
 
   return (
     <section className="section-container requirements-section">
-      <SectionSubHeader
+      <ScheduleSubHeader
         title={intl.formatMessage(messages.requirementsTitle)}
         description={intl.formatMessage(messages.requirementsDescription)}
       />
