@@ -24,7 +24,7 @@ const cardHeaderProps = {
   onEditSubmit: jest.fn(),
   closeForm: jest.fn(),
   isDisabledEditField: false,
-  nDeleteClick: onClickDeleteMock,
+  onClickDelete: onClickDeleteMock,
 };
 
 const renderComponent = (props) => render(
@@ -164,6 +164,6 @@ describe('<CardHeader />', () => {
 
     const deleteMenuItem = getByText(messages.menuDelete.defaultMessage);
     fireEvent.click(deleteMenuItem);
-    expect(onClickDeleteMock).toHaveBeenCalled();
+    expect(onClickDeleteMock).toHaveBeenCalledTimes(1);
   });
 });
