@@ -89,6 +89,7 @@ const useCourseOutline = ({ courseId }) => {
 
   const handlePublishSectionSubmit = () => {
     dispatch(publishCourseSectionQuery(currentSection.id));
+    console.log('test', '----------');
 
     closePublishModal();
   };

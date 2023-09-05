@@ -89,7 +89,11 @@ describe('<CourseOutline />', () => {
     });
   });
 
-  it('check updated section when edit query is successfully', async () => {
+  it('check edit section when edit query is successfully', async () => {
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexMock);
+
     const { getByText } = render(<RootWrapper />);
     const newDisplayName = 'New section name';
 

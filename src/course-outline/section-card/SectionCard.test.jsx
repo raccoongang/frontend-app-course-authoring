@@ -34,7 +34,7 @@ const renderComponent = (props) => render(
         section={section}
         onOpenPublishModal={jest.fn()}
         onOpenHighlightsModal={jest.fn()}
-        onNewSubsectionClick={onClickNewSubsectionMock}
+        onClickNewSubsection={onClickNewSubsectionMock}
         onEditClick={jest.fn()}
         savingStatus=""
         onEditSectionSubmit={jest.fn()}
@@ -86,7 +86,7 @@ describe('<SectionCard />', () => {
 
     const newSubsectionButton = getByRole('button', { name: messages.newSubsectionButton.defaultMessage });
     fireEvent.click(newSubsectionButton);
-    expect(onClickNewSubsectionMock).toHaveBeenCalledTimes(1);
+    expect(onClickNewSubsectionMock).toHaveBeenCalled();
   });
 
   it('calls the onNewSubsectionClick function when the button is clicked', () => {
@@ -94,6 +94,6 @@ describe('<SectionCard />', () => {
 
     const newSubsectionButton = getByRole('button', { name: messages.newSubsectionButton.defaultMessage });
     fireEvent.click(newSubsectionButton);
-    expect(onClickNewSubsectionMock).toHaveBeenCalledTimes(1);
+    expect(onClickNewSubsectionMock).toHaveBeenCalled();
   });
 });

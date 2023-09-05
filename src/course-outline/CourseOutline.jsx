@@ -13,8 +13,8 @@ import {
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
-import { RequestStatus } from '../data/constants';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
+import { RequestStatus } from '../data/constants';
 import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -58,7 +58,7 @@ const CourseOutline = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
-    handleSubmitPublishSection,
+    handlePublishSectionSubmit,
     handleEditSectionSubmit,
   } = useCourseOutline({ courseId });
 
@@ -170,7 +170,7 @@ const CourseOutline = ({ courseId }) => {
         <PublishModal
           isOpen={isPublishModalOpen}
           onClose={closePublishModal}
-          onPublishSubmit={handleSubmitPublishSection}
+          onPublishSubmit={handlePublishSectionSubmit}
         />
       </Container>
       <div className="alert-toast">

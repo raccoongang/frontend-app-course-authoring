@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Hyperlink } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import HelpSidebar from '../../generic/help-sidebar';
+import { HelpSidebar } from '../../generic/help-sidebar';
 import { useHelpUrls } from '../../help-urls/hooks';
 import { getFormattedSidebarMessages } from './utils';
 
