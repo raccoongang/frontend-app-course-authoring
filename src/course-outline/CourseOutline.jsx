@@ -167,7 +167,6 @@ const CourseOutline = ({ courseId }) => {
             isOpen={isEnableHighlightsModalOpen}
             close={closeEnableHighlightsModal}
             onEnableHighlightsSubmit={handleEnableHighlightsSubmit}
-            highlightsDocUrl={statusBarData.highlightsDocUrl}
           />
         </section>
         <HighlightsModal
