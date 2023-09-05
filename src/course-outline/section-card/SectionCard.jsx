@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Button } from '@edx/paragon';
-import { Add as IconAdd } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { Badge, Button, useToggle } from '@edx/paragon';
+import { Add as IconAdd } from '@edx/paragon/icons';
 
 import { setCurrentSection } from '../data/slice';
+import { RequestStatus } from '../../data/constants';
 import CardHeader from '../card-header/CardHeader';
 import { getSectionStatus } from '../utils';
 import messages from './messages';
@@ -16,12 +17,16 @@ const SectionCard = ({
   onOpenHighlightsModal,
   onOpenPublishModal,
   onClickNewSubsection,
+  onEditSectionSubmit,
+  savingStatus,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isFormOpen, openForm, closeForm] = useToggle(false);
 
   const {
+    id,
     displayName,
     published,
     releasedToStudents,
@@ -47,16 +52,36 @@ const SectionCard = ({
     dispatch(setCurrentSection(section));
   };
 
+  const handleEditSubmit = (titleValue) => {
+    if (displayName !== titleValue) {
+      onEditSectionSubmit(id, titleValue);
+      return;
+    }
+
+    closeForm();
+  };
+
+  useEffect(() => {
+    if (savingStatus === RequestStatus.SUCCESSFUL) {
+      closeForm();
+    }
+  }, [savingStatus]);
+
   return (
     <div className="section-card">
       <CardHeader
+        sectionId={id}
         title={displayName}
         sectionStatus={sectionStatus}
         isExpanded={isExpanded}
         onExpand={handleExpandContent}
         onClickMenuButton={handleClickMenuButton}
         onClickPublish={onOpenPublishModal}
-        onClickEdit={() => ({})}
+        onClickEdit={openForm}
+        isFormOpen={isFormOpen}
+        closeForm={closeForm}
+        onEditSubmit={handleEditSubmit}
+        isDisabledEditField={savingStatus === RequestStatus.IN_PROGRESS}
       />
       <div className="section-card__content" data-testid="section-card__content">
         <div className="outline-section__status">
@@ -97,6 +122,7 @@ SectionCard.defaultProps = {
 
 SectionCard.propTypes = {
   section: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
     published: PropTypes.bool.isRequired,
     releasedToStudents: PropTypes.bool.isRequired,
@@ -109,6 +135,8 @@ SectionCard.propTypes = {
   onOpenHighlightsModal: PropTypes.func.isRequired,
   onOpenPublishModal: PropTypes.func.isRequired,
   onClickNewSubsection: PropTypes.func.isRequired,
+  onEditSectionSubmit: PropTypes.func.isRequired,
+  savingStatus: PropTypes.string.isRequired,
 };
 
 export default SectionCard;

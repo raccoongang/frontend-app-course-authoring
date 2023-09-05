@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
-import { useHelpUrls } from '../help-urls/hooks';
 import { RequestStatus } from '../data/constants';
 import {
   setCurrentSection,
@@ -13,14 +12,17 @@ import {
   getOutlineIndexData,
   getSavingStatus,
   getStatusBarData,
-  getSectionsList, getCurrentSection,
+  getSectionsList,
+  getCurrentSection,
 } from './data/selectors';
 import {
+  editCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
   fetchCourseLaunchQuery,
   fetchCourseOutlineIndexQuery,
-  fetchCourseReindexQuery, publishCourseSectionQuery,
+  fetchCourseReindexQuery,
+  publishCourseSectionQuery,
   updateCourseSectionHighlightsQuery,
 } from './data/thunk';
 
@@ -85,10 +87,14 @@ const useCourseOutline = ({ courseId }) => {
     closeHighlightsModal();
   };
 
-  const handleSubmitPublishSection = () => {
+  const handlePublishSectionSubmit = () => {
     dispatch(publishCourseSectionQuery(currentSection.id));
 
     closePublishModal();
+  };
+
+  const handleEditSectionSubmit = (sectionId, displayName) => {
+    dispatch(editCourseSectionQuery(sectionId, displayName));
   };
 
   useEffect(() => {
@@ -107,12 +113,6 @@ const useCourseOutline = ({ courseId }) => {
     }
   }, [reIndexLoadingStatus]);
 
-  const {
-    visibility: learnMoreVisibilityUrl,
-    grading: learnMoreGradingUrl,
-    outline: learnMoreOutlineUrl,
-  } = useHelpUrls(['visibility', 'grading', 'outline']);
-
   return {
     savingStatus,
     sectionsList,
@@ -120,9 +120,6 @@ const useCourseOutline = ({ courseId }) => {
     isReIndexShow: Boolean(reindexLink),
     showSuccessAlert,
     showErrorAlert,
-    learnMoreVisibilityUrl,
-    learnMoreGradingUrl,
-    learnMoreOutlineUrl,
     isDisabledReindexButton,
     isSectionsExpanded,
     isPublishModalOpen,
@@ -131,7 +128,8 @@ const useCourseOutline = ({ courseId }) => {
     headerNavigationsActions,
     handleEnableHighlightsSubmit,
     handleHighlightsFormSubmit,
-    handleSubmitPublishSection,
+    handlePublishSectionSubmit,
+    handleEditSectionSubmit,
     statusBarData,
     isEnableHighlightsModalOpen,
     openEnableHighlightsModal,

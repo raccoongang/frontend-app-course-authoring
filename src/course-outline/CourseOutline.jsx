@@ -13,8 +13,8 @@ import {
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
-import { RequestStatus } from '../data/constants';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
+import { RequestStatus } from '../data/constants';
 import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -26,8 +26,8 @@ import EnableHighlightsModal from './enable-highlights-modal/EnableHighlightsMod
 import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
-import { useCourseOutline } from './hooks';
 import PublishModal from './publish-modal/PublishModal';
+import { useCourseOutline } from './hooks';
 import messages from './messages';
 
 const CourseOutline = ({ courseId }) => {
@@ -58,7 +58,8 @@ const CourseOutline = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleOpenHighlightsModal,
     handleHighlightsFormSubmit,
-    handleSubmitPublishSection,
+    handlePublishSectionSubmit,
+    handleEditSectionSubmit,
   } = useCourseOutline({ courseId });
 
   const {
@@ -135,8 +136,10 @@ const CourseOutline = ({ courseId }) => {
                       {sectionsList.length ? sectionsList.map((section) => (
                         <SectionCard
                           section={section}
+                          savingStatus={savingStatus}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={openPublishModal}
+                          onEditSectionSubmit={handleEditSectionSubmit}
                           // TODO add handler in Add new subsection feature
                           onClickNewSubsection={() => ({})}
                         />
@@ -167,7 +170,7 @@ const CourseOutline = ({ courseId }) => {
         <PublishModal
           isOpen={isPublishModalOpen}
           onClose={closePublishModal}
-          onPublishSubmit={handleSubmitPublishSection}
+          onPublishSubmit={handlePublishSectionSubmit}
         />
       </Container>
       <div className="alert-toast">

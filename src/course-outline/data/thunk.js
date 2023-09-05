@@ -9,11 +9,13 @@ import {
   getCourseLaunchChecklist,
 } from '../utils/getChecklistForStatusBar';
 import {
+  editCourseSection,
   enableCourseHighlightsEmails,
   getCourseBestPractices,
   getCourseLaunch,
   getCourseOutlineIndex,
-  getCourseSection, publishCourseSection,
+  getCourseSection,
+  publishCourseSection,
   restartIndexingOnCourse,
   updateCourseSectionHighlights,
 } from './api';
@@ -142,7 +144,7 @@ export function fetchCourseSectionQuery(sectionId) {
 
 export function updateCourseSectionHighlightsQuery(sectionId, highlights) {
   return async (dispatch) => {
-    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
 
     try {
@@ -168,6 +170,25 @@ export function publishCourseSectionQuery(sectionId) {
 
     try {
       await publishCourseSection(sectionId).then(async (result) => {
+        if (result) {
+          await dispatch(fetchCourseSectionQuery(sectionId));
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function editCourseSectionQuery(sectionId, displayName) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    try {
+      await editCourseSection(sectionId, displayName).then(async (result) => {
         if (result) {
           await dispatch(fetchCourseSectionQuery(sectionId));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));

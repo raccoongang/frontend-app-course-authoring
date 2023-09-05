@@ -111,7 +111,6 @@ StatusBar.propTypes = {
       completedCourseBestPracticesChecks: PropTypes.number.isRequired,
     }),
     highlightsEnabledForMessaging: PropTypes.bool.isRequired,
-    highlightsDocUrl: PropTypes.string.isRequired,
   }).isRequired,
 };
 
