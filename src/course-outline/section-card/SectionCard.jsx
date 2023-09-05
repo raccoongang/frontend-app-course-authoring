@@ -19,6 +19,7 @@ const SectionCard = ({
   onClickNewSubsection,
   onEditSectionSubmit,
   savingStatus,
+  onOpenDeleteModal,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const SectionCard = ({
         onClickMenuButton={handleClickMenuButton}
         onClickPublish={onOpenPublishModal}
         onClickEdit={openForm}
+        onClickDelete={onOpenDeleteModal}
         isFormOpen={isFormOpen}
         closeForm={closeForm}
         onEditSubmit={handleEditSubmit}
@@ -137,6 +139,7 @@ SectionCard.propTypes = {
   onClickNewSubsection: PropTypes.func.isRequired,
   onEditSectionSubmit: PropTypes.func.isRequired,
   savingStatus: PropTypes.string.isRequired,
+  onOpenDeleteModal: PropTypes.func.isRequired,
 };
 
 export default SectionCard;

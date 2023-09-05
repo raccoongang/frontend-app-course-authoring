@@ -74,6 +74,9 @@ const slice = createSlice({
     setCurrentSection: (state, { payload }) => {
       state.currentSection = payload;
     },
+    deleteSection: (state, { payload }) => {
+      state.sectionsList = state.sectionsList.filter(({ id }) => id !== payload);
+    },
   },
 });
 
@@ -88,6 +91,7 @@ export const {
   updateSavingStatus,
   updateSectionList,
   setCurrentSection,
+  deleteSection,
 } = slice.actions;
 
 export const {

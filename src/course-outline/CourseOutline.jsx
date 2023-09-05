@@ -27,6 +27,7 @@ import SectionCard from './section-card/SectionCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import PublishModal from './publish-modal/PublishModal';
+import DeleteModal from './delete-modal/DeleteModal';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
 
@@ -48,9 +49,12 @@ const CourseOutline = ({ courseId }) => {
     isDisabledReindexButton,
     isHighlightsModalOpen,
     isPublishModalOpen,
+    isDeleteModalOpen,
     closeHighlightsModal,
     closePublishModal,
+    closeDeleteModal,
     openPublishModal,
+    openDeleteModal,
     headerNavigationsActions,
     openEnableHighlightsModal,
     closeEnableHighlightsModal,
@@ -60,6 +64,7 @@ const CourseOutline = ({ courseId }) => {
     handleHighlightsFormSubmit,
     handlePublishSectionSubmit,
     handleEditSectionSubmit,
+    handleDeleteSectionSubmit,
   } = useCourseOutline({ courseId });
 
   const {
@@ -139,6 +144,7 @@ const CourseOutline = ({ courseId }) => {
                           savingStatus={savingStatus}
                           onOpenHighlightsModal={handleOpenHighlightsModal}
                           onOpenPublishModal={openPublishModal}
+                          onOpenDeleteModal={openDeleteModal}
                           onEditSectionSubmit={handleEditSectionSubmit}
                           // TODO add handler in Add new subsection feature
                           onClickNewSubsection={() => ({})}
@@ -171,6 +177,11 @@ const CourseOutline = ({ courseId }) => {
           isOpen={isPublishModalOpen}
           onClose={closePublishModal}
           onPublishSubmit={handlePublishSectionSubmit}
+        />
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          close={closeDeleteModal}
+          onDeleteSubmit={handleDeleteSectionSubmit}
         />
       </Container>
       <div className="alert-toast">

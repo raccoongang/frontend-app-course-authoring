@@ -16,6 +16,7 @@ import {
   getCurrentSection,
 } from './data/selectors';
 import {
+  deleteCourseSectionQuery,
   editCourseSectionQuery,
   enableCourseHighlightsEmailsQuery,
   fetchCourseBestPracticesQuery,
@@ -43,6 +44,7 @@ const useCourseOutline = ({ courseId }) => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [isHighlightsModalOpen, openHighlightsModal, closeHighlightsModal] = useToggle(false);
   const [isPublishModalOpen, openPublishModal, closePublishModal] = useToggle(false);
+  const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
 
   const headerNavigationsActions = {
     handleNewSection: () => {
@@ -97,6 +99,11 @@ const useCourseOutline = ({ courseId }) => {
     dispatch(editCourseSectionQuery(sectionId, displayName));
   };
 
+  const handleDeleteSectionSubmit = () => {
+    dispatch(deleteCourseSectionQuery(currentSection.id));
+    closeDeleteModal();
+  };
+
   useEffect(() => {
     dispatch(fetchCourseOutlineIndexQuery(courseId));
     dispatch(fetchCourseBestPracticesQuery({ courseId }));
@@ -140,6 +147,10 @@ const useCourseOutline = ({ courseId }) => {
     isHighlightsModalOpen,
     closeHighlightsModal,
     courseName: courseStructure?.displayName,
+    isDeleteModalOpen,
+    closeDeleteModal,
+    openDeleteModal,
+    handleDeleteSectionSubmit,
   };
 };
 
