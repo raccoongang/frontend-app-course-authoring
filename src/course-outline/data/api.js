@@ -112,7 +112,6 @@ export async function restartIndexingOnCourse(reindexLink) {
 export async function getCourseSection(sectionId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionApiUrl(sectionId));
-
   return camelCaseObject(data);
 }
 

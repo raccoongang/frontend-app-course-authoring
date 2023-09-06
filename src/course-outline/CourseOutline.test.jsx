@@ -88,6 +88,9 @@ describe('<CourseOutline />', () => {
   });
 
   it('should expand and collapse subsections, after click on subheader buttons', async () => {
+    axiosMock
+      .onGet(getCourseOutlineIndexApiUrl(courseId))
+      .reply(200, courseOutlineIndexMock);
     const { queryAllByTestId, getByText } = render(<RootWrapper />);
 
     await waitFor(() => {
