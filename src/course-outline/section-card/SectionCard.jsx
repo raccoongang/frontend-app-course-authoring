@@ -21,11 +21,16 @@ const SectionCard = ({
   savingStatus,
   onOpenDeleteModal,
   onDuplicateSubmit,
+  isSectionsExpanded,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(isSectionsExpanded);
   const [isFormOpen, openForm, closeForm] = useToggle(false);
+
+  useEffect(() => {
+    setIsExpanded(isSectionsExpanded);
+  }, [isSectionsExpanded]);
 
   const {
     id,
@@ -99,8 +104,8 @@ const SectionCard = ({
           </Button>
         </div>
       </div>
-      {isExpanded && children && (
-        <div className="section-card__subsections" data-testid="section-card__subsections">
+      {isExpanded && (
+        <div data-testid="section-card__subsections" className="section-card__subsections">
           {children}
         </div>
       )}
@@ -143,6 +148,7 @@ SectionCard.propTypes = {
   savingStatus: PropTypes.string.isRequired,
   onOpenDeleteModal: PropTypes.func.isRequired,
   onDuplicateSubmit: PropTypes.func.isRequired,
+  isSectionsExpanded: PropTypes.bool.isRequired,
 };
 
 export default SectionCard;
