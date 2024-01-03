@@ -29,17 +29,17 @@ const useCourseUnit = ({ courseId, blockId }) => {
 
   const unitTitle = courseUnit.metadata?.displayName || '';
 
-  const breadcrumbsData = {
-    section: {
-      id: courseUnit?.ancestorInfo[1]?.id,
-      // displayName: courseUnit.ancestorInfo[1]?.displayName,
-      // dropdown: sectionsList
-    },
-    subsection: {
-      id: courseUnit?.ancestorInfo[0]?.id,
-      // displayName: courseUnit.ancestorInfo[0]?.displayName,
-    },
-  };
+  // const breadcrumbsData = {
+  //   section: {
+  //     id: courseUnit?.ancestorInfo[1]?.id,
+  //     // displayName: courseUnit.ancestorInfo[1]?.displayName,
+  //     // dropdown: sectionsList
+  //   },
+  //   subsection: {
+  //     id: courseUnit?.ancestorInfo[0]?.id,
+  //     // displayName: courseUnit.ancestorInfo[0]?.displayName,
+  //   },
+  // };
 
   const headerNavigationsActions = {
     handleViewLive: () => {
@@ -82,7 +82,7 @@ const useCourseUnit = ({ courseId, blockId }) => {
     headerNavigationsActions,
     handleTitleEdit,
     handleTitleEditSubmit,
-    breadcrumbsData,
+    // breadcrumbsData,
   };
 };
 
