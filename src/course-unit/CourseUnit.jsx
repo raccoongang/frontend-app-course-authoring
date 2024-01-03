@@ -7,32 +7,34 @@ import { Container, Layout } from '@edx/paragon';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
 
 import { RequestStatus } from '../data/constants';
-import PageSubHeader from './page-sub-header/PageSubHeader';
 import getPageHeadTitle from '../generic/utils';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 
+import HeaderTitle from './header-title/HeaderTitle';
+import Breadcrumbs from './breadcrumbs/Breadcrumbs';
+import HeaderNavigations from './header-navigations/HeaderNavigations';
+import SubHeader from '../generic/sub-header/SubHeader';
+
 import { useCourseUnit } from './hooks';
 import messages from './messages';
 import './CourseUnit.scss';
-
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
   const intl = useIntl();
   const {
     isLoading,
-    breadcrumbsData,
     unitTitle,
     savingStatus,
-    isTitleFormOpen,
+    isTitleEditFormOpen,
     isInternetConnectionAlertFailed,
     handleTitleEditSubmit,
     headerNavigationsActions,
     handleTitleEdit,
     handleInternetConnectionFailed,
-  } = useCourseUnit({ intl, courseId, blockId });
+  } = useCourseUnit({ courseId, blockId });
 
   document.title = getPageHeadTitle('', unitTitle);
 
@@ -53,14 +55,25 @@ const CourseUnit = ({ courseId }) => {
           <ErrorAlert hideHeading isError={savingStatus === RequestStatus.FAILED}>
             {intl.formatMessage(messages.alertFailedGeneric, { actionName: 'save', type: 'changes' })}
           </ErrorAlert>
-          <PageSubHeader
-            courseId={courseId}
-            breadcrumbsData={breadcrumbsData}
-            unitTitle={unitTitle}
-            isTitleFormOpen={isTitleFormOpen}
-            handleTitleEdit={handleTitleEdit}
-            handleTitleEditSubmit={handleTitleEditSubmit}
-            headerNavigationsActions={headerNavigationsActions}
+          <SubHeader
+            title={(
+              <HeaderTitle
+                unitTitle={unitTitle}
+                isTitleEditFormOpen={isTitleEditFormOpen}
+                handleTitleEdit={handleTitleEdit}
+                handleTitleEditSubmit={handleTitleEditSubmit}
+              />
+            )}
+            subtitle={(
+              <Breadcrumbs
+                courseId={courseId}
+              />
+            )}
+            headerActions={(
+              <HeaderNavigations
+                headerNavigationsActions={headerNavigationsActions}
+              />
+            )}
           />
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}
@@ -69,9 +82,8 @@ const CourseUnit = ({ courseId }) => {
             xs={[{ span: 9 }, { span: 3 }]}
             xl={[{ span: 9 }, { span: 3 }]}
           >
-            <Layout.Element>
-
-            </Layout.Element>
+            <Layout.Element />
+            <Layout.Element />
           </Layout>
         </section>
       </Container>

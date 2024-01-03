@@ -1,12 +1,22 @@
+// @ts-check
 import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
-
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 
+/**
+ * Get course unit API url
+ * @param {string} itemId
+ * @returns {`${string}/xblock/container/${string}`}
+ */
 export const getCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/container/${itemId}`;
 
-export const setCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${itemId}`;
+/**
+ * Get XBlock base API url
+ * @param {string} itemId
+ * @returns {`${string}/xblock/${string}`}
+ */
+export const getXBlockBaseApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${itemId}`;
 
 /**
  * Get course unit.
@@ -28,7 +38,7 @@ export async function getCourseUnit(unitId) {
  */
 export async function editUnitDisplayName(unitId, displayName) {
   const { data } = await getAuthenticatedHttpClient()
-    .post(setCourseUnitApiUrl(unitId), {
+    .post(getXBlockBaseApiUrl(unitId), {
       metadata: {
         display_name: displayName,
       },

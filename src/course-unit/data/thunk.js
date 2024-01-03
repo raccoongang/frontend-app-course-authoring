@@ -8,7 +8,7 @@ import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
 import {
   hideProcessingNotification,
-  showProcessingNotification
+  showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
 
 
@@ -45,7 +45,6 @@ export function editCourseItemQuery(itemId, displayName) {
     } catch (error) {
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
-
     }
   };
 }

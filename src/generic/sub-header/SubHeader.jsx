@@ -16,7 +16,7 @@ const SubHeader = ({
   <div className={`${!hideBorder && 'border-bottom border-light-400'} mb-3`}>
     <header className="sub-header">
       <h2 className="sub-header-title">
-        <small className="sub-header-title-subtitle">{subtitle}</small>
+        <div className="sub-header-title-subtitle">{subtitle}</div>
         {title}
         {titleActions && (
           <ActionRow className="ml-auto mt-2 justify-content-start">
@@ -52,8 +52,14 @@ SubHeader.defaultProps = {
   withSubHeaderContent: true,
 };
 SubHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string,
+  ]).isRequired,
+  subtitle: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string,
+  ]),
   contentTitle: PropTypes.string,
   description: PropTypes.string,
   instruction: PropTypes.oneOfType([

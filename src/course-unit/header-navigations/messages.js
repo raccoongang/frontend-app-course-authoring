@@ -9,14 +9,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.button.preview',
     defaultMessage: 'Preview',
   },
-  altButtonEdit: {
-    id: 'course-authoring.course-unit.heading.button.edit.alt',
-    defaultMessage: 'Edit',
-  },
-  altButtonSettings: {
-    id: 'course-authoring.course-unit.heading.button.Settings.alt',
-    defaultMessage: 'Settings',
-  },
 });
 
 export default messages;
