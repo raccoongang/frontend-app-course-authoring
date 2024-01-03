@@ -19,6 +19,12 @@ import { CourseUnit } from './course-unit';
 import CourseExportPage from './export-page/CourseExportPage';
 import CourseImportPage from './import-page/CourseImportPage';
 
+const COURSEWARE = [
+  '/container/:blockId/:sequenceId/:unitId',
+  '/container/:blockId/:sequenceId',
+  '/container/:courseId',
+];
+
 /**
  * As of this writing, these routes are mounted at a path prefixed with the following:
  *
@@ -69,10 +75,12 @@ const CourseAuthoringRoutes = () => {
           path="custom-pages/*"
           element={<PageWrap><CustomPages courseId={courseId} /></PageWrap>}
         />
-        <Route
-          path="/container/:blockId"
-          element={process.env.ENABLE_UNIT_PAGE === 'true' ? <PageWrap><CourseUnit courseId={courseId} /></PageWrap> : null}
-        />
+        {COURSEWARE.map((route) => (
+          <Route
+            path={route}
+            element={process.env.ENABLE_UNIT_PAGE === 'true' ? <PageWrap><CourseUnit courseId={courseId} /></PageWrap> : null}
+          />
+        ))}
         <Route
           path="editor/course-videos/:blockId"
           element={process.env.ENABLE_NEW_EDITOR_PAGES === 'true' ? <PageWrap><VideoSelectorContainer courseId={courseId} /></PageWrap> : null}

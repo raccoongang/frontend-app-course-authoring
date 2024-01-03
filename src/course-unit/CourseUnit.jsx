@@ -11,16 +11,15 @@ import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
-import HeaderTitle from './header-title/HeaderTitle';
-import Breadcrumbs from './breadcrumbs/Breadcrumbs';
-import HeaderNavigations from './header-navigations/HeaderNavigations';
+import Sequence from './course-sequence';
+
 import { useCourseUnit } from './hooks';
 import messages from './messages';
 
 import './CourseUnit.scss';
 
 const CourseUnit = ({ courseId }) => {
-  const { blockId } = useParams();
+  const { sequenceId, blockId } = useParams();
   const intl = useIntl();
   const {
     isLoading,
@@ -33,13 +32,21 @@ const CourseUnit = ({ courseId }) => {
     handleTitleEdit,
     handleInternetConnectionFailed,
   } = useCourseUnit({ courseId, blockId });
-
+  // console.log('blockId', blockId);
   document.title = getPageHeadTitle('', unitTitle);
 
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
+
+  const handleUnitNavigationClick = () => {
+    console.log('handleUnitNavigationClick');
+  };
+
+  const handleNextSequenceClick = () => {};
+
+  const handlePreviousSequenceClick = () => {};
 
   if (isLoading) {
     return null;
@@ -73,6 +80,14 @@ const CourseUnit = ({ courseId }) => {
               />
             )}
           />
+          <Sequence
+            courseId={courseId}
+            sequenceId={sequenceId}
+            unitId={blockId}
+            unitNavigationHandler={handleUnitNavigationClick}
+            nextSequenceHandler={handleNextSequenceClick}
+            previousSequenceHandler={handlePreviousSequenceClick}
+          />
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}
             md={[{ span: 9 }, { span: 3 }]}
@@ -80,7 +95,6 @@ const CourseUnit = ({ courseId }) => {
             xs={[{ span: 9 }, { span: 3 }]}
             xl={[{ span: 9 }, { span: 3 }]}
           >
-            <Layout.Element />
             <Layout.Element />
           </Layout>
         </section>
