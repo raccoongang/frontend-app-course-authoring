@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import {
   act, render, waitFor, fireEvent,
 } from '@testing-library/react';
@@ -24,6 +23,7 @@ import { executeThunk } from '../utils';
 import CourseUnit from './CourseUnit';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
+import { getUnitPreviewPath, getUnitViewLivePath } from './utils';
 
 let axiosMock;
 let store;
@@ -89,12 +89,14 @@ describe('<CourseUnit />', () => {
       const viewLiveButton = getByRole('button', { name: headerNavigationsMessages.viewLiveButton.defaultMessage });
       userEvent.click(viewLiveButton);
       expect(window.open).toHaveBeenCalled();
-      expect(window.open).toHaveBeenCalledWith(`${getConfig().LMS_BASE_URL}/courses/${courseId}/jump_to/${blockId}`, '_blank');
+      const VIEW_LIVE_LINK = getConfig().LMS_BASE_URL + getUnitViewLivePath(courseId, blockId);
+      expect(window.open).toHaveBeenCalledWith(VIEW_LIVE_LINK, '_blank');
 
       const previewButton = getByRole('button', { name: headerNavigationsMessages.previewButton.defaultMessage });
       userEvent.click(previewButton);
       expect(window.open).toHaveBeenCalled();
-      expect(window.open).toHaveBeenCalledWith(`${getConfig().PREVIEW_BASE_URL}/courses/${courseId}/courseware/interactive_demonstrations/${sectionId}/1?activate_block_id=${blockId}`, '_blank');
+      const PREVIEW_LINK = getConfig().PREVIEW_BASE_URL + getUnitPreviewPath(courseId, sectionId, blockId);
+      expect(window.open).toHaveBeenCalledWith(PREVIEW_LINK, '_blank');
     });
 
     window.open = open;

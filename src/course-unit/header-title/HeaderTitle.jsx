@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form, IconButton } from '@edx/paragon';
@@ -51,8 +51,7 @@ const HeaderTitle = ({
         alt={intl.formatMessage(messages.altButtonSettings)}
         className="flex-shrink-0"
         iconAs={SettingsIcon}
-        onClick={() => {
-        }}
+        onClick={() => {}}
       />
     </div>
   );

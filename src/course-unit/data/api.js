@@ -4,18 +4,8 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 
-/**
- * Get course unit API url
- * @param {string} itemId
- * @returns {`${string}/xblock/container/${string}`}
- */
 export const getCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/container/${itemId}`;
 
-/**
- * Get XBlock base API url
- * @param {string} itemId
- * @returns {`${string}/xblock/${string}`}
- */
 export const getXBlockBaseApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${itemId}`;
 
 /**
@@ -23,7 +13,7 @@ export const getXBlockBaseApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${item
  * @param {string} unitId
  * @returns {Promise<Object>}
  */
-export async function getCourseUnit(unitId) {
+export async function getCourseUnitData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseUnitApiUrl(unitId));
 
@@ -31,7 +21,7 @@ export async function getCourseUnit(unitId) {
 }
 
 /**
- * Edit course unit.
+ * Edit course unit display name.
  * @param {string} unitId
  * @param {string} displayName
  * @returns {Promise<Object>}

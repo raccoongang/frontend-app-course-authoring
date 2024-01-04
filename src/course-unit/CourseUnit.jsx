@@ -1,24 +1,22 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { Container, Layout } from '@edx/paragon';
+import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
 
+import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
+import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
-import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
-
 import HeaderTitle from './header-title/HeaderTitle';
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
-import SubHeader from '../generic/sub-header/SubHeader';
-
 import { useCourseUnit } from './hooks';
 import messages from './messages';
+
 import './CourseUnit.scss';
 
 const CourseUnit = ({ courseId }) => {
@@ -56,6 +54,7 @@ const CourseUnit = ({ courseId }) => {
             {intl.formatMessage(messages.alertFailedGeneric, { actionName: 'save', type: 'changes' })}
           </ErrorAlert>
           <SubHeader
+            hideBorder
             title={(
               <HeaderTitle
                 unitTitle={unitTitle}
@@ -64,7 +63,7 @@ const CourseUnit = ({ courseId }) => {
                 handleTitleEditSubmit={handleTitleEditSubmit}
               />
             )}
-            subtitle={(
+            breadcrumbs={(
               <Breadcrumbs
                 courseId={courseId}
               />

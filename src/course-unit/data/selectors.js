@@ -1,4 +1,4 @@
-export const getCourseUnit = (state) => state.courseUnit.unit;
+export const getCourseUnitData = (state) => state.courseUnit.unit;
 
 export const getSavingStatus = (state) => state.courseUnit.savingStatus;
 

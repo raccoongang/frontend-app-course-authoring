@@ -2,23 +2,24 @@ import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppContext } from '@edx/frontend-platform/react';
 
+import { RequestStatus } from '../data/constants';
 import {
   fetchCourseUnitQuery,
   editCourseItemQuery,
 } from './data/thunk';
 import {
-  getCourseUnit,
+  getCourseUnitData,
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
 import { updateSavingStatus } from './data/slice';
-import { RequestStatus } from '../data/constants';
+import { getUnitViewLivePath, getUnitPreviewPath } from './utils';
 
 const useCourseUnit = ({ courseId, blockId }) => {
   const dispatch = useDispatch();
 
   const { config } = useContext(AppContext);
-  const courseUnit = useSelector(getCourseUnit);
+  const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
 
@@ -28,11 +29,11 @@ const useCourseUnit = ({ courseId, blockId }) => {
 
   const headerNavigationsActions = {
     handleViewLive: () => {
-      window.open(`${config.LMS_BASE_URL}/courses/${courseId}/jump_to/${blockId}`, '_blank');
+      window.open(config.LMS_BASE_URL + getUnitViewLivePath(courseId, blockId), '_blank');
     },
     handlePreview: () => {
       const sectionId = courseUnit.ancestorInfo?.ancestors[0]?.id.split('@').pop();
-      window.open(`${config.PREVIEW_BASE_URL}/courses/${courseId}/courseware/interactive_demonstrations/${sectionId}/1?activate_block_id=${blockId}`, '_blank');
+      window.open(config.PREVIEW_BASE_URL + getUnitPreviewPath(courseId, sectionId, blockId), '_blank');
     },
   };
 

@@ -6,11 +6,11 @@ const messages = defineMessages({
     defaultMessage: 'Edit',
   },
   ariaLabelButtonEdit: {
-    id: 'course-authoring.course-unit.heading.button.Edit.ariaLabel',
+    id: 'course-authoring.course-unit.heading.button.edit.aria-label',
     defaultMessage: 'Edit field',
   },
   altButtonSettings: {
-    id: 'course-authoring.course-unit.heading.button.Settings.alt',
+    id: 'course-authoring.course-unit.heading.button.settings.alt',
     defaultMessage: 'Settings',
   },
 });

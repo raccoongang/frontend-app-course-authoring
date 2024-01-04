@@ -1,4 +1,3 @@
-import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
