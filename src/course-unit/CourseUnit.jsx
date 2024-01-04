@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { Container, Layout } from '@edx/paragon';
@@ -13,6 +13,7 @@ import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import Sequence from './course-sequence';
+import { fetchSequence, fetchCourse } from './data/thunk';
 
 import { useCourseUnit } from './hooks';
 import messages from './messages';
@@ -21,6 +22,7 @@ import './CourseUnit.scss';
 const CourseUnit = ({ courseId }) => {
   const { sequenceId, blockId } = useParams();
   const intl = useIntl();
+  const dispatch = useDispatch();
   const {
     isLoading,
     breadcrumbsData,
@@ -33,7 +35,7 @@ const CourseUnit = ({ courseId }) => {
     handleTitleEdit,
     handleInternetConnectionFailed,
   } = useCourseUnit({ intl, courseId, blockId });
-  // console.log('blockId', blockId);
+
   document.title = getPageHeadTitle('', unitTitle);
 
   const {
@@ -41,13 +43,10 @@ const CourseUnit = ({ courseId }) => {
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
 
-  const handleUnitNavigationClick = () => {
-    console.log('handleUnitNavigationClick');
-  };
-
-  const handleNextSequenceClick = () => {};
-
-  const handlePreviousSequenceClick = () => {};
+  useEffect(() => {
+    dispatch(fetchSequence(sequenceId));
+    dispatch(fetchCourse(courseId));
+  }, []);
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -74,9 +73,6 @@ const CourseUnit = ({ courseId }) => {
             courseId={courseId}
             sequenceId={sequenceId}
             unitId={blockId}
-            unitNavigationHandler={handleUnitNavigationClick}
-            nextSequenceHandler={handleNextSequenceClick}
-            previousSequenceHandler={handlePreviousSequenceClick}
           />
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}
