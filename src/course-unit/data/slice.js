@@ -11,6 +11,7 @@ const slice = createSlice({
       fetchUnitLoadingStatus: RequestStatus.IN_PROGRESS,
     },
     unit: {},
+    courseSectionVertical: {},
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -56,6 +57,9 @@ const slice = createSlice({
       state.courseId = payload.courseId;
       state.courseStatus = 'DENIED';
     },
+    fetchCourseSectionVerticalDataSuccess: (state, { payload }) => {
+      state.courseSectionVertical = payload;
+    },
   },
 });
 
@@ -71,6 +75,7 @@ export const {
   fetchCourseSuccess,
   fetchCourseFailure,
   fetchCourseDenied,
+  fetchCourseSectionVerticalDataSuccess,
 } = slice.actions;
 
 export const {

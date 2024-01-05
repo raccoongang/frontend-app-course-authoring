@@ -1,10 +1,17 @@
+import { logError, logInfo } from '@edx/frontend-platform/logging';
 import {
   hideProcessingNotification,
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
 import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
-import { getCourseUnitData, editUnitDisplayName } from './api';
+import {
+  getCourseUnitData,
+  editUnitDisplayName,
+  getSequenceMetadata,
+  getCourseMetadata,
+  getLearningSequencesOutline, getCourseHomeCourseMetadata, getCourseSectionVerticalData,
+} from './api';
 import {
   updateLoadingCourseUnitStatus,
   fetchCourseItemSuccess,
@@ -15,7 +22,7 @@ import {
   fetchCourseRequest,
   fetchCourseSuccess,
   fetchCourseDenied,
-  fetchCourseFailure,
+  fetchCourseFailure, fetchCourseSectionVerticalDataSuccess,
 } from './slice';
 import {
   addModel, updateModel, updateModels, updateModelsMap, addModelsMap,
@@ -28,6 +35,8 @@ export function fetchCourseUnitQuery(courseId) {
     try {
       const courseUnit = await getCourseUnitData(courseId);
       dispatch(fetchCourseItemSuccess(courseUnit));
+      const courseSectionVerticalData = await getCourseSectionVerticalData(courseId);
+      dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
       dispatch(updateLoadingCourseUnitStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {

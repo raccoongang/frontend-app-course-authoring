@@ -1,45 +1,62 @@
-import { Stack, Button } from '@edx/paragon';
+import { Button } from '@edx/paragon';
 import { Plus } from '@edx/paragon/icons';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import { useIndexOfLastVisibleChild } from '../hooks';
+import SequenceNavigationDropdown from './SequenceNavigationDropdown';
+
 import UnitButton from './UnitButton';
-/* eslint-disable react/prop-types */
-const SequenceNavigationTabs = ({
-  unitIds,
-  unitId,
-  sequenceId,
-  courseId,
-  onNavigate,
-}) => {
-  // console.log('unitId', unitId);
-  // console.log('unitIds', unitIds);
+
+const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
+  const [
+    indexOfLastVisibleChild,
+    containerRef,
+    invisibleStyle,
+  ] = useIndexOfLastVisibleChild();
+  const shouldDisplayDropdown = indexOfLastVisibleChild === -1;
 
   return (
-    <Stack className="sequence-nav-tabs w-100" direction="horizontal" gap={0}>
-      {unitIds.map(buttonUnitId => (
-        <UnitButton
-          key={buttonUnitId}
-          isActive={unitId === buttonUnitId}
-          onClick={onNavigate}
-          unitId={buttonUnitId}
+    <div style={{ flexBasis: '100%', minWidth: 0 }}>
+      <div className="sequence-navigation-tabs-container" ref={containerRef}>
+        <div
+          className="sequence-navigation-tabs d-flex flex-grow-1"
+          style={shouldDisplayDropdown ? invisibleStyle : null}
+        >
+          {unitIds?.map(buttonUnitId => (
+            <UnitButton
+              key={buttonUnitId}
+              unitId={buttonUnitId}
+              isActive={unitId === buttonUnitId}
+              onClick={onNavigate}
+            />
+          ))}
+          <Button
+            variant="outline-primary"
+            className="disabled new-unit-btn"
+            iconBefore={Plus}
+            as={Link}
+            to="/"
+          >
+            New unit
+          </Button>
+        </div>
+      </div>
+      {shouldDisplayDropdown && (
+        <SequenceNavigationDropdown
+          unitId={unitId}
+          onNavigate={onNavigate}
+          unitIds={unitIds}
         />
-      ))}
-      <Button
-        variant="outline-primary"
-        className="disabled w-100"
-        iconBefore={Plus}
-        as={Link}
-        to="/"
-      >
-        New unit
-      </Button>
-    </Stack>
+      )}
+    </div>
   );
 };
 
 SequenceNavigationTabs.propTypes = {
-  unitIds: PropTypes.array.isRequired,
+  unitId: PropTypes.string.isRequired,
+  onNavigate: PropTypes.func.isRequired,
+  unitIds: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default SequenceNavigationTabs;
