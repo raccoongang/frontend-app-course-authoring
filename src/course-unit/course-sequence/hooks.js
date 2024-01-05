@@ -1,43 +1,31 @@
 import { useSelector } from 'react-redux';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { useWindowSize } from '@edx/paragon';
+
 import { useModel } from '../../generic/model-store';
 import { sequenceIdsSelector } from '../data/selectors';
 
-// eslint-disable-next-line import/prefer-default-export
 export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) {
-  // const sequenceIds = [
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@edx_introduction',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@19a30717eff543078a5d94ae9d6c18a5',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@basic_questions',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@simulations',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@graded_simulations',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@175e76c4951144a29d46211361266e0e',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@48ecb924d7fe4b66a230137626bfa93e',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@dbe8fc027bcb4fe9afb744d2e8415855',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@6ab9c442501d472c8ed200e367b4edfa',
-  //   'block-v1:edX+DemoX+Demo_Course+type@sequential+block@workflow',
-  // ];
-
   const sequenceIds = useSelector(sequenceIdsSelector);
-  console.log('sequenceIds >>>>>>>>>>>>>>>>>>>>>>>', sequenceIds);
   const sequence = useModel('sequences', currentSequenceId);
   const { courseId, status } = useSelector(state => state.courseDetail);
   const courseStatus = status;
   const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
+  const { nextUrl, prevUrl } = useSelector(state => state.courseUnit.courseSectionVertical);
 
   // If we don't know the sequence and unit yet, then assume no.
   if (courseStatus !== 'successful' || sequenceStatus !== 'LOADED' || !currentSequenceId || !currentUnitId) {
     return { isFirstUnit: false, isLastUnit: false };
   }
 
-  const sequenceIndex = sequenceIds.indexOf(currentSequenceId);
-  // console.log('HELLOOOOOOOOOO', sequenceIndex);
-  const unitIndex = sequence.unitIds.indexOf(currentUnitId);
+  const sequenceIndex = sequenceIds?.indexOf(currentSequenceId);
+  const unitIndex = sequence.unitIds?.indexOf(currentUnitId);
 
   const isFirstSequence = sequenceIndex === 0;
   const isFirstUnitInSequence = unitIndex === 0;
   const isFirstUnit = isFirstSequence && isFirstUnitInSequence;
   const isLastSequence = sequenceIndex === sequenceIds.length - 1;
-  const isLastUnitInSequence = unitIndex === sequence.unitIds.length - 1;
+  const isLastUnitInSequence = unitIndex === sequence.unitIds?.length - 1;
   const isLastUnit = isLastSequence && isLastUnitInSequence;
 
   const nextSequenceId = sequenceIndex < sequenceIds.length - 1 ? sequenceIds[sequenceIndex + 1] : null;
@@ -48,11 +36,12 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
     nextLink = `/course/${courseId}/course-end`;
   } else {
     const nextIndex = unitIndex + 1;
-    if (nextIndex < sequence.unitIds.length) {
+    if (nextIndex < sequence.unitIds?.length) {
       const nextUnitId = sequence.unitIds[nextIndex];
       nextLink = `/course/${courseId}/container/${nextUnitId}/${currentSequenceId}`;
     } else if (nextSequenceId) {
-      nextLink = `/course/${courseId}/container/${nextSequenceId}/first`;
+      const NEXT_URL_FROM_BACKEND = decodeURIComponent(nextUrl);
+      nextLink = `/course/${courseId}${NEXT_URL_FROM_BACKEND}/${nextSequenceId}`;
     }
   }
 
@@ -62,10 +51,86 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
     const previousUnitId = sequence.unitIds[previousIndex];
     previousLink = `/course/${courseId}/container/${previousUnitId}/${currentSequenceId}`;
   } else if (previousSequenceId) {
-    previousLink = `/course/${courseId}/${previousSequenceId}/last`;
+    const PREV_URL_FROM_BACKEND = decodeURIComponent(prevUrl);
+    previousLink = `/course/${courseId}${PREV_URL_FROM_BACKEND}/${previousSequenceId}`;
   }
 
   return {
     isFirstUnit, isLastUnit, nextLink, previousLink,
   };
+}
+
+const invisibleStyle = {
+  position: 'absolute',
+  left: 0,
+  pointerEvents: 'none',
+  visibility: 'hidden',
+};
+
+/**
+ * This hook will find the index of the last child of a containing element
+ * that fits within its bounding rectangle. This is done by summing the widths
+ * of the children until they exceed the width of the container.
+ *
+ * The hook returns an array containing:
+ * [indexOfLastVisibleChild, containerElementRef, invisibleStyle, overflowElementRef]
+ *
+ * indexOfLastVisibleChild - the index of the last visible child
+ * containerElementRef - a ref to be added to the containing html node
+ * invisibleStyle - a set of styles to be applied to child of the containing node
+ *    if it needs to be hidden. These styles remove the element visually, from
+ *    screen readers, and from normal layout flow. But, importantly, these styles
+ *    preserve the width of the element, so that future width calculations will
+ *    still be accurate.
+ * overflowElementRef - a ref to be added to an html node inside the container
+ *    that is likely to be used to contain a "More" type dropdown or other
+ *    mechanism to reveal hidden children. The width of this element is always
+ *    included when determining which children will fit or not. Usage of this ref
+ *    is optional.
+ */
+export function useIndexOfLastVisibleChild() {
+  const containerElementRef = useRef(null);
+  const overflowElementRef = useRef(null);
+  const containingRectRef = useRef({});
+  const [indexOfLastVisibleChild, setIndexOfLastVisibleChild] = useState(-1);
+  const windowSize = useWindowSize();
+
+  useLayoutEffect(() => {
+    const containingRect = containerElementRef.current.getBoundingClientRect();
+
+    // No-op if the width is unchanged.
+    // (Assumes tabs themselves don't change count or width).
+    if (!containingRect.width === containingRectRef.current.width) {
+      return;
+    }
+    // Update for future comparison
+    containingRectRef.current = containingRect;
+
+    // Get array of child nodes from NodeList form
+    const childNodesArr = Array.prototype.slice.call(containerElementRef.current.children);
+    const { nextIndexOfLastVisibleChild } = childNodesArr
+      // filter out the overflow element
+      .filter(childNode => childNode !== overflowElementRef.current)
+      // sum the widths to find the last visible element's index
+      .reduce((acc, childNode, index) => {
+        // use floor to prevent rounding errors
+        acc.sumWidth += Math.floor(childNode.getBoundingClientRect().width);
+        if (acc.sumWidth <= containingRect.width) {
+          acc.nextIndexOfLastVisibleChild = index;
+        }
+        return acc;
+      }, {
+        // Include the overflow element's width to begin with. Doing this means
+        // sometimes we'll show a dropdown with one item in it when it would fit,
+        // but allowing this case dramatically simplifies the calculations we need
+        // to do above.
+        sumWidth: overflowElementRef.current ? overflowElementRef.current.getBoundingClientRect().width : 0,
+        nextIndexOfLastVisibleChild: -1,
+      });
+
+    setIndexOfLastVisibleChild(nextIndexOfLastVisibleChild);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [windowSize, containerElementRef.current]);
+
+  return [indexOfLastVisibleChild, containerElementRef, invisibleStyle, overflowElementRef];
 }

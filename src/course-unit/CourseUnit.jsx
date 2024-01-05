@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Layout } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
@@ -17,6 +17,11 @@ import { useCourseUnit } from './hooks';
 import messages from './messages';
 
 import './CourseUnit.scss';
+import HeaderTitle from './header-title/HeaderTitle';
+import Breadcrumbs from './breadcrumbs/Breadcrumbs';
+import HeaderNavigations from './header-navigations/HeaderNavigations';
+import { useEffect } from 'react';
+import { fetchCourse, fetchSequence } from './data/thunk';
 
 const CourseUnit = ({ courseId }) => {
   const { sequenceId, blockId } = useParams();
@@ -39,6 +44,11 @@ const CourseUnit = ({ courseId }) => {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchSequence(sequenceId));
+    dispatch(fetchCourse(courseId));
+  }, [sequenceId]);
 
   const handleUnitNavigationClick = () => {
     console.log('handleUnitNavigationClick');

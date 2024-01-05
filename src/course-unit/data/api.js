@@ -8,6 +8,8 @@ export const getCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/contai
 
 export const getXBlockBaseApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${itemId}`;
 
+export const getCourseSectionVerticalApiUrl = (itemId) => `${getApiBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
+
 export function getTimeOffsetMillis(headerDate, requestTime, responseTime) {
   // Time offset computation should move down into the HttpClient wrapper to maintain a global time correction reference
   // Requires 'Access-Control-Expose-Headers: Date' on the server response per https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#access-control-expose-headers
@@ -171,6 +173,18 @@ export function normalizeLearningSequencesData(learningSequencesData) {
   };
 
   return models;
+}
+
+/**
+ * Get an object containing course section vertical data.
+ * @param {string} unitId
+ * @returns {Promise<Object>}
+ */
+export async function getCourseSectionVerticalData(unitId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getCourseSectionVerticalApiUrl(unitId));
+
+  return camelCaseObject(data);
 }
 
 export async function getLearningSequencesOutline(courseId) {

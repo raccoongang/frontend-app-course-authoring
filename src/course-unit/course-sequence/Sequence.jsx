@@ -1,22 +1,12 @@
-import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { ButtonGroup, Button } from '@edx/paragon';
-import { ChevronLeft, ChevronRight } from '@edx/paragon/icons';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
-// http://localhost:2001/course/course-v1:edX+DemoX+Demo_Course/container/block-v1:edX+DemoX+Demo_Course+type@sequential+block@edx_introduction/block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc
-
+import { useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { breakpoints, useWindowSize } from '@edx/paragon';
+import { injectIntl } from '@edx/frontend-platform/i18n';
+import SequenceNavigation from './sequence-navigation/SequenceNavigation';
 import { useModel } from '../../generic/model-store';
 
-import messages from './messages';
-import SequenceNavigationTabs from './sequence-navigation/SequenceNavigationTabs';
-import { useSequenceNavigationMetadata } from './hooks';
-import { fetchSequence, fetchCourse } from '../data/thunk';
-
 const Sequence = ({
-  intl,
   courseId,
   sequenceId,
   unitId,
@@ -24,28 +14,10 @@ const Sequence = ({
   nextSequenceHandler,
   previousSequenceHandler,
 }) => {
-  const { sequenceStatus } = useSelector(state => state.courseUnit);
-  // const course = useModel('coursewareMeta', courseId);
   const sequence = useModel('sequences', sequenceId);
-  const dispatch = useDispatch();
-  // const unit = useModel('units', unitId);
-  const globalStore = useSelector(state => state);
-  // const courseDetails = useModel('courseDetails', courseId);
-
-  const {
-    isFirstUnit, isLastUnit, nextLink, previousLink,
-  } = useSequenceNavigationMetadata(
-    sequenceId,
-    unitId,
-  );
-  // console.log('isFirstUnit', isFirstUnit);
-  // console.log('isLastUnit', isLastUnit);
-
-  useEffect(() => {
-    dispatch(fetchSequence(sequenceId));
-    dispatch(fetchCourse(courseId));
-  }, []);
-  console.log('globalStore', globalStore);
+  const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
+  const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
+  const sequenceMightBeUnit = useSelector(state => state.courseUnit.sequenceMightBeUnit);
 
   const handleNavigate = (destinationUnitId) => {
     unitNavigationHandler(destinationUnitId);
@@ -71,82 +43,55 @@ const Sequence = ({
     }
   };
 
-  const renderPreviousButton = () => {
-    const disabled = isFirstUnit;
+  const defaultContent = (
+    <div className="sequence-container d-inline-flex flex-row">
+      <div className={classNames('sequence w-100', { 'position-relative': shouldDisplayNotificationTriggerInSequence })}>
+        <SequenceNavigation
+          sequenceId={sequenceId}
+          unitId={unitId}
+          courseId={courseId}
+          nextHandler={() => {
+            handleNext();
+          }}
+          onNavigate={(destinationUnitId) => {
+            handleNavigate(destinationUnitId);
+          }}
+          previousHandler={() => {
+            handlePrevious();
+          }}
+        />
+      </div>
+    </div>
+  );
 
-    return (
-      <Button
-        className="sequence-nav-button button-prev"
-        variant={disabled ? 'brand' : 'outline-primary'}
-        iconBefore={ChevronLeft}
-        disabled={disabled}
-        onClick={() => handlePrevious()}
-        as={disabled ? undefined : Link}
-        to={disabled ? undefined : previousLink}
-      >
-        {intl.formatMessage(messages.prevBtnText)}
-      </Button>
-    );
-  };
-
-  const renderNextButton = () => {
-    const disabled = isLastUnit;
-
-    return (
-      <Button
-        className="sequence-nav-button button-next"
-        variant={disabled ? 'brand' : 'outline-primary'}
-        iconAfter={ChevronRight}
-        disabled={disabled}
-        onClick={() => handleNext()}
-        as={disabled ? undefined : Link}
-        to={disabled ? undefined : nextLink}
-      >
-        {intl.formatMessage(messages.nextBtnText)}
-      </Button>
-    );
-  };
-
-  const renderUnitButtons = () => {
-    // if (isLocked) {
-    //   return (
-    //       <UnitButton unitId={unitId} title="" contentType="lock" isActive onClick={() => {}} />
-    //   );
-    // }
-    if (sequence.unitIds.length === 0) {
-      return (
-        <div style={{ flexBasis: '100%', minWidth: 0, borderBottom: 'solid 1px #EAEAEA' }} />
-      );
+  // If sequence might be a unit, we want to keep showing a spinner - the courseware container will redirect us when
+  // it knows which sequence to actually go to.
+  const loading = sequenceStatus === 'LOADING' || (sequenceStatus === 'FAILED' && sequenceMightBeUnit);
+  if (loading) {
+    if (!sequenceId) {
+      return (<div> noContent </div>);
     }
-    return (
-      <SequenceNavigationTabs
-        unitIds={sequence.unitIds}
-        unitId={unitId}
-        sequenceId={sequenceId}
-        courseId={courseId}
-        // showCompletion={sequence.showCompletion}
-        onNavigate={(destinationUnitId) => {
-          handleNavigate(destinationUnitId);
-        }}
-      />
-    );
-  };
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
-  return sequenceStatus === 'LOADED' && (
-    <ButtonGroup
-      as="nav"
-      className="sequence-nav d-flex"
-      aria-label={intl.formatMessage(messages.sequenceNavLabelText)}
-    >
-      {renderPreviousButton()}
-      {renderUnitButtons()}
-      {renderNextButton()}
-    </ButtonGroup>
+  if (sequenceStatus === 'LOADED') {
+    return (
+      <div>
+        {defaultContent}
+      </div>
+    );
+  }
+
+  // sequence status 'failed' and any other unexpected sequence status.
+  return (
+    <p className="text-center py-5 mx-auto" style={{ maxWidth: '30em' }}>
+      failed
+    </p>
   );
 };
 
 Sequence.propTypes = {
-  intl: intlShape.isRequired,
   unitId: PropTypes.string,
   courseId: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,
