@@ -42,8 +42,7 @@ const CourseUnit = ({ courseId }) => {
   } = useSelector(getProcessingNotification);
 
   if (isLoading) {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
+    return null;
   }
 
   return (
