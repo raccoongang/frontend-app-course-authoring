@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { breakpoints, useWindowSize } from '@edx/paragon';
 import { injectIntl } from '@edx/frontend-platform/i18n';
+import React, { useEffect, useState } from 'react';
 import SequenceNavigation from './sequence-navigation/SequenceNavigation';
 import { useModel } from '../../generic/model-store';
 
@@ -17,7 +18,8 @@ const Sequence = ({
   const sequence = useModel('sequences', sequenceId);
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
   const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
-
+  const sequenceMightBeUnit = useSelector(state => state.courseUnit.sequenceMightBeUnit);
+  // console.log('sequenceStatus', sequenceStatus);
   const handleNavigate = (destinationUnitId) => {
     unitNavigationHandler(destinationUnitId);
   };
@@ -46,9 +48,9 @@ const Sequence = ({
     <div className="sequence-container d-inline-flex flex-row">
       <div className={classNames('sequence w-100', { 'position-relative': shouldDisplayNotificationTriggerInSequence })}>
         <SequenceNavigation
-          courseId={courseId}
           sequenceId={sequenceId}
           unitId={unitId}
+          courseId={courseId}
           nextHandler={() => {
             handleNext();
           }}
@@ -62,6 +64,17 @@ const Sequence = ({
       </div>
     </div>
   );
+
+  // If sequence might be a unit, we want to keep showing a spinner - the courseware container will redirect us when
+  // it knows which sequence to actually go to.
+  const loading = sequenceStatus === 'LOADING' || (sequenceStatus === 'FAILED' && sequenceMightBeUnit);
+  if (loading) {
+    if (!sequenceId) {
+      return (<div> noContent </div>);
+    }
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
   if (sequenceStatus === 'LOADED') {
     return (

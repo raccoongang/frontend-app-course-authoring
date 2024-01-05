@@ -13,7 +13,7 @@ import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import Sequence from './course-sequence';
-import { fetchSequence, fetchCourse } from './data/thunk';
+import { fetchSequence, fetchCourse, fetchCourseSectionVerticalData } from './data/thunk';
 
 import { useCourseUnit } from './hooks';
 import messages from './messages';
@@ -46,6 +46,7 @@ const CourseUnit = ({ courseId }) => {
   useEffect(() => {
     dispatch(fetchSequence(sequenceId));
     dispatch(fetchCourse(courseId));
+    // dispatch(fetchCourseSectionVerticalData(courseId));
   }, []);
 
   if (isLoading) {

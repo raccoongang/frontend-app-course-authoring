@@ -6,6 +6,7 @@ import {
   getCourseMetadata,
   getLearningSequencesOutline,
   getCourseHomeCourseMetadata,
+  getCourseSectionVerticalData,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -18,6 +19,7 @@ import {
   fetchCourseSuccess,
   fetchCourseDenied,
   fetchCourseFailure,
+  fetchCourseSectionVerticalDataSuccess,
 } from './slice';
 import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
@@ -36,6 +38,8 @@ export function fetchCourseUnitQuery(courseId) {
     try {
       const courseUnit = await getCourseUnit(courseId);
       dispatch(fetchCourseItemSuccess(courseUnit));
+      const courseSectionVerticalData = await getCourseSectionVerticalData(courseId);
+      dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
       dispatch(updateLoadingCourseUnitStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
@@ -44,6 +48,23 @@ export function fetchCourseUnitQuery(courseId) {
     }
   };
 }
+
+// export function fetchCourseSectionVerticalData(courseId) {
+//   return async (dispatch) => {
+//     dispatch(updateLoadingCourseUnitStatus({ status: RequestStatus.IN_PROGRESS }));
+//
+//     try {
+//       const courseSectionVerticalData = await getCourseSectionVerticalData(courseId);
+//       console.log('courseSectionVerticalData', courseSectionVerticalData);
+//       dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
+//       dispatch(updateLoadingCourseUnitStatus({ status: RequestStatus.SUCCESSFUL }));
+//       return true;
+//     } catch (error) {
+//       dispatch(updateLoadingCourseUnitStatus({ status: RequestStatus.FAILED }));
+//       return false;
+//     }
+//   };
+// }
 
 export function editCourseItemQuery(itemId, displayName) {
   return async (dispatch) => {

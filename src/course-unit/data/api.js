@@ -14,6 +14,7 @@ const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 export const getCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/container/${itemId}`;
 
 export const setCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${itemId}`;
+export const getCourseSectionVerticalApiUrl = (itemId) => `${getApiBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
 
 /**
  * Get course unit.
@@ -23,6 +24,18 @@ export const setCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${item
 export async function getCourseUnit(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseUnitApiUrl(unitId));
+
+  return camelCaseObject(data);
+}
+
+/**
+ * Get an object containing course section vertical data.
+ * @param {string} unitId
+ * @returns {Promise<Object>}
+ */
+export async function getCourseSectionVerticalData(unitId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getCourseSectionVerticalApiUrl(unitId));
 
   return camelCaseObject(data);
 }
@@ -98,14 +111,3 @@ export async function getCourseHomeCourseMetadata(courseId, rootSlug) {
 
   return normalizeCourseHomeCourseMetadata(data, rootSlug);
 }
-
-// const getSequenceHandlerUrl = (courseId, sequenceId) => `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler`;
-
-// export async function postSequencePosition(courseId, sequenceId, activeUnitIndex) {
-//   const { data } = await getAuthenticatedHttpClient().post(
-//     `${getSequenceHandlerUrl(courseId, sequenceId)}/goto_position`,
-//     // Position is 1-indexed on the server and 0-indexed in this app. Adjust here.
-//     { position: activeUnitIndex + 1 },
-//   );
-//   return data;
-// }

@@ -26,9 +26,9 @@ const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
           {unitIds?.map(buttonUnitId => (
             <UnitButton
               key={buttonUnitId}
+              unitId={buttonUnitId}
               isActive={unitId === buttonUnitId}
               onClick={onNavigate}
-              unitId={buttonUnitId}
             />
           ))}
           <Button

@@ -11,6 +11,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const { courseId, status } = useSelector(state => state.courseDetail);
   const courseStatus = status;
   const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
+  const { nextUrl, prevUrl } = useSelector(state => state.courseUnit.courseSectionVertical);
 
   // If we don't know the sequence and unit yet, then assume no.
   if (courseStatus !== 'successful' || sequenceStatus !== 'LOADED' || !currentSequenceId || !currentUnitId) {
@@ -39,8 +40,8 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
       const nextUnitId = sequence.unitIds[nextIndex];
       nextLink = `/course/${courseId}/container/${nextUnitId}/${currentSequenceId}`;
     } else if (nextSequenceId) {
-      const NEXT_URL_FROM_BACKEND = 'container/block-v1:edX+DemoX+Demo_Course+type@vertical+block@867dddb6f55d410caaa9c1eb9c6743ec';
-      nextLink = `/course/${courseId}/${NEXT_URL_FROM_BACKEND}/${nextSequenceId}`;
+      const NEXT_URL_FROM_BACKEND = decodeURIComponent(nextUrl);
+      nextLink = `/course/${courseId}${NEXT_URL_FROM_BACKEND}/${nextSequenceId}`;
     }
   }
 
@@ -50,8 +51,8 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
     const previousUnitId = sequence.unitIds[previousIndex];
     previousLink = `/course/${courseId}/container/${previousUnitId}/${currentSequenceId}`;
   } else if (previousSequenceId) {
-    const PREV_URL_FROM_BACKEND = 'container/block-v1:edX+DemoX+Demo_Course+type@vertical+block@b74b638511c94ec880b5ef897fe7f2c8';
-    previousLink = `/course/${courseId}/${PREV_URL_FROM_BACKEND}/${previousSequenceId}`;
+    const PREV_URL_FROM_BACKEND = decodeURIComponent(prevUrl);
+    previousLink = `/course/${courseId}${PREV_URL_FROM_BACKEND}/${previousSequenceId}`;
   }
 
   return {

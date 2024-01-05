@@ -17,22 +17,20 @@ import SequenceNavigationTabs from './SequenceNavigationTabs';
 
 const SequenceNavigation = ({
   intl,
-  courseId,
-  sequenceId,
   unitId,
-  nextHandler,
-  onNavigate,
-  previousHandler,
+  sequenceId,
   className,
+  onNavigate,
+  nextHandler,
+  previousHandler,
+  courseId,
 }) => {
   const { sequenceStatus } = useSelector(state => state.courseUnit);
   const {
     isFirstUnit, isLastUnit, nextLink, previousLink,
-  } = useSequenceNavigationMetadata(
-    sequenceId,
-    unitId,
-  );
+  } = useSequenceNavigationMetadata(sequenceId, unitId);
   const sequence = useModel('sequences', sequenceId);
+
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
 
   const renderUnitButtons = () => {
@@ -46,8 +44,6 @@ const SequenceNavigation = ({
       <SequenceNavigationTabs
         unitIds={sequence.unitIds}
         unitId={unitId}
-        sequenceId={sequenceId}
-        courseId={courseId}
         onNavigate={onNavigate}
       />
     );
