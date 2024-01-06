@@ -7,7 +7,7 @@ import { useIndexOfLastVisibleChild } from '../hooks';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
 
-const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
+const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const [
     indexOfLastVisibleChild,
     containerRef,
@@ -27,7 +27,6 @@ const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
               key={buttonUnitId}
               unitId={buttonUnitId}
               isActive={unitId === buttonUnitId}
-              onClick={onNavigate}
             />
           ))}
           {/* TODO: The functionality of the New unit button will be implemented in https://youtrack.raccoongang.com/issue/AXIMST-14 */}
@@ -45,7 +44,6 @@ const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
       {shouldDisplayDropdown && (
         <SequenceNavigationDropdown
           unitId={unitId}
-          onNavigate={onNavigate}
           unitIds={unitIds}
         />
       )}
@@ -55,7 +53,6 @@ const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
 
 SequenceNavigationTabs.propTypes = {
   unitId: PropTypes.string.isRequired,
-  onNavigate: PropTypes.func.isRequired,
   unitIds: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 

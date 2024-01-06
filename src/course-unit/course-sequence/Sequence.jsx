@@ -21,29 +21,29 @@ const Sequence = ({
   const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
   const sequenceMightBeUnit = useSelector(state => state.courseUnit.sequenceMightBeUnit);
 
-  const handleNavigate = (destinationUnitId) => {
-    unitNavigationHandler(destinationUnitId);
-  };
+  // const handleNavigate = (destinationUnitId) => {
+  //   unitNavigationHandler(destinationUnitId);
+  // };
 
-  const handleNext = () => {
-    const nextIndex = sequence.unitIds.indexOf(unitId) + 1;
-    if (nextIndex < sequence.unitIds.length) {
-      const newUnitId = sequence.unitIds[nextIndex];
-      handleNavigate(newUnitId);
-    } else {
-      nextSequenceHandler();
-    }
-  };
+  // const handleNext = () => {
+  //   const nextIndex = sequence.unitIds.indexOf(unitId) + 1;
+  //   if (nextIndex < sequence.unitIds.length) {
+  //     const newUnitId = sequence.unitIds[nextIndex];
+  //     handleNavigate(newUnitId);
+  //   } else {
+  //     nextSequenceHandler();
+  //   }
+  // };
 
-  const handlePrevious = () => {
-    const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
-    if (previousIndex >= 0) {
-      const newUnitId = sequence.unitIds[previousIndex];
-      handleNavigate(newUnitId);
-    } else {
-      previousSequenceHandler();
-    }
-  };
+  // const handlePrevious = () => {
+  //   const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
+  //   if (previousIndex >= 0) {
+  //     const newUnitId = sequence.unitIds[previousIndex];
+  //     handleNavigate(newUnitId);
+  //   } else {
+  //     previousSequenceHandler();
+  //   }
+  // };
 
   const defaultContent = (
     <div className="sequence-container d-inline-flex flex-row">
@@ -52,15 +52,15 @@ const Sequence = ({
           sequenceId={sequenceId}
           unitId={unitId}
           courseId={courseId}
-          nextHandler={() => {
-            handleNext();
-          }}
-          onNavigate={(destinationUnitId) => {
-            handleNavigate(destinationUnitId);
-          }}
-          previousHandler={() => {
-            handlePrevious();
-          }}
+          // nextHandler={() => {
+          //   handleNext();
+          // }}
+          // onNavigate={(destinationUnitId) => {
+          //   handleNavigate(destinationUnitId);
+          // }}
+          // previousHandler={() => {
+          //   handlePrevious();
+          // }}
         />
       </div>
     </div>

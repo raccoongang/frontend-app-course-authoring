@@ -42,12 +42,6 @@ const CourseUnit = ({ courseId }) => {
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
 
-  const handleUnitNavigationClick = () => {};
-
-  const handleNextSequenceClick = () => {};
-
-  const handlePreviousSequenceClick = () => {};
-
   if (isLoading) {
     return <Loading />;
   }
@@ -84,9 +78,6 @@ const CourseUnit = ({ courseId }) => {
             courseId={courseId}
             sequenceId={sequenceId}
             unitId={blockId}
-            unitNavigationHandler={handleUnitNavigationClick}
-            nextSequenceHandler={handleNextSequenceClick}
-            previousSequenceHandler={handlePreviousSequenceClick}
           />
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}

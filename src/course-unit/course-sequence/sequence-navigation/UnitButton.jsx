@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useSelector } from 'react-redux';
 import { Button } from '@edx/paragon';
@@ -7,23 +6,19 @@ import { Link } from 'react-router-dom';
 import UnitIcon from './UnitIcon';
 
 const UnitButton = ({
-  onClick, title, contentType, isActive, unitId, className, showTitle,
+  title, contentType, isActive, unitId, className, showTitle, style,
 }) => {
   const { courseId } = useSelector(state => state.courseDetail);
   const { sequenceId } = useSelector(state => state.courseUnit);
-
-  const handleClick = useCallback(() => {
-    onClick(unitId);
-  }, [onClick, unitId]);
 
   return (
     <Button
       className={className}
       variant={isActive ? 'primary' : 'outline-primary'}
       as={Link}
-      onClick={handleClick}
       title={title}
       to={`/course/${courseId}/container/${unitId}/${sequenceId}/`}
+      style={style}
     >
       <UnitIcon type={contentType} />
       {showTitle && <span className="unit-title">{title}</span>}
@@ -36,7 +31,6 @@ UnitButton.propTypes = {
   contentType: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
   showTitle: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   unitId: PropTypes.string.isRequired,
 };

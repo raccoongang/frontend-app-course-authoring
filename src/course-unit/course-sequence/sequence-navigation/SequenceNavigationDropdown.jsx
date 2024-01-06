@@ -4,11 +4,7 @@ import { FormattedMessage } from '@edx/frontend-platform/i18n';
 
 import UnitButton from './UnitButton';
 
-const SequenceNavigationDropdown = ({
-  unitId,
-  onNavigate,
-  unitIds,
-}) => (
+const SequenceNavigationDropdown = ({ unitId, unitIds }) => (
   <Dropdown className="sequence-navigation-dropdown">
     <Dropdown.Toggle variant="outline-primary" className="w-100">
       <FormattedMessage
@@ -28,7 +24,6 @@ const SequenceNavigationDropdown = ({
           className="w-100"
           isActive={unitId === buttonUnitId}
           key={buttonUnitId}
-          onClick={onNavigate}
           showTitle
           unitId={buttonUnitId}
         />
@@ -39,7 +34,6 @@ const SequenceNavigationDropdown = ({
 
 SequenceNavigationDropdown.propTypes = {
   unitId: PropTypes.string.isRequired,
-  onNavigate: PropTypes.func.isRequired,
   unitIds: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 

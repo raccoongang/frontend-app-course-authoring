@@ -21,9 +21,6 @@ const SequenceNavigation = ({
   unitId,
   sequenceId,
   className,
-  onNavigate,
-  nextHandler,
-  previousHandler,
 }) => {
   const { sequenceStatus } = useSelector(state => state.courseUnit);
   const {
@@ -43,7 +40,6 @@ const SequenceNavigation = ({
       <SequenceNavigationTabs
         unitIds={sequence.unitIds || []}
         unitId={unitId}
-        onNavigate={onNavigate}
       />
     );
   };
@@ -58,7 +54,6 @@ const SequenceNavigation = ({
         variant="outline-primary"
         iconBefore={prevArrow}
         disabled={disabled}
-        onClick={previousHandler}
         as={disabled ? undefined : Link}
         to={disabled ? undefined : previousLink}
       >
@@ -78,7 +73,6 @@ const SequenceNavigation = ({
         variant="outline-primary"
         iconAfter={nextArrow}
         disabled={disabled}
-        onClick={nextHandler}
         as={disabled ? undefined : Link}
         to={disabled ? undefined : nextLink}
       >
@@ -104,9 +98,6 @@ SequenceNavigation.propTypes = {
   unitId: PropTypes.string,
   className: PropTypes.string,
   sequenceId: PropTypes.string,
-  onNavigate: PropTypes.func.isRequired,
-  nextHandler: PropTypes.func.isRequired,
-  previousHandler: PropTypes.func.isRequired,
 };
 
 SequenceNavigation.defaultProps = {
