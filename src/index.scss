@@ -3,6 +3,7 @@
 @import "~@edx/paragon/scss/core/core";
 @import "~@edx/brand/paragon/overrides";
 @import "~@edx/frontend-component-header/dist/index";
+
 @import "assets/scss/variables";
 @import "assets/scss/form";
 @import "assets/scss/utilities";
@@ -22,3 +23,4 @@
 @import "files-and-videos";
 @import "content-tags-drawer/TagBubble";
 @import "course-outline/CourseOutline";
+@import "course-unit/CourseUnit";

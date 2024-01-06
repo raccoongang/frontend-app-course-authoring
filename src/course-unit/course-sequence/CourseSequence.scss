@@ -1,54 +1,39 @@
-@import "~@edx/brand/paragon/fonts";
-@import "~@edx/brand/paragon/variables";
-@import "~@edx/paragon/scss/core/core";
-@import "~@edx/brand/paragon/overrides";
-
 .sequence-container {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin-bottom: 4rem;
+  margin-bottom: 1.75rem;
   width: 100%;
-  margin-right: auto;
-  margin-left: auto;
 }
 
 .sequence-navigation {
-  display: flex;
-
-  @media (min-width: map-get($grid-breakpoints, "sm")) {
-    margin: -1px -1px 0;
-  }
-
   .btn {
     flex-grow: 1;
-    display: inline-flex;
     position: relative;
-    height: 3rem;
-    justify-content: center;
-    align-items: center;
     white-space: nowrap;
+    color: $gray-700;
+
+    &.btn-primary {
+      color: $white;
+    }
 
     &:focus {
       z-index: 1;
     }
   }
 
-  .sequence-navigation-tabs-container {
-    flex-grow: 1;
-    flex-shrink: 1;
+  .sequence-navigation-tabs-wrapper {
     flex-basis: 100%;
-    display: flex;
+    min-width: 0;
+  }
+
+  .sequence-navigation-tabs-container {
+    flex: 1 1 100%;
     // min-width 0 prevents the flex item from overflowing the parent container
     // https://dev.to/martyhimmel/quick-tip-to-stop-flexbox-from-overflowing-peb
     min-width: 0;
   }
 
-  .sequence-navigation-tabs {
-    .btn:not(.new-unit-btn) {
-      flex-basis: 100%;
-      min-width: 2rem;
-    }
+  .sequence-navigation-tabs .btn:not(.sequence-navigation-tabs-new-unit-btn) {
+    flex-basis: 100%;
+    min-width: 2rem;
   }
 
   .sequence-navigation-dropdown {
@@ -61,7 +46,7 @@
         text-align: left;
         overflow: hidden;
         min-width: 0;
-        margin: 0 1rem;
+        margin: map-get($spacers, 0) $spacer;
         text-overflow: ellipsis;
       }
 
@@ -72,23 +57,23 @@
     }
   }
 
-  .new-unit-btn {
-    min-width: 200px;
+  .sequence-navigation-prev-btn,
+  .sequence-navigation-next-btn,
+  .sequence-navigation-tabs-new-unit-btn {
+    min-width: 12.5rem;
   }
 
-  .previous-btn,
-  .next-btn {
-    min-width: 200px;
-
+  .sequence-navigation-prev-btn,
+  .sequence-navigation-next-btn {
     @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
       min-width: fit-content;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      padding-top: $spacer;
+      padding-bottom: $spacer;
     }
 
     @media (min-width: map-get($grid-breakpoints, "sm")) {
-      padding-left: 2rem;
-      padding-right: 2rem;
+      padding-left: map-get($spacers, 4\.5);
+      padding-right: map-get($spacers, 4\.5);
     }
   }
 }

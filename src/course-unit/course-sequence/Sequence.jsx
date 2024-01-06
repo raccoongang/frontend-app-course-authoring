@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { breakpoints, useWindowSize } from '@edx/paragon';
 import { injectIntl } from '@edx/frontend-platform/i18n';
-import SequenceNavigation from './sequence-navigation/SequenceNavigation';
+
 import { useModel } from '../../generic/model-store';
+import Loading from '../../generic/Loading';
+import SequenceNavigation from './sequence-navigation/SequenceNavigation';
 
 const Sequence = ({
   courseId,
@@ -69,10 +71,10 @@ const Sequence = ({
   const loading = sequenceStatus === 'LOADING' || (sequenceStatus === 'FAILED' && sequenceMightBeUnit);
   if (loading) {
     if (!sequenceId) {
-      return (<div> noContent </div>);
+      return (<div>There is no content here.</div>);
     }
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
+    return <Loading />;
   }
 
   if (sequenceStatus === 'LOADED') {

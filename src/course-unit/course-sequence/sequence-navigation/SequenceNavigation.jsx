@@ -3,10 +3,11 @@ import classNames from 'classnames';
 import {
   injectIntl, intlShape, isRtl, getLocale,
 } from '@edx/frontend-platform/i18n';
+import { Button, useWindowSize, breakpoints } from '@edx/paragon';
 import {
-  Button, useWindowSize, breakpoints,
-} from '@edx/paragon';
-import { ChevronLeft, ChevronRight } from '@edx/paragon/icons';
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from '@edx/paragon/icons';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -23,7 +24,6 @@ const SequenceNavigation = ({
   onNavigate,
   nextHandler,
   previousHandler,
-  courseId,
 }) => {
   const { sequenceStatus } = useSelector(state => state.courseUnit);
   const {
@@ -32,7 +32,6 @@ const SequenceNavigation = ({
   const sequence = useModel('sequences', sequenceId);
 
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
-
   const renderUnitButtons = () => {
     if (sequence.unitIds?.length === 0 || unitId === null) {
       return (
@@ -42,7 +41,7 @@ const SequenceNavigation = ({
 
     return (
       <SequenceNavigationTabs
-        unitIds={sequence.unitIds}
+        unitIds={sequence.unitIds || []}
         unitId={unitId}
         onNavigate={onNavigate}
       />
@@ -51,12 +50,12 @@ const SequenceNavigation = ({
 
   const renderPreviousButton = () => {
     const disabled = isFirstUnit;
-    const prevArrow = isRtl(getLocale()) ? ChevronRight : ChevronLeft;
+    const prevArrow = isRtl(getLocale()) ? ChevronRightIcon : ChevronLeftIcon;
 
     return (
       <Button
+        className="sequence-navigation-prev-btn"
         variant="outline-primary"
-        className="previous-btn"
         iconBefore={prevArrow}
         disabled={disabled}
         onClick={previousHandler}
@@ -71,12 +70,12 @@ const SequenceNavigation = ({
   const renderNextButton = () => {
     const buttonText = intl.formatMessage(messages.nextBtnText);
     const disabled = isLastUnit;
-    const nextArrow = isRtl(getLocale()) ? ChevronLeft : ChevronRight;
+    const nextArrow = isRtl(getLocale()) ? ChevronLeftIcon : ChevronRightIcon;
 
     return (
       <Button
+        className="sequence-navigation-next-btn"
         variant="outline-primary"
-        className="next-btn"
         iconAfter={nextArrow}
         disabled={disabled}
         onClick={nextHandler}
@@ -90,8 +89,7 @@ const SequenceNavigation = ({
 
   return sequenceStatus === 'LOADED' && (
     <nav
-      id="courseware-sequenceNavigation"
-      className={classNames('sequence-navigation', className)}
+      className={classNames('sequence-navigation d-flex', className)}
       style={{ width: shouldDisplayNotificationTriggerInSequence ? '90%' : null }}
     >
       {renderPreviousButton()}
@@ -105,7 +103,6 @@ SequenceNavigation.propTypes = {
   intl: intlShape.isRequired,
   unitId: PropTypes.string,
   className: PropTypes.string,
-  courseId: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,
   onNavigate: PropTypes.func.isRequired,
   nextHandler: PropTypes.func.isRequired,
