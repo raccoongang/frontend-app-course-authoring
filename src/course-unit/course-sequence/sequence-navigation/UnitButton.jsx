@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { connect, useSelector } from 'react-redux';
 import { Button } from '@edx/paragon';
 import { Link } from 'react-router-dom';
-import { connect, useSelector } from 'react-redux';
 
 import UnitIcon from './UnitIcon';
 

@@ -5,7 +5,7 @@ import { AppContext } from '@edx/frontend-platform/react';
 import { RequestStatus } from '../data/constants';
 import {
   fetchCourseUnitQuery,
-  editCourseItemQuery,
+  editCourseItemQuery, fetchSequence, fetchCourse,
 } from './data/thunk';
 import {
   getCourseUnitData,
@@ -15,7 +15,7 @@ import {
 import { updateSavingStatus } from './data/slice';
 import { getUnitViewLivePath, getUnitPreviewPath } from './utils';
 
-const useCourseUnit = ({ courseId, blockId }) => {
+const useCourseUnit = ({ courseId, blockId, sequenceId }) => {
   const dispatch = useDispatch();
 
   const { config } = useContext(AppContext);
@@ -55,7 +55,9 @@ const useCourseUnit = ({ courseId, blockId }) => {
 
   useEffect(() => {
     dispatch(fetchCourseUnitQuery(blockId));
-  }, [courseId]);
+    dispatch(fetchSequence(sequenceId));
+    dispatch(fetchCourse(courseId));
+  }, [courseId, blockId]);
 
   return {
     courseUnit,

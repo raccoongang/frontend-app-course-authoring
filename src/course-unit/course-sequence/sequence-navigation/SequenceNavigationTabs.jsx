@@ -1,11 +1,10 @@
-import { Button } from '@edx/paragon';
-import { Plus } from '@edx/paragon/icons';
 import PropTypes from 'prop-types';
+import { Button } from '@edx/paragon';
+import { Plus as PlusIcon } from '@edx/paragon/icons';
 import { Link } from 'react-router-dom';
 
 import { useIndexOfLastVisibleChild } from '../hooks';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
-
 import UnitButton from './UnitButton';
 
 const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
@@ -17,13 +16,13 @@ const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
   const shouldDisplayDropdown = indexOfLastVisibleChild === -1;
 
   return (
-    <div style={{ flexBasis: '100%', minWidth: 0 }}>
-      <div className="sequence-navigation-tabs-container" ref={containerRef}>
+    <div className="sequence-navigation-tabs-wrapper">
+      <div className="sequence-navigation-tabs-container d-flex" ref={containerRef}>
         <div
           className="sequence-navigation-tabs d-flex flex-grow-1"
           style={shouldDisplayDropdown ? invisibleStyle : null}
         >
-          {unitIds?.map(buttonUnitId => (
+          {unitIds.map((buttonUnitId) => (
             <UnitButton
               key={buttonUnitId}
               unitId={buttonUnitId}
@@ -31,10 +30,11 @@ const SequenceNavigationTabs = ({ unitIds, unitId, onNavigate }) => {
               onClick={onNavigate}
             />
           ))}
+          {/* TODO: The functionality of the New unit button will be implemented in https://youtrack.raccoongang.com/issue/AXIMST-14 */}
           <Button
+            className="sequence-navigation-tabs-new-unit-btn disabled"
             variant="outline-primary"
-            className="disabled new-unit-btn"
-            iconBefore={Plus}
+            iconBefore={PlusIcon}
             as={Link}
             to="/"
           >

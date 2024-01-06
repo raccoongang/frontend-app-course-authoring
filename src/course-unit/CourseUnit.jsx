@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Layout } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
@@ -11,17 +11,14 @@ import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
+import Loading from '../generic/Loading';
+import HeaderTitle from './header-title/HeaderTitle';
+import Breadcrumbs from './breadcrumbs/Breadcrumbs';
+import HeaderNavigations from './header-navigations/HeaderNavigations';
 import Sequence from './course-sequence';
 
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-
-import './CourseUnit.scss';
-import HeaderTitle from './header-title/HeaderTitle';
-import Breadcrumbs from './breadcrumbs/Breadcrumbs';
-import HeaderNavigations from './header-navigations/HeaderNavigations';
-import { useEffect } from 'react';
-import { fetchCourse, fetchSequence } from './data/thunk';
 
 const CourseUnit = ({ courseId }) => {
   const { sequenceId, blockId } = useParams();
@@ -36,30 +33,23 @@ const CourseUnit = ({ courseId }) => {
     headerNavigationsActions,
     handleTitleEdit,
     handleInternetConnectionFailed,
-  } = useCourseUnit({ courseId, blockId });
-  // console.log('blockId', blockId);
+  } = useCourseUnit({ courseId, blockId, sequenceId });
+
   document.title = getPageHeadTitle('', unitTitle);
 
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchSequence(sequenceId));
-    dispatch(fetchCourse(courseId));
-  }, [sequenceId]);
 
-  const handleUnitNavigationClick = () => {
-    console.log('handleUnitNavigationClick');
-  };
+  const handleUnitNavigationClick = () => {};
 
   const handleNextSequenceClick = () => {};
 
   const handlePreviousSequenceClick = () => {};
 
   if (isLoading) {
-    return null;
+    return <Loading />;
   }
 
   return (
@@ -105,7 +95,10 @@ const CourseUnit = ({ courseId }) => {
             xs={[{ span: 9 }, { span: 3 }]}
             xl={[{ span: 9 }, { span: 3 }]}
           >
-            <Layout.Element />
+            <Layout.Element>
+              {/* TODO: Unit content will be added in the following tasks. */}
+              Unit content
+            </Layout.Element>
           </Layout>
         </section>
       </Container>

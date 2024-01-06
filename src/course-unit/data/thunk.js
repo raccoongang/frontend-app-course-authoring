@@ -1,10 +1,14 @@
 import { logError, logInfo } from '@edx/frontend-platform/logging';
+
 import {
   hideProcessingNotification,
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
 import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
+import {
+  addModel, updateModel, updateModels, updateModelsMap, addModelsMap,
+} from '../../generic/model-store';
 import {
   getCourseUnitData,
   editUnitDisplayName,
@@ -24,9 +28,6 @@ import {
   fetchCourseDenied,
   fetchCourseFailure, fetchCourseSectionVerticalDataSuccess,
 } from './slice';
-import {
-  addModel, updateModel, updateModels, updateModelsMap, addModelsMap,
-} from '../../generic/model-store';
 
 export function fetchCourseUnitQuery(courseId) {
   return async (dispatch) => {

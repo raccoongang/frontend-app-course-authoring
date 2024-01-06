@@ -14,45 +14,43 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const { nextUrl, prevUrl } = useSelector(state => state.courseUnit.courseSectionVertical);
 
   // If we don't know the sequence and unit yet, then assume no.
-  if (courseStatus !== 'successful' || sequenceStatus !== 'LOADED' || !currentSequenceId || !currentUnitId) {
+  if (courseStatus !== 'successful' || sequenceStatus !== 'LOADED' || !currentSequenceId || !currentUnitId || !sequence.unitIds) {
     return { isFirstUnit: false, isLastUnit: false };
   }
 
-  const sequenceIndex = sequenceIds?.indexOf(currentSequenceId);
-  const unitIndex = sequence.unitIds?.indexOf(currentUnitId);
+  const sequenceIndex = sequenceIds.indexOf(currentSequenceId);
+  const unitIndex = sequence.unitIds.indexOf(currentUnitId);
 
   const isFirstSequence = sequenceIndex === 0;
   const isFirstUnitInSequence = unitIndex === 0;
   const isFirstUnit = isFirstSequence && isFirstUnitInSequence;
   const isLastSequence = sequenceIndex === sequenceIds.length - 1;
-  const isLastUnitInSequence = unitIndex === sequence.unitIds?.length - 1;
+  const isLastUnitInSequence = unitIndex === sequence.unitIds.length - 1;
   const isLastUnit = isLastSequence && isLastUnitInSequence;
 
   const nextSequenceId = sequenceIndex < sequenceIds.length - 1 ? sequenceIds[sequenceIndex + 1] : null;
   const previousSequenceId = sequenceIndex > 0 ? sequenceIds[sequenceIndex - 1] : null;
 
   let nextLink;
-  if (isLastUnit) {
-    nextLink = `/course/${courseId}/course-end`;
-  } else {
-    const nextIndex = unitIndex + 1;
-    if (nextIndex < sequence.unitIds?.length) {
-      const nextUnitId = sequence.unitIds[nextIndex];
-      nextLink = `/course/${courseId}/container/${nextUnitId}/${currentSequenceId}`;
-    } else if (nextSequenceId) {
-      const NEXT_URL_FROM_BACKEND = decodeURIComponent(nextUrl);
-      nextLink = `/course/${courseId}${NEXT_URL_FROM_BACKEND}/${nextSequenceId}`;
-    }
+  const nextIndex = unitIndex + 1;
+
+  if (nextIndex < sequence.unitIds.length) {
+    const nextUnitId = sequence.unitIds[nextIndex];
+    nextLink = `/course/${courseId}/container/${nextUnitId}/${currentSequenceId}`;
+  } else if (nextSequenceId) {
+    const nextUnitId = decodeURIComponent(nextUrl);
+    nextLink = `/course/${courseId}${nextUnitId}/${nextSequenceId}`;
   }
 
   let previousLink;
   const previousIndex = unitIndex - 1;
+
   if (previousIndex >= 0) {
     const previousUnitId = sequence.unitIds[previousIndex];
     previousLink = `/course/${courseId}/container/${previousUnitId}/${currentSequenceId}`;
   } else if (previousSequenceId) {
-    const PREV_URL_FROM_BACKEND = decodeURIComponent(prevUrl);
-    previousLink = `/course/${courseId}${PREV_URL_FROM_BACKEND}/${previousSequenceId}`;
+    const previousUnitId = decodeURIComponent(prevUrl);
+    previousLink = `/course/${courseId}${previousUnitId}/${previousSequenceId}`;
   }
 
   return {
