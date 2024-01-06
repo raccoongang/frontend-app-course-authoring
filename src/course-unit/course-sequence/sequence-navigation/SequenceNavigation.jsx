@@ -15,6 +15,7 @@ import { useModel } from '../../../generic/model-store';
 import messages from '../messages';
 import { useSequenceNavigationMetadata } from '../hooks';
 import SequenceNavigationTabs from './SequenceNavigationTabs';
+import { RequestStatus } from '../../../data/constants';
 
 const SequenceNavigation = ({
   intl,
@@ -81,7 +82,7 @@ const SequenceNavigation = ({
     );
   };
 
-  return sequenceStatus === 'LOADED' && (
+  return sequenceStatus === RequestStatus.SUCCESSFUL && (
     <nav
       className={classNames('sequence-navigation d-flex', className)}
       style={{ width: shouldDisplayNotificationTriggerInSequence ? '90%' : null }}

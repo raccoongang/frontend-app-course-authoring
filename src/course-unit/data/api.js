@@ -10,13 +10,16 @@ import {
   appendBrowserTimezoneToUrl,
 } from './utils';
 
-const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
+const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
+const getLmsBaseUrl = () => getConfig().LMS_BASE_URL;
 
-export const getCourseUnitApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/container/${itemId}`;
-
-export const getXBlockBaseApiUrl = (itemId) => `${getApiBaseUrl()}/xblock/${itemId}`;
-
-export const getCourseSectionVerticalApiUrl = (itemId) => `${getApiBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
+export const getCourseUnitApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/container/${itemId}`;
+export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}`;
+export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
+export const getSequenceMetadataApiUrl = (sequenceId) => `${getLmsBaseUrl()}/api/courseware/sequence/${sequenceId}`;
+export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
+export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
+export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/course_home/course_metadata/${courseId}`;
 
 /**
  * Get course unit.
@@ -47,9 +50,14 @@ export async function editUnitDisplayName(unitId, displayName) {
   return data;
 }
 
+/**
+ * Get sequence metadata for a given sequence ID.
+ * @param {string} sequenceId - The ID of the sequence for which metadata is requested.
+ * @returns {Promise<Object>} - A Promise that resolves to the normalized sequence metadata.
+ */
 export async function getSequenceMetadata(sequenceId) {
   const { data } = await getAuthenticatedHttpClient()
-    .get(`${getConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceId}`, {});
+    .get(getSequenceMetadataApiUrl(sequenceId), {});
 
   return normalizeSequenceMetadata(data);
 }
@@ -68,12 +76,11 @@ export async function getCourseSectionVerticalData(unitId) {
 
 /**
  * Retrieves the outline of learning sequences for a specific course.
- *
  * @param {string} courseId - The ID of the course.
  * @returns {Promise<Object>} A Promise that resolves to the normalized learning sequences outline data.
  */
 export async function getLearningSequencesOutline(courseId) {
-  const outlineUrl = new URL(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/${courseId}`);
+  const outlineUrl = new URL(getLearningSequencesOutlineApiUrl(courseId));
   const { data } = await getAuthenticatedHttpClient().get(outlineUrl.href, {});
 
   return normalizeLearningSequencesData(data);
@@ -81,28 +88,27 @@ export async function getLearningSequencesOutline(courseId) {
 
 /**
  * Retrieves metadata for a specific course.
- *
  * @param {string} courseId - The ID of the course.
  * @returns {Promise<Object>} A Promise that resolves to the normalized course metadata.
  */
 export async function getCourseMetadata(courseId) {
-  let url = `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`;
-  url = appendBrowserTimezoneToUrl(url);
-  const metadata = await getAuthenticatedHttpClient().get(url);
+  let courseMetadataApiUrl = getCourseMetadataApiUrl(courseId);
+  courseMetadataApiUrl = appendBrowserTimezoneToUrl(courseMetadataApiUrl);
+  const metadata = await getAuthenticatedHttpClient().get(courseMetadataApiUrl);
+
   return normalizeMetadata(metadata);
 }
 
 /**
  * Retrieves metadata for a course's home page.
- *
  * @param {string} courseId - The ID of the course.
  * @param {string} rootSlug - The root slug for the course.
  * @returns {Promise<Object>} A Promise that resolves to the normalized course home page metadata.
  */
 export async function getCourseHomeCourseMetadata(courseId, rootSlug) {
-  let url = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
-  url = appendBrowserTimezoneToUrl(url);
-  const { data } = await getAuthenticatedHttpClient().get(url);
+  let courseHomeCourseMetadataApiUrl = getCourseHomeCourseMetadataApiUrl(courseId);
+  courseHomeCourseMetadataApiUrl = appendBrowserTimezoneToUrl(courseHomeCourseMetadataApiUrl);
+  const { data } = await getAuthenticatedHttpClient().get(courseHomeCourseMetadataApiUrl);
 
   return normalizeCourseHomeCourseMetadata(data, rootSlug);
 }

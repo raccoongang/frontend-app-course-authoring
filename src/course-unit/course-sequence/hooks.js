@@ -4,6 +4,7 @@ import { useWindowSize } from '@edx/paragon';
 
 import { useModel } from '../../generic/model-store';
 import { sequenceIdsSelector } from '../data/selectors';
+import { RequestStatus } from '../../data/constants';
 
 export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) {
   const sequenceIds = useSelector(sequenceIdsSelector);
@@ -14,7 +15,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const { nextUrl, prevUrl } = useSelector(state => state.courseUnit.courseSectionVertical);
 
   // If we don't know the sequence and unit yet, then assume no.
-  if (courseStatus !== 'successful' || sequenceStatus !== 'LOADED' || !currentSequenceId || !currentUnitId || !sequence.unitIds) {
+  if (courseStatus !== RequestStatus.SUCCESSFUL || sequenceStatus !== RequestStatus.SUCCESSFUL || !currentSequenceId || !currentUnitId || !sequence.unitIds) {
     return { isFirstUnit: false, isLastUnit: false };
   }
 

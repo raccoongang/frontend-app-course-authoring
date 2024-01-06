@@ -4,47 +4,20 @@ import classNames from 'classnames';
 import { breakpoints, useWindowSize } from '@edx/paragon';
 import { injectIntl } from '@edx/frontend-platform/i18n';
 
-import { useModel } from '../../generic/model-store';
 import Loading from '../../generic/Loading';
 import SequenceNavigation from './sequence-navigation/SequenceNavigation';
+import { RequestStatus } from '../../data/constants';
 
 const Sequence = ({
   courseId,
   sequenceId,
   unitId,
-  unitNavigationHandler,
-  nextSequenceHandler,
-  previousSequenceHandler,
 }) => {
-  const sequence = useModel('sequences', sequenceId);
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
   const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
   const sequenceMightBeUnit = useSelector(state => state.courseUnit.sequenceMightBeUnit);
-
-  // const handleNavigate = (destinationUnitId) => {
-  //   unitNavigationHandler(destinationUnitId);
-  // };
-
-  // const handleNext = () => {
-  //   const nextIndex = sequence.unitIds.indexOf(unitId) + 1;
-  //   if (nextIndex < sequence.unitIds.length) {
-  //     const newUnitId = sequence.unitIds[nextIndex];
-  //     handleNavigate(newUnitId);
-  //   } else {
-  //     nextSequenceHandler();
-  //   }
-  // };
-
-  // const handlePrevious = () => {
-  //   const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
-  //   if (previousIndex >= 0) {
-  //     const newUnitId = sequence.unitIds[previousIndex];
-  //     handleNavigate(newUnitId);
-  //   } else {
-  //     previousSequenceHandler();
-  //   }
-  // };
-
+  const TEST = useSelector(state => state);
+  console.log('TEST', TEST);
   const defaultContent = (
     <div className="sequence-container d-inline-flex flex-row">
       <div className={classNames('sequence w-100', { 'position-relative': shouldDisplayNotificationTriggerInSequence })}>
@@ -52,15 +25,6 @@ const Sequence = ({
           sequenceId={sequenceId}
           unitId={unitId}
           courseId={courseId}
-          // nextHandler={() => {
-          //   handleNext();
-          // }}
-          // onNavigate={(destinationUnitId) => {
-          //   handleNavigate(destinationUnitId);
-          // }}
-          // previousHandler={() => {
-          //   handlePrevious();
-          // }}
         />
       </div>
     </div>
@@ -68,7 +32,7 @@ const Sequence = ({
 
   // If sequence might be a unit, we want to keep showing a spinner - the courseware container will redirect us when
   // it knows which sequence to actually go to.
-  const loading = sequenceStatus === 'LOADING' || (sequenceStatus === 'FAILED' && sequenceMightBeUnit);
+  const loading = sequenceStatus === RequestStatus.IN_PROGRESS || (sequenceStatus === RequestStatus.FAILED && sequenceMightBeUnit);
   if (loading) {
     if (!sequenceId) {
       return (<div>There is no content here.</div>);
@@ -77,7 +41,7 @@ const Sequence = ({
     return <Loading />;
   }
 
-  if (sequenceStatus === 'LOADED') {
+  if (sequenceStatus === RequestStatus.SUCCESSFUL) {
     return (
       <div>
         {defaultContent}
@@ -97,9 +61,6 @@ Sequence.propTypes = {
   unitId: PropTypes.string,
   courseId: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,
-  unitNavigationHandler: PropTypes.func.isRequired,
-  nextSequenceHandler: PropTypes.func.isRequired,
-  previousSequenceHandler: PropTypes.func.isRequired,
 };
 
 Sequence.defaultProps = {
