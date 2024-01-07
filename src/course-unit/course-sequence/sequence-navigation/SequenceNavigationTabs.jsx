@@ -2,12 +2,15 @@ import PropTypes from 'prop-types';
 import { Button } from '@edx/paragon';
 import { Plus as PlusIcon } from '@edx/paragon/icons';
 import { Link } from 'react-router-dom';
+import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { useIndexOfLastVisibleChild } from '../hooks';
+import messages from '../messages';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
 
 const SequenceNavigationTabs = ({ unitIds, unitId }) => {
+  const intl = useIntl();
   const [
     indexOfLastVisibleChild,
     containerRef,
@@ -37,7 +40,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
             as={Link}
             to="/"
           >
-            New unit
+            {intl.formatMessage(messages.newUnitBtnText)}
           </Button>
         </div>
       </div>

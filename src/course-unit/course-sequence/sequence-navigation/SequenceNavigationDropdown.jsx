@@ -10,7 +10,7 @@ const SequenceNavigationDropdown = ({ unitId, unitIds }) => (
       <FormattedMessage
         defaultMessage="{current} of {total}"
         description="The title of the mobile menu for sequence navigation of units"
-        id="learn.course.sequence.navigation.mobile.menu"
+        id="course-authoring.course-unit.sequence.navigation.mobile.menu"
         values={{
           current: unitIds.indexOf(unitId) + 1,
           total: unitIds.length,

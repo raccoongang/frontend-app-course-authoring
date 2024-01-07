@@ -16,7 +16,6 @@ import HeaderTitle from './header-title/HeaderTitle';
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import Sequence from './course-sequence';
-
 import { useCourseUnit } from './hooks';
 import messages from './messages';
 

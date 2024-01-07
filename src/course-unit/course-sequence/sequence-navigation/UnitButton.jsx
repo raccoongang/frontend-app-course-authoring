@@ -6,10 +6,9 @@ import { Link } from 'react-router-dom';
 import UnitIcon from './UnitIcon';
 
 const UnitButton = ({
-  title, contentType, isActive, unitId, className, showTitle, style,
+  title, contentType, isActive, unitId, className, showTitle,
 }) => {
-  const { courseId } = useSelector(state => state.courseDetail);
-  const { sequenceId } = useSelector(state => state.courseUnit);
+  const { courseId, sequenceId } = useSelector(state => state.courseUnit);
 
   return (
     <Button
@@ -18,7 +17,6 @@ const UnitButton = ({
       as={Link}
       title={title}
       to={`/course/${courseId}/container/${unitId}/${sequenceId}/`}
-      style={style}
     >
       <UnitIcon type={contentType} />
       {showTitle && <span className="unit-title">{title}</span>}

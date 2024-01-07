@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {
@@ -8,14 +10,12 @@ import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
 } from '@edx/paragon/icons';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { useModel } from '../../../generic/model-store';
+import { RequestStatus } from '../../../data/constants';
 import messages from '../messages';
 import { useSequenceNavigationMetadata } from '../hooks';
 import SequenceNavigationTabs from './SequenceNavigationTabs';
-import { RequestStatus } from '../../../data/constants';
 
 const SequenceNavigation = ({
   intl,

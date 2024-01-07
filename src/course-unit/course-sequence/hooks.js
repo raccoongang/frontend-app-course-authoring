@@ -3,19 +3,23 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useWindowSize } from '@edx/paragon';
 
 import { useModel } from '../../generic/model-store';
-import { sequenceIdsSelector } from '../data/selectors';
 import { RequestStatus } from '../../data/constants';
+import { getCourseSectionVertical, getSequenceStatus, sequenceIdsSelector } from '../data/selectors';
 
 export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) {
+  const { SUCCESSFUL } = RequestStatus;
   const sequenceIds = useSelector(sequenceIdsSelector);
+  const sequenceStatus = useSelector(getSequenceStatus);
+  const { nextUrl, prevUrl } = useSelector(getCourseSectionVertical);
   const sequence = useModel('sequences', currentSequenceId);
   const { courseId, status } = useSelector(state => state.courseDetail);
-  const courseStatus = status;
-  const sequenceStatus = useSelector(state => state.courseUnit.sequenceStatus);
-  const { nextUrl, prevUrl } = useSelector(state => state.courseUnit.courseSectionVertical);
+
+  const isCourseOrSequenceNotSuccessful = status !== SUCCESSFUL || sequenceStatus !== SUCCESSFUL;
+  const areIdsNotValid = !currentSequenceId || !currentUnitId || !sequence.unitIds;
+  const isNotSuccessfulCompletion = isCourseOrSequenceNotSuccessful || areIdsNotValid;
 
   // If we don't know the sequence and unit yet, then assume no.
-  if (courseStatus !== RequestStatus.SUCCESSFUL || sequenceStatus !== RequestStatus.SUCCESSFUL || !currentSequenceId || !currentUnitId || !sequence.unitIds) {
+  if (isNotSuccessfulCompletion) {
     return { isFirstUnit: false, isLastUnit: false };
   }
 
