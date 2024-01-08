@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   act, render, waitFor, cleanup, fireEvent, within,
 } from '@testing-library/react';
@@ -48,6 +47,8 @@ let axiosMock;
 let store;
 const mockPathname = '/foo-bar';
 const courseId = '123';
+const locatorSectionName = 'Demo Course Overview';
+const locatorSectionId = 'block-v1:edX+DemoX+Demo_Course+type@sequential+block@edx_introduction';
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
@@ -56,6 +57,7 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({
     pathname: mockPathname,
   }),
+  useSearchParams: () => [new URLSearchParams({ show: locatorSectionId })],
 }));
 
 jest.mock('../help-urls/hooks', () => ({
@@ -528,6 +530,18 @@ describe('<CourseOutline />', () => {
     await checkDuplicateBtn(subsection, sectionElement, subsectionElement, 'subsection', 2);
     // check section
     await checkDuplicateBtn(section, null, sectionElement, 'section', 5);
+  });
+
+  it('check correct scrolling to the locator section when URL has a "show" param', async () => {
+    const scrollIntoViewFn = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewFn;
+    const { getByText } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(getByText(locatorSectionName)).toBeInTheDocument();
+      expect(scrollIntoViewFn).toHaveBeenCalled();
+      expect(scrollIntoViewFn).toHaveBeenCalledWith({ behavior: 'smooth' });
+    });
   });
 
   it('check section, subsection & unit is published when publish button is clicked', async () => {
