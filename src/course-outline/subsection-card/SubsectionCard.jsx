@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@edx/paragon';
 import { Add as IconAdd } from '@edx/paragon/icons';
@@ -24,7 +25,10 @@ const SubsectionCard = ({
   const currentRef = useRef(null);
   const intl = useIntl();
   const dispatch = useDispatch();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [searchParams] = useSearchParams();
+  const locatorId = searchParams.get('show');
+  const isScrolledToElement = locatorId === subsection.id;
+  const [isExpanded, setIsExpanded] = useState(locatorId ? isScrolledToElement : false);
   const [isFormOpen, openForm, closeForm] = useToggle(false);
 
   const {
@@ -81,7 +85,12 @@ const SubsectionCard = ({
   }, [savingStatus]);
 
   return (
-    <div className="subsection-card" data-testid="subsection-card" ref={currentRef}>
+    <div
+      className="subsection-card"
+      data-locator={subsection.id}
+      data-testid="subsection-card"
+      ref={currentRef}
+    >
       <CardHeader
         title={displayName}
         status={subsectionStatus}
