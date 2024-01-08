@@ -8,16 +8,19 @@ import { useIndexOfLastVisibleChild } from '../hooks';
 import messages from '../messages';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
+import { useSelector } from 'react-redux';
 
 const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const intl = useIntl();
+
+  // const { courseId } = useSelector(state => state.courseDetails);
   const [
     indexOfLastVisibleChild,
     containerRef,
     invisibleStyle,
   ] = useIndexOfLastVisibleChild();
   const shouldDisplayDropdown = indexOfLastVisibleChild === -1;
-
+  // console.log('courseId', courseId);
   return (
     <div className="sequence-navigation-tabs-wrapper">
       <div className="sequence-navigation-tabs-container d-flex" ref={containerRef}>

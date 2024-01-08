@@ -4,18 +4,24 @@ import { useWindowSize } from '@edx/paragon';
 
 import { useModel } from '../../generic/model-store';
 import { RequestStatus } from '../../data/constants';
-import { getCourseSectionVertical, getSequenceStatus, sequenceIdsSelector } from '../data/selectors';
+import {
+  getCourseSectionVertical,
+  getCourseSectionVerticalLoadingStatus,
+  getSequenceStatus,
+  sequenceIdsSelector
+} from '../data/selectors';
 
 export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) {
   const { SUCCESSFUL } = RequestStatus;
   const sequenceIds = useSelector(sequenceIdsSelector);
-  const sequenceStatus = useSelector(getSequenceStatus);
+  const { courseSectionVerticalLoadingStatus } = useSelector(getCourseSectionVerticalLoadingStatus);
+  const sequenceStatus = courseSectionVerticalLoadingStatus;
   const { nextUrl, prevUrl } = useSelector(getCourseSectionVertical);
   const sequence = useModel('sequences', currentSequenceId);
   const { courseId, status } = useSelector(state => state.courseDetail);
-
+  // console.log('sequence >>>', sequence);
   const isCourseOrSequenceNotSuccessful = status !== SUCCESSFUL || sequenceStatus !== SUCCESSFUL;
-  const areIdsNotValid = !currentSequenceId || !currentUnitId || !sequence.unitIds;
+  const areIdsNotValid = !currentSequenceId || !currentUnitId || !sequence?.unitIds;
   const isNotSuccessfulCompletion = isCourseOrSequenceNotSuccessful || areIdsNotValid;
 
   // If we don't know the sequence and unit yet, then assume no.
@@ -24,13 +30,13 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   }
 
   const sequenceIndex = sequenceIds.indexOf(currentSequenceId);
-  const unitIndex = sequence.unitIds.indexOf(currentUnitId);
+  const unitIndex = sequence?.unitIds.indexOf(currentUnitId);
 
   const isFirstSequence = sequenceIndex === 0;
   const isFirstUnitInSequence = unitIndex === 0;
   const isFirstUnit = isFirstSequence && isFirstUnitInSequence;
   const isLastSequence = sequenceIndex === sequenceIds.length - 1;
-  const isLastUnitInSequence = unitIndex === sequence.unitIds.length - 1;
+  const isLastUnitInSequence = unitIndex === sequence?.unitIds.length - 1;
   const isLastUnit = isLastSequence && isLastUnitInSequence;
 
   const nextSequenceId = sequenceIndex < sequenceIds.length - 1 ? sequenceIds[sequenceIndex + 1] : null;

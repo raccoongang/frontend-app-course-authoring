@@ -28,7 +28,7 @@ const useCourseUnit = ({ courseId, blockId }) => {
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
-
+  console.log('sequenceId', sequenceId);
   const headerNavigationsActions = {
     handleViewLive: () => {
       window.open(config.LMS_BASE_URL + getUnitViewLivePath(courseId, blockId), '_blank');
@@ -63,8 +63,8 @@ const useCourseUnit = ({ courseId, blockId }) => {
 
   useEffect(() => {
     dispatch(fetchCourseUnitQuery(blockId));
-    dispatch(fetchCourseSectionVerticalData(blockId));
-    dispatch(fetchSequence(sequenceId));
+    dispatch(fetchCourseSectionVerticalData(blockId, sequenceId));
+    // dispatch(fetchSequence(sequenceId));
     dispatch(fetchCourse(courseId));
     handleNavigate(sequenceId);
   }, [courseId, blockId, sequenceId]);

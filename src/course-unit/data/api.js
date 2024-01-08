@@ -8,6 +8,7 @@ import {
   normalizeMetadata,
   normalizeCourseHomeCourseMetadata,
   appendBrowserTimezoneToUrl,
+  normalizeCourseSectionVerticalData,
 } from './utils';
 
 const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
@@ -29,7 +30,7 @@ export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl(
 export async function getCourseUnitData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseUnitApiUrl(unitId));
-
+  console.log('GHGHGFHGHG', data);
   return camelCaseObject(data);
 }
 
@@ -58,7 +59,7 @@ export async function editUnitDisplayName(unitId, displayName) {
 export async function getSequenceMetadata(sequenceId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getSequenceMetadataApiUrl(sequenceId), {});
-
+  // console.log('normalizeSequenceMetadata(data)', normalizeSequenceMetadata(data));
   return normalizeSequenceMetadata(data);
 }
 
@@ -70,8 +71,9 @@ export async function getSequenceMetadata(sequenceId) {
 export async function getCourseSectionVerticalData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionVerticalApiUrl(unitId));
+  console.log('getCourseSectionVerticalData', normalizeCourseSectionVerticalData(data));
 
-  return camelCaseObject(data);
+  return normalizeCourseSectionVerticalData(data);
 }
 
 /**

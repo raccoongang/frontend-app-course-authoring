@@ -17,6 +17,8 @@ const Sequence = ({
   const intl = useIntl();
   const { IN_PROGRESS, FAILED, SUCCESSFUL } = RequestStatus;
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
+  const STORE = useSelector(state => state);
+  console.log('STORE', STORE);
   const { sequenceStatus, sequenceMightBeUnit } = useSelector(state => state.courseUnit);
 
   const defaultContent = (
@@ -30,6 +32,8 @@ const Sequence = ({
       </div>
     </div>
   );
+
+  console.log('sequenceStatus =============', sequenceStatus);
 
   // If sequence might be a unit, we want to keep showing a spinner - the courseware container will redirect us when
   // it knows which sequence to actually go to.

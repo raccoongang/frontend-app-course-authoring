@@ -16,6 +16,7 @@ import { RequestStatus } from '../../../data/constants';
 import messages from '../messages';
 import { useSequenceNavigationMetadata } from '../hooks';
 import SequenceNavigationTabs from './SequenceNavigationTabs';
+import { getCourseSectionVertical } from '../../data/selectors';
 
 const SequenceNavigation = ({
   intl,
@@ -24,14 +25,15 @@ const SequenceNavigation = ({
   className,
 }) => {
   const { sequenceStatus } = useSelector(state => state.courseUnit);
+  const MODELS = useSelector(state => state.models);
   const {
     isFirstUnit, isLastUnit, nextLink, previousLink,
   } = useSequenceNavigationMetadata(sequenceId, unitId);
   const sequence = useModel('sequences', sequenceId);
-
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
+  console.log('MODELS >>>', MODELS);
   const renderUnitButtons = () => {
-    if (sequence.unitIds?.length === 0 || unitId === null) {
+    if (sequence?.unitIds?.length === 0 || unitId === null) {
       return (
         <div style={{ flexBasis: '100%', minWidth: 0, borderBottom: 'solid 1px #EAEAEA' }} />
       );
@@ -39,7 +41,7 @@ const SequenceNavigation = ({
 
     return (
       <SequenceNavigationTabs
-        unitIds={sequence.unitIds || []}
+        unitIds={sequence?.unitIds || []}
         unitId={unitId}
       />
     );

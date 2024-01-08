@@ -8,8 +8,8 @@ import UnitIcon from './UnitIcon';
 const UnitButton = ({
   title, contentType, isActive, unitId, className, showTitle,
 }) => {
-  const { courseId, sequenceId } = useSelector(state => state.courseUnit);
-
+  const { sequenceId } = useSelector(state => state.courseUnit);
+  const { courseId } = useSelector(state => state.courseDetail);
   return (
     <Button
       className={className}

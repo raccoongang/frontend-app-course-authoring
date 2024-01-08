@@ -9,6 +9,7 @@ export const getLoadingStatus = (state) => state.courseUnit.loadingStatus;
 export const getSequenceStatus = (state) => state.courseUnit.sequenceStatus;
 
 export const getCourseSectionVertical = (state) => state.courseUnit.courseSectionVertical;
+export const getCourseSectionVerticalLoadingStatus = (state) => state.courseUnit.loadingStatus;
 
 export function sequenceIdsSelector(state) {
   if (state.courseUnit.courseStatus !== RequestStatus.SUCCESSFUL) {

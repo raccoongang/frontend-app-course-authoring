@@ -47,17 +47,28 @@ export function fetchCourseUnitQuery(courseId) {
   };
 }
 
-export function fetchCourseSectionVerticalData(courseId) {
+export function fetchCourseSectionVerticalData(courseId, sequenceId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.IN_PROGRESS }));
-
+    dispatch(fetchSequenceRequest({ sequenceId }));
     try {
       const courseSectionVerticalData = await getCourseSectionVerticalData(courseId);
       dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
       dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.SUCCESSFUL }));
+      // console.log('courseSectionVerticalData SICK', courseSectionVerticalData.sequence);
+      dispatch(updateModel({
+        modelType: 'sequences',
+        model: courseSectionVerticalData.sequence,
+      }));
+      dispatch(updateModels({
+        modelType: 'units',
+        models: courseSectionVerticalData.units,
+      }));
+      dispatch(fetchSequenceSuccess({ sequenceId }));
       return true;
     } catch (error) {
       dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.FAILED }));
+      dispatch(fetchSequenceFailure({ sequenceId }));
       return false;
     }
   };
@@ -84,44 +95,45 @@ export function editCourseItemQuery(itemId, displayName) {
   };
 }
 
-export function fetchSequence(sequenceId) {
-  return async (dispatch) => {
-    dispatch(fetchSequenceRequest({ sequenceId }));
-    try {
-      const { sequence, units } = await getSequenceMetadata(sequenceId);
-
-      if (sequence.blockType !== 'sequential') {
-        // Some other block types (particularly 'chapter') can be returned
-        // by this API. We want to error in that case, since downstream
-        // courseware code is written to render Sequences of Units.
-        logError(
-          `Requested sequence '${sequenceId}' `
-            + `has block type '${sequence.blockType}'; expected block type 'sequential'.`,
-        );
-        dispatch(fetchSequenceFailure({ sequenceId }));
-      } else {
-        dispatch(updateModel({
-          modelType: 'sequences',
-          model: sequence,
-        }));
-        dispatch(updateModels({
-          modelType: 'units',
-          models: units,
-        }));
-        dispatch(fetchSequenceSuccess({ sequenceId }));
-      }
-    } catch (error) {
-      // Some errors are expected - for example, CoursewareContainer may request sequence metadata for a unit and rely
-      // on the request failing to notice that it actually does have a unit (mostly so it doesn't have to know anything
-      // about the opaque key structure). In such cases, the backend gives us a 422.
-      const sequenceMightBeUnit = error?.response?.status === 422;
-      if (!sequenceMightBeUnit) {
-        logError(error);
-      }
-      dispatch(fetchSequenceFailure({ sequenceId, sequenceMightBeUnit }));
-    }
-  };
-}
+// export function fetchSequence(sequenceId) {
+//   return async (dispatch) => {
+//     dispatch(fetchSequenceRequest({ sequenceId }));
+//     try {
+//       const { sequence, units } = await getSequenceMetadata(sequenceId);
+//
+//       if (sequence.blockType !== 'sequential') {
+//         // Some other block types (particularly 'chapter') can be returned
+//         // by this API. We want to error in that case, since downstream
+//         // courseware code is written to render Sequences of Units.
+//         logError(
+//           `Requested sequence '${sequenceId}' `
+//             + `has block type '${sequence.blockType}'; expected block type 'sequential'.`,
+//         );
+//         dispatch(fetchSequenceFailure({ sequenceId }));
+//       } else {
+//         console.log('sequence', sequence);
+//         dispatch(updateModel({
+//           modelType: 'sequences',
+//           model: sequence,
+//         }));
+//         dispatch(updateModels({
+//           modelType: 'units',
+//           models: units,
+//         }));
+//         dispatch(fetchSequenceSuccess({ sequenceId }));
+//       }
+//     } catch (error) {
+//       // Some errors are expected - for example, CoursewareContainer may request sequence metadata for a unit and rely
+//       // on the request failing to notice that it actually does have a unit (mostly so it doesn't have to know anything
+//       // about the opaque key structure). In such cases, the backend gives us a 422.
+//       const sequenceMightBeUnit = error?.response?.status === 422;
+//       if (!sequenceMightBeUnit) {
+//         logError(error);
+//       }
+//       dispatch(fetchSequenceFailure({ sequenceId, sequenceMightBeUnit }));
+//     }
+//   };
+// }
 
 export function fetchCourse(courseId) {
   return async (dispatch) => {
@@ -166,10 +178,10 @@ export function fetchCourse(courseId) {
           modelsMap: sections,
         }));
         // We update for sequences because the sequence metadata may have come back first.
-        dispatch(updateModelsMap({
-          modelType: 'sequences',
-          modelsMap: sequences,
-        }));
+        // dispatch(updateModelsMap({
+        //   modelType: 'sequences',
+        //   modelsMap: sequences,
+        // }));
       }
 
       const fetchedMetadata = courseMetadataResult.status === 'fulfilled';
