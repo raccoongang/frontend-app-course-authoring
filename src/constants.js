@@ -35,3 +35,10 @@ export const COURSE_CREATOR_STATES = {
   denied: 'denied',
   disallowedForThisSite: 'disallowed_for_this_site',
 };
+
+export const DECODE_ROUTES = {
+  COURSE_UNIT: [
+    '/container/:blockId/:sequenceId',
+    '/container/:blockId',
+  ],
+};

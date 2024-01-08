@@ -20,10 +20,11 @@ import { useCourseUnit } from './hooks';
 import messages from './messages';
 
 const CourseUnit = ({ courseId }) => {
-  const { sequenceId, blockId } = useParams();
+  const { blockId } = useParams();
   const intl = useIntl();
   const {
     isLoading,
+    sequenceId,
     unitTitle,
     savingStatus,
     isTitleEditFormOpen,
@@ -32,7 +33,7 @@ const CourseUnit = ({ courseId }) => {
     headerNavigationsActions,
     handleTitleEdit,
     handleInternetConnectionFailed,
-  } = useCourseUnit({ courseId, blockId, sequenceId });
+  } = useCourseUnit({ courseId, blockId });
 
   document.title = getPageHeadTitle('', unitTitle);
 
