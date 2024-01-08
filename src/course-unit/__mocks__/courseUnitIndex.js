@@ -912,7 +912,7 @@ module.exports = {
         },
       },
       {
-        id: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@interactive_demonstrations',
+        id: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@graded_interactions',
         display_name: 'Example Week 1: Getting Started',
         category: 'chapter',
         has_children: true,

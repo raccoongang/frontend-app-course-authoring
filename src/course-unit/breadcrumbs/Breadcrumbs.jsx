@@ -14,14 +14,14 @@ import messages from './messages';
 const Breadcrumbs = ({ courseId }) => {
   const intl = useIntl();
   const { ancestorInfo } = useSelector(getCourseUnitData);
-  const { sectionsList } = useCourseOutline({ courseId });
+  const { sectionsList, isLoading: isLoadingCourseOutline } = useCourseOutline({ courseId });
   const activeCourseSectionInfo = sectionsList.find((block) => block.id === ancestorInfo?.ancestors[1]?.id);
 
   const breadcrumbs = {
     section: {
       id: ancestorInfo?.ancestors[1]?.id,
       displayName: ancestorInfo?.ancestors[1]?.displayName,
-      dropdownItems: sectionsList || [],
+      dropdownItems: sectionsList,
     },
     subsection: {
       id: ancestorInfo?.ancestors[0]?.id,
@@ -29,6 +29,12 @@ const Breadcrumbs = ({ courseId }) => {
       dropdownItems: activeCourseSectionInfo?.childInfo.children || [],
     },
   };
+
+  const getLoadingPlaceholder = () => (
+    <div className="small px-3 py-2" role="status">
+      {intl.formatMessage(messages.loading)}
+    </div>
+  );
 
   return (
     <nav className="d-flex align-center mb-2.5">
@@ -43,14 +49,18 @@ const Breadcrumbs = ({ courseId }) => {
               />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {breadcrumbs.section.dropdownItems.map(({ studioUrl, displayName }) => (
-                <Dropdown.Item
-                  href={studioUrl}
-                  className="small"
-                >
-                  {displayName}
-                </Dropdown.Item>
-              ))}
+              {(isLoadingCourseOutline || !breadcrumbs.section.dropdownItems.length)
+                ? getLoadingPlaceholder()
+                : breadcrumbs.section.dropdownItems.map(({ id, studioUrl, displayName }) => (
+                  <Dropdown.Item
+                    key={id}
+                    href={studioUrl}
+                    className="small"
+                    data-testid="breadcrumbs-section-dropdown-item"
+                  >
+                    {displayName}
+                  </Dropdown.Item>
+                ))}
             </Dropdown.Menu>
           </Dropdown>
           <Icon
@@ -70,14 +80,18 @@ const Breadcrumbs = ({ courseId }) => {
               />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {breadcrumbs.subsection.dropdownItems.map(({ studioUrl, displayName }) => (
-                <Dropdown.Item
-                  href={studioUrl}
-                  className="small"
-                >
-                  {displayName}
-                </Dropdown.Item>
-              ))}
+              {(isLoadingCourseOutline || !breadcrumbs.subsection.dropdownItems.length)
+                ? getLoadingPlaceholder()
+                : breadcrumbs.subsection.dropdownItems.map(({ id, studioUrl, displayName }) => (
+                  <Dropdown.Item
+                    key={id}
+                    href={studioUrl}
+                    className="small"
+                    data-testid="breadcrumbs-subsection-dropdown-item"
+                  >
+                    {displayName}
+                  </Dropdown.Item>
+                ))}
             </Dropdown.Menu>
           </Dropdown>
         </li>
