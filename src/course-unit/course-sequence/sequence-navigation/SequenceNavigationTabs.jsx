@@ -8,10 +8,12 @@ import { useIndexOfLastVisibleChild } from '../hooks';
 import messages from '../messages';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewUnitItem } from '../../data/thunk';
 
 const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
 
   // const { courseId } = useSelector(state => state.courseDetails);
   const [
@@ -21,6 +23,12 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   ] = useIndexOfLastVisibleChild();
   const shouldDisplayDropdown = indexOfLastVisibleChild === -1;
   // console.log('courseId', courseId);
+
+  const handleClick = () => {
+    console.log('handleClick');
+    dispatch(addNewUnitItem());
+  };
+
   return (
     <div className="sequence-navigation-tabs-wrapper">
       <div className="sequence-navigation-tabs-container d-flex" ref={containerRef}>
@@ -37,11 +45,10 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
           ))}
           {/* TODO: The functionality of the New unit button will be implemented in https://youtrack.raccoongang.com/issue/AXIMST-14 */}
           <Button
-            className="sequence-navigation-tabs-new-unit-btn disabled"
+            className="sequence-navigation-tabs-new-unit-btn"
             variant="outline-primary"
             iconBefore={PlusIcon}
-            as={Link}
-            to="/"
+            onClick={handleClick}
           >
             {intl.formatMessage(messages.newUnitBtnText)}
           </Button>

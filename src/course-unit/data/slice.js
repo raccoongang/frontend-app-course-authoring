@@ -24,6 +24,12 @@ const slice = createSlice({
         fetchUnitLoadingStatus: payload.status,
       };
     },
+    addNewUnitStatus: (state, { payload }) => {
+      state.loadingStatus = {
+        ...state.loadingStatus,
+        fetchUnitLoadingStatus: payload.status,
+      };
+    },
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },

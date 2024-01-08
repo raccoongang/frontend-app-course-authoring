@@ -12,9 +12,11 @@ import {
 import {
   getCourseUnitData,
   editUnitDisplayName,
-  getSequenceMetadata,
+  // getSequenceMetadata,
   getCourseMetadata,
-  getLearningSequencesOutline, getCourseHomeCourseMetadata, getCourseSectionVerticalData,
+  getLearningSequencesOutline,
+  // getCourseHomeCourseMetadata,
+  getCourseSectionVerticalData, addNewUnit,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -24,8 +26,8 @@ import {
   fetchSequenceFailure,
   fetchSequenceSuccess,
   fetchCourseRequest,
-  fetchCourseSuccess,
-  fetchCourseDenied,
+  // fetchCourseSuccess,
+  // fetchCourseDenied,
   fetchCourseFailure,
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
@@ -95,6 +97,27 @@ export function editCourseItemQuery(itemId, displayName) {
   };
 }
 
+export function addNewUnitItem(itemId, displayName) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      await addNewUnit(itemId, displayName).then(async (result) => {
+        // if (result) {
+        //   const courseUnit = await getCourseUnitData(itemId);
+        //   dispatch(fetchCourseItemSuccess(courseUnit));
+        //   dispatch(hideProcessingNotification());
+        //   dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        // }
+      });
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
 // export function fetchSequence(sequenceId) {
 //   return async (dispatch) => {
 //     dispatch(fetchSequenceRequest({ sequenceId }));
@@ -141,11 +164,10 @@ export function fetchCourse(courseId) {
     Promise.allSettled([
       getCourseMetadata(courseId),
       getLearningSequencesOutline(courseId),
-      getCourseHomeCourseMetadata(courseId, 'courseware'),
+      // getCourseHomeCourseMetadata(courseId, 'courseware'),
     ]).then(([
       courseMetadataResult,
-      learningSequencesOutlineResult,
-      courseHomeMetadataResult]) => {
+      learningSequencesOutlineResult]) => {
       if (courseMetadataResult.status === 'fulfilled') {
         dispatch(addModel({
           modelType: 'coursewareMeta',
@@ -153,21 +175,21 @@ export function fetchCourse(courseId) {
         }));
       }
 
-      if (courseHomeMetadataResult.status === 'fulfilled') {
-        dispatch(addModel({
-          modelType: 'courseHomeMeta',
-          model: {
-            id: courseId,
-            ...courseHomeMetadataResult.value,
-          },
-        }));
-      }
+      // if (courseHomeMetadataResult.status === 'fulfilled') {
+      //   dispatch(addModel({
+      //     modelType: 'courseHomeMeta',
+      //     model: {
+      //       id: courseId,
+      //       ...courseHomeMetadataResult.value,
+      //     },
+      //   }));
+      // }
 
       if (learningSequencesOutlineResult.status === 'fulfilled') {
         const {
           courses, sections, sequences,
         } = learningSequencesOutlineResult.value;
-
+        // console.log('courses', courses);
         // This updates the course with a sectionIds array from the Learning Sequence data.
         dispatch(updateModelsMap({
           modelType: 'coursewareMeta',
@@ -185,7 +207,7 @@ export function fetchCourse(courseId) {
       }
 
       const fetchedMetadata = courseMetadataResult.status === 'fulfilled';
-      const fetchedCourseHomeMetadata = courseHomeMetadataResult.status === 'fulfilled';
+      // const fetchedCourseHomeMetadata = courseHomeMetadataResult.status === 'fulfilled';
       const fetchedOutline = learningSequencesOutlineResult.status === 'fulfilled';
 
       // Log errors for each request if needed. Outline failures may occur
@@ -203,20 +225,20 @@ export function fetchCourse(courseId) {
       if (!fetchedMetadata) {
         logError(courseMetadataResult.reason);
       }
-      if (!fetchedCourseHomeMetadata) {
-        logError(courseHomeMetadataResult.reason);
-      }
-      if (fetchedMetadata && fetchedCourseHomeMetadata) {
-        if (courseHomeMetadataResult.value.courseAccess.hasAccess && fetchedOutline) {
-          // User has access
-          dispatch(fetchCourseSuccess({ courseId }));
-          return;
-        }
-        // User either doesn't have access or only has partial access
-        // (can't access course blocks)
-        dispatch(fetchCourseDenied({ courseId }));
-        return;
-      }
+      // if (!fetchedCourseHomeMetadata) {
+      //   logError(courseHomeMetadataResult.reason);
+      // }
+      // if (fetchedMetadata && fetchedCourseHomeMetadata) {
+      //   if (courseHomeMetadataResult.value.courseAccess.hasAccess && fetchedOutline) {
+      //     // User has access
+      //     dispatch(fetchCourseSuccess({ courseId }));
+      //     return;
+      //   }
+      //   // User either doesn't have access or only has partial access
+      //   // (can't access course blocks)
+      //   dispatch(fetchCourseDenied({ courseId }));
+      //   return;
+      // }
 
       // Definitely an error happening
       dispatch(fetchCourseFailure({ courseId }));
