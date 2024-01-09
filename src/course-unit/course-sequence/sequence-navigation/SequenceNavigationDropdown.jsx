@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { Button, Dropdown } from '@edx/paragon';
 import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-
 import { Plus as PlusIcon } from '@edx/paragon/icons/es5';
-import UnitButton from './UnitButton';
+
 import messages from '../messages';
+import UnitButton from './UnitButton';
 
 const SequenceNavigationDropdown = ({ unitId, unitIds, handleClick }) => {
   const intl = useIntl();
@@ -48,6 +48,7 @@ const SequenceNavigationDropdown = ({ unitId, unitIds, handleClick }) => {
 SequenceNavigationDropdown.propTypes = {
   unitId: PropTypes.string.isRequired,
   unitIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleClick: PropTypes.func.isRequired,
 };
 
 export default SequenceNavigationDropdown;

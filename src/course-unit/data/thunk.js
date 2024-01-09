@@ -5,18 +5,18 @@ import {
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
 import { RequestStatus } from '../../data/constants';
-import { NOTIFICATION_MESSAGES } from '../../constants';
 import {
   addModel, updateModel, updateModels, updateModelsMap, addModelsMap,
 } from '../../generic/model-store';
+import { NOTIFICATION_MESSAGES } from '../../constants';
 import {
   getCourseUnitData,
   editUnitDisplayName,
-  // getSequenceMetadata,
   getCourseMetadata,
   getLearningSequencesOutline,
-  // getCourseHomeCourseMetadata,
-  getCourseSectionVerticalData, addNewUnit,
+  getCourseHomeCourseMetadata,
+  getCourseSectionVerticalData,
+  sendNewSequenceNavigationUnit,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -26,11 +26,12 @@ import {
   fetchSequenceFailure,
   fetchSequenceSuccess,
   fetchCourseRequest,
-  // fetchCourseSuccess,
-  // fetchCourseDenied,
   fetchCourseFailure,
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
+  fetchCourseSuccess,
+  fetchCourseDenied,
+  addNewUnitId,
 } from './slice';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -53,11 +54,11 @@ export function fetchCourseSectionVerticalData(courseId, sequenceId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.IN_PROGRESS }));
     dispatch(fetchSequenceRequest({ sequenceId }));
+
     try {
       const courseSectionVerticalData = await getCourseSectionVerticalData(courseId);
       dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
       dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.SUCCESSFUL }));
-      // console.log('courseSectionVerticalData SICK', courseSectionVerticalData.sequence);
       dispatch(updateModel({
         modelType: 'sequences',
         model: courseSectionVerticalData.sequence,
@@ -97,17 +98,28 @@ export function editCourseItemQuery(itemId, displayName) {
   };
 }
 
-export function addNewUnitItem(itemId, displayName) {
+export function addNewSequenceNavigationUnit(unitId, sequenceId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
 
     try {
-      await addNewUnit(itemId, displayName).then(async (result) => {
+      await sendNewSequenceNavigationUnit(sequenceId).then(async (result) => {
         if (result) {
-          // console.log('result', result);
-          // const courseUnit = await getCourseUnitData(itemId);
-          // dispatch(fetchCourseItemSuccess(courseUnit));
+          const courseSectionVerticalData = await getCourseSectionVerticalData(unitId, sequenceId);
+          dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
+          dispatch(addNewUnitId({ newUnitId: result.locator }));
+          dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.SUCCESSFUL }));
+
+          dispatch(updateModel({
+            modelType: 'sequences',
+            model: courseSectionVerticalData.sequence,
+          }));
+          dispatch(updateModels({
+            modelType: 'units',
+            models: courseSectionVerticalData.units,
+          }));
+
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
         }
@@ -119,56 +131,16 @@ export function addNewUnitItem(itemId, displayName) {
   };
 }
 
-// export function fetchSequence(sequenceId) {
-//   return async (dispatch) => {
-//     dispatch(fetchSequenceRequest({ sequenceId }));
-//     try {
-//       const { sequence, units } = await getSequenceMetadata(sequenceId);
-//
-//       if (sequence.blockType !== 'sequential') {
-//         // Some other block types (particularly 'chapter') can be returned
-//         // by this API. We want to error in that case, since downstream
-//         // courseware code is written to render Sequences of Units.
-//         logError(
-//           `Requested sequence '${sequenceId}' `
-//             + `has block type '${sequence.blockType}'; expected block type 'sequential'.`,
-//         );
-//         dispatch(fetchSequenceFailure({ sequenceId }));
-//       } else {
-//         console.log('sequence', sequence);
-//         dispatch(updateModel({
-//           modelType: 'sequences',
-//           model: sequence,
-//         }));
-//         dispatch(updateModels({
-//           modelType: 'units',
-//           models: units,
-//         }));
-//         dispatch(fetchSequenceSuccess({ sequenceId }));
-//       }
-//     } catch (error) {
-//       // Some errors are expected - for example, CoursewareContainer may request sequence metadata for a unit and rely
-//       // on the request failing to notice that it actually does have a unit (mostly so it doesn't have to know anything
-//       // about the opaque key structure). In such cases, the backend gives us a 422.
-//       const sequenceMightBeUnit = error?.response?.status === 422;
-//       if (!sequenceMightBeUnit) {
-//         logError(error);
-//       }
-//       dispatch(fetchSequenceFailure({ sequenceId, sequenceMightBeUnit }));
-//     }
-//   };
-// }
-
 export function fetchCourse(courseId) {
   return async (dispatch) => {
     dispatch(fetchCourseRequest({ courseId }));
     Promise.allSettled([
       getCourseMetadata(courseId),
       getLearningSequencesOutline(courseId),
-      // getCourseHomeCourseMetadata(courseId, 'courseware'),
+      getCourseHomeCourseMetadata(courseId, 'courseware'),
     ]).then(([
       courseMetadataResult,
-      learningSequencesOutlineResult]) => {
+      learningSequencesOutlineResult, courseHomeMetadataResult]) => {
       if (courseMetadataResult.status === 'fulfilled') {
         dispatch(addModel({
           modelType: 'coursewareMeta',
@@ -176,21 +148,19 @@ export function fetchCourse(courseId) {
         }));
       }
 
-      // if (courseHomeMetadataResult.status === 'fulfilled') {
-      //   dispatch(addModel({
-      //     modelType: 'courseHomeMeta',
-      //     model: {
-      //       id: courseId,
-      //       ...courseHomeMetadataResult.value,
-      //     },
-      //   }));
-      // }
+      if (courseHomeMetadataResult.status === 'fulfilled') {
+        dispatch(addModel({
+          modelType: 'courseHomeMeta',
+          model: {
+            id: courseId,
+            ...courseHomeMetadataResult.value,
+          },
+        }));
+      }
 
       if (learningSequencesOutlineResult.status === 'fulfilled') {
-        const {
-          courses, sections, sequences,
-        } = learningSequencesOutlineResult.value;
-        // console.log('courses', courses);
+        const { courses, sections } = learningSequencesOutlineResult.value;
+
         // This updates the course with a sectionIds array from the Learning Sequence data.
         dispatch(updateModelsMap({
           modelType: 'coursewareMeta',
@@ -200,15 +170,10 @@ export function fetchCourse(courseId) {
           modelType: 'sections',
           modelsMap: sections,
         }));
-        // We update for sequences because the sequence metadata may have come back first.
-        // dispatch(updateModelsMap({
-        //   modelType: 'sequences',
-        //   modelsMap: sequences,
-        // }));
       }
 
       const fetchedMetadata = courseMetadataResult.status === 'fulfilled';
-      // const fetchedCourseHomeMetadata = courseHomeMetadataResult.status === 'fulfilled';
+      const fetchedCourseHomeMetadata = courseHomeMetadataResult.status === 'fulfilled';
       const fetchedOutline = learningSequencesOutlineResult.status === 'fulfilled';
 
       // Log errors for each request if needed. Outline failures may occur
@@ -226,20 +191,20 @@ export function fetchCourse(courseId) {
       if (!fetchedMetadata) {
         logError(courseMetadataResult.reason);
       }
-      // if (!fetchedCourseHomeMetadata) {
-      //   logError(courseHomeMetadataResult.reason);
-      // }
-      // if (fetchedMetadata && fetchedCourseHomeMetadata) {
-      //   if (courseHomeMetadataResult.value.courseAccess.hasAccess && fetchedOutline) {
-      //     // User has access
-      //     dispatch(fetchCourseSuccess({ courseId }));
-      //     return;
-      //   }
-      //   // User either doesn't have access or only has partial access
-      //   // (can't access course blocks)
-      //   dispatch(fetchCourseDenied({ courseId }));
-      //   return;
-      // }
+      if (!fetchedCourseHomeMetadata) {
+        logError(courseHomeMetadataResult.reason);
+      }
+      if (fetchedMetadata && fetchedCourseHomeMetadata) {
+        if (courseHomeMetadataResult.value.courseAccess.hasAccess && fetchedOutline) {
+          // User has access
+          dispatch(fetchCourseSuccess({ courseId }));
+          return;
+        }
+        // User either doesn't have access or only has partial access
+        // (can't access course blocks)
+        dispatch(fetchCourseDenied({ courseId }));
+        return;
+      }
 
       // Definitely an error happening
       dispatch(fetchCourseFailure({ courseId }));

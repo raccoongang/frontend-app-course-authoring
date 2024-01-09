@@ -1,33 +1,43 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@edx/paragon';
 import { Plus as PlusIcon } from '@edx/paragon/icons';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { addNewSequenceNavigationUnit } from '../../data/thunk';
 import { useIndexOfLastVisibleChild } from '../hooks';
 import messages from '../messages';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { addNewUnitItem } from '../../data/thunk';
+import { addNewUnitId } from '../../data/slice';
 
 const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { sequenceId, newUnitId } = useSelector(state => state.courseUnit);
+  const { courseId } = useSelector(state => state.courseDetail);
 
-  // const { courseId } = useSelector(state => state.courseDetails);
   const [
     indexOfLastVisibleChild,
     containerRef,
     invisibleStyle,
   ] = useIndexOfLastVisibleChild();
   const shouldDisplayDropdown = indexOfLastVisibleChild === -1;
-  // console.log('courseId', courseId);
 
-  const handleClick = () => {
-    // console.log('handleClick');
-    dispatch(addNewUnitItem());
+  const handleAddNewSequenceUnit = () => {
+    dispatch(addNewSequenceNavigationUnit(unitId, sequenceId));
   };
+
+  useEffect(() => {
+    if (newUnitId) {
+      const pathToNewSequenceUnit = `/course/${courseId}/container/${newUnitId}/${sequenceId}`;
+      navigate(pathToNewSequenceUnit, { replace: true });
+      dispatch(addNewUnitId(''));
+    }
+  }, [newUnitId]);
 
   return (
     <div className="sequence-navigation-tabs-wrapper">
@@ -43,12 +53,11 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
               isActive={unitId === buttonUnitId}
             />
           ))}
-          {/* TODO: The functionality of the New unit button will be implemented in https://youtrack.raccoongang.com/issue/AXIMST-14 */}
           <Button
             className="sequence-navigation-tabs-new-unit-btn"
             variant="outline-primary"
             iconBefore={PlusIcon}
-            onClick={handleClick}
+            onClick={handleAddNewSequenceUnit}
           >
             {intl.formatMessage(messages.newUnitBtnText)}
           </Button>
@@ -58,7 +67,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
         <SequenceNavigationDropdown
           unitId={unitId}
           unitIds={unitIds}
-          handleClick={handleClick}
+          handleClick={handleAddNewSequenceUnit}
         />
       )}
     </div>
