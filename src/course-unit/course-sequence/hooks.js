@@ -23,7 +23,7 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const isCourseOrSequenceNotSuccessful = status !== SUCCESSFUL || sequenceStatus !== SUCCESSFUL;
   const areIdsNotValid = !currentSequenceId || !currentUnitId || !sequence?.unitIds;
   const isNotSuccessfulCompletion = isCourseOrSequenceNotSuccessful || areIdsNotValid;
-
+  // console.log('sequenceStatus', sequenceStatus);
   // If we don't know the sequence and unit yet, then assume no.
   if (isNotSuccessfulCompletion) {
     return { isFirstUnit: false, isLastUnit: false };

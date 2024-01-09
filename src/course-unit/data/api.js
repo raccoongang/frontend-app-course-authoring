@@ -31,7 +31,7 @@ export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl(
 export async function getCourseUnitData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseUnitApiUrl(unitId));
-  console.log('GHGHGFHGHG', data);
+  // console.log('GHGHGFHGHG', data);
   return camelCaseObject(data);
 }
 
@@ -83,7 +83,7 @@ export async function addNewUnit(unitId, displayName) {
 export async function getCourseSectionVerticalData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionVerticalApiUrl(unitId));
-  console.log('getCourseSectionVerticalData', normalizeCourseSectionVerticalData(data));
+  // console.log('getCourseSectionVerticalData', normalizeCourseSectionVerticalData(data));
 
   return normalizeCourseSectionVerticalData(data);
 }

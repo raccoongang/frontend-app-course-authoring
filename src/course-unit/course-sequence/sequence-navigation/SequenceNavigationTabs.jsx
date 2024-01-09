@@ -25,7 +25,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   // console.log('courseId', courseId);
 
   const handleClick = () => {
-    console.log('handleClick');
+    // console.log('handleClick');
     dispatch(addNewUnitItem());
   };
 
@@ -58,6 +58,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
         <SequenceNavigationDropdown
           unitId={unitId}
           unitIds={unitIds}
+          handleClick={handleClick}
         />
       )}
     </div>

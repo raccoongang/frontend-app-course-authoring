@@ -31,7 +31,7 @@ const SequenceNavigation = ({
   } = useSequenceNavigationMetadata(sequenceId, unitId);
   const sequence = useModel('sequences', sequenceId);
   const shouldDisplayNotificationTriggerInSequence = useWindowSize().width < breakpoints.small.minWidth;
-  console.log('MODELS >>>', MODELS);
+  // console.log('MODELS >>>', MODELS);
   const renderUnitButtons = () => {
     if (sequence?.unitIds?.length === 0 || unitId === null) {
       return (

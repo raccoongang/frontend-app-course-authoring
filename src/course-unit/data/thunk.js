@@ -104,12 +104,13 @@ export function addNewUnitItem(itemId, displayName) {
 
     try {
       await addNewUnit(itemId, displayName).then(async (result) => {
-        // if (result) {
-        //   const courseUnit = await getCourseUnitData(itemId);
-        //   dispatch(fetchCourseItemSuccess(courseUnit));
-        //   dispatch(hideProcessingNotification());
-        //   dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-        // }
+        if (result) {
+          // console.log('result', result);
+          // const courseUnit = await getCourseUnitData(itemId);
+          // dispatch(fetchCourseItemSuccess(courseUnit));
+          dispatch(hideProcessingNotification());
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
       });
     } catch (error) {
       dispatch(hideProcessingNotification());
