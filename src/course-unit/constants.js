@@ -8,7 +8,7 @@ import {
 
 export const UNIT_ICON_TYPES = ['video', 'other', 'vertical', 'problem', 'lock'];
 
-export const typeToIconMapping = {
+export const TYPE_ICONS_MAP = {
   video: VideoCameraIcon,
   other: BookOpenIcon,
   vertical: FormatListBulletedIcon,

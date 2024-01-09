@@ -47,6 +47,7 @@ const SequenceNavigation = ({
   };
 
   const renderPreviousButton = () => {
+    const buttonText = intl.formatMessage(messages.prevBtnText);
     const disabled = isFirstUnit;
     const prevArrow = isRtl(getLocale()) ? ChevronRightIcon : ChevronLeftIcon;
 
@@ -59,7 +60,7 @@ const SequenceNavigation = ({
         as={disabled ? undefined : Link}
         to={disabled ? undefined : previousLink}
       >
-        {shouldDisplayNotificationTriggerInSequence ? null : intl.formatMessage(messages.prevBtnText)}
+        {shouldDisplayNotificationTriggerInSequence ? null : buttonText}
       </Button>
     );
   };

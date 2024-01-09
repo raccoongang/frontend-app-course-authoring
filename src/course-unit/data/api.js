@@ -80,8 +80,8 @@ export async function getCourseSectionVerticalData(unitId) {
  * @returns {Promise<Object>} A Promise that resolves to the normalized learning sequences outline data.
  */
 export async function getLearningSequencesOutline(courseId) {
-  const outlineUrl = new URL(getLearningSequencesOutlineApiUrl(courseId));
-  const { data } = await getAuthenticatedHttpClient().get(outlineUrl.href, {});
+  const { href } = new URL(getLearningSequencesOutlineApiUrl(courseId));
+  const { data } = await getAuthenticatedHttpClient().get(href, {});
 
   return normalizeLearningSequencesData(data);
 }

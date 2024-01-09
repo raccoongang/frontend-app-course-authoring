@@ -1,3 +1,5 @@
+import { createSelector } from '@reduxjs/toolkit';
+
 import { RequestStatus } from '../../data/constants';
 
 export const getCourseUnitData = (state) => state.courseUnit.unit;
@@ -10,12 +12,19 @@ export const getSequenceStatus = (state) => state.courseUnit.sequenceStatus;
 
 export const getCourseSectionVertical = (state) => state.courseUnit.courseSectionVertical;
 
-export function sequenceIdsSelector(state) {
-  if (state.courseUnit.courseStatus !== RequestStatus.SUCCESSFUL) {
-    return [];
-  }
-  const { sectionIds = [] } = state.models.coursewareMeta[state.courseDetail.courseId];
+export const getCourseStatus = state => state.courseUnit.courseStatus;
+export const getCoursewareMeta = state => state.models.coursewareMeta;
+export const getSections = state => state.models.sections;
+export const getCourseId = state => state.courseDetail.courseId;
 
-  return sectionIds
-    .flatMap(sectionId => state.models.sections[sectionId].sequenceIds);
-}
+export const sequenceIdsSelector = createSelector(
+  [getCourseStatus, getCoursewareMeta, getSections, getCourseId],
+  (courseStatus, coursewareMeta, sections, courseId) => {
+    if (courseStatus !== RequestStatus.SUCCESSFUL) {
+      return [];
+    }
+
+    const sectionIds = coursewareMeta[courseId].sectionIds || [];
+    return sectionIds.flatMap(sectionId => sections[sectionId].sequenceIds);
+  },
+);

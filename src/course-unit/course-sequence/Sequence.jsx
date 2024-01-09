@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { breakpoints, useWindowSize } from '@edx/paragon';
-import { injectIntl, useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@edx/frontend-platform/i18n';
 
 import Loading from '../../generic/Loading';
 import { RequestStatus } from '../../data/constants';
@@ -48,7 +48,7 @@ const Sequence = ({
 
   // sequence status 'failed' and any other unexpected sequence status.
   return (
-    <p className="text-center py-5 mx-auto" style={{ maxWidth: '30em' }}>
+    <p className="sequence-load-failure-msg text-center py-5 mx-auto">
       {intl.formatMessage(messages.sequenceLoadFailure)}
     </p>
   );

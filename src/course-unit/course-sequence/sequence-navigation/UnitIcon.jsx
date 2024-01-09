@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { Icon } from '@edx/paragon';
 import { BookOpen as BookOpenIcon } from '@edx/paragon/icons';
 
-import { typeToIconMapping, UNIT_ICON_TYPES } from '../../constants';
+import { TYPE_ICONS_MAP, UNIT_ICON_TYPES } from '../../constants';
 
 const UnitIcon = ({ type }) => {
-  const icon = typeToIconMapping[type] || BookOpenIcon;
+  const icon = TYPE_ICONS_MAP[type] || BookOpenIcon;
 
   return <Icon src={icon} screenReaderText={type} />;
 };
