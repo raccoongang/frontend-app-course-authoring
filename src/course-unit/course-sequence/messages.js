@@ -25,6 +25,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.sequence.no.content',
     defaultMessage: 'There is no content here.',
   },
+  sequenceDropdownTitle: {
+    id: 'course-authoring.course-unit.sequence.navigation.menu',
+    defaultMessage: '{current} of {total}',
+  },
 });
 
 export default messages;

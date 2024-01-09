@@ -4,7 +4,7 @@ import {
   FormatListBulleted as FormatListBulletedIcon,
   Lock as LockIcon,
   VideoCamera as VideoCameraIcon,
-} from '@edx/paragon/icons/es5';
+} from '@edx/paragon/icons';
 
 export const UNIT_ICON_TYPES = ['video', 'other', 'vertical', 'problem', 'lock'];
 

@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { RequestStatus } from '../data/constants';
 import {
   fetchCourseUnitQuery,
-  editCourseItemQuery, fetchSequence, fetchCourse, fetchCourseSectionVerticalData,
+  editCourseItemQuery,
+  fetchSequence,
+  fetchCourse,
+  fetchCourseSectionVerticalData,
 } from './data/thunk';
 import {
   getCourseUnitData,
@@ -16,7 +19,8 @@ import {
 import { updateSavingStatus } from './data/slice';
 import { getUnitViewLivePath, getUnitPreviewPath } from './utils';
 
-const useCourseUnit = ({ courseId, blockId }) => {
+// eslint-disable-next-line import/prefer-default-export
+export const useCourseUnit = ({ courseId, blockId }) => {
   const dispatch = useDispatch();
 
   const { config } = useContext(AppContext);
@@ -82,6 +86,3 @@ const useCourseUnit = ({ courseId, blockId }) => {
     handleTitleEditSubmit,
   };
 };
-
-// eslint-disable-next-line import/prefer-default-export
-export { useCourseUnit };

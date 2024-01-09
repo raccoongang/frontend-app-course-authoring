@@ -138,7 +138,7 @@ export function normalizeLearningSequencesData(learningSequencesData) {
     // If we are unreleased and already stripped out all our children, just don't show us at all.
     // (We check both release date and children because children will exist for an unreleased section even for staff,
     // so we still want to show this section.)
-    if (!isReleased(section) && availableSequenceIds.length === 0) {
+    if (!isReleased(section) && !availableSequenceIds.length) {
       return;
     }
 

@@ -36,7 +36,7 @@ export const COURSE_CREATOR_STATES = {
   disallowedForThisSite: 'disallowed_for_this_site',
 };
 
-export const DECODE_ROUTES = {
+export const DECODED_ROUTES = {
   COURSE_UNIT: [
     '/container/:blockId/:sequenceId',
     '/container/:blockId',

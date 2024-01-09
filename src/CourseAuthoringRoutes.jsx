@@ -18,7 +18,7 @@ import { CourseUpdates } from './course-updates';
 import { CourseUnit } from './course-unit';
 import CourseExportPage from './export-page/CourseExportPage';
 import CourseImportPage from './import-page/CourseImportPage';
-import { DECODE_ROUTES } from './constants';
+import { DECODED_ROUTES } from './constants';
 
 /**
  * As of this writing, these routes are mounted at a path prefixed with the following:
@@ -70,7 +70,7 @@ const CourseAuthoringRoutes = () => {
           path="custom-pages/*"
           element={<PageWrap><CustomPages courseId={courseId} /></PageWrap>}
         />
-        {DECODE_ROUTES.COURSE_UNIT.map((path) => (
+        {DECODED_ROUTES.COURSE_UNIT.map((path) => (
           <Route
             path={path}
             element={process.env.ENABLE_UNIT_PAGE === 'true' ? <PageWrap><CourseUnit courseId={courseId} /></PageWrap> : null}

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Button } from '@edx/paragon';
 import { Plus as PlusIcon } from '@edx/paragon/icons';
-import { Link } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { useIndexOfLastVisibleChild } from '../hooks';

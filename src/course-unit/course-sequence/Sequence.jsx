@@ -33,8 +33,8 @@ const Sequence = ({
 
   // If sequence might be a unit, we want to keep showing a spinner - the courseware container will redirect us when
   // it knows which sequence to actually go to.
-  const loading = sequenceStatus === IN_PROGRESS || (sequenceStatus === FAILED && sequenceMightBeUnit);
-  if (loading) {
+  const isLoading = sequenceStatus === IN_PROGRESS || (sequenceStatus === FAILED && sequenceMightBeUnit);
+  if (isLoading) {
     if (!sequenceId) {
       return (<div>{intl.formatMessage(messages.sequenceNoContent)}</div>);
     }
@@ -43,11 +43,7 @@ const Sequence = ({
   }
 
   if (sequenceStatus === SUCCESSFUL) {
-    return (
-      <div>
-        {defaultContent}
-      </div>
-    );
+    return defaultContent;
   }
 
   // sequence status 'failed' and any other unexpected sequence status.
@@ -69,4 +65,4 @@ Sequence.defaultProps = {
   unitId: null,
 };
 
-export default injectIntl(Sequence);
+export default Sequence;

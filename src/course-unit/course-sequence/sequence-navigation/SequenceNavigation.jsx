@@ -13,8 +13,9 @@ import {
 
 import { useModel } from '../../../generic/model-store';
 import { RequestStatus } from '../../../data/constants';
-import messages from '../messages';
+import { getSequenceStatus } from '../../data/selectors';
 import { useSequenceNavigationMetadata } from '../hooks';
+import messages from '../messages';
 import SequenceNavigationTabs from './SequenceNavigationTabs';
 
 const SequenceNavigation = ({
@@ -23,7 +24,7 @@ const SequenceNavigation = ({
   sequenceId,
   className,
 }) => {
-  const { sequenceStatus } = useSelector(state => state.courseUnit);
+  const sequenceStatus = useSelector(getSequenceStatus);
   const {
     isFirstUnit, isLastUnit, nextLink, previousLink,
   } = useSequenceNavigationMetadata(sequenceId, unitId);
