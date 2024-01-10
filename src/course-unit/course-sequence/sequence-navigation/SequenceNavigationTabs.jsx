@@ -6,7 +6,7 @@ import { Plus as PlusIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate } from 'react-router-dom';
 
-import { addNewUnitItem, addNewSequenceNavigationUnit } from '../../data/thunk';
+import { addNewSequenceNavigationUnit } from '../../data/thunk';
 import { useIndexOfLastVisibleChild } from '../hooks';
 import { addNewUnitId, changeTitleEditFormOpen } from '../../data/slice';
 import messages from '../messages';
