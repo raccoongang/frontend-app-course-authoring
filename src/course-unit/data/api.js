@@ -4,7 +4,6 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 import {
   normalizeLearningSequencesData,
-  normalizeSequenceMetadata,
   normalizeMetadata,
   normalizeCourseHomeCourseMetadata,
   appendBrowserTimezoneToUrl,
@@ -17,6 +16,7 @@ const getLmsBaseUrl = () => getConfig().LMS_BASE_URL;
 export const getCourseUnitApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/container/${itemId}`;
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}`;
+export const getXBlocksBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
 export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
 export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
@@ -61,6 +61,22 @@ export async function getCourseSectionVerticalData(unitId) {
     .get(getCourseSectionVerticalApiUrl(unitId));
 
   return normalizeCourseSectionVerticalData(data);
+}
+
+/**
+ * Sends a new sequence navigation unit.
+ * @param {string} sequenceId - The ID of the parent sequence.
+ * @returns {Promise<object>} A Promise that resolves with the server response data.
+ */
+export async function sendNewSequenceNavigationUnit(sequenceId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getXBlocksBaseApiUrl(), {
+      parent_locator: sequenceId,
+      category: 'vertical',
+      display_name: 'Unit',
+    });
+
+  return data;
 }
 
 /**
