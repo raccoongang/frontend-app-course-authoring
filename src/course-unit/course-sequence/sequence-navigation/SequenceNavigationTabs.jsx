@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { addNewSequenceNavigationUnit } from '../../data/thunk';
+import SequenceNavigationDropdown from './SequenceNavigationDropdown';
+import { addNewUnitId, changeTitleEditFormOpen } from '../../data/slice';
 import { useIndexOfLastVisibleChild } from '../hooks';
 import messages from '../messages';
-import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
-import { addNewUnitId } from '../../data/slice';
 
 const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const intl = useIntl();
@@ -36,6 +36,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
       const pathToNewSequenceUnit = `/course/${courseId}/container/${newUnitId}/${sequenceId}`;
       navigate(pathToNewSequenceUnit, { replace: true });
       dispatch(addNewUnitId(''));
+      dispatch(changeTitleEditFormOpen(true));
     }
   }, [newUnitId]);
 

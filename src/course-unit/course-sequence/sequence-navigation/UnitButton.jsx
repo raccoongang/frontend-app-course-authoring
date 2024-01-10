@@ -10,6 +10,7 @@ const UnitButton = ({
 }) => {
   const { sequenceId } = useSelector(state => state.courseUnit);
   const { courseId } = useSelector(state => state.courseDetail);
+
   return (
     <Button
       className={className}
@@ -17,6 +18,7 @@ const UnitButton = ({
       as={Link}
       title={title}
       to={`/course/${courseId}/container/${unitId}/${sequenceId}/`}
+      data-testid="add-new-unit-btn"
     >
       <UnitIcon type={contentType} />
       {showTitle && <span className="unit-title">{title}</span>}

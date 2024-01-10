@@ -33,7 +33,7 @@ const SequenceNavigationDropdown = ({ unitId, unitIds, handleClick }) => {
           />
         ))}
         <Button
-          className="sequence-navigation-tabs-new-unit-btn"
+          as={Dropdown.Item}
           variant="outline-primary"
           iconBefore={PlusIcon}
           onClick={handleClick}

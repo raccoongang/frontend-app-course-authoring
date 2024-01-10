@@ -56,6 +56,7 @@ export async function editUnitDisplayName(unitId, displayName) {
  * @returns {Promise<object>} A Promise that resolves with the server response data.
  */
 export async function sendNewSequenceNavigationUnit(sequenceId) {
+  console.log('POOOOOST');
   const { data } = await getAuthenticatedHttpClient()
     .post(getXBlocksBaseApiUrl(), {
       parent_locator: sequenceId,
@@ -72,6 +73,7 @@ export async function sendNewSequenceNavigationUnit(sequenceId) {
  * @returns {Promise<Object>}
  */
 export async function getCourseSectionVerticalData(unitId) {
+  console.log('getCourseSectionVerticalData unitId', unitId);
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionVerticalApiUrl(unitId));
 

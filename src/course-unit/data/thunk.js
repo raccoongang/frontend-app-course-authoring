@@ -51,6 +51,8 @@ export function fetchCourseUnitQuery(courseId) {
 }
 
 export function fetchCourseSectionVerticalData(courseId, sequenceId) {
+  // console.log('courseId', courseId);
+  // console.log('sequenceId', sequenceId);
   return async (dispatch) => {
     dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.IN_PROGRESS }));
     dispatch(fetchSequenceRequest({ sequenceId }));

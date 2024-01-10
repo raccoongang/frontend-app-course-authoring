@@ -7,6 +7,7 @@ const slice = createSlice({
   name: 'courseUnit',
   initialState: {
     savingStatus: '',
+    isTitleEditFormOpen: false,
     newUnitId: null,
     loadingStatus: {
       fetchUnitLoadingStatus: RequestStatus.IN_PROGRESS,
@@ -16,6 +17,9 @@ const slice = createSlice({
     courseSectionVertical: {},
   },
   reducers: {
+    changeTitleEditFormOpen: (state, { payload }) => {
+      state.isTitleEditFormOpen = payload;
+    },
     addNewUnitId: (state, { payload }) => {
       state.newUnitId = payload.newUnitId;
     },
@@ -95,6 +99,7 @@ export const {
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
   addNewUnitId,
+  changeTitleEditFormOpen,
 } = slice.actions;
 
 export const {

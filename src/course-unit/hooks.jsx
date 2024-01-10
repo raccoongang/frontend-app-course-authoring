@@ -13,7 +13,7 @@ import {
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
-import { updateSavingStatus } from './data/slice';
+import { changeTitleEditFormOpen, updateSavingStatus } from './data/slice';
 import { getUnitViewLivePath, getUnitPreviewPath } from './utils';
 
 const useCourseUnit = ({ courseId, blockId }) => {
@@ -24,7 +24,8 @@ const useCourseUnit = ({ courseId, blockId }) => {
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
   const navigate = useNavigate();
-  const [isTitleEditFormOpen, toggleTitleEditForm] = useState(false);
+  // const [isTitleEditFormOpen, toggleTitleEditForm] = useState(false);
+  const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
@@ -44,7 +45,8 @@ const useCourseUnit = ({ courseId, blockId }) => {
   };
 
   const handleTitleEdit = () => {
-    toggleTitleEditForm(!isTitleEditFormOpen);
+    // toggleTitleEditForm(!isTitleEditFormOpen);
+    dispatch(changeTitleEditFormOpen(!isTitleEditFormOpen));
   };
 
   const handleTitleEditSubmit = (displayName) => {
