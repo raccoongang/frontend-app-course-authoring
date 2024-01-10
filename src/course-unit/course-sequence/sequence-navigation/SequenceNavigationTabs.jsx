@@ -1,22 +1,45 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Button } from '@edx/paragon';
 import { Plus as PlusIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { useNavigate } from 'react-router-dom';
 
+import { addNewUnitItem, addNewSequenceNavigationUnit } from '../../data/thunk';
 import { useIndexOfLastVisibleChild } from '../hooks';
+import { addNewUnitId, changeTitleEditFormOpen } from '../../data/slice';
 import messages from '../messages';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
 
 const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const sequenceId = useSelector(state => state.courseUnit.sequenceId);
+  const newUnitId = useSelector(state => state.courseUnit.newUnitId);
+  const courseId = useSelector(state => state.courseDetail.courseId);
+
   const [
     indexOfLastVisibleChild,
     containerRef,
     invisibleStyle,
   ] = useIndexOfLastVisibleChild();
   const shouldDisplayDropdown = indexOfLastVisibleChild === -1;
+
+  const handleAddNewSequenceUnit = () => {
+    dispatch(addNewSequenceNavigationUnit(unitId, sequenceId));
+  };
+
+  useEffect(() => {
+    if (newUnitId) {
+      const pathToNewSequenceUnit = `/course/${courseId}/container/${newUnitId}/${sequenceId}`;
+      navigate(pathToNewSequenceUnit, { replace: true });
+      dispatch(addNewUnitId(''));
+      dispatch(changeTitleEditFormOpen(true));
+    }
+  }, [newUnitId]);
 
   return (
     <div className="sequence-navigation-tabs-wrapper">
@@ -32,13 +55,11 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
               isActive={unitId === buttonUnitId}
             />
           ))}
-          {/* TODO: The functionality of the New unit button will be implemented in https://youtrack.raccoongang.com/issue/AXIMST-14 */}
           <Button
-            className="sequence-navigation-tabs-new-unit-btn disabled"
+            className="sequence-navigation-tabs-new-unit-btn"
             variant="outline-primary"
             iconBefore={PlusIcon}
-            as={Link}
-            to="/"
+            onClick={handleAddNewSequenceUnit}
           >
             {intl.formatMessage(messages.newUnitBtnText)}
           </Button>
@@ -48,6 +69,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
         <SequenceNavigationDropdown
           unitId={unitId}
           unitIds={unitIds}
+          handleClick={handleAddNewSequenceUnit}
         />
       )}
     </div>

@@ -13,7 +13,10 @@ import {
   getCourseUnitData,
   editUnitDisplayName,
   getCourseMetadata,
-  getLearningSequencesOutline, getCourseHomeCourseMetadata, getCourseSectionVerticalData,
+  getLearningSequencesOutline,
+  getCourseHomeCourseMetadata,
+  getCourseSectionVerticalData,
+  sendNewSequenceNavigationUnit,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -27,7 +30,7 @@ import {
   fetchCourseDenied,
   fetchCourseFailure,
   fetchCourseSectionVerticalDataSuccess,
-  updateLoadingCourseSectionVerticalDataStatus,
+  updateLoadingCourseSectionVerticalDataStatus, addNewUnitId,
 } from './slice';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -69,6 +72,38 @@ export function fetchCourseSectionVerticalData(courseId, sequenceId) {
       dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.FAILED }));
       dispatch(fetchSequenceFailure({ sequenceId }));
       return false;
+    }
+  };
+}
+
+export function addNewSequenceNavigationUnit(unitId, sequenceId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
+
+    try {
+      await sendNewSequenceNavigationUnit(sequenceId).then(async (result) => {
+        if (result) {
+          const courseSectionVerticalData = await getCourseSectionVerticalData(unitId, sequenceId);
+          dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
+          dispatch(addNewUnitId({ newUnitId: result.locator }));
+          dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.SUCCESSFUL }));
+
+          dispatch(updateModel({
+            modelType: 'sequences',
+            model: courseSectionVerticalData.sequence,
+          }));
+          dispatch(updateModels({
+            modelType: 'units',
+            models: courseSectionVerticalData.units,
+          }));
+          dispatch(hideProcessingNotification());
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
     }
   };
 }

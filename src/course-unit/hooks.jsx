@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ import {
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
-import { updateSavingStatus } from './data/slice';
+import { changeTitleEditFormOpen, updateSavingStatus } from './data/slice';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -26,7 +26,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const loadingStatus = useSelector(getLoadingStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const navigate = useNavigate();
-  const [isTitleEditFormOpen, toggleTitleEditForm] = useState(false);
+  const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
@@ -45,7 +45,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   };
 
   const handleTitleEdit = () => {
-    toggleTitleEditForm(!isTitleEditFormOpen);
+    dispatch(changeTitleEditFormOpen(!isTitleEditFormOpen));
   };
 
   const handleTitleEditSubmit = (displayName) => {
@@ -66,6 +66,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(fetchCourseUnitQuery(blockId));
     dispatch(fetchCourseSectionVerticalData(blockId, sequenceId));
     dispatch(fetchCourse(courseId));
+
     handleNavigate(sequenceId);
   }, [courseId, blockId, sequenceId]);
 
