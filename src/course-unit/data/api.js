@@ -8,6 +8,7 @@ import {
   normalizeMetadata,
   normalizeCourseHomeCourseMetadata,
   appendBrowserTimezoneToUrl,
+  normalizeCourseSectionVerticalData,
 } from './utils';
 
 const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
@@ -17,7 +18,6 @@ export const getCourseUnitApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/con
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}`;
 export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
-export const getSequenceMetadataApiUrl = (sequenceId) => `${getLmsBaseUrl()}/api/courseware/sequence/${sequenceId}`;
 export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
 export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
 export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/course_home/course_metadata/${courseId}`;
@@ -52,18 +52,6 @@ export async function editUnitDisplayName(unitId, displayName) {
 }
 
 /**
- * Get sequence metadata for a given sequence ID.
- * @param {string} sequenceId - The ID of the sequence for which metadata is requested.
- * @returns {Promise<Object>} - A Promise that resolves to the normalized sequence metadata.
- */
-export async function getSequenceMetadata(sequenceId) {
-  const { data } = await getAuthenticatedHttpClient()
-    .get(getSequenceMetadataApiUrl(sequenceId), {});
-
-  return normalizeSequenceMetadata(data);
-}
-
-/**
  * Get an object containing course section vertical data.
  * @param {string} unitId
  * @returns {Promise<Object>}
@@ -72,7 +60,7 @@ export async function getCourseSectionVerticalData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionVerticalApiUrl(unitId));
 
-  return camelCaseObject(data);
+  return normalizeCourseSectionVerticalData(data);
 }
 
 /**
