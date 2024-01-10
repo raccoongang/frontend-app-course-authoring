@@ -18,6 +18,7 @@ const UnitButton = ({
       as={Link}
       title={title}
       to={`/course/${courseId}/container/${unitId}/${sequenceId}/`}
+      data-testid="course-unit-btn"
     >
       <UnitIcon type={contentType} />
       {showTitle && <span className="unit-title">{title}</span>}

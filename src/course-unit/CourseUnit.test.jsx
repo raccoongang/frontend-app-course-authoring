@@ -8,10 +8,11 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
+import { cloneDeep, set } from 'lodash';
 import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
-  getXBlockBaseApiUrl,
+  getXBlockBaseApiUrl, getXBlocksBaseApiUrl,
 } from './data/api';
 import {
   fetchCourseSectionVerticalData,
@@ -21,16 +22,18 @@ import initializeStore from '../store';
 import {
   courseSectionVerticalMock,
   courseUnitIndexMock,
+  courseUnitMock,
 } from './__mocks__';
 import { executeThunk } from '../utils';
 import CourseUnit from './CourseUnit';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
+import messages from './course-sequence/messages';
 
 let axiosMock;
 let store;
 const courseId = '123';
-const blockId = '567890';
+const blockId = 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc';
 const unitDisplayName = courseUnitIndexMock.metadata.display_name;
 
 jest.mock('react-router-dom', () => ({
@@ -150,5 +153,49 @@ describe('<CourseUnit />', () => {
     titleEditField = queryByRole('textbox', { name: headerTitleMessages.ariaLabelButtonEdit.defaultMessage });
     expect(titleEditField).not.toBeInTheDocument();
     expect(await findByText(newDisplayName)).toBeInTheDocument();
+  });
+
+  it('correct addition of a new course unit after click on the "Add new unit" button', async () => {
+    const { getByRole, getAllByTestId } = render(<RootWrapper />);
+    let units = null;
+    const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
+    set(updatedCourseSectionVerticalData, 'xblock_info.ancestor_info.ancestors[0].child_info.children', [
+      ...updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0].child_info.children,
+      courseUnitMock,
+    ]);
+
+    await waitFor(async () => {
+      units = getAllByTestId('course-unit-btn');
+      const courseUnits = courseSectionVerticalMock.xblock_info.ancestor_info.ancestors[0].child_info.children;
+      expect(units.length).toEqual(courseUnits.length);
+    });
+
+    const newUnitParamsMock = {
+      parent_locator: 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@d91b9e5d8bc64d57a1332d06bf2f2193',
+      category: 'vertical',
+      display_name: 'Unit',
+    };
+
+    axiosMock
+      .onPost(getXBlocksBaseApiUrl(), newUnitParamsMock)
+      .reply(200, { dummy: 'value' });
+    axiosMock.reset();
+    axiosMock
+      .onGet(getCourseSectionVerticalApiUrl(blockId))
+      .reply(200, {
+        ...updatedCourseSectionVerticalData,
+      });
+
+    await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
+
+    await waitFor(async () => {
+      const addNewUnitBtn = getByRole('button', { name: messages.newUnitBtnText.defaultMessage });
+      units = getAllByTestId('course-unit-btn');
+      const updatedCourseUnits = updatedCourseSectionVerticalData
+        .xblock_info.ancestor_info.ancestors[0].child_info.children;
+
+      userEvent.click(addNewUnitBtn);
+      expect(units.length).toEqual(updatedCourseUnits.length);
+    });
   });
 });
