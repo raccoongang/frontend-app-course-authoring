@@ -10,6 +10,7 @@ const slice = createSlice({
     loadingStatus: {
       fetchUnitLoadingStatus: RequestStatus.IN_PROGRESS,
       courseSectionVerticalLoadingStatus: RequestStatus.IN_PROGRESS,
+      fetchAdvancedSettingsModulesLoadingStatus: RequestStatus.IN_PROGRESS,
     },
     unit: {},
     courseSectionVertical: {},
@@ -73,6 +74,15 @@ const slice = createSlice({
         createUnitXblockLoadingStatus: payload.status,
       };
     },
+    fetchAdvancedSettingsModulesSuccess: (state, { payload }) => {
+      state.advancedSettingsModules = payload.advancedModules;
+    },
+    updateLoadingAdvancedSettingsModulesStatus: (state, { payload }) => {
+      state.loadingStatus = {
+        ...state.loadingStatus,
+        fetchAdvancedSettingsModulesLoadingStatus: payload.status,
+      };
+    },
   },
 });
 
@@ -91,6 +101,8 @@ export const {
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
+  updateLoadingAdvancedSettingsModulesStatus,
+  fetchAdvancedSettingsModulesSuccess,
 } = slice.actions;
 
 export const {

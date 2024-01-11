@@ -17,6 +17,7 @@ export const getCourseUnitApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/con
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}`;
 export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
+export const getAdvancedSettingsModules = (courseId) => `${getStudioBaseUrl()}/api/contentstore/v0/advanced_settings/${courseId}?filter_fields=advanced_modules`;
 export const getSequenceMetadataApiUrl = (sequenceId) => `${getLmsBaseUrl()}/api/courseware/sequence/${sequenceId}`;
 export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
 export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
@@ -71,6 +72,13 @@ export async function getSequenceMetadata(sequenceId) {
 export async function getCourseSectionVerticalData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionVerticalApiUrl(unitId));
+
+  return camelCaseObject(data);
+}
+
+export async function getAdvancedSettingsModulesData(unitId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getAdvancedSettingsModules(unitId));
 
   return camelCaseObject(data);
 }

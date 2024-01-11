@@ -18,6 +18,7 @@ import {
   getCourseHomeCourseMetadata,
   getCourseSectionVerticalData,
   createCourseXblock,
+  getAdvancedSettingsModulesData,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -33,6 +34,8 @@ import {
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
+  updateLoadingAdvancedSettingsModulesStatus,
+  fetchAdvancedSettingsModulesSuccess,
 } from './slice';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -46,6 +49,22 @@ export function fetchCourseUnitQuery(courseId) {
       return true;
     } catch (error) {
       dispatch(updateLoadingCourseUnitStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function fetchAdvancedSettingsModules(courseId) {
+  return async (dispatch) => {
+    dispatch(updateLoadingAdvancedSettingsModulesStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      const advancedSettingsModules = await getAdvancedSettingsModulesData(courseId);
+      dispatch(fetchAdvancedSettingsModulesSuccess(advancedSettingsModules));
+      dispatch(updateLoadingAdvancedSettingsModulesStatus({ status: RequestStatus.SUCCESSFUL }));
+      return true;
+    } catch (error) {
+      dispatch(updateLoadingAdvancedSettingsModulesStatus({ status: RequestStatus.FAILED }));
       return false;
     }
   };
