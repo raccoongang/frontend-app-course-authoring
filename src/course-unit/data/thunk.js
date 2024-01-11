@@ -14,7 +14,10 @@ import {
   editUnitDisplayName,
   getSequenceMetadata,
   getCourseMetadata,
-  getLearningSequencesOutline, getCourseHomeCourseMetadata, getCourseSectionVerticalData, createCourseXblock,
+  getLearningSequencesOutline,
+  getCourseHomeCourseMetadata,
+  getCourseSectionVerticalData,
+  createCourseXblock,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
