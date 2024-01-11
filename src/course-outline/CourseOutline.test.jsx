@@ -56,7 +56,6 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({
     pathname: mockPathname,
   }),
-  useSearchParams: () => [new URLSearchParams({ show: locatorSectionId })],
 }));
 
 jest.mock('../help-urls/hooks', () => ({
@@ -477,18 +476,6 @@ describe('<CourseOutline />', () => {
     await checkDuplicateBtn(section, null, sectionElement, 'section', 5);
   });
 
-  it('check correct scrolling to the locator section when URL has a "show" param', async () => {
-    const scrollIntoViewFn = jest.fn();
-    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewFn;
-    const { getByText } = render(<RootWrapper />);
-
-    await waitFor(() => {
-      expect(getByText(locatorSectionName)).toBeInTheDocument();
-      expect(scrollIntoViewFn).toHaveBeenCalled();
-      expect(scrollIntoViewFn).toHaveBeenCalledWith({ behavior: 'smooth' });
-    });
-  });
-
   it('check section, subsection & unit is published when publish button is clicked', async () => {
     const { findAllByTestId, findByTestId } = render(<RootWrapper />);
     const [section] = courseOutlineIndexMock.courseStructure.childInfo.children;
@@ -688,6 +675,20 @@ describe('<CourseOutline />', () => {
         expect(children[i].id === newSections[i].id);
         expect(newChildren[i].id !== newSections[i].id);
       }
+    });
+  });
+
+  it('check correct scrolling to the locator section when URL has a "show" param', async () => {
+    const scrollIntoViewFn = jest.fn();
+    jest.spyOn(URLSearchParams.prototype, 'get')
+        .mockImplementation((key) => locatorSectionId);
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewFn;
+
+    render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(scrollIntoViewFn).toHaveBeenCalled();
+      expect(scrollIntoViewFn).toHaveBeenCalledWith({ behavior: 'smooth' });
     });
   });
 });
