@@ -20,9 +20,6 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     case COMPONENT_ICON_TYPES.dragAndDrop:
       handleCreateNewCourseXblock({ type, parentLocator: blockId });
       break;
-    case COMPONENT_ICON_TYPES.library:
-      handleCreateNewCourseXblock({ type, category: 'library_content', parentLocator: blockId });
-      break;
     case COMPONENT_ICON_TYPES.advanced:
       handleCreateNewCourseXblock({
         type: moduleName, category: type, parentLocator: blockId,

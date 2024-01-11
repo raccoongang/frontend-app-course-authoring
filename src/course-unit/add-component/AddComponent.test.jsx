@@ -108,22 +108,6 @@ describe('<AddComponent />', () => {
     });
   });
 
-  it('create new "Library Content" xblock on click', () => {
-    const { getByRole } = renderComponent();
-
-    const discussionButton = getByRole('button', {
-      name: new RegExp(`${messages.buttonText.defaultMessage} Library Content`, 'i'),
-    });
-
-    userEvent.click(discussionButton);
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
-      parentLocator: '123',
-      type: 'library',
-      category: 'library_content',
-    });
-  });
-
   it('should open advanced settings modal and display advanced module list', async () => {
     const { getByRole, getByText } = renderComponent();
     const advancedButton = getByRole('button', {
