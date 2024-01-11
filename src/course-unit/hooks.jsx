@@ -10,6 +10,7 @@ import {
   fetchSequence,
   fetchCourse,
   fetchCourseSectionVerticalData,
+  fetchAdvancedSettingsModules,
 } from './data/thunk';
 import {
   getCourseSectionVertical,
@@ -73,6 +74,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(fetchCourseSectionVerticalData(blockId));
     dispatch(fetchSequence(sequenceId));
     dispatch(fetchCourse(courseId));
+    dispatch(fetchAdvancedSettingsModules(courseId));
     handleNavigate(sequenceId);
   }, [courseId, blockId, sequenceId]);
 

@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types';
 import { Form } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { useSelector } from 'react-redux';
+import { capitalize } from 'lodash';
 
+import { getAdvancedSettingsModules } from '../../data/selectors';
+import { COMPONENT_ICON_TYPES } from '../../constants';
 import messages from '../messages';
 import ModalContainer from './ModalContainer';
 
-const AdvancedModal = ({ isOpen, close }) => {
+const AdvancedModal = ({ isOpen, close, handleCreateNewXblock }) => {
   const intl = useIntl();
+  const advancedSettingsModules = useSelector(getAdvancedSettingsModules);
+  const { displayName, value } = advancedSettingsModules;
 
   return (
     <ModalContainer
@@ -16,12 +22,15 @@ const AdvancedModal = ({ isOpen, close }) => {
       btnText={intl.formatMessage(messages.advancedModalBtnText)}
     >
       <Form.Group>
-        <Form.RadioSet name="Advanced components">
-          <Form.Radio className="mb-2.5" value="lti-consumer">LTI Consumer</Form.Radio>
-          <Form.Radio className="mb-2.5" value="peer-instruction-question">Peer instruction question</Form.Radio>
-          <Form.Radio className="mb-2.5" value="poll">Poll</Form.Radio>
-          <Form.Radio className="mb-2.5" value="survey">Survey</Form.Radio>
-          <Form.Radio className="mb-2.5" value="word-cloud">Word cloud</Form.Radio>
+        <Form.RadioSet
+          name={displayName}
+          onChange={(e) => handleCreateNewXblock(COMPONENT_ICON_TYPES.advanced, e.target.value)}
+        >
+          {value.map((moduleName) => (
+            <Form.Radio key={moduleName} className="mb-2.5" value={moduleName}>
+              {capitalize(moduleName.replace(/_/g, ' '))}
+            </Form.Radio>
+          ))}
         </Form.RadioSet>
       </Form.Group>
     </ModalContainer>
@@ -30,7 +39,8 @@ const AdvancedModal = ({ isOpen, close }) => {
 
 AdvancedModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  close: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  handleCreateNewXblock: PropTypes.func.isRequired,
 };
 
 export default AdvancedModal;

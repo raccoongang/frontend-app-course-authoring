@@ -14,7 +14,7 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
   const [isOpen, open, close] = useToggle(false);
   const { componentTemplates } = useSelector(getCourseSectionVertical);
 
-  const handleCreateNewXblock = (type) => () => {
+  const handleCreateNewXblock = (type, moduleName) => {
     switch (type) {
     case COMPONENT_ICON_TYPES.discussion:
     case COMPONENT_ICON_TYPES.dragAndDrop:
@@ -24,7 +24,9 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
       handleCreateNewCourseXblock({ type, category: 'library_content', parentLocator: blockId });
       break;
     case COMPONENT_ICON_TYPES.advanced:
-      handleCreateNewCourseXblock({ type, category: 'advanced', parentLocator: blockId });
+      handleCreateNewCourseXblock({
+        type: moduleName, category: type, parentLocator: blockId,
+      });
       break;
     default:
     }
@@ -39,19 +41,22 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
       <h5 className="h3 mb-4 text-center">{intl.formatMessage(messages.title)}</h5>
       <ul className="new-component-type list-unstyled m-0 d-flex flex-wrap justify-content-center">
         {Object.keys(componentTemplates).map((component) => {
-          if (componentTemplates[component].type === 'advanced') {
+          if (componentTemplates[component].type === COMPONENT_ICON_TYPES.advanced) {
             return (
-              <li key={componentTemplates[component].type}>
-                <Button
-                  variant="outline-primary"
-                  className="add-component-button flex-column rounded-sm"
-                  onClick={open}
-                >
-                  <ComponentIcon type={componentTemplates[component].type} />
-                  <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
-                  <span className="small mt-2">{componentTemplates[component].displayName}</span>
-                </Button>
-              </li>
+              <>
+                <li key={componentTemplates[component].type}>
+                  <Button
+                    variant="outline-primary"
+                    className="add-component-button flex-column rounded-sm"
+                    onClick={open}
+                  >
+                    <ComponentIcon type={componentTemplates[component].type} />
+                    <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
+                    <span className="small mt-2">{componentTemplates[component].displayName}</span>
+                  </Button>
+                </li>
+                <AdvancedModal isOpen={isOpen} close={close} handleCreateNewXblock={handleCreateNewXblock} />
+              </>
             );
           }
           return (
@@ -59,7 +64,7 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
               <Button
                 variant="outline-primary"
                 className="add-component-button flex-column rounded-sm"
-                onClick={handleCreateNewXblock(componentTemplates[component].type)}
+                onClick={() => handleCreateNewXblock(componentTemplates[component].type)}
               >
                 <ComponentIcon type={componentTemplates[component].type} />
                 <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
@@ -69,7 +74,6 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
           );
         })}
       </ul>
-      <AdvancedModal isOpen={isOpen} close={close} />
     </div>
   );
 };
