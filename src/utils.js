@@ -265,16 +265,13 @@ export const isValidDate = (date) => {
 export const createCorrectInternalRoute = (checkPath) => {
   let basePath = getPath(getConfig().PUBLIC_PATH);
 
-  // Remove the trailing '/'
   if (basePath.endsWith('/')) {
     basePath = basePath.slice(0, -1);
   }
 
-  // Check if the check path starts with the base path
   if (!checkPath.startsWith(basePath)) {
     return `${basePath}${checkPath}`;
   }
 
-  // Return path as is
   return checkPath;
 };
