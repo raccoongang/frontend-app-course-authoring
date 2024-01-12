@@ -13,7 +13,7 @@ import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
   getXBlockBaseApiUrl,
-  getXBlocksBaseApiUrl,
+  getXBlocksBaseApiUrl, postXBlockBaseApiUrl,
 } from './data/api';
 import {
   fetchCourseSectionVerticalData,
@@ -30,7 +30,7 @@ import { executeThunk } from '../utils';
 import CourseUnit from './CourseUnit';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
-import messages from './course-sequence/messages';
+import courseSequenceMessages from './course-sequence/messages';
 import messages from './add-component/messages';
 
 let axiosMock;
@@ -212,7 +212,7 @@ describe('<CourseUnit />', () => {
     await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
 
     await waitFor(async () => {
-      const addNewUnitBtn = getByRole('button', { name: messages.newUnitBtnText.defaultMessage });
+      const addNewUnitBtn = getByRole('button', { name: courseSequenceMessages.newUnitBtnText.defaultMessage });
       units = getAllByTestId('course-unit-btn');
       const updatedCourseUnits = updatedCourseSectionVerticalData
         .xblock_info.ancestor_info.ancestors[0].child_info.children;
