@@ -13,9 +13,13 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.modal.advanced.title',
     defaultMessage: 'Add advanced component',
   },
-  advancedModalBtnText: {
+  openResponseModalTitle: {
+    id: 'course-authoring.course-unit.modal.advanced.title',
+    defaultMessage: 'Add open response component',
+  },
+  modalContainerSubmitBtnText: {
     id: 'course-authoring.course-unit.modal.advanced.button.text',
-    defaultMessage: 'Primary action',
+    defaultMessage: 'Select',
   },
   modalContainerCancelBtnText: {
     id: 'course-authoring.course-unit.modal.container.cancel.button.text',

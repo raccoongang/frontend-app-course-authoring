@@ -10,21 +10,21 @@ import { COMPONENT_ICON_TYPES } from '../../constants';
 import messages from '../messages';
 import ModalContainer from './ModalContainer';
 
-const AdvancedModal = ({ isOpen, close, handleCreateNewXblock }) => {
+const OpenResponseModal = ({ isOpen, close, handleCreateNewXblock }) => {
   const intl = useIntl();
   const advancedSettingsModules = useSelector(getAdvancedSettingsModules);
   const { displayName, value } = advancedSettingsModules;
   const [moduleTitle, setModuleTitle] = useState('');
 
   const handleSubmit = () => {
-    handleCreateNewXblock(COMPONENT_ICON_TYPES.advanced, moduleTitle);
+    handleCreateNewXblock(COMPONENT_ICON_TYPES.openassessment, moduleTitle);
   };
 
   return (
     <ModalContainer
       isOpen={isOpen}
       close={close}
-      title={intl.formatMessage(messages.advancedModalTitle)}
+      title={intl.formatMessage(messages.openResponseModalTitle)}
       onSubmit={handleSubmit}
     >
       <Form.Group>
@@ -43,10 +43,10 @@ const AdvancedModal = ({ isOpen, close, handleCreateNewXblock }) => {
   );
 };
 
-AdvancedModal.propTypes = {
+OpenResponseModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   handleCreateNewXblock: PropTypes.func.isRequired,
 };
 
-export default AdvancedModal;
+export default OpenResponseModal;

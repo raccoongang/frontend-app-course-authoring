@@ -7,7 +7,7 @@ import { getCourseSectionVertical } from '../data/selectors';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import ComponentIcon from './ComponentIcon';
 import messages from './messages';
-import { AdvancedModal } from './modals';
+import { AdvancedModal, OpenResponseModal } from './modals';
 
 const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
   const intl = useIntl();
@@ -23,6 +23,11 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     case COMPONENT_ICON_TYPES.advanced:
       handleCreateNewCourseXblock({
         type: moduleName, category: moduleName, parentLocator: blockId,
+      });
+      break;
+    case COMPONENT_ICON_TYPES.openassessment:
+      handleCreateNewCourseXblock({
+        type, boilerplate: moduleName, parentLocator: blockId,
       });
       break;
     default:
@@ -53,6 +58,24 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
                   </Button>
                 </li>
                 <AdvancedModal isOpen={isOpen} close={close} handleCreateNewXblock={handleCreateNewXblock} />
+              </>
+            );
+          }
+          if (componentTemplates[component].type === COMPONENT_ICON_TYPES.openassessment) {
+            return (
+              <>
+                <li key={componentTemplates[component].type}>
+                  <Button
+                    variant="outline-primary"
+                    className="add-component-button flex-column rounded-sm"
+                    onClick={open}
+                  >
+                    <ComponentIcon type={componentTemplates[component].type} />
+                    <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
+                    <span className="small mt-2">{componentTemplates[component].displayName}</span>
+                  </Button>
+                </li>
+                <OpenResponseModal isOpen={isOpen} close={close} handleCreateNewXblock={handleCreateNewXblock} />
               </>
             );
           }
