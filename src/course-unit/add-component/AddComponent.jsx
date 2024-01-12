@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@edx/paragon';
 
-import { createCorrectInternalRoute } from '../../utils';
 import { getCourseSectionVertical } from '../data/selectors';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import ComponentIcon from './ComponentIcon';
@@ -23,7 +22,7 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
       break;
     case COMPONENT_ICON_TYPES.problem:
       handleCreateNewCourseXblock({ type, parentLocator: blockId }, ({ courseKey, locator }) => {
-        navigate(createCorrectInternalRoute(`/course/${courseKey}/editor/problem/${locator}`));
+        navigate(`/course/${courseKey}/editor/problem/${locator}`);
       });
       break;
     default:
