@@ -22,7 +22,7 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
       break;
     case COMPONENT_ICON_TYPES.advanced:
       handleCreateNewCourseXblock({
-        type: moduleName, category: type, parentLocator: blockId,
+        type: moduleName, category: moduleName, parentLocator: blockId,
       });
       break;
     default:

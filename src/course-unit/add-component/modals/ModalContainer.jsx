@@ -5,9 +5,14 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import messages from '../messages';
 
 const ModalContainer = ({
-  title, isOpen, close, children, btnText, size,
+  title, isOpen, close, children, btnText, size, onSubmit,
 }) => {
   const intl = useIntl();
+
+  const handleSubmit = () => {
+    onSubmit();
+    close();
+  };
 
   return (
     <StandardModal
@@ -21,7 +26,9 @@ const ModalContainer = ({
           <Button variant="tertiary" onClick={close}>
             {intl.formatMessage(messages.modalContainerCancelBtnText)}
           </Button>
-          <Button>{btnText}</Button>
+          <Button onClick={() => handleSubmit()}>
+            {btnText}
+          </Button>
         </ActionRow>
       )}
     >
@@ -33,6 +40,7 @@ const ModalContainer = ({
 ModalContainer.propTypes = {
   title: PropTypes.string.isRequired,
   isOpen: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   btnText: PropTypes.string.isRequired,
