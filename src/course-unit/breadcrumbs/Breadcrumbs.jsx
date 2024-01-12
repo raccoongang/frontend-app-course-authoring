@@ -13,7 +13,7 @@ import messages from './messages';
 const Breadcrumbs = () => {
   const intl = useIntl();
   const { ancestorXblocks } = useSelector(getCourseSectionVertical);
-  const { 0: section, 1: subsection } = ancestorXblocks ?? {};
+  const [section, subsection] = ancestorXblocks ?? [];
 
   return (
     <nav className="d-flex align-center mb-2.5">
