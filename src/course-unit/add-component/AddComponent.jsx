@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@edx/paragon';
 
+import { createCorrectInternalRoute } from '../../utils';
 import { getCourseSectionVertical } from '../data/selectors';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import ComponentIcon from './ComponentIcon';
 import messages from './messages';
 
 const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
+  const navigate = useNavigate();
   const intl = useIntl();
   const { componentTemplates } = useSelector(getCourseSectionVertical);
 
@@ -17,6 +20,11 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     case COMPONENT_ICON_TYPES.discussion:
     case COMPONENT_ICON_TYPES.dragAndDrop:
       handleCreateNewCourseXblock({ type, parentLocator: blockId });
+      break;
+    case COMPONENT_ICON_TYPES.problem:
+      handleCreateNewCourseXblock({ type, parentLocator: blockId }, ({ courseKey, locator }) => {
+        navigate(createCorrectInternalRoute(`/course/${courseKey}/editor/problem/${locator}`));
+      });
       break;
     default:
     }
