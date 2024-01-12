@@ -7,7 +7,9 @@ import {
   Settings as SettingsIcon,
 } from '@edx/paragon/icons';
 
+import { useDispatch } from 'react-redux';
 import messages from './messages';
+import { updateQueryPendingStatus } from '../data/slice';
 
 const HeaderTitle = ({
   unitTitle,
@@ -16,10 +18,12 @@ const HeaderTitle = ({
   handleTitleEditSubmit,
 }) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState(unitTitle);
 
   useEffect(() => {
     setTitleValue(unitTitle);
+    dispatch(updateQueryPendingStatus(true));
   }, [unitTitle]);
 
   return (
