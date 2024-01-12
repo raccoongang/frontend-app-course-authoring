@@ -12,6 +12,7 @@ import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
   getXBlockBaseApiUrl,
+  postXBlockBaseApiUrl,
 } from './data/api';
 import {
   fetchCourseSectionVerticalData,
@@ -19,6 +20,7 @@ import {
 } from './data/thunk';
 import initializeStore from '../store';
 import {
+  courseCreateXblockMock,
   courseSectionVerticalMock,
   courseUnitIndexMock,
 } from './__mocks__';
@@ -26,16 +28,19 @@ import { executeThunk } from '../utils';
 import CourseUnit from './CourseUnit';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
+import messages from './add-component/messages';
 
 let axiosMock;
 let store;
 const courseId = '123';
 const blockId = '567890';
 const unitDisplayName = courseUnitIndexMock.metadata.display_name;
+const mockedUsedNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ blockId }),
+  useNavigate: () => mockedUsedNavigate,
 }));
 
 const RootWrapper = () => (
@@ -150,5 +155,23 @@ describe('<CourseUnit />', () => {
     titleEditField = queryByRole('textbox', { name: headerTitleMessages.ariaLabelButtonEdit.defaultMessage });
     expect(titleEditField).not.toBeInTheDocument();
     expect(await findByText(newDisplayName)).toBeInTheDocument();
+  });
+
+  it('handle creating Problem xblock and navigate to editor page', async () => {
+    const { courseKey, locator } = courseCreateXblockMock;
+    axiosMock
+      .onPost(postXBlockBaseApiUrl({ type: 'problem', category: 'problem', parentLocator: blockId }))
+      .reply(200, courseCreateXblockMock);
+    const { getByRole } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      const discussionButton = getByRole('button', {
+        name: new RegExp(`${messages.buttonText.defaultMessage} Problem`, 'i'),
+      });
+
+      userEvent.click(discussionButton);
+      expect(mockedUsedNavigate).toHaveBeenCalled();
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseKey}/editor/problem/${locator}`);
+    });
   });
 });
