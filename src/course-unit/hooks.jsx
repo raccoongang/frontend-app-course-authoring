@@ -64,8 +64,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     }
   };
 
-  const handleCreateNewCourseXblock = (body) => (
-    dispatch(createNewCourseXblock(body))
+  const handleCreateNewCourseXblock = (body, callback) => (
+    dispatch(createNewCourseXblock(body, callback))
   );
 
   useEffect(() => {
