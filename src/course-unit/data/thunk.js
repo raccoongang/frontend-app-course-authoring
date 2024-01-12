@@ -91,7 +91,6 @@ export function addNewSequenceNavigationUnit(unitId, sequenceId) {
           dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
           dispatch(addNewUnitId({ newUnitId: result.locator }));
           dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.SUCCESSFUL }));
-
           dispatch(updateModel({
             modelType: 'sequences',
             model: courseSectionVerticalData.sequence,

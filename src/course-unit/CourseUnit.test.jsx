@@ -7,13 +7,14 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-
 import { cloneDeep, set } from 'lodash';
+
 import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
   getXBlockBaseApiUrl,
-  getXBlocksBaseApiUrl, postXBlockBaseApiUrl,
+  getXBlocksBaseApiUrl,
+  postXBlockBaseApiUrl,
 } from './data/api';
 import {
   fetchCourseSectionVerticalData,
@@ -36,7 +37,7 @@ import messages from './add-component/messages';
 let axiosMock;
 let store;
 const courseId = '123';
-const blockId = 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc';
+const blockId = '567890';
 const unitDisplayName = courseUnitIndexMock.metadata.display_name;
 const mockedUsedNavigate = jest.fn();
 

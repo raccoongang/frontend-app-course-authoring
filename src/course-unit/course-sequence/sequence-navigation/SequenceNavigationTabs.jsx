@@ -7,9 +7,10 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate } from 'react-router-dom';
 
 import { addNewSequenceNavigationUnit } from '../../data/thunk';
-import { useIndexOfLastVisibleChild } from '../hooks';
 import { addNewUnitId, changeTitleEditFormOpen, updateQueryPendingStatus } from '../../data/slice';
+import { getCourseId, getNewUnitId, getSequenceId } from '../../data/selectors';
 import messages from '../messages';
+import { useIndexOfLastVisibleChild } from '../hooks';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
 
@@ -17,9 +18,9 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const sequenceId = useSelector(state => state.courseUnit.sequenceId);
-  const newUnitId = useSelector(state => state.courseUnit.newUnitId);
-  const courseId = useSelector(state => state.courseDetail.courseId);
+  const sequenceId = useSelector(getSequenceId);
+  const newUnitId = useSelector(getNewUnitId);
+  const courseId = useSelector(getCourseId);
 
   const [
     indexOfLastVisibleChild,

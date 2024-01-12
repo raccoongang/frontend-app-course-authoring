@@ -24,7 +24,6 @@ export const NOTIFICATION_MESSAGES = {
   saving: 'Saving',
   duplicating: 'Duplicating',
   deleting: 'Deleting',
-  adding: 'Adding',
   empty: '',
 };
 

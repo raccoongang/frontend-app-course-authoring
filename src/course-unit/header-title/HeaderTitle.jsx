@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form, IconButton } from '@edx/paragon';
@@ -7,9 +8,8 @@ import {
   Settings as SettingsIcon,
 } from '@edx/paragon/icons';
 
-import { useDispatch } from 'react-redux';
-import messages from './messages';
 import { updateQueryPendingStatus } from '../data/slice';
+import messages from './messages';
 
 const HeaderTitle = ({
   unitTitle,

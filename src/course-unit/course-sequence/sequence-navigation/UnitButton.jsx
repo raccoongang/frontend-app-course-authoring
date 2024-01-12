@@ -4,12 +4,13 @@ import { Button } from '@edx/paragon';
 import { Link } from 'react-router-dom';
 
 import UnitIcon from './UnitIcon';
+import { getCourseId, getSequenceId } from '../../data/selectors';
 
 const UnitButton = ({
   title, contentType, isActive, unitId, className, showTitle,
 }) => {
-  const courseId = useSelector(state => state.courseDetail.courseId);
-  const sequenceId = useSelector(state => state.courseUnit.sequenceId);
+  const courseId = useSelector(getCourseId);
+  const sequenceId = useSelector(getSequenceId);
 
   return (
     <Button
