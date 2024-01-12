@@ -3,6 +3,7 @@ on:
   push:
     branches:
     - 'master'
+    - 'ts-branch'
   pull_request:
     branches:
     - '**'
