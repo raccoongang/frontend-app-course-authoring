@@ -15,9 +15,11 @@ const AdvancedModal = ({ isOpen, close, handleCreateNewXblock }) => {
   const advancedSettingsModules = useSelector(getAdvancedSettingsModules);
   const { displayName, value } = advancedSettingsModules;
   const [moduleTitle, setModuleTitle] = useState('');
-
+  console.log('advancedSettingsModules', advancedSettingsModules);
   const handleSubmit = () => {
-    handleCreateNewXblock(COMPONENT_ICON_TYPES.advanced, moduleTitle);
+    // handleCreateNewXblock(COMPONENT_ICON_TYPES.advanced, moduleTitle);
+    console.log('moduleTitle', moduleTitle);
+    setModuleTitle('');
   };
 
   return (
@@ -27,6 +29,7 @@ const AdvancedModal = ({ isOpen, close, handleCreateNewXblock }) => {
       title={intl.formatMessage(messages.advancedModalTitle)}
       btnText={intl.formatMessage(messages.advancedModalBtnText)}
       onSubmit={handleSubmit}
+      hasValue={!moduleTitle.length > 0}
     >
       <Form.Group>
         <Form.RadioSet
