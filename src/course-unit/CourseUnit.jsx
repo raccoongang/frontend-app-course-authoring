@@ -27,8 +27,10 @@ const CourseUnit = ({ courseId }) => {
     isLoading,
     sequenceId,
     unitTitle,
+    isQueryPending,
     savingStatus,
     isTitleEditFormOpen,
+    isErrorAlert,
     isInternetConnectionAlertFailed,
     handleTitleEditSubmit,
     headerNavigationsActions,
@@ -51,7 +53,7 @@ const CourseUnit = ({ courseId }) => {
     <>
       <Container size="xl" className="course-unit px-4">
         <section className="course-unit-container mb-4 mt-5">
-          <ErrorAlert hideHeading isError={savingStatus === RequestStatus.FAILED}>
+          <ErrorAlert hideHeading isError={savingStatus === RequestStatus.FAILED && isErrorAlert}>
             {intl.formatMessage(messages.alertFailedGeneric, { actionName: 'save', type: 'changes' })}
           </ErrorAlert>
           <SubHeader
@@ -99,11 +101,13 @@ const CourseUnit = ({ courseId }) => {
           isShow={isShowProcessingNotification}
           title={processingNotificationTitle}
         />
-        <InternetConnectionAlert
-          isFailed={isInternetConnectionAlertFailed}
-          isQueryPending={savingStatus === RequestStatus.PENDING}
-          onInternetConnectionFailed={handleInternetConnectionFailed}
-        />
+        {isQueryPending && (
+          <InternetConnectionAlert
+            isFailed={isInternetConnectionAlertFailed}
+            isQueryPending={savingStatus === RequestStatus.PENDING}
+            onInternetConnectionFailed={handleInternetConnectionFailed}
+          />
+        )}
       </div>
     </>
   );

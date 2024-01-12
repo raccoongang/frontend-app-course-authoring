@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { addNewSequenceNavigationUnit } from '../../data/thunk';
 import { useIndexOfLastVisibleChild } from '../hooks';
-import { addNewUnitId, changeTitleEditFormOpen } from '../../data/slice';
+import { addNewUnitId, changeTitleEditFormOpen, updateQueryPendingStatus } from '../../data/slice';
 import messages from '../messages';
 import SequenceNavigationDropdown from './SequenceNavigationDropdown';
 import UnitButton from './UnitButton';
@@ -30,6 +30,7 @@ const SequenceNavigationTabs = ({ unitIds, unitId }) => {
 
   const handleAddNewSequenceUnit = () => {
     dispatch(addNewSequenceNavigationUnit(unitId, sequenceId));
+    dispatch(updateQueryPendingStatus(true));
   };
 
   useEffect(() => {

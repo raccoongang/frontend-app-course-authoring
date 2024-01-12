@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,18 +15,21 @@ import {
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
-import { changeTitleEditFormOpen, updateSavingStatus } from './data/slice';
+import { changeTitleEditFormOpen, updateQueryPendingStatus } from './data/slice';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
   const dispatch = useDispatch();
 
+  const [isErrorAlert, toggleErrorAlert] = useState(false);
+  const [hasInternetConnectionError, setInternetConnectionError] = useState(false);
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const navigate = useNavigate();
   const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
+  const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
@@ -40,8 +43,16 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     },
   };
 
+  useEffect(() => {
+    if (savingStatus === RequestStatus.SUCCESSFUL) {
+      dispatch(updateQueryPendingStatus(false));
+    } else if (savingStatus === RequestStatus.FAILED && !hasInternetConnectionError) {
+      toggleErrorAlert(true);
+    }
+  }, [savingStatus]);
+
   const handleInternetConnectionFailed = () => {
-    dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    setInternetConnectionError(true);
   };
 
   const handleTitleEdit = () => {
@@ -74,6 +85,9 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     sequenceId,
     courseUnit,
     unitTitle,
+    savingStatus,
+    isQueryPending,
+    isErrorAlert,
     isLoading: loadingStatus.fetchUnitLoadingStatus === RequestStatus.IN_PROGRESS,
     isTitleEditFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,

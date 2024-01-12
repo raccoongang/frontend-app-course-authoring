@@ -7,6 +7,7 @@ const slice = createSlice({
   name: 'courseUnit',
   initialState: {
     savingStatus: '',
+    isQueryPending: false,
     newUnitId: null,
     isTitleEditFormOpen: false,
     loadingStatus: {
@@ -25,6 +26,9 @@ const slice = createSlice({
         ...state.loadingStatus,
         fetchUnitLoadingStatus: payload.status,
       };
+    },
+    updateQueryPendingStatus: (state, { payload }) => {
+      state.isQueryPending = payload;
     },
     changeTitleEditFormOpen: (state, { payload }) => {
       state.isTitleEditFormOpen = payload;
@@ -100,6 +104,7 @@ export const {
   updateLoadingCourseSectionVerticalDataStatus,
   changeTitleEditFormOpen,
   addNewUnitId,
+  updateQueryPendingStatus,
 } = slice.actions;
 
 export const {

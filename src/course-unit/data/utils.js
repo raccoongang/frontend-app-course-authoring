@@ -205,7 +205,7 @@ export function normalizeCourseSectionVerticalData(metadata) {
       bookmarked: unit.bookmarked,
       complete: unit.complete,
       title: unit.displayName,
-      contentType: unit.type,
+      contentType: unit.xblockType,
       graded: unit.graded,
       containsContentTypeGatedContent: unit.contains_content_type_gated_content,
     })),
