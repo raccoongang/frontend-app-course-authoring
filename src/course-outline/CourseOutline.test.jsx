@@ -46,7 +46,6 @@ let axiosMock;
 let store;
 const mockPathname = '/foo-bar';
 const courseId = '123';
-const locatorSectionName = 'Demo Course Overview';
 const locatorSectionId = 'block-v1:edX+DemoX+Demo_Course+type@sequential+block@edx_introduction';
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -681,7 +680,7 @@ describe('<CourseOutline />', () => {
   it('check correct scrolling to the locator section when URL has a "show" param', async () => {
     const scrollIntoViewFn = jest.fn();
     jest.spyOn(URLSearchParams.prototype, 'get')
-        .mockImplementation((key) => locatorSectionId);
+      .mockImplementation(() => locatorSectionId);
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewFn;
 
     render(<RootWrapper />);
