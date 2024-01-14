@@ -8,8 +8,7 @@ const slice = createSlice({
   initialState: {
     savingStatus: '',
     isQueryPending: false,
-    newUnitId: null,
-    isTitleEditFormOpen: false,
+    isEditTitleFormOpen: false,
     loadingStatus: {
       fetchUnitLoadingStatus: RequestStatus.IN_PROGRESS,
       courseSectionVerticalLoadingStatus: RequestStatus.IN_PROGRESS,
@@ -30,8 +29,8 @@ const slice = createSlice({
     updateQueryPendingStatus: (state, { payload }) => {
       state.isQueryPending = payload;
     },
-    changeTitleEditFormOpen: (state, { payload }) => {
-      state.isTitleEditFormOpen = payload;
+    changeEditTitleFormOpen: (state, { payload }) => {
+      state.isEditTitleFormOpen = payload;
     },
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
@@ -88,9 +87,6 @@ const slice = createSlice({
         fetchUnitLoadingStatus: payload.status,
       };
     },
-    addNewUnitId: (state, { payload }) => {
-      state.newUnitId = payload.newUnitId;
-    },
   },
 });
 
@@ -108,8 +104,7 @@ export const {
   fetchCourseDenied,
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
-  changeTitleEditFormOpen,
-  addNewUnitId,
+  changeEditTitleFormOpen,
   updateQueryPendingStatus,
   updateLoadingCourseXblockStatus,
 } = slice.actions;

@@ -29,7 +29,7 @@ const CourseUnit = ({ courseId }) => {
     unitTitle,
     isQueryPending,
     savingStatus,
-    isTitleEditFormOpen,
+    isEditTitleFormOpen,
     isErrorAlert,
     isInternetConnectionAlertFailed,
     handleTitleEditSubmit,
@@ -62,7 +62,7 @@ const CourseUnit = ({ courseId }) => {
             title={(
               <HeaderTitle
                 unitTitle={unitTitle}
-                isTitleEditFormOpen={isTitleEditFormOpen}
+                isEditTitleFormOpen={isEditTitleFormOpen}
                 handleTitleEdit={handleTitleEdit}
                 handleTitleEditSubmit={handleTitleEditSubmit}
               />
@@ -82,6 +82,7 @@ const CourseUnit = ({ courseId }) => {
             courseId={courseId}
             sequenceId={sequenceId}
             unitId={blockId}
+            handleCreateNewCourseXblock={handleCreateNewCourseXblock}
           />
           <Layout
             lg={[{ span: 9 }, { span: 3 }]}

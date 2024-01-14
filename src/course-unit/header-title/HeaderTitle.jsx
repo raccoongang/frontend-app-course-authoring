@@ -13,7 +13,7 @@ import messages from './messages';
 
 const HeaderTitle = ({
   unitTitle,
-  isTitleEditFormOpen,
+  isEditTitleFormOpen,
   handleTitleEdit,
   handleTitleEditSubmit,
 }) => {
@@ -28,7 +28,7 @@ const HeaderTitle = ({
 
   return (
     <div className="d-flex align-items-center lead">
-      {isTitleEditFormOpen ? (
+      {isEditTitleFormOpen ? (
         <Form.Group className="m-0">
           <Form.Control
             ref={(e) => e && e.focus()}
@@ -63,7 +63,7 @@ const HeaderTitle = ({
 
 HeaderTitle.propTypes = {
   unitTitle: PropTypes.string.isRequired,
-  isTitleEditFormOpen: PropTypes.bool.isRequired,
+  isEditTitleFormOpen: PropTypes.bool.isRequired,
   handleTitleEdit: PropTypes.func.isRequired,
   handleTitleEditSubmit: PropTypes.func.isRequired,
 };

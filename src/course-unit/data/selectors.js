@@ -13,7 +13,6 @@ export const getCourseStatus = state => state.courseUnit.courseStatus;
 export const getCoursewareMeta = state => state.models.coursewareMeta;
 export const getSections = state => state.models.sections;
 export const getCourseId = state => state.courseDetail.courseId;
-export const getNewUnitId = state => state.courseUnit.newUnitId;
 export const getSequenceId = state => state.courseUnit.sequenceId;
 export const sequenceIdsSelector = createSelector(
   [getCourseStatus, getCoursewareMeta, getSections, getCourseId],

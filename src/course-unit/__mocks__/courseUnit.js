@@ -80,4 +80,5 @@ module.exports = {
     selected_groups_label: '',
   },
   enable_copy_paste_units: false,
+  xblock_type: 'other',
 };

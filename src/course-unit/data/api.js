@@ -16,7 +16,6 @@ const getLmsBaseUrl = () => getConfig().LMS_BASE_URL;
 export const getCourseUnitApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/container/${itemId}`;
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}`;
-export const getXBlocksBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
 export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
 export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
@@ -64,22 +63,6 @@ export async function getCourseSectionVerticalData(unitId) {
 }
 
 /**
- * Sends a new sequence navigation unit.
- * @param {string} sequenceId - The ID of the parent sequence.
- * @returns {Promise<object>} A Promise that resolves with the server response data.
- */
-export async function sendNewSequenceNavigationUnit(sequenceId) {
-  const { data } = await getAuthenticatedHttpClient()
-    .post(getXBlocksBaseApiUrl(), {
-      parent_locator: sequenceId,
-      category: 'vertical',
-      display_name: 'Unit',
-    });
-
-  return data;
-}
-
-/**
  * Retrieves the outline of learning sequences for a specific course.
  * @param {string} courseId - The ID of the course.
  * @returns {Promise<Object>} A Promise that resolves to the normalized learning sequences outline data.
@@ -118,11 +101,14 @@ export async function getCourseHomeCourseMetadata(courseId, rootSlug) {
   return normalizeCourseHomeCourseMetadata(data, rootSlug);
 }
 
-export async function createCourseXblock({ type, category, parentLocator }) {
+export async function createCourseXblock({
+  type, category, parentLocator, displayName,
+}) {
   const body = {
     type,
     category: category || type,
     parent_locator: parentLocator,
+    display_name: displayName,
   };
   const { data } = await getAuthenticatedHttpClient()
     .post(postXBlockBaseApiUrl(), body);

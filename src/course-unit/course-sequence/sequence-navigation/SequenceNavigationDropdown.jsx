@@ -11,7 +11,7 @@ const SequenceNavigationDropdown = ({ unitId, unitIds, handleClick }) => {
 
   return (
     <Dropdown className="sequence-navigation-dropdown">
-      <Dropdown.Toggle variant="outline-primary" className="w-100">
+      <Dropdown.Toggle id="sequence-navigation-dropdown" variant="outline-primary" className="w-100">
         {intl.formatMessage(messages.sequenceDropdownTitle, {
           current: unitIds.indexOf(unitId) + 1,
           total: unitIds.length,

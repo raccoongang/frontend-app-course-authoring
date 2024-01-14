@@ -13,7 +13,6 @@ import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
   getXBlockBaseApiUrl,
-  getXBlocksBaseApiUrl,
   postXBlockBaseApiUrl,
 } from './data/api';
 import {
@@ -183,8 +182,9 @@ describe('<CourseUnit />', () => {
     const { getByRole, getAllByTestId } = render(<RootWrapper />);
     let units = null;
     const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
+    const updatedAncestorsChild = updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0];
     set(updatedCourseSectionVerticalData, 'xblock_info.ancestor_info.ancestors[0].child_info.children', [
-      ...updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0].child_info.children,
+      ...updatedAncestorsChild.child_info.children,
       courseUnitMock,
     ]);
 
@@ -194,14 +194,8 @@ describe('<CourseUnit />', () => {
       expect(units.length).toEqual(courseUnits.length);
     });
 
-    const newUnitParamsMock = {
-      parent_locator: 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@d91b9e5d8bc64d57a1332d06bf2f2193',
-      category: 'vertical',
-      display_name: 'Unit',
-    };
-
     axiosMock
-      .onPost(getXBlocksBaseApiUrl(), newUnitParamsMock)
+      .onPost(postXBlockBaseApiUrl(), { parent_locator: blockId, category: 'vertical', display_name: 'Unit' })
       .reply(200, { dummy: 'value' });
     axiosMock.reset();
     axiosMock
@@ -212,14 +206,15 @@ describe('<CourseUnit />', () => {
 
     await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
 
-    await waitFor(async () => {
-      const addNewUnitBtn = getByRole('button', { name: courseSequenceMessages.newUnitBtnText.defaultMessage });
-      units = getAllByTestId('course-unit-btn');
-      const updatedCourseUnits = updatedCourseSectionVerticalData
-        .xblock_info.ancestor_info.ancestors[0].child_info.children;
+    const addNewUnitBtn = getByRole('button', { name: courseSequenceMessages.newUnitBtnText.defaultMessage });
+    units = getAllByTestId('course-unit-btn');
+    const updatedCourseUnits = updatedCourseSectionVerticalData
+      .xblock_info.ancestor_info.ancestors[0].child_info.children;
 
-      userEvent.click(addNewUnitBtn);
-      expect(units.length).toEqual(updatedCourseUnits.length);
-    });
+    userEvent.click(addNewUnitBtn);
+    expect(units.length).toEqual(updatedCourseUnits.length);
+    expect(mockedUsedNavigate).toHaveBeenCalled();
+    expect(mockedUsedNavigate)
+      .toHaveBeenCalledWith(`/course/${courseId}/container/${blockId}/${updatedAncestorsChild.id}`, { replace: true });
   });
 });

@@ -16,7 +16,7 @@ import {
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
-import { changeTitleEditFormOpen, updateQueryPendingStatus } from './data/slice';
+import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -29,7 +29,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const loadingStatus = useSelector(getLoadingStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const navigate = useNavigate();
-  const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
+  const isEditTitleFormOpen = useSelector(state => state.courseUnit.isEditTitleFormOpen);
   const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
 
   const unitTitle = courseUnit.metadata?.displayName || '';
@@ -44,20 +44,12 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     },
   };
 
-  useEffect(() => {
-    if (savingStatus === RequestStatus.SUCCESSFUL) {
-      dispatch(updateQueryPendingStatus(false));
-    } else if (savingStatus === RequestStatus.FAILED && !hasInternetConnectionError) {
-      toggleErrorAlert(true);
-    }
-  }, [savingStatus]);
-
   const handleInternetConnectionFailed = () => {
     setInternetConnectionError(true);
   };
 
   const handleTitleEdit = () => {
-    dispatch(changeTitleEditFormOpen(!isTitleEditFormOpen));
+    dispatch(changeEditTitleFormOpen(!isEditTitleFormOpen));
   };
 
   const handleTitleEditSubmit = (displayName) => {
@@ -79,6 +71,14 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   );
 
   useEffect(() => {
+    if (savingStatus === RequestStatus.SUCCESSFUL) {
+      dispatch(updateQueryPendingStatus(false));
+    } else if (savingStatus === RequestStatus.FAILED && !hasInternetConnectionError) {
+      toggleErrorAlert(true);
+    }
+  }, [savingStatus]);
+
+  useEffect(() => {
     dispatch(fetchCourseUnitQuery(blockId));
     dispatch(fetchCourseSectionVerticalData(blockId, sequenceId));
     dispatch(fetchCourse(courseId));
@@ -94,7 +94,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     isQueryPending,
     isErrorAlert,
     isLoading: loadingStatus.fetchUnitLoadingStatus === RequestStatus.IN_PROGRESS,
-    isTitleEditFormOpen,
+    isEditTitleFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     handleInternetConnectionFailed,
     headerNavigationsActions,
