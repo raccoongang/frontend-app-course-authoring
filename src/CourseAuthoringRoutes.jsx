@@ -72,6 +72,7 @@ const CourseAuthoringRoutes = () => {
         />
         {DECODED_ROUTES.COURSE_UNIT.map((path) => (
           <Route
+            key={path}
             path={path}
             element={process.env.ENABLE_UNIT_PAGE === 'true' ? <PageWrap><CourseUnit courseId={courseId} /></PageWrap> : null}
           />
