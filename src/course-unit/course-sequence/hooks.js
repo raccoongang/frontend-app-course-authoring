@@ -4,17 +4,21 @@ import { useWindowSize } from '@edx/paragon';
 
 import { useModel } from '../../generic/model-store';
 import { RequestStatus } from '../../data/constants';
-import { getCourseSectionVertical, getSequenceStatus, sequenceIdsSelector } from '../data/selectors';
+import {
+  getCourseSectionVertical,
+  getCourseSectionVerticalLoadingStatus,
+  sequenceIdsSelector,
+} from '../data/selectors';
 
 export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) {
   const { SUCCESSFUL } = RequestStatus;
   const sequenceIds = useSelector(sequenceIdsSelector);
-  const sequenceStatus = useSelector(getSequenceStatus);
+  const courseSectionVerticalLoadingStatus = useSelector(getCourseSectionVerticalLoadingStatus);
   const { nextUrl, prevUrl } = useSelector(getCourseSectionVertical);
   const sequence = useModel('sequences', currentSequenceId);
   const { courseId, status } = useSelector(state => state.courseDetail);
 
-  const isCourseOrSequenceNotSuccessful = status !== SUCCESSFUL || sequenceStatus !== SUCCESSFUL;
+  const isCourseOrSequenceNotSuccessful = status !== SUCCESSFUL || courseSectionVerticalLoadingStatus !== SUCCESSFUL;
   const areIdsNotValid = !currentSequenceId || !currentUnitId || !sequence.unitIds;
   const isNotSuccessfulCompletion = isCourseOrSequenceNotSuccessful || areIdsNotValid;
 
