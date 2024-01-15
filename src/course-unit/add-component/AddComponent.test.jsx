@@ -107,4 +107,19 @@ describe('<AddComponent />', () => {
       type: 'problem',
     }, expect.any(Function));
   });
+
+  it('create new "Video" xblock on click', () => {
+    const { getByRole } = renderComponent();
+
+    const discussionButton = getByRole('button', {
+      name: new RegExp(`${messages.buttonText.defaultMessage} Video`, 'i'),
+    });
+
+    userEvent.click(discussionButton);
+    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+      parentLocator: '123',
+      type: 'video',
+    }, expect.any(Function));
+  });
 });
