@@ -1,3 +1,4 @@
+import { logError } from '@edx/frontend-platform/logging';
 import {
   hideProcessingNotification,
   showProcessingNotification,
@@ -11,10 +12,13 @@ import {
   getCourseSectionVerticalData,
   createCourseXblock,
   getCourseVerticalChildren,
+  updateClipboard,
+  getClipboard,
   handleCourseUnitVisibilityAndData,
   deleteUnitItem,
   duplicateUnitItem,
 } from './api';
+import { ClipboardStatus } from '../constants';
 import {
   updateLoadingCourseUnitStatus,
   fetchCourseItemSuccess,
@@ -27,6 +31,8 @@ import {
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
+  updateClipboardStatus,
+  updateClipboardData,
   updateQueryPendingStatus,
   deleteXBlock,
   duplicateXBlock,
@@ -215,6 +221,37 @@ export function duplicateUnitItemQuery(itemId, xblockId) {
     } catch (error) {
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function copyToClipboard(usageKey) {
+  const POLL_INTERVAL_MS = 1000; // Timeout duration for polling in milliseconds
+
+  return async (dispatch) => {
+    dispatch(updateClipboardData(null));
+    dispatch(updateClipboardStatus({ status: ClipboardStatus.LOADING }));
+
+    try {
+      let clipboardData = await updateClipboard(usageKey);
+
+      // Enter the loop only if the status is LOADING
+      while (clipboardData.content?.status === ClipboardStatus.LOADING) {
+        // eslint-disable-next-line no-await-in-loop,no-promise-executor-return
+        await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+        // eslint-disable-next-line no-await-in-loop
+        clipboardData = await getClipboard();
+      }
+
+      if (clipboardData.content?.status === ClipboardStatus.READY) {
+        dispatch(updateClipboardData(clipboardData));
+        dispatch(updateClipboardStatus({ status: ClipboardStatus.READY }));
+      } else {
+        throw new Error(`Unexpected clipboard status "${clipboardData.content?.status}" in successful API response.`);
+      }
+    } catch (error) {
+      dispatch(updateClipboardStatus({ status: ClipboardStatus.ERROR }));
+      logError('Error copying to clipboard:', error);
     }
   };
 }
