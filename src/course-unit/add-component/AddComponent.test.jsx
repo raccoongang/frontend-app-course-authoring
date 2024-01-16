@@ -93,7 +93,7 @@ describe('<AddComponent />', () => {
     });
   });
 
-  it('create new "Problem" xblock on click', () => {
+  it('calls handleCreateNewCourseXblock with correct parameters when Problem xblock create button is clicked', () => {
     const { getByRole } = renderComponent();
 
     const discussionButton = getByRole('button', {
@@ -108,7 +108,7 @@ describe('<AddComponent />', () => {
     }, expect.any(Function));
   });
 
-  it('create new "Video" xblock on click', () => {
+  it('calls handleCreateNewCourseXblock with correct parameters when Video xblock create button is clicked', () => {
     const { getByRole } = renderComponent();
 
     const discussionButton = getByRole('button', {

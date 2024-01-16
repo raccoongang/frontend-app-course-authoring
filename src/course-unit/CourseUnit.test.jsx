@@ -218,7 +218,7 @@ describe('<CourseUnit />', () => {
       .toHaveBeenCalledWith(`/course/${courseId}/container/${blockId}/${updatedAncestorsChild.id}`, { replace: true });
   });
 
-  it('handle creating Video xblock and navigate to editor page', async () => {
+  it('handles creating Video xblock and navigates to editor page', async () => {
     const { courseKey, locator } = courseCreateXblockMock;
     axiosMock
       .onPost(postXBlockBaseApiUrl({ type: 'video', category: 'video', parentLocator: blockId }))
