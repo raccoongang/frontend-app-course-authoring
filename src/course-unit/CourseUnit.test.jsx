@@ -217,4 +217,22 @@ describe('<CourseUnit />', () => {
     expect(mockedUsedNavigate)
       .toHaveBeenCalledWith(`/course/${courseId}/container/${blockId}/${updatedAncestorsChild.id}`, { replace: true });
   });
+
+  it('handles creating Video xblock and navigates to editor page', async () => {
+    const { courseKey, locator } = courseCreateXblockMock;
+    axiosMock
+      .onPost(postXBlockBaseApiUrl({ type: 'video', category: 'video', parentLocator: blockId }))
+      .reply(200, courseCreateXblockMock);
+    const { getByRole } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      const discussionButton = getByRole('button', {
+        name: new RegExp(`${messages.buttonText.defaultMessage} Video`, 'i'),
+      });
+
+      userEvent.click(discussionButton);
+      expect(mockedUsedNavigate).toHaveBeenCalled();
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseKey}/editor/video/${locator}`);
+    });
+  });
 });
