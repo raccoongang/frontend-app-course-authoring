@@ -21,6 +21,7 @@ export const getSequenceMetadataApiUrl = (sequenceId) => `${getLmsBaseUrl()}/api
 export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
 export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
 export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/course_home/course_metadata/${courseId}`;
+export const getClipboardUrl = () => `${getStudioBaseUrl()}/api/content-staging/v1/clipboard/`;
 
 /**
  * Get course unit.
@@ -112,6 +113,27 @@ export async function getCourseHomeCourseMetadata(courseId, rootSlug) {
   const { data } = await getAuthenticatedHttpClient().get(courseHomeCourseMetadataApiUrl);
 
   return normalizeCourseHomeCourseMetadata(data, rootSlug);
+}
+
+/**
+ * Retrieves user's clipboard.
+ * @returns {Promise<Object>} - A Promise that resolves clipboard data.
+ */
+export async function getClipboard() {
+  const { data } = await getAuthenticatedHttpClient().get(getClipboardUrl());
+
+  return data;
+}
+
+/**
+ * Updates user's clipboard.
+ * @param {string} usageKey - The ID of the block.
+ * @returns {Promise<Object>} - A Promise that resolves clipboard data.
+ */
+export async function updateClipboard(usageKey) {
+  const { data } = await getAuthenticatedHttpClient().post(getClipboardUrl(), { usage_key: usageKey });
+
+  return data;
 }
 
 export async function createCourseXblock({ type, category, parentLocator }) {

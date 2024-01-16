@@ -17,7 +17,7 @@ import {
   getLearningSequencesOutline,
   getCourseHomeCourseMetadata,
   getCourseSectionVerticalData,
-  createCourseXblock,
+  createCourseXblock, updateClipboard, getClipboard,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -33,7 +33,10 @@ import {
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
+  updateClipboardStatus,
+  updateClipboardData,
 } from './slice';
+import { ClipboardStatus } from '../constants';
 
 export function fetchCourseUnitQuery(courseId) {
   return async (dispatch) => {
@@ -238,6 +241,37 @@ export function createNewCourseXblock(body, callback) {
       dispatch(hideProcessingNotification());
       dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.FAILED }));
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function copyToClipboard(usageKey) {
+  const POLL_INTERVAL_MS = 1000; // Timeout duration for polling in milliseconds
+
+  return async (dispatch) => {
+    dispatch(updateClipboardData(null));
+    dispatch(updateClipboardStatus({ status: ClipboardStatus.LOADING }));
+
+    try {
+      let clipboardData = await updateClipboard(usageKey);
+
+      // Enter the loop only if the status is LOADING
+      while (clipboardData.content?.status === ClipboardStatus.LOADING) {
+        // eslint-disable-next-line no-await-in-loop,no-promise-executor-return
+        await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+        // eslint-disable-next-line no-await-in-loop
+        clipboardData = await getClipboard();
+      }
+
+      if (clipboardData.content?.status === ClipboardStatus.READY) {
+        dispatch(updateClipboardData(clipboardData));
+        dispatch(updateClipboardStatus({ status: ClipboardStatus.READY }));
+      } else {
+        throw new Error(`Unexpected clipboard status "${clipboardData.content?.status}" in successful API response.`);
+      }
+    } catch (error) {
+      dispatch(updateClipboardStatus({ status: ClipboardStatus.ERROR }));
+      logError('Error copying to clipboard:', error);
     }
   };
 }

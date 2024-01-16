@@ -13,6 +13,8 @@ const slice = createSlice({
     },
     unit: {},
     courseSectionVertical: {},
+    clipboardData: null,
+    clipboardStatus: '',
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -73,6 +75,12 @@ const slice = createSlice({
         createUnitXblockLoadingStatus: payload.status,
       };
     },
+    updateClipboardData: (state, { payload }) => {
+      state.clipboardData = payload;
+    },
+    updateClipboardStatus: (state, { payload }) => {
+      state.clipboardStatus = payload.status;
+    },
   },
 });
 
@@ -91,6 +99,8 @@ export const {
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
+  updateClipboardData,
+  updateClipboardStatus,
 } = slice.actions;
 
 export const {

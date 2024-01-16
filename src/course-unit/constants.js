@@ -15,6 +15,22 @@ import {
 
 export const UNIT_ICON_TYPES = ['video', 'other', 'vertical', 'problem', 'lock'];
 
+export const NOT_XBLOCK_TYPES = ['vertical', 'sequential', 'chapter', 'course'];
+
+export const STUDIO_CLIPBOARD_CHANNEL = 'studio_clipboard_channel';
+
+/**
+ * Enum for clipboard status.
+ * @readonly
+ * @enum {string}
+ */
+export const ClipboardStatus = {
+  LOADING: 'loading',
+  READY: 'ready',
+  EXPIRED: 'expired',
+  ERROR: 'error',
+};
+
 export const COMPONENT_ICON_TYPES = {
   advanced: 'advanced',
   discussion: 'discussion',

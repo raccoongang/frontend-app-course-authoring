@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Layout } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
@@ -19,8 +19,11 @@ import HeaderNavigations from './header-navigations/HeaderNavigations';
 import Sequence from './course-sequence';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
+import useClipboard from './clipboard/useClipboard';
+import { copyToClipboard } from './data/thunk';
 
 const CourseUnit = ({ courseId }) => {
+  const dispatch = useDispatch();
   const { blockId } = useParams();
   const intl = useIntl();
   const {
@@ -36,6 +39,9 @@ const CourseUnit = ({ courseId }) => {
     handleInternetConnectionFailed,
     handleCreateNewCourseXblock,
   } = useCourseUnit({ courseId, blockId });
+  const { showPasteUnit, showPasteXBlock, isClipboardLoading } = useClipboard();
+
+  console.log(`showPasteUnit: ${showPasteUnit}, showPasteXBlock: ${showPasteXBlock}, isClipboardLoading: ${isClipboardLoading}`);
 
   document.title = getPageHeadTitle('', unitTitle);
 
@@ -92,7 +98,11 @@ const CourseUnit = ({ courseId }) => {
                 handleCreateNewCourseXblock={handleCreateNewCourseXblock}
               />
             </Layout.Element>
-            <Layout.Element />
+            <Layout.Element>
+              <button onClick={() => dispatch(copyToClipboard('block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40fc'))}>Copy unit</button>
+              <button onClick={() => dispatch(copyToClipboard('block-v1:edX+DemoX+Demo_Course+type@vertical+block@vertical_0270f6de40f'))}>Copy with error</button>
+              <button onClick={() => dispatch(copyToClipboard('block-v1:edX+DemoX+Demo_Course+type@html+block@html1'))}>Copy xblock</button>
+            </Layout.Element>
           </Layout>
         </section>
       </Container>
