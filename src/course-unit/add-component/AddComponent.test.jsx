@@ -93,7 +93,7 @@ describe('<AddComponent />', () => {
     });
   });
 
-  it('create new "Problem" xblock on click', () => {
+  it('calls handleCreateNewCourseXblock with correct parameters when Problem xblock create button is clicked', () => {
     const { getByRole } = renderComponent();
 
     const discussionButton = getByRole('button', {
@@ -105,6 +105,21 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'problem',
+    }, expect.any(Function));
+  });
+
+  it('calls handleCreateNewCourseXblock with correct parameters when Video xblock create button is clicked', () => {
+    const { getByRole } = renderComponent();
+
+    const discussionButton = getByRole('button', {
+      name: new RegExp(`${messages.buttonText.defaultMessage} Video`, 'i'),
+    });
+
+    userEvent.click(discussionButton);
+    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+      parentLocator: '123',
+      type: 'video',
     }, expect.any(Function));
   });
 });
