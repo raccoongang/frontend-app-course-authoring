@@ -28,10 +28,7 @@ const ModalContainer = ({
       footerNode={(
         <ActionRow>
           <ActionRow.Spacer />
-          <Button
-            variant="tertiary"
-            onClick={handleClose}
-          >
+          <Button variant="tertiary" onClick={handleClose}>
             {intl.formatMessage(messages.modalContainerCancelBtnText)}
           </Button>
           <Button onClick={handleSubmit} disabled={hasValue}>
@@ -47,11 +44,14 @@ const ModalContainer = ({
 
 ModalContainer.propTypes = {
   title: PropTypes.string.isRequired,
-  isOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   btnText: PropTypes.string.isRequired,
   size: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
+  hasValue: PropTypes.bool.isRequired,
+  resetDisabled: PropTypes.func.isRequired,
 };
 
 ModalContainer.defaultProps = {
