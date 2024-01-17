@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Layout } from '@edx/paragon';
+import { Container, Layout, Stack } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
 
+import React from 'react';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
@@ -19,6 +20,7 @@ import HeaderNavigations from './header-navigations/HeaderNavigations';
 import Sequence from './course-sequence';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
+import Sidebar from './sidebar/Sidebar';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -83,9 +85,9 @@ const CourseUnit = ({ courseId }) => {
             handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
           />
           <Layout
-            lg={[{ span: 9 }, { span: 3 }]}
-            md={[{ span: 9 }, { span: 3 }]}
-            sm={[{ span: 9 }, { span: 3 }]}
+            lg={[{ span: 8 }, { span: 4 }]}
+            md={[{ span: 8 }, { span: 4 }]}
+            sm={[{ span: 8 }, { span: 3 }]}
             xs={[{ span: 9 }, { span: 3 }]}
             xl={[{ span: 9 }, { span: 3 }]}
           >
@@ -95,7 +97,12 @@ const CourseUnit = ({ courseId }) => {
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
             </Layout.Element>
-            <Layout.Element />
+            <Layout.Element>
+              <Stack gap={3}>
+                <Sidebar />
+                <Sidebar />
+              </Stack>
+            </Layout.Element>
           </Layout>
         </section>
       </Container>

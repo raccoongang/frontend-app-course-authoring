@@ -1,0 +1,67 @@
+.course-unit-sidebar {
+  //width: 342px;
+
+  .course-unit-sidebar-header {
+    padding: 1rem 1rem 20px 1rem;
+
+    .course-unit-sidebar-header-icon {
+      margin-right: 4px;
+    }
+
+    .pgn__card-header {
+      padding: 0;
+    }
+
+    .pgn__card-header-title-md {
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .pgn__card-header-content {
+      margin: 0;
+    }
+  }
+
+  .course-unit-sidebar-footer {
+    padding: 0 1rem 1rem 1rem;
+
+    .course-unit-sidebar-visibility {
+      .course-unit-sidebar-visibility-title {
+        font-size: 12px;
+        line-height: 20px;
+        font-weight: 400;
+        color: $gray-700;
+      }
+
+      .course-unit-sidebar-visibility-copy {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 20px;
+        color: $gray-700;
+      }
+
+      .course-unit-sidebar-visibility-checkbox {
+        .pgn__form-label {
+          font-size: 12px;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+
+  .course-unit-sidebar-date {
+    padding: 0 1rem 1rem 1rem;
+    font-size: 12px;
+    line-height: 20px;
+
+    .course-unit-sidebar-date-stage {
+      font-size: 12px;
+      line-height: 20px;
+      font-weight: 400;
+    }
+
+    .course-unit-sidebar-date-timestamp {
+      color: $gray-700;
+    }
+  }
+}
