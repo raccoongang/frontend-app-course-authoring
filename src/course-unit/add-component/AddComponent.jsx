@@ -2,14 +2,13 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Button, useToggle } from '@edx/paragon';
+import { useToggle } from '@edx/paragon';
 
-import { useState } from 'react';
 import { getCourseSectionVertical } from '../data/selectors';
 import { COMPONENT_ICON_TYPES } from '../constants';
-import ComponentIcon from './ComponentIcon';
+import ComponentModalView from './add-component-modals/ComponentModalView';
+import AddComponentButton from './add-component-btn';
 import messages from './messages';
-import { Modal } from './modals';
 
 const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
   const navigate = useNavigate();
@@ -20,7 +19,6 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
   const { componentTemplates } = useSelector(getCourseSectionVertical);
 
   const handleCreateNewXblock = (type, moduleName) => {
-    console.log('handleCreateNewXblock ===>', { type, moduleName });
     switch (type) {
     case COMPONENT_ICON_TYPES.discussion:
     case COMPONENT_ICON_TYPES.dragAndDrop:
@@ -58,6 +56,16 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     }
   };
 
+  const renderComponentButton = (componentIndex, modalParams) => (
+    <ComponentModalView
+      key={componentIndex}
+      componentTemplates={componentTemplates}
+      componentIndex={componentIndex}
+      handleCreateNewXblock={handleCreateNewXblock}
+      modalParams={modalParams}
+    />
+  );
+
   if (!Object.keys(componentTemplates).length) {
     return null;
   }
@@ -66,92 +74,32 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     <div className="py-4">
       <h5 className="h3 mb-4 text-center">{intl.formatMessage(messages.title)}</h5>
       <ul className="new-component-type list-unstyled m-0 d-flex flex-wrap justify-content-center">
-        {Object.keys(componentTemplates).map((component) => {
-          if (componentTemplates[component].type === COMPONENT_ICON_TYPES.advanced) {
-            const componentData = componentTemplates.find(template => template.type === COMPONENT_ICON_TYPES.advanced);
-            console.log('componentData', componentData);
-            return (
-              <>
-                <li key={componentTemplates[component].type}>
-                  <Button
-                    variant="outline-primary"
-                    className="add-component-button flex-column rounded-sm"
-                    onClick={openAdvanced}
-                  >
-                    <ComponentIcon type={componentTemplates[component].type} />
-                    <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
-                    <span className="small mt-2">{componentTemplates[component].displayName}</span>
-                  </Button>
-                </li>
-                <Modal
-                  isOpen={isOpenAdvanced}
-                  close={closeAdvanced}
-                  data={componentData}
-                  handleCreateNewXblock={handleCreateNewXblock}
-                />
-              </>
-            );
+        {Object.keys(componentTemplates).map((componentIndex) => {
+          const { type, displayName } = componentTemplates[componentIndex];
+
+          if (type === COMPONENT_ICON_TYPES.advanced) {
+            return renderComponentButton(componentIndex, {
+              open: openAdvanced, close: closeAdvanced, isOpen: isOpenAdvanced,
+            });
           }
-          if (componentTemplates[component].type === COMPONENT_ICON_TYPES.html) {
-            const componentData = componentTemplates.find(template => template.type === COMPONENT_ICON_TYPES.html);
-            return (
-              <>
-                <li key={componentTemplates[component].type}>
-                  <Button
-                    variant="outline-primary"
-                    className="add-component-button flex-column rounded-sm"
-                    onClick={openHtml}
-                  >
-                    <ComponentIcon type={componentTemplates[component].type} />
-                    <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
-                    <span className="small mt-2">{componentTemplates[component].displayName}</span>
-                  </Button>
-                </li>
-                <Modal
-                  isOpen={isOpenHtml}
-                  close={closeHtml}
-                  data={componentData}
-                  handleCreateNewXblock={handleCreateNewXblock}
-                />
-              </>
-            );
+          if (type === COMPONENT_ICON_TYPES.html) {
+            return renderComponentButton(componentIndex, {
+              open: openHtml, close: closeHtml, isOpen: isOpenHtml,
+            });
           }
-          if (componentTemplates[component].type === COMPONENT_ICON_TYPES.openassessment) {
-            const componentData = componentTemplates
-              .find(template => template.type === COMPONENT_ICON_TYPES.openassessment);
-            return (
-              <>
-                <li key={componentTemplates[component].type}>
-                  <Button
-                    variant="outline-primary"
-                    className="add-component-button flex-column rounded-sm"
-                    onClick={openOpenassessment}
-                  >
-                    <ComponentIcon type={componentTemplates[component].type} />
-                    <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
-                    <span className="small mt-2">{componentTemplates[component].displayName}</span>
-                  </Button>
-                </li>
-                <Modal
-                  isOpen={isOpenOpenassessment}
-                  close={closeOpenassessment}
-                  data={componentData}
-                  handleCreateNewXblock={handleCreateNewXblock}
-                />
-              </>
-            );
+          if (type === COMPONENT_ICON_TYPES.openassessment) {
+            return renderComponentButton(componentIndex, {
+              open: openOpenassessment, close: closeOpenassessment, isOpen: isOpenOpenassessment,
+            });
           }
+
           return (
-            <li key={componentTemplates[component].type}>
-              <Button
-                variant="outline-primary"
-                className="add-component-button flex-column rounded-sm"
-                onClick={() => handleCreateNewXblock(componentTemplates[component].type)}
-              >
-                <ComponentIcon type={componentTemplates[component].type} />
-                <span className="sr-only">{intl.formatMessage(messages.buttonText)}</span>
-                <span className="small mt-2">{componentTemplates[component].displayName}</span>
-              </Button>
+            <li key={type}>
+              <AddComponentButton
+                onClick={() => handleCreateNewXblock(type)}
+                displayName={displayName}
+                type={type}
+              />
             </li>
           );
         })}
