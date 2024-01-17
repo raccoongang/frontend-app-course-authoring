@@ -58,7 +58,7 @@ export async function editUnitDisplayName(unitId, displayName) {
 export async function getCourseSectionVerticalData(unitId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseSectionVerticalApiUrl(unitId));
-
+  console.log('getCourseSectionVerticalData ===>', normalizeCourseSectionVerticalData(data));
   return normalizeCourseSectionVerticalData(data);
 }
 
@@ -102,10 +102,11 @@ export async function getCourseHomeCourseMetadata(courseId, rootSlug) {
 }
 
 export async function createCourseXblock({
-  type, category, parentLocator, displayName,
+  type, category, parentLocator, displayName, boilerplate,
 }) {
   const body = {
     type,
+    boilerplate,
     category: category || type,
     parent_locator: parentLocator,
     display_name: displayName,
