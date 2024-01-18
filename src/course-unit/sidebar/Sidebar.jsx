@@ -20,16 +20,29 @@ import courseUnit from '../CourseUnit';
 
 const Sidebar = ({ isDisplayUnitLocation }) => {
   const unitData = useSelector(getCourseUnitData);
-  const visibleText = unitData.currentlyVisibleToStudents ? 'IS VISIBLE TO' : 'WILL VISIBLE TO';
-  const unitStatus = {
-    release: 'RELEASE',
-    scheduled: 'SCHEDULED',
-  };
-  const iconVariants = {
-    publishedAndLive: CheckCircleIcon,
-    publishedNotYetReleased: CheckCircleOutlineIcon,
-    draft: InfoOutlineIcon,
-  };
+  const {
+    hasChanges, editedOn, editedBy, publishedBy, publishedOn, visibilityState, releaseDateFrom,
+    releaseDate, published, hasExplicitStaffLock, enableCopyPasteUnits, releasedToStudents,
+  } = unitData;
+
+  const visibleToStaffOnly = visibilityState === 'staff_only';
+  let title = 'Draft (never published)';
+  if (visibilityState === 'staff_only') {
+    title = 'Visible to staff only';
+  } else if (visibilityState === 'live') {
+    title = 'Published and live';
+  } else if (published && !hasChanges) {
+    title = 'Published (not yet released)';
+  } else if (published && hasChanges) {
+    title = 'Draft (unpublished changes)';
+  }
+
+  let releaseLabel = 'RELEASE';
+  if (visibilityState === 'live') {
+    releaseLabel = 'RELEASE';
+  } else if (visibilityState === 'ready') {
+    releaseLabel = 'SCHEDULED';
+  }
 
   if (isDisplayUnitLocation) {
     const locationId = unitData.id.match(/block@(.+)$/)[1];
@@ -63,59 +76,74 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
   console.log('unitData ===>>>', unitData);
 
   const getPublishText = () => {
-    if (unitData.hasChanges) {
-      return 'Draft saved on';
+    if (hasChanges && editedOn && editedBy) {
+      return `Draft saved on ${editedOn} by ${editedBy}`;
+    } if (publishedOn && publishedBy) {
+      return `Last published ${publishedOn} by ${publishedBy}`;
     }
 
-    if (unitData.publishedBy && !unitData.releaseDate) {
-      return 'Last published';
+    return 'Previously published';
+  };
+
+  const getReleaseStatus = () => {
+    if (releaseDate) {
+      return (
+        <span>
+          <h6 className="course-unit-sidebar-date-timestamp m-0 d-inline">
+            {releaseDate}
+          </h6> with {releaseDateFrom}
+        </span>
+      );
     }
 
-    return 'Draft saved on';
+    return 'Unscheduled';
+  };
+
+  const getVisibilityTitle = () => {
+    if (releasedToStudents && published && !hasChanges) {
+      return 'IS VISIBLE TO';
+    }
+
+    return 'WILL BE VISIBLE TO ';
   };
 
   const getIconSource = () => {
-    if (unitData.hasChanges) {
-      return iconVariants.draft;
+    if (visibilityState === 'staff_only') {
+      // Visible to staff only
+      return InfoOutlineIcon;
+    } if (visibilityState === 'live') {
+      // Published and live
+      return CheckCircleIcon;
+    } if (published && !hasChanges) {
+      // Published (not yet released)
+      return CheckCircleOutlineIcon;
+    } if (published && hasChanges) {
+      // Draft (unpublished changes)
+      return InfoOutlineIcon;
     }
 
-    if (unitData.publishedBy && !unitData.releaseDate) {
-      return iconVariants.publishedNotYetReleased;
-    }
-
-    return iconVariants.draft;
+    return InfoOutlineIcon;
   };
 
   const getIconColor = () => {
-    if (!unitData.publishedBy) {
-      return '#000';
+    const BLACK_COLOR = '#000';
+    const GREEN_COLOR = '#0D7D4D';
+
+    if (visibilityState === 'staff_only') {
+      // Visible to staff only
+      return BLACK_COLOR;
+    } if (visibilityState === 'live') {
+      // Published and live
+      return GREEN_COLOR;
+    } if (published && !hasChanges) {
+      // Published (not yet released)
+      return BLACK_COLOR;
+    } if (published && hasChanges) {
+      // Draft (unpublished changes)
+      return BLACK_COLOR;
     }
 
-    if (unitData.hasChanges) {
-      return '#000';
-    }
-
-    if (unitData.publishedBy && !unitData.releaseDate) {
-      return '#000';
-    }
-
-    return '#0D7D4D';
-  };
-
-  const getHeaderTitle = () => {
-    if (!unitData.publishedBy) {
-      return 'Draft (never published)';
-    }
-
-    if (unitData.hasChanges) {
-      return 'Draft (unpublished changes)';
-    }
-
-    if (unitData.publishedBy && !unitData.releaseDate) {
-      return 'Published (not yet released)';
-    }
-
-    return 'Draft (never published)';
+    return BLACK_COLOR;
   };
 
   return (
@@ -127,33 +155,17 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
           src={getIconSource()}
         />
         <h3 className="course-unit-sidebar-header-title m-0">
-          {getHeaderTitle()}
+          {title}
         </h3>
       </Stack>
       <Card.Section className="course-unit-sidebar-date">
         <Stack>
           <span>
-            {getPublishText()} {unitData.editedOn} by {unitData.editedBy}
+            {getPublishText()}
           </span>
-          {false && (
-            <span className="mt-3.5">
-              <h5 className="course-unit-sidebar-date-stage m-0">{unitStatus.release}</h5>
-              {unitData.releaseDate ? (
-                <>
-                  <h6 className="course-unit-sidebar-date-timestamp m-0 d-inline">
-                    Feb 05, 2013 at 05:00 UTC
-                  </h6> with Subsection “Homework - Labs and Demos”
-                </>
-              ) : (
-                <p className="m-0">Unreleased</p>
-              )}
-            </span>
-          )}
           <span className="mt-3.5">
-            <h5 className="course-unit-sidebar-date-stage m-0">{unitStatus.release}</h5>
-            {!unitData.releaseData && (
-              <p className="m-0">Unscheduled</p>
-            )}
+            <h5 className="course-unit-sidebar-date-stage m-0">{releaseLabel}</h5>
+            {getReleaseStatus()}
           </span>
           <p className="mt-3.5 mb-0">
             Note: Do not hide graded assignments after they have been released.
@@ -163,25 +175,33 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
       <Card.Footer className="course-unit-sidebar-footer" orientation="horizontal">
         <Stack className="course-unit-sidebar-visibility">
           <small className="course-unit-sidebar-visibility-title">
-            {visibleText}
+            {getVisibilityTitle()}
           </small>
-          <h6 className="course-unit-sidebar-visibility-copy">
-            {unitData.visibilityState === 'staff_only' ? 'Staff only' : 'Staff and learners'}
-          </h6>
-          <Form.Checkbox className="course-unit-sidebar-visibility-checkbox">
-            Hide from learners
-          </Form.Checkbox>
-          {unitData.hasChanges && (
+          {visibleToStaffOnly ? (
             <>
-              <Button className="mt-3.5" variant="outline-primary" size="sm">
-                Publish
-              </Button>
-              {unitData.publishedBy && (
-                <Button className="mt-2" variant="tertiary" size="sm">
-                  Discard changes
-                </Button>
+              <h6 className="course-unit-sidebar-visibility-copy">Staff only</h6>
+              {!hasExplicitStaffLock && (
+                <mark>=== hasExplicitStaffLock ===</mark>
               )}
             </>
+          ) : (
+            <h6 className="course-unit-sidebar-visibility-copy">Staff and learners</h6>
+          )}
+          <Form.Checkbox className="course-unit-sidebar-visibility-checkbox" checked={hasExplicitStaffLock}>
+            Hide from learners
+          </Form.Checkbox>
+
+          <Button className="mt-3.5" variant="outline-primary" size="sm" disabled={published && !hasChanges}>
+            Publish
+          </Button>
+          <Button className="mt-2" variant="tertiary" size="sm" disabled={!published || !hasChanges}>
+            Discard changes
+          </Button>
+          {/* TODO: Unit copying functionality will be added to: https://youtrack.raccoongang.com/issue/AXIMST-375 */}
+          {enableCopyPasteUnits && (
+            <Button className="mt-2" variant="outline-primary" size="sm">
+              Copy unit
+            </Button>
           )}
         </Stack>
       </Card.Footer>
