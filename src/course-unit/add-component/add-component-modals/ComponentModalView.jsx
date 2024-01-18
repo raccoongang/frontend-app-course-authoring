@@ -43,7 +43,7 @@ const ComponentModalView = ({
         btnText={intl.formatMessage(messages.modalBtnText)}
         onSubmit={handleSubmit}
         resetDisabled={() => setModuleTitle('')}
-        hasValue={!moduleTitle.length > 0}
+        hasValue={!moduleTitle.length}
       >
         <Form.Group>
           <Form.RadioSet
