@@ -10,19 +10,18 @@ import messages from '../messages';
 import ModalContainer from './ModalContainer';
 
 const ComponentModalView = ({
-  componentTemplates,
-  componentIndex,
+  component,
   modalParams,
-  handleCreateNewXblock,
+  handleCreateNewXBlock,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
   const [moduleTitle, setModuleTitle] = useState('');
   const { open, close, isOpen } = modalParams;
-  const { type, displayName, templates } = componentTemplates[componentIndex];
+  const { type, displayName, templates } = component;
 
   const handleSubmit = () => {
-    handleCreateNewXblock(type, moduleTitle);
+    handleCreateNewXBlock(type, moduleTitle);
     dispatch(updateQueryPendingStatus(true));
     setModuleTitle('');
   };
@@ -71,27 +70,24 @@ const ComponentModalView = ({
 };
 
 ComponentModalView.propTypes = {
-  componentIndex: PropTypes.string.isRequired,
   modalParams: PropTypes.shape({
     open: PropTypes.func,
     close: PropTypes.func,
     isOpen: PropTypes.bool,
   }).isRequired,
-  handleCreateNewXblock: PropTypes.func.isRequired,
-  componentTemplates: PropTypes.arrayOf(
-    PropTypes.shape({
-      displayName: PropTypes.string.isRequired,
-      category: PropTypes.string,
-      type: PropTypes.string.isRequired,
-      templates: PropTypes.arrayOf(
-        PropTypes.shape({
-          boilerplateName: PropTypes.string,
-          category: PropTypes.string,
-          displayName: PropTypes.string.isRequired,
-        }),
-      ),
-    }),
-  ).isRequired,
+  handleCreateNewXBlock: PropTypes.func.isRequired,
+  component: PropTypes.shape({
+    displayName: PropTypes.string.isRequired,
+    category: PropTypes.string,
+    type: PropTypes.string.isRequired,
+    templates: PropTypes.arrayOf(
+      PropTypes.shape({
+        boilerplateName: PropTypes.string,
+        category: PropTypes.string,
+        displayName: PropTypes.string.isRequired,
+      }),
+    ),
+  }).isRequired,
 };
 
 export default ComponentModalView;

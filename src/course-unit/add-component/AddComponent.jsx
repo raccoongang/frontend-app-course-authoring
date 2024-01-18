@@ -10,41 +10,41 @@ import ComponentModalView from './add-component-modals/ComponentModalView';
 import AddComponentButton from './add-component-btn';
 import messages from './messages';
 
-const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
+const AddComponent = ({ blockId, handleCreateNewCourseXBlock }) => {
   const navigate = useNavigate();
   const intl = useIntl();
   const [isOpenAdvanced, openAdvanced, closeAdvanced] = useToggle(false);
   const [isOpenHtml, openHtml, closeHtml] = useToggle(false);
-  const [isOpenOpenassessment, openOpenassessment, closeOpenassessment] = useToggle(false);
+  const [isOpenOpenAssessment, openOpenAssessment, closeOpenAssessment] = useToggle(false);
   const { componentTemplates } = useSelector(getCourseSectionVertical);
 
-  const handleCreateNewXblock = (type, moduleName) => {
+  const handleCreateNewXBlock = (type, moduleName) => {
     switch (type) {
     case COMPONENT_ICON_TYPES.discussion:
     case COMPONENT_ICON_TYPES.dragAndDrop:
-      handleCreateNewCourseXblock({ type, parentLocator: blockId });
+      handleCreateNewCourseXBlock({ type, parentLocator: blockId });
       break;
     case COMPONENT_ICON_TYPES.problem:
     case COMPONENT_ICON_TYPES.video:
-      handleCreateNewCourseXblock({ type, parentLocator: blockId }, ({ courseKey, locator }) => {
+      handleCreateNewCourseXBlock({ type, parentLocator: blockId }, ({ courseKey, locator }) => {
         navigate(`/course/${courseKey}/editor/${type}/${locator}`);
       });
       break;
     case COMPONENT_ICON_TYPES.library:
-      handleCreateNewCourseXblock({ type, category: 'library_content', parentLocator: blockId });
+      handleCreateNewCourseXBlock({ type, category: 'library_content', parentLocator: blockId });
       break;
     case COMPONENT_ICON_TYPES.advanced:
-      handleCreateNewCourseXblock({
+      handleCreateNewCourseXBlock({
         type: moduleName, category: moduleName, parentLocator: blockId,
       });
       break;
     case COMPONENT_ICON_TYPES.openassessment:
-      handleCreateNewCourseXblock({
+      handleCreateNewCourseXBlock({
         boilerplate: moduleName, category: type, parentLocator: blockId,
       });
       break;
     case COMPONENT_ICON_TYPES.html:
-      handleCreateNewCourseXblock({
+      handleCreateNewCourseXBlock({
         type,
         boilerplate: moduleName,
         parentLocator: blockId,
@@ -56,16 +56,6 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     }
   };
 
-  const renderComponentButton = (componentIndex, modalParams) => (
-    <ComponentModalView
-      key={componentIndex}
-      componentTemplates={componentTemplates}
-      componentIndex={componentIndex}
-      handleCreateNewXblock={handleCreateNewXblock}
-      modalParams={modalParams}
-    />
-  );
-
   if (!Object.keys(componentTemplates).length) {
     return null;
   }
@@ -74,33 +64,51 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
     <div className="py-4">
       <h5 className="h3 mb-4 text-center">{intl.formatMessage(messages.title)}</h5>
       <ul className="new-component-type list-unstyled m-0 d-flex flex-wrap justify-content-center">
-        {Object.keys(componentTemplates).map((componentIndex) => {
-          const { type, displayName } = componentTemplates[componentIndex];
+        {componentTemplates.map((component) => {
+          const { type, displayName } = component;
+          let modalParams;
 
-          if (type === COMPONENT_ICON_TYPES.advanced) {
-            return renderComponentButton(componentIndex, {
-              open: openAdvanced, close: closeAdvanced, isOpen: isOpenAdvanced,
-            });
-          }
-          if (type === COMPONENT_ICON_TYPES.html) {
-            return renderComponentButton(componentIndex, {
-              open: openHtml, close: closeHtml, isOpen: isOpenHtml,
-            });
-          }
-          if (type === COMPONENT_ICON_TYPES.openassessment) {
-            return renderComponentButton(componentIndex, {
-              open: openOpenassessment, close: closeOpenassessment, isOpen: isOpenOpenassessment,
-            });
+          switch (type) {
+          case COMPONENT_ICON_TYPES.advanced:
+            modalParams = {
+              open: openAdvanced,
+              close: closeAdvanced,
+              isOpen: isOpenAdvanced,
+            };
+            break;
+          case COMPONENT_ICON_TYPES.html:
+            modalParams = {
+              open: openHtml,
+              close: closeHtml,
+              isOpen: isOpenHtml,
+            };
+            break;
+          case COMPONENT_ICON_TYPES.openassessment:
+            modalParams = {
+              open: openOpenAssessment,
+              close: closeOpenAssessment,
+              isOpen: isOpenOpenAssessment,
+            };
+            break;
+          default:
+            return (
+              <li key={type}>
+                <AddComponentButton
+                  onClick={() => handleCreateNewXBlock(type)}
+                  displayName={displayName}
+                  type={type}
+                />
+              </li>
+            );
           }
 
           return (
-            <li key={type}>
-              <AddComponentButton
-                onClick={() => handleCreateNewXblock(type)}
-                displayName={displayName}
-                type={type}
-              />
-            </li>
+            <ComponentModalView
+              key={type}
+              component={component}
+              handleCreateNewXBlock={handleCreateNewXBlock}
+              modalParams={modalParams}
+            />
           );
         })}
       </ul>
@@ -110,7 +118,7 @@ const AddComponent = ({ blockId, handleCreateNewCourseXblock }) => {
 
 AddComponent.propTypes = {
   blockId: PropTypes.string.isRequired,
-  handleCreateNewCourseXblock: PropTypes.func.isRequired,
+  handleCreateNewCourseXBlock: PropTypes.func.isRequired,
 };
 
 export default AddComponent;

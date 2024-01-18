@@ -21,14 +21,14 @@ import messages from './messages';
 let store;
 let axiosMock;
 const blockId = '123';
-const handleCreateNewCourseXblockMock = jest.fn();
+const handleCreateNewCourseXBlockMock = jest.fn();
 
 const renderComponent = (props) => render(
   <AppProvider store={store}>
     <IntlProvider locale="en">
       <AddComponent
         blockId={blockId}
-        handleCreateNewCourseXblock={handleCreateNewCourseXblockMock}
+        handleCreateNewCourseXBlock={handleCreateNewCourseXBlockMock}
         {...props}
       />
     </IntlProvider>
@@ -74,8 +74,8 @@ describe('<AddComponent />', () => {
     });
 
     userEvent.click(discussionButton);
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'discussion',
     });
@@ -89,14 +89,14 @@ describe('<AddComponent />', () => {
     });
 
     userEvent.click(discussionButton);
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'drag-and-drop-v2',
     });
   });
 
-  it('calls handleCreateNewCourseXblock with correct parameters when Problem xblock create button is clicked', () => {
+  it('calls handleCreateNewCourseXBlock with correct parameters when Problem xblock create button is clicked', () => {
     const { getByRole } = renderComponent();
 
     const discussionButton = getByRole('button', {
@@ -104,14 +104,14 @@ describe('<AddComponent />', () => {
     });
 
     userEvent.click(discussionButton);
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'problem',
     }, expect.any(Function));
   });
 
-  it('calls handleCreateNewCourseXblock with correct parameters when Video xblock create button is clicked', () => {
+  it('calls handleCreateNewCourseXBlock with correct parameters when Video xblock create button is clicked', () => {
     const { getByRole } = renderComponent();
 
     const discussionButton = getByRole('button', {
@@ -119,8 +119,8 @@ describe('<AddComponent />', () => {
     });
 
     userEvent.click(discussionButton);
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'video',
     }, expect.any(Function));
@@ -134,8 +134,8 @@ describe('<AddComponent />', () => {
     });
 
     userEvent.click(discussionButton);
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       category: 'library_content',
       type: 'library',
@@ -243,8 +243,8 @@ describe('<AddComponent />', () => {
 
     userEvent.click(sendBtn);
 
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'annotatable',
       category: 'annotatable',
@@ -269,8 +269,8 @@ describe('<AddComponent />', () => {
 
     userEvent.click(sendBtn);
 
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       type: 'html',
       boilerplate: 'html',
@@ -295,8 +295,8 @@ describe('<AddComponent />', () => {
 
     userEvent.click(sendBtn);
 
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalled();
-    expect(handleCreateNewCourseXblockMock).toHaveBeenCalledWith({
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       category: 'openassessment',
       boilerplate: 'peer-assessment',
