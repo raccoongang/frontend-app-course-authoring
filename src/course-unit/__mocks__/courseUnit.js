@@ -1,6 +1,6 @@
 module.exports = {
   id: 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@d91b9e5d8bc64d57a1332d06bf2f2144',
-  display_name: 'Unit',
+  display_name: 'Getting Started new',
   category: 'vertical',
   has_children: true,
   edited_on: 'Dec 28, 2023 at 10:00 UTC',

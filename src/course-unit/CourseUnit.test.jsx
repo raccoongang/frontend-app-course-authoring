@@ -218,6 +218,53 @@ describe('<CourseUnit />', () => {
       .toHaveBeenCalledWith(`/course/${courseId}/container/${blockId}/${updatedAncestorsChild.id}`, { replace: true });
   });
 
+  it('after changing the unit header, the sequence unit is updated', async () => {
+    const { getAllByTestId, getByRole } = render(<RootWrapper />);
+    const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
+    const updatedAncestorsChild = updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0];
+    set(updatedCourseSectionVerticalData, 'xblock_info.ancestor_info.ancestors[0].child_info.children', [
+      ...updatedAncestorsChild.child_info.children,
+      courseUnitMock,
+    ]);
+
+    const newDisplayName = `${unitDisplayName} new`;
+
+    axiosMock
+      .onPost(getXBlockBaseApiUrl(blockId, {
+        metadata: {
+          display_name: newDisplayName,
+        },
+      }))
+      .reply(200, { dummy: 'value' })
+      .onGet(getCourseUnitApiUrl(blockId))
+      .reply(200, {
+        ...courseUnitIndexMock,
+        metadata: {
+          ...courseUnitIndexMock.metadata,
+          display_name: newDisplayName,
+        },
+      })
+      .onGet(getCourseSectionVerticalApiUrl(blockId))
+      .reply(200, {
+        ...updatedCourseSectionVerticalData,
+      });
+
+    await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
+
+    const editTitleButton = getByRole('button', { name: headerTitleMessages.altButtonEdit.defaultMessage });
+    fireEvent.click(editTitleButton);
+
+    const titleEditField = getByRole('textbox', { name: headerTitleMessages.ariaLabelButtonEdit.defaultMessage });
+    fireEvent.change(titleEditField, { target: { value: newDisplayName } });
+
+    await act(async () => fireEvent.blur(titleEditField));
+
+    await waitFor(async () => {
+      const units = getAllByTestId('course-unit-btn');
+      expect(units.some(unit => unit.title === newDisplayName)).toBe(true);
+    });
+  });
+
   it('handles creating Video xblock and navigates to editor page', async () => {
     const { courseKey, locator } = courseCreateXblockMock;
     axiosMock
