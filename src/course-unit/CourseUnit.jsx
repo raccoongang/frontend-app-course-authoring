@@ -100,7 +100,7 @@ const CourseUnit = ({ courseId }) => {
             <Layout.Element>
               <Stack gap={3}>
                 <Sidebar />
-                <Sidebar />
+                <Sidebar isDisplayUnitLocation />
               </Stack>
             </Layout.Element>
           </Layout>
