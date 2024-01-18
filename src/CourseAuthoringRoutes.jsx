@@ -16,6 +16,7 @@ import { GradingSettings } from './grading-settings';
 import CourseTeam from './course-team/CourseTeam';
 import { CourseUpdates } from './course-updates';
 import { CourseUnit } from './course-unit';
+import { Certificates } from './certificates';
 import CourseExportPage from './export-page/CourseExportPage';
 import CourseImportPage from './import-page/CourseImportPage';
 import { DECODED_ROUTES } from './constants';
@@ -108,6 +109,10 @@ const CourseAuthoringRoutes = () => {
         <Route
           path="export"
           element={<PageWrap><CourseExportPage courseId={courseId} /></PageWrap>}
+        />
+        <Route
+          path="certificates"
+          element={<PageWrap><Certificates courseId={courseId} /></PageWrap>}
         />
       </Routes>
     </CourseAuthoringPage>
