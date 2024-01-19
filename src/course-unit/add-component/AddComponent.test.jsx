@@ -126,7 +126,7 @@ describe('<AddComponent />', () => {
     }, expect.any(Function));
   });
 
-  it('create new "Library" xblock on click', () => {
+  it('creates new "Library" xblock on click', () => {
     const { getByRole } = renderComponent();
 
     const discussionButton = getByRole('button', {

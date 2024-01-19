@@ -30,6 +30,8 @@ const AddComponent = ({ blockId, handleCreateNewCourseXBlock }) => {
         navigate(`/course/${courseKey}/editor/${type}/${locator}`);
       });
       break;
+    // TODO: The library functional will be a bit different of current legacy (CMS)
+    //  behaviour and this ticket is on hold (blocked by other development team).
     case COMPONENT_ICON_TYPES.library:
       handleCreateNewCourseXBlock({ type, category: 'library_content', parentLocator: blockId });
       break;
