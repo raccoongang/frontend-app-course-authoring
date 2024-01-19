@@ -22,16 +22,10 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
             <DropdownButton id="dropdown-basic-button">
               <Dropdown.Item />
             </DropdownButton>
-            <Button
-              variant="outline-primary"
-              alt={intl.formatMessage(messages.headingActionsPreviewAlt)}
-            >
+            <Button variant="outline-primary">
               {intl.formatMessage(messages.headingActionsPreview)}
             </Button>
-            <Button
-              variant="outline-primary"
-              alt={intl.formatMessage(messages.headingActionsDeactivateAlt)}
-            >
+            <Button variant="outline-primary">
               {intl.formatMessage(messages.headingActionsDeactivate)}
             </Button>
           </>

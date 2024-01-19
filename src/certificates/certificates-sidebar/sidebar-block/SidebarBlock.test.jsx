@@ -14,8 +14,8 @@ const renderComponent = (props) => render(
 describe('SidebarBlock', () => {
   it('renders without crashing', () => {
     const { getByText } = renderComponent(testProps);
-    expect(getByText('Test Title')).toBeInTheDocument();
-    expect(getByText('Test Paragraph')).toBeInTheDocument();
+    expect(getByText(testProps.title)).toBeInTheDocument();
+    expect(getByText(testProps.paragraphs[0])).toBeInTheDocument();
   });
 
   it('renders <hr> if isLast is false', () => {

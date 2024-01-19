@@ -13,16 +13,8 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.heading.action.button.preview',
     defaultMessage: 'Preview certificate',
   },
-  headingActionsPreviewAlt: {
-    id: 'course-authoring.certificates.heading.action.button.preview.alt',
-    defaultMessage: 'Preview certificate',
-  },
   headingActionsDeactivate: {
     id: 'course-authoring.certificates.heading.action.button.deactivate',
-    defaultMessage: 'Deactivate',
-  },
-  headingActionsDeactivateAlt: {
-    id: 'course-authoring.certificates.heading.action.button.deactivate.alt',
     defaultMessage: 'Deactivate',
   },
   noCertificatesText: {
