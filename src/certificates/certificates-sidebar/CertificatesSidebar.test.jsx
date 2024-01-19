@@ -1,5 +1,4 @@
-import React from 'react';
-import { screen, render, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
@@ -39,19 +38,19 @@ describe('CertificatesSidebar', () => {
     store = initializeStore();
   });
 
-  test('renders correctly', async () => {
-    renderComponent();
+  it('renders correctly', async () => {
+    const { getByText } = renderComponent();
     await waitFor(() => {
-      expect(screen.getByText(messages.about.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText(messages.aboutDescription_1.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText(messages.aboutDescription_2.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText(messages.aboutDescription_3.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.about.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.aboutDescription_1.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.aboutDescription_2.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.aboutDescription_3.defaultMessage)).toBeInTheDocument();
 
-      expect(screen.getByText(messages.about_2.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText(messages.about_2_Description_1.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText(messages.about_2_Description_2.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.about_2.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.about_2_Description_1.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.about_2_Description_2.defaultMessage)).toBeInTheDocument();
 
-      expect(screen.getByText(messages.learnMoreBtn.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.learnMoreBtn.defaultMessage)).toBeInTheDocument();
     });
   });
 });

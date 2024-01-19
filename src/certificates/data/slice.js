@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchCertificates } from './thunks';
 import { RequestStatus } from '../../data/constants';
 
 const slice = createSlice({
@@ -15,22 +14,19 @@ const slice = createSlice({
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchCertificates.pending, (state) => {
-        state.loadingStatus = RequestStatus.IN_PROGRESS;
-      })
-      .addCase(fetchCertificates.fulfilled, (state, action) => {
-        state.certificatesData = action.payload;
-        state.loadingStatus = RequestStatus.SUCCESSFUL;
-      })
-      .addCase(fetchCertificates.rejected, (state, action) => {
-        state.loadingStatus = action.payload.status;
-      });
+    updateLoadingStatus: (state, { payload }) => {
+      state.loadingStatus = payload.status;
+    },
+    fetchCertificatesSuccess: (state, { payload }) => {
+      Object.assign(state.certificatesData, payload);
+    },
   },
 });
 
-export const { updateSavingStatus } = slice.actions;
+export const {
+  updateSavingStatus,
+  updateLoadingStatus,
+  fetchCertificatesSuccess,
+} = slice.actions;
 
 export const { reducer } = slice;

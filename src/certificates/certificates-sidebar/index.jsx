@@ -1,12 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Button } from '@edx/paragon';
+import { Button, Hyperlink } from '@edx/paragon';
 
 import { HelpSidebar } from '../../generic/help-sidebar';
-import SidebarBlock from './sidebar-block';
 import { useHelpUrls } from '../../help-urls/hooks';
 import { getSidebarData } from './utils';
+import SidebarBlock from './sidebar-block';
 import messages from './messages';
 
 const CertificatesSidebar = ({ courseId }) => {
@@ -26,7 +25,7 @@ const CertificatesSidebar = ({ courseId }) => {
         />
       ))}
       <Button
-        as="a"
+        as={Hyperlink}
         size="sm"
         href={learnMoreCertificates}
         variant="outline-primary"

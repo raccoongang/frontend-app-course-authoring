@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
@@ -56,16 +56,16 @@ describe('Certificates', () => {
     store = initializeStore(initialState);
   });
 
-  test('renders WithoutModes when there are no certificate modes', () => {
-    renderComponent();
-    expect(screen.getByText(messages.withoutModesText.defaultMessage)).toBeInTheDocument();
-    expect(screen.queryByText(messages.noCertificatesText.defaultMessage)).not.toBeInTheDocument();
+  it('renders WithoutModes when there are no certificate modes', () => {
+    const { getByText, queryByText } = renderComponent();
+    expect(getByText(messages.withoutModesText.defaultMessage)).toBeInTheDocument();
+    expect(queryByText(messages.noCertificatesText.defaultMessage)).not.toBeInTheDocument();
   });
 
-  test('renders WithModesWithoutCertificates when there are modes but no certificates', () => {
+  it('renders WithModesWithoutCertificates when there are modes but no certificates', () => {
     useCertificates.mockReturnValue({ hasCertificates: false, hasCertificateModes: true });
-    renderComponent();
-    expect(screen.getByText(messages.noCertificatesText.defaultMessage)).toBeInTheDocument();
-    expect(screen.queryByText(messages.withoutModesText.defaultMessage)).not.toBeInTheDocument();
+    const { getByText, queryByText } = renderComponent();
+    expect(getByText(messages.noCertificatesText.defaultMessage)).toBeInTheDocument();
+    expect(queryByText(messages.withoutModesText.defaultMessage)).not.toBeInTheDocument();
   });
 });

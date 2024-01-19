@@ -1,10 +1,8 @@
-/* eslint-disable no-console */
-import React from 'react';
 import PropTypes from 'prop-types';
 
-import MainLayout from './layout/MainLayout';
-import WithoutModes from './without-modes/WithoutModes';
-import WithModesWithoutCertificates from './with-modes-without-certificates/WithModesWithoutCertificates';
+import MainLayout from './layout';
+import WithoutModes from './without-modes';
+import WithModesWithoutCertificates from './with-modes-without-certificates';
 import useCertificates from './hooks/useCertificates';
 
 const Certificates = ({ courseId }) => {

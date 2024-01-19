@@ -1,22 +1,30 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import SidebarBlock from '.';
 
+const testProps = {
+  title: 'Test Title',
+  paragraphs: ['Test Paragraph'],
+};
+
+const renderComponent = (props) => render(
+  <SidebarBlock {...props} />,
+);
+
 describe('SidebarBlock', () => {
-  test('renders without crashing', () => {
-    render(<SidebarBlock title="Test Title" paragraphs={['Test Paragraph']} isLast={false} />);
-    expect(screen.getByText('Test Title')).toBeInTheDocument();
-    expect(screen.getByText('Test Paragraph')).toBeInTheDocument();
+  it('renders without crashing', () => {
+    const { getByText } = renderComponent(testProps);
+    expect(getByText('Test Title')).toBeInTheDocument();
+    expect(getByText('Test Paragraph')).toBeInTheDocument();
   });
 
-  test('renders <hr> if isLast is false', () => {
-    render(<SidebarBlock title="Test Title" paragraphs={['Test Paragraph']} isLast={false} />);
-    expect(screen.getByRole('separator')).toBeInTheDocument();
+  it('renders <hr> if isLast is false', () => {
+    const { getByRole } = renderComponent(testProps);
+    expect(getByRole('separator')).toBeInTheDocument();
   });
 
-  test('does not render <hr> if isLast is true', () => {
-    render(<SidebarBlock title="Test Title" paragraphs={['Test Paragraph']} isLast />);
-    expect(screen.queryByRole('separator')).not.toBeInTheDocument();
+  it('does not render <hr> if isLast is true', () => {
+    const { queryByRole } = renderComponent({ ...testProps, isLast: true });
+    expect(queryByRole('separator')).not.toBeInTheDocument();
   });
 });

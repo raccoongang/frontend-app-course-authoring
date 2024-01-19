@@ -15,13 +15,17 @@ const SidebarBlock = ({ title, paragraphs, isLast }) => (
   </React.Fragment>
 );
 
+SidebarBlock.defaultProps = {
+  isLast: false,
+};
+
 SidebarBlock.propTypes = {
   title: PropTypes.string.isRequired,
   paragraphs: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,
   ])).isRequired,
-  isLast: PropTypes.bool.isRequired,
+  isLast: PropTypes.bool,
 };
 
 export default SidebarBlock;

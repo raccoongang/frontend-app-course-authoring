@@ -1,20 +1,23 @@
 /* eslint-disable import/prefer-default-export */
-import { createAsyncThunk } from '@reduxjs/toolkit';
-
 import { RequestStatus } from '../../data/constants';
 import { getCertificates } from './api';
+import { fetchCertificatesSuccess, updateLoadingStatus } from './slice';
 
-export const fetchCertificates = createAsyncThunk(
-  'certificates/fetchCertificates',
-  async (courseId, { rejectWithValue }) => {
+export function fetchCertificates(courseId) {
+  return async (dispatch) => {
+    dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
+
     try {
       const certificates = await getCertificates(courseId);
-      return certificates;
+
+      dispatch(fetchCertificatesSuccess(certificates));
+      dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        return rejectWithValue({ courseId, status: RequestStatus.DENIED });
+        dispatch(updateLoadingStatus({ courseId, status: RequestStatus.DENIED }));
+      } else {
+        dispatch(updateLoadingStatus({ courseId, status: RequestStatus.FAILED }));
       }
-      return rejectWithValue({ courseId, status: RequestStatus.FAILED });
     }
-  },
-);
+  };
+}

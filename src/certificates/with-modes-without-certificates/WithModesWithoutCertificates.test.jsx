@@ -1,12 +1,11 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
 
 import initializeStore from '../../store';
-import WithModesWithoutCertificates from './WithModesWithoutCertificates';
 import messages from '../messages';
+import WithModesWithoutCertificates from '.';
 
 const courseId = 'course-123';
 let store;
@@ -39,14 +38,14 @@ describe('WithModesWithoutCertificates', () => {
     store = initializeStore();
   });
 
-  test('renders correctly', async () => {
-    renderComponent();
+  it('renders correctly', async () => {
+    const { getByText, queryByText } = renderComponent();
     await waitFor(() => {
-      expect(screen.getByText(messages.noCertificatesText.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText(messages.setupCertificateBtn.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.noCertificatesText.defaultMessage)).toBeInTheDocument();
+      expect(getByText(messages.setupCertificateBtn.defaultMessage)).toBeInTheDocument();
 
-      expect(screen.queryByText(messages.headingActionsPreview.defaultMessage)).not.toBeInTheDocument();
-      expect(screen.queryByText(messages.headingActionsDeactivate.defaultMessage)).not.toBeInTheDocument();
+      expect(queryByText(messages.headingActionsPreview.defaultMessage)).not.toBeInTheDocument();
+      expect(queryByText(messages.headingActionsDeactivate.defaultMessage)).not.toBeInTheDocument();
     });
   });
 });

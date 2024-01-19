@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Container, Button, Layout, Dropdown, DropdownButton,
@@ -15,6 +14,7 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
     <Container size="xl" className="certificates px-4">
       <div className="mt-5" />
       <SubHeader
+        hideBorder
         subtitle={intl.formatMessage(messages.headingSubtitle)}
         title={intl.formatMessage(messages.headingTitle)}
         headerActions={showHeaderButtons && ( // TODO create btn handlers in the task (https://youtrack.raccoongang.com/issue/AXIMST-166)
@@ -25,14 +25,12 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
             <Button
               variant="outline-primary"
               alt={intl.formatMessage(messages.headingActionsPreviewAlt)}
-              disabled={false}
             >
               {intl.formatMessage(messages.headingActionsPreview)}
             </Button>
             <Button
               variant="outline-primary"
               alt={intl.formatMessage(messages.headingActionsDeactivateAlt)}
-              disabled={false}
             >
               {intl.formatMessage(messages.headingActionsDeactivate)}
             </Button>

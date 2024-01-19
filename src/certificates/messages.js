@@ -27,19 +27,19 @@ const messages = defineMessages({
   },
   noCertificatesText: {
     id: 'course-authoring.certificates.nocertificate.text',
-    defaultMessage: 'You have not created any certificates yet.',
+    defaultMessage: 'You haven\'t added any certificates to this course yet.',
   },
   setupCertificateBtn: {
     id: 'course-authoring.certificates.setup.certificate.button',
-    defaultMessage: 'Set up your certificate',
+    defaultMessage: 'Add your first certificate',
   },
   setupCertificateBtnAlt: {
     id: 'course-authoring.certificates.setup.certificate.button.alt',
-    defaultMessage: 'Set up your certificate',
+    defaultMessage: 'Add your first certificate',
   },
   withoutModesText: {
     id: 'course-authoring.certificates.without.modes.text',
-    defaultMessage: 'This course does not use a mode that offers certificates',
+    defaultMessage: 'This course does not use a mode that offers certificates.',
   },
 });
 
