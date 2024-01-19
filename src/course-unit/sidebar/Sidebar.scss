@@ -56,4 +56,10 @@
       color: $gray-700;
     }
   }
+
+  &.is-stuff-only {
+    .course-unit-sidebar-date-and-with {
+      text-decoration: line-through;
+    }
+  }
 }

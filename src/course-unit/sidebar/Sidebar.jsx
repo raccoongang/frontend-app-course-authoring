@@ -9,6 +9,7 @@ import {
 import { useSelector } from 'react-redux';
 import { getCourseUnitData } from '../data/selectors';
 import courseUnit from '../CourseUnit';
+import classNames from 'classnames';
 
 /*
 * - Published and live
@@ -88,7 +89,7 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
   const getReleaseStatus = () => {
     if (releaseDate) {
       return (
-        <span>
+        <span className="course-unit-sidebar-date-and-with">
           <h6 className="course-unit-sidebar-date-timestamp m-0 d-inline">
             {releaseDate}
           </h6> with {releaseDateFrom}
@@ -147,7 +148,12 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
   };
 
   return (
-    <Card className="course-unit-sidebar">
+    <Card
+      className={classNames('course-unit-sidebar', {
+        'is-scheduled': releaseDate,
+        'is-stuff-only': visibleToStaffOnly,
+      })}
+    >
       <Stack className="course-unit-sidebar-header" direction="horizontal">
         <Icon
           className="course-unit-sidebar-header-icon"
@@ -190,13 +196,16 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
           <Form.Checkbox className="course-unit-sidebar-visibility-checkbox" checked={hasExplicitStaffLock}>
             Hide from learners
           </Form.Checkbox>
-
-          <Button className="mt-3.5" variant="outline-primary" size="sm" disabled={published && !hasChanges}>
-            Publish
-          </Button>
-          <Button className="mt-2" variant="tertiary" size="sm" disabled={!published || !hasChanges}>
-            Discard changes
-          </Button>
+          {(!published || hasChanges) && (
+            <Button className="mt-3.5" variant="outline-primary" size="sm">
+              Publish
+            </Button>
+          )}
+          {(published && hasChanges) && (
+            <Button className="mt-2" variant="tertiary" size="sm">
+              Discard changes
+            </Button>
+          )}
           {/* TODO: Unit copying functionality will be added to: https://youtrack.raccoongang.com/issue/AXIMST-375 */}
           {enableCopyPasteUnits && (
             <Button className="mt-2" variant="outline-primary" size="sm">

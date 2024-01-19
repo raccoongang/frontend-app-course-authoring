@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useToggle } from '@edx/paragon';
 
+import classNames from 'classnames';
 import { getCourseSectionVertical } from '../data/selectors';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import ComponentModalView from './add-component-modals/ComponentModalView';
