@@ -5,7 +5,6 @@ import { Container, Layout, Stack } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
 
-import React from 'react';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
@@ -18,9 +17,9 @@ import HeaderTitle from './header-title/HeaderTitle';
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import Sequence from './course-sequence';
+import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import Sidebar from './sidebar/Sidebar';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();

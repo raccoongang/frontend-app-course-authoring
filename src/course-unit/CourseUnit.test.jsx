@@ -31,7 +31,9 @@ import CourseUnit from './CourseUnit';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
 import courseSequenceMessages from './course-sequence/messages';
-import messages from './add-component/messages';
+import addComponentMessages from './add-component/messages';
+import sidebarMessages from './sidebar/messages';
+import { extractCourseUnitId } from './sidebar/utils';
 
 let axiosMock;
 let store;
@@ -169,7 +171,7 @@ describe('<CourseUnit />', () => {
 
     await waitFor(() => {
       const discussionButton = getByRole('button', {
-        name: new RegExp(`${messages.buttonText.defaultMessage} Problem`, 'i'),
+        name: new RegExp(`${addComponentMessages.buttonText.defaultMessage} Problem`, 'i'),
       });
 
       userEvent.click(discussionButton);
@@ -227,12 +229,50 @@ describe('<CourseUnit />', () => {
 
     await waitFor(() => {
       const discussionButton = getByRole('button', {
-        name: new RegExp(`${messages.buttonText.defaultMessage} Video`, 'i'),
+        name: new RegExp(`${addComponentMessages.buttonText.defaultMessage} Video`, 'i'),
       });
 
       userEvent.click(discussionButton);
       expect(mockedUsedNavigate).toHaveBeenCalled();
       expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseKey}/editor/video/${locator}`);
+    });
+  });
+
+  it('renders course unit details for a draft with unpublished changes', async () => {
+    const { getByText } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(getByText(sidebarMessages.sidebarTitleDraftUnpublishedChanges.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.visibilityStaffAndLearnersTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.releaseStatusTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.sidebarBodyNote.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.visibilityWillBeVisibleToTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.visibilityCheckboxTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.actionButtonPublishTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.actionButtonDiscardChangesTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(courseUnitIndexMock.release_date)).toBeInTheDocument();
+      expect(getByText(
+        sidebarMessages.publishInfoDraftSaved.defaultMessage
+          .replace('{editedOn}', courseUnitIndexMock.edited_on)
+          .replace('{editedBy}', courseUnitIndexMock.edited_by),
+      )).toBeInTheDocument();
+      expect(getByText(
+        sidebarMessages.releaseInfoWithSection.defaultMessage
+          .replace('{sectionName}', courseUnitIndexMock.release_date_from),
+      )).toBeInTheDocument();
+    });
+  });
+
+  it('renders course unit details in the sidebar', async () => {
+    const { getByText } = render(<RootWrapper />);
+    const courseUnitLocationId = extractCourseUnitId(courseUnitIndexMock);
+
+    await waitFor(() => {
+      expect(getByText(sidebarMessages.sidebarHeaderUnitLocationTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.unitLocationTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(courseUnitLocationId)).toBeInTheDocument();
+      expect(getByText(sidebarMessages.unitLocationDescription.defaultMessage
+        .replace('{id}', courseUnitLocationId))).toBeInTheDocument();
     });
   });
 });

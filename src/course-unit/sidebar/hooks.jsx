@@ -1,51 +1,44 @@
+import { useIntl } from '@edx/frontend-platform/i18n';
+
+import { getUnitReleaseStatus, UNIT_VISIBILITY_STATES } from '../constants';
+import messages from './messages';
+import { extractCourseUnitId } from './utils';
+
 const useCourseUnitData = (unitData) => {
-  const {
-    hasChanges, published, visibilityState,
-    editedOn, editedBy, publishedBy, publishedOn,
-    releaseDateFrom, releaseDate, hasExplicitStaffLock,
-    enableCopyPasteUnits, releasedToStudents,
-  } = unitData;
+  const intl = useIntl();
+  const { hasChanges, published, visibilityState } = unitData;
 
-  const locationId = unitData?.id.match(/block@(.+)$/)[1];
-  const visibleToStaffOnly = visibilityState === 'staff_only';
-  let title = 'Draft (never published)';
-  let releaseLabel = 'RELEASE';
+  const locationId = extractCourseUnitId(unitData);
+  const visibleToStaffOnly = visibilityState === UNIT_VISIBILITY_STATES.staffOnly;
+  let title = intl.formatMessage(messages.sidebarTitleDraftNeverPublished);
+  let releaseLabel = getUnitReleaseStatus(intl).release;
 
-  if (visibilityState === 'staff_only') {
-    title = 'Visible to staff only';
-  } else if (visibilityState === 'live') {
-    title = 'Published and live';
-    releaseLabel = 'RELEASED';
-    releaseLabel = 'RELEASED';
-  } else if (visibilityState === 'ready') {
-    releaseLabel = 'SCHEDULED';
-  } else if (published) {
-    title = hasChanges ? 'Draft (unpublished changes)' : 'Published (not yet released)';
-  }
-
-  if (visibilityState === 'live') {
-    releaseLabel = 'RELEASED';
-  } else if (visibilityState === 'ready') {
-    releaseLabel = 'SCHEDULED';
+  switch (visibilityState) {
+  case UNIT_VISIBILITY_STATES.staffOnly:
+    title = intl.formatMessage(messages.sidebarTitleVisibleToStaffOnly);
+    break;
+  case UNIT_VISIBILITY_STATES.live:
+    title = intl.formatMessage(messages.sidebarTitlePublishedAndLive);
+    releaseLabel = getUnitReleaseStatus(intl).released;
+    break;
+  case UNIT_VISIBILITY_STATES.ready:
+    releaseLabel = getUnitReleaseStatus(intl).scheduled;
+    break;
+  default:
+    if (published) {
+      title = hasChanges
+        ? intl.formatMessage(messages.sidebarTitleDraftUnpublishedChanges)
+        : intl.formatMessage(messages.sidebarTitlePublishedNotYetReleased);
+    }
+    break;
   }
 
   return {
     title,
-    published,
-    releaseLabel,
     locationId,
+    releaseLabel,
     visibilityState,
     visibleToStaffOnly,
-    editedOn,
-    editedBy,
-    publishedBy,
-    publishedOn,
-    releaseDateFrom,
-    releaseDate,
-    hasChanges,
-    hasExplicitStaffLock,
-    enableCopyPasteUnits,
-    releasedToStudents,
   };
 };
 
