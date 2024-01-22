@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { RequestStatus } from '../data/constants';
 import {
-  createNewCourseXblock,
+  createNewCourseXBlock,
   fetchCourseUnitQuery,
   editCourseItemQuery,
   fetchCourse,
@@ -70,7 +70,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   };
 
   const handleCreateNewCourseXBlock = (body, callback) => (
-    dispatch(createNewCourseXblock(body, callback, blockId))
+    dispatch(createNewCourseXBlock(body, callback, blockId))
   );
 
   useEffect(() => {

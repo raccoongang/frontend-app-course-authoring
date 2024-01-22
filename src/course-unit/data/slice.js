@@ -89,10 +89,10 @@ const slice = createSlice({
         fetchUnitLoadingStatus: payload.status,
       };
     },
-    fetchCourseVerticalChildrenDataSuccess: (state, { payload }) => {
+    updateCourseVerticalChildren: (state, { payload }) => {
       state.courseVerticalChildren = payload;
     },
-    updateLoadingCourseVerticalChildrenDataStatus: (state, { payload }) => {
+    updateCourseVerticalChildrenLoadingStatus: (state, { payload }) => {
       state.loadingStatus = {
         ...state.loadingStatus,
         courseVerticalChildrenLoadingStatus: payload.status,
@@ -118,8 +118,8 @@ export const {
   changeEditTitleFormOpen,
   updateQueryPendingStatus,
   updateLoadingCourseXblockStatus,
-  fetchCourseVerticalChildrenDataSuccess,
-  updateLoadingCourseVerticalChildrenDataStatus,
+  updateCourseVerticalChildren,
+  updateCourseVerticalChildrenLoadingStatus,
 } = slice.actions;
 
 export const {

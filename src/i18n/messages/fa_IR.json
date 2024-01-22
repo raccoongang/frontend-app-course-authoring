@@ -68,5 +68,6 @@
   "course-authoring.course-unit.xblock.button.duplicate.label": "Duplicate",
   "course-authoring.course-unit.xblock.button.move.label": "Move",
   "course-authoring.course-unit.xblock.button.manageAccess.label": "Manage access",
-  "course-authoring.course-unit.xblock.button.delete.label": "Delete"
+  "course-authoring.course-unit.xblock.button.delete.label": "Delete",
+  "course-authoring.course-unit.xblock.button.actions.alt": "Actions"
 }

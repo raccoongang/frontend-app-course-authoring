@@ -5,6 +5,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.button.edit.alt',
     defaultMessage: 'Edit Item',
   },
+  blockActionsDropdownAlt: {
+    id: 'course-authoring.course-unit.xblock.button.actions.alt',
+    defaultMessage: 'Actions',
+  },
   blockLabelButtonCopy: {
     id: 'course-authoring.course-unit.xblock.button.copy.label',
     defaultMessage: 'Copy',
