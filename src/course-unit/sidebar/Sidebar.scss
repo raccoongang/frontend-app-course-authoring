@@ -1,11 +1,11 @@
 %base-font-params {
-  font-size: $font-size-xs;
+  font-size: $font-size-sm;
   line-height: $line-height-base;
 }
 
 .course-unit-sidebar {
   .course-unit-sidebar-header {
-    padding: $spacer map-get($spacers, 3\.5) map-get($spacers, 3\.5);
+    padding: $spacer $spacer map-get($spacers, 3\.5);
 
     .course-unit-sidebar-header-icon {
       margin-right: map-get($spacers, 1);
@@ -28,6 +28,11 @@
         @extend %base-font-params;
       }
 
+      .course-unit-sidebar-location-description {
+        font-size: $font-size-xs;
+        line-height: $line-height-base;
+      }
+
       .course-unit-sidebar-visibility-copy {
         font-weight: $font-weight-bold;
         color: $gray-700;
@@ -36,7 +41,7 @@
       }
 
       .course-unit-sidebar-visibility-checkbox .pgn__form-label {
-        font-size: $font-size-xs;
+        font-size: $font-size-sm;
         line-height: $headings-line-height;
       }
     }
@@ -55,6 +60,8 @@
 
     .course-unit-sidebar-date-timestamp {
       color: $gray-700;
+
+      @extend %base-font-params;
     }
   }
 

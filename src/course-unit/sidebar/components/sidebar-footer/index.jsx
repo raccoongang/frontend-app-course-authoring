@@ -13,7 +13,7 @@ const SidebarFooter = ({ isDisplayUnitLocation, locationId }) => {
     <Card.Footer className="course-unit-sidebar-footer" orientation="horizontal">
       <Stack className="course-unit-sidebar-visibility">
         {isDisplayUnitLocation ? (
-          <small className="course-unit-sidebar-visibility-title">
+          <small className="course-unit-sidebar-location-description">
             {intl.formatMessage(messages.unitLocationDescription, { id: locationId })}
           </small>
         ) : (

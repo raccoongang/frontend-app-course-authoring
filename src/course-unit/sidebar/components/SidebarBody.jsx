@@ -27,7 +27,9 @@ const SidebarBody = ({ releaseLabel, isDisplayUnitLocation, locationId }) => {
             <h5 className="course-unit-sidebar-date-stage m-0">
               {intl.formatMessage(messages.unitLocationTitle)}
             </h5>
-            <p className="m-0">{locationId}</p>
+            <p className="m-0 font-weight-bold">
+              {locationId}
+            </p>
           </span>
         ) : (
           <>
