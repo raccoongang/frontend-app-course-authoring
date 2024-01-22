@@ -103,7 +103,7 @@ describe('<AddComponent />', () => {
     });
 
     userEvent.click(customComponentButton);
-    expect(handleCreateNewCourseXblockMock).not.toHaveBeenCalled();
+    expect(handleCreateNewCourseXBlockMock).not.toHaveBeenCalled();
   });
 
   it('calls handleCreateNewCourseXblock with correct parameters when Discussion xblock create button is clicked', () => {
