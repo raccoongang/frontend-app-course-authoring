@@ -7,6 +7,7 @@ export const getSavingStatus = (state) => state.courseUnit.savingStatus;
 export const getLoadingStatus = (state) => state.courseUnit.loadingStatus;
 export const getSequenceStatus = (state) => state.courseUnit.sequenceStatus;
 export const getCourseSectionVertical = (state) => state.courseUnit.courseSectionVertical;
+export const getCourseUnitComponentTemplates = (state) => state.courseUnit.courseSectionVertical.componentTemplates;
 export const getCourseSectionVerticalLoadingStatus = (state) => state
   .courseUnit.loadingStatus.courseSectionVerticalLoadingStatus;
 export const getCourseStatus = state => state.courseUnit.courseStatus;
