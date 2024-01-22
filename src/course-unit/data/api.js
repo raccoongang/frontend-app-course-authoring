@@ -9,6 +9,7 @@ import {
   appendBrowserTimezoneToUrl,
   normalizeCourseSectionVerticalData,
 } from './utils';
+import { PUBLISH_TYPES } from '../constants';
 
 const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
 const getLmsBaseUrl = () => getConfig().LMS_BASE_URL;
@@ -126,6 +127,30 @@ export async function createCourseXblock({
 
   const { data } = await getAuthenticatedHttpClient()
     .post(postXBlockBaseApiUrl(), body);
+
+  return data;
+}
+
+/**
+ * Handles the visibility and data of a course unit, such as publishing, resetting to default values,
+ * and toggling visibility to students.
+ * @param {string} unitId - The ID of the course unit.
+ * @param {string} type - The action type (e.g., PUBLISH_TYPES.discardChanges).
+ * @param {boolean} isVisible - The visibility status for students.
+ * @returns {Promise<any>} A promise that resolves with the response data.
+ */
+export async function handleCourseUnitVisibilityAndData(unitId, type, isVisible) {
+  const body = {
+    publish: type,
+    ...(type === PUBLISH_TYPES.republish ? {
+      metadata: {
+        visible_to_staff_only: isVisible,
+      },
+    } : {}),
+  };
+
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getXBlockBaseApiUrl(unitId), body);
 
   return data;
 }

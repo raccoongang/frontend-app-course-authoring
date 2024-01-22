@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ActionRow, AlertModal, Button } from '@edx/paragon';
-import { Error } from '@edx/paragon/icons';
 
-const ModalError = ({
-  isOpen, title, message, handleCancel, handleAction, cancelButtonText, actionButtonText,
+const ModalNotification = ({
+  isOpen, title, message, handleCancel, handleAction, cancelButtonText, actionButtonText, variant, icon, className,
 }) => (
   <AlertModal
+    className={className}
     title={title}
     isOpen={isOpen}
-    variant="danger"
-    icon={Error}
+    variant={variant}
+    icon={icon}
     footerNode={(
       <ActionRow>
         <Button variant="tertiary" onClick={handleCancel}>{cancelButtonText}</Button>
@@ -22,7 +22,7 @@ const ModalError = ({
   </AlertModal>
 );
 
-ModalError.propTypes = {
+ModalNotification.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
@@ -30,6 +30,15 @@ ModalError.propTypes = {
   handleAction: PropTypes.func.isRequired,
   cancelButtonText: PropTypes.string.isRequired,
   actionButtonText: PropTypes.string.isRequired,
+  variant: PropTypes.string,
+  className: PropTypes.string,
+  icon: PropTypes.elementType,
 };
 
-export default ModalError;
+ModalNotification.defaultProps = {
+  variant: 'default',
+  icon: undefined,
+  className: undefined,
+};
+
+export default ModalNotification;
