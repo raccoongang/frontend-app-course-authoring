@@ -1,0 +1,22 @@
+.course-unit {
+  .studio-xblock-wrapper {
+    @include pgn-box-shadow(1, "down");
+
+    border-radius: 6px;
+    background: $white;
+  }
+
+  .xblock-header {
+    border-bottom: 1px solid $light-400;
+    padding-bottom: map-get($spacers, 1\.5);
+
+    .action-item {
+      margin-top: -#{map-get($spacers, 1)};
+
+      svg {
+        width: 1.562rem;
+        height: 1.562rem;
+      }
+    }
+  }
+}

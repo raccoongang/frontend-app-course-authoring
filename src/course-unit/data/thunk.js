@@ -17,6 +17,7 @@ import {
   getCourseHomeCourseMetadata,
   getCourseSectionVerticalData,
   createCourseXblock,
+  getCourseVerticalChildren,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -32,6 +33,8 @@ import {
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
+  fetchCourseVerticalChildrenDataSuccess,
+  updateLoadingCourseVerticalChildrenDataStatus,
 } from './slice';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -192,7 +195,7 @@ export function fetchCourse(courseId) {
   };
 }
 
-export function createNewCourseXblock(body, callback) {
+export function createNewCourseXblock(body, callback, blockId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.IN_PROGRESS }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
@@ -205,7 +208,8 @@ export function createNewCourseXblock(body, callback) {
             const courseSectionVerticalData = await getCourseSectionVerticalData(result.locator);
             dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
           }
-          // ToDo: implement fetching (update) xblocks after success creating
+          const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
+          dispatch(fetchCourseVerticalChildrenDataSuccess(courseVerticalChildrenData));
           dispatch(hideProcessingNotification());
           dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
@@ -218,6 +222,20 @@ export function createNewCourseXblock(body, callback) {
       dispatch(hideProcessingNotification());
       dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.FAILED }));
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function fetchCourseVerticalChildrenData(itemId) {
+  return async (dispatch) => {
+    dispatch(updateLoadingCourseVerticalChildrenDataStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      const courseVerticalChildrenData = await getCourseVerticalChildren(itemId);
+      dispatch(fetchCourseVerticalChildrenDataSuccess(courseVerticalChildrenData));
+      dispatch(updateLoadingCourseVerticalChildrenDataStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(updateLoadingCourseVerticalChildrenDataStatus({ status: RequestStatus.FAILED }));
     }
   };
 }
