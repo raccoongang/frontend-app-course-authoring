@@ -77,7 +77,7 @@ export function fetchCourseSectionVerticalData(courseId, sequenceId) {
   };
 }
 
-export function editCourseItemQuery(itemId, displayName) {
+export function editCourseItemQuery(itemId, displayName, sequenceId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
@@ -86,6 +86,18 @@ export function editCourseItemQuery(itemId, displayName) {
       await editUnitDisplayName(itemId, displayName).then(async (result) => {
         if (result) {
           const courseUnit = await getCourseUnitData(itemId);
+          const courseSectionVerticalData = await getCourseSectionVerticalData(itemId);
+          dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
+          dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.SUCCESSFUL }));
+          dispatch(updateModel({
+            modelType: 'sequences',
+            model: courseSectionVerticalData.sequence,
+          }));
+          dispatch(updateModels({
+            modelType: 'units',
+            models: courseSectionVerticalData.units,
+          }));
+          dispatch(fetchSequenceSuccess({ sequenceId }));
           dispatch(fetchCourseItemSuccess(courseUnit));
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
