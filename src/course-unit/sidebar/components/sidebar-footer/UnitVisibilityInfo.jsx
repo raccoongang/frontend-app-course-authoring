@@ -1,13 +1,19 @@
-import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { useParams } from 'react-router-dom';
 
 import { getCourseUnitData } from '../../../data/selectors';
+import { editCourseUnitVisibilityAndData } from '../../../data/thunk';
+import { PUBLISH_TYPES } from '../../../constants';
 import { getVisibilityTitle } from '../../utils';
 import messages from '../../messages';
 
-const UnitVisibilityInfo = () => {
+const UnitVisibilityInfo = ({ openVisibleModal }) => {
   const intl = useIntl();
+  const { blockId } = useParams();
+  const dispatch = useDispatch();
   const {
     published,
     hasChanges,
@@ -17,6 +23,10 @@ const UnitVisibilityInfo = () => {
     visibleToStaffOnly,
     hasExplicitStaffLock,
   } = useSelector(getCourseUnitData);
+
+  const handleCourseUnitVisibility = () => {
+    dispatch(editCourseUnitVisibilityAndData(blockId, PUBLISH_TYPES.republish, true));
+  };
 
   return (
     <>
@@ -44,12 +54,17 @@ const UnitVisibilityInfo = () => {
       <Form.Checkbox
         className="course-unit-sidebar-visibility-checkbox"
         checked={hasExplicitStaffLock}
-        onChange={() => {}}
+        onChange={hasExplicitStaffLock ? null : handleCourseUnitVisibility}
+        onClick={hasExplicitStaffLock ? openVisibleModal : null}
       >
         {intl.formatMessage(messages.visibilityCheckboxTitle)}
       </Form.Checkbox>
     </>
   );
+};
+
+UnitVisibilityInfo.propTypes = {
+  openVisibleModal: PropTypes.func.isRequired,
 };
 
 export default UnitVisibilityInfo;

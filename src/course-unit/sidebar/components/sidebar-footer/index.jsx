@@ -6,7 +6,9 @@ import messages from '../../messages';
 import UnitVisibilityInfo from './UnitVisibilityInfo';
 import ActionButtons from './ActionButtons';
 
-const SidebarFooter = ({ isDisplayUnitLocation, locationId }) => {
+const SidebarFooter = ({
+  isDisplayUnitLocation, locationId, openDiscardModal, openVisibleModal, handlePublishing,
+}) => {
   const intl = useIntl();
 
   return (
@@ -18,8 +20,8 @@ const SidebarFooter = ({ isDisplayUnitLocation, locationId }) => {
           </small>
         ) : (
           <>
-            <UnitVisibilityInfo />
-            <ActionButtons />
+            <UnitVisibilityInfo openVisibleModal={openVisibleModal} />
+            <ActionButtons openDiscardModal={openDiscardModal} handlePublishing={handlePublishing} />
           </>
         )}
       </Stack>
@@ -30,6 +32,9 @@ const SidebarFooter = ({ isDisplayUnitLocation, locationId }) => {
 SidebarFooter.propTypes = {
   isDisplayUnitLocation: PropTypes.bool,
   locationId: PropTypes.string,
+  openDiscardModal: PropTypes.func.isRequired,
+  openVisibleModal: PropTypes.func.isRequired,
+  handlePublishing: PropTypes.func.isRequired,
 };
 
 SidebarFooter.defaultProps = {
