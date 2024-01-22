@@ -218,7 +218,7 @@ describe('<CourseUnit />', () => {
       .toHaveBeenCalledWith(`/course/${courseId}/container/${blockId}/${updatedAncestorsChild.id}`, { replace: true });
   });
 
-  it('after changing the unit header, the sequence unit is updated', async () => {
+  it('the sequence unit is updated after changing the unit header', async () => {
     const { getAllByTestId, getByRole } = render(<RootWrapper />);
     const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
     const updatedAncestorsChild = updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0];
