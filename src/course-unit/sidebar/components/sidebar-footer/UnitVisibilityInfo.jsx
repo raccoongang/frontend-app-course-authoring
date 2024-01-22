@@ -1,13 +1,17 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { useParams } from 'react-router-dom';
 import { getCourseUnitData } from '../../../data/selectors';
 import { getVisibilityTitle } from '../../utils';
 import messages from '../../messages';
+import { editVisibleToStaffOnly } from '../../../data/thunk';
 
-const UnitVisibilityInfo = () => {
+const UnitVisibilityInfo = ({ openVisibleModal }) => {
   const intl = useIntl();
+  const { blockId } = useParams();
+  const dispatch = useDispatch();
   const {
     published,
     hasChanges,
@@ -16,7 +20,20 @@ const UnitVisibilityInfo = () => {
     releasedToStudents,
     visibleToStaffOnly,
     hasExplicitStaffLock,
+    id,
   } = useSelector(getCourseUnitData);
+
+  const handleChange = () => {
+    const bodySetCheck = {
+      id,
+      data: null,
+      metadata: {
+        visible_to_staff_only: true,
+      },
+    };
+
+    return dispatch(editVisibleToStaffOnly(blockId, bodySetCheck));
+  };
 
   return (
     <>
@@ -44,7 +61,8 @@ const UnitVisibilityInfo = () => {
       <Form.Checkbox
         className="course-unit-sidebar-visibility-checkbox"
         checked={hasExplicitStaffLock}
-        onChange={() => {}}
+        onChange={hasExplicitStaffLock ? null : handleChange}
+        onClick={hasExplicitStaffLock ? openVisibleModal : null}
       >
         {intl.formatMessage(messages.visibilityCheckboxTitle)}
       </Form.Checkbox>

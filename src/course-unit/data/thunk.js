@@ -17,7 +17,7 @@ import {
   getCourseHomeCourseMetadata,
   getCourseSectionVerticalData,
   createCourseXblock,
-  getCourseVerticalChildren,
+  getCourseVerticalChildren, toggleVisibleToStaffOnly,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -101,6 +101,27 @@ export function editCourseItemQuery(itemId, displayName, sequenceId) {
             models: courseSectionVerticalData.units,
           }));
           dispatch(fetchSequenceSuccess({ sequenceId }));
+          dispatch(fetchCourseItemSuccess(courseUnit));
+          dispatch(hideProcessingNotification());
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function editVisibleToStaffOnly(itemId, body) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      await toggleVisibleToStaffOnly(itemId, body).then(async (result) => {
+        if (result) {
+          const courseUnit = await getCourseUnitData(itemId);
           dispatch(fetchCourseItemSuccess(courseUnit));
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));

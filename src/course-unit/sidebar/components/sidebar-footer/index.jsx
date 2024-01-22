@@ -6,7 +6,7 @@ import messages from '../../messages';
 import UnitVisibilityInfo from './UnitVisibilityInfo';
 import ActionButtons from './ActionButtons';
 
-const SidebarFooter = ({ isDisplayUnitLocation, locationId }) => {
+const SidebarFooter = ({ isDisplayUnitLocation, locationId, open, openVisibleModal, handleChange, handlePublish }) => {
   const intl = useIntl();
 
   return (
@@ -18,8 +18,8 @@ const SidebarFooter = ({ isDisplayUnitLocation, locationId }) => {
           </small>
         ) : (
           <>
-            <UnitVisibilityInfo />
-            <ActionButtons />
+            <UnitVisibilityInfo openVisibleModal={openVisibleModal} handleChange={handleChange} />
+            <ActionButtons open={open} handlePublish={handlePublish} />
           </>
         )}
       </Stack>

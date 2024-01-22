@@ -5,7 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { getCourseUnitData } from '../../../data/selectors';
 import messages from '../../messages';
 
-const ActionButtons = () => {
+const ActionButtons = ({ open, handlePublish }) => {
   const intl = useIntl();
   const {
     published,
@@ -20,6 +20,7 @@ const ActionButtons = () => {
           className="mt-3.5"
           variant="outline-primary"
           size="sm"
+          onClick={handlePublish}
         >
           {intl.formatMessage(messages.actionButtonPublishTitle)}
         </Button>
@@ -29,6 +30,7 @@ const ActionButtons = () => {
           className="mt-2"
           variant="link"
           size="sm"
+          onClick={open}
         >
           {intl.formatMessage(messages.actionButtonDiscardChangesTitle)}
         </Button>

@@ -130,6 +130,13 @@ export async function createCourseXblock({
   return data;
 }
 
+export async function toggleVisibleToStaffOnly(unitId, body) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getXBlockBaseApiUrl(unitId), body);
+
+  return data;
+}
+
 export async function getCourseVerticalChildren(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseVerticalChildrenApiUrl(itemId));
