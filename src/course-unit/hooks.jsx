@@ -66,7 +66,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     }
   };
 
-  const handleCreateNewCourseXblock = (body, callback) => (
+  const handleCreateNewCourseXBlock = (body, callback) => (
     dispatch(createNewCourseXblock(body, callback))
   );
 
@@ -100,6 +100,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     headerNavigationsActions,
     handleTitleEdit,
     handleTitleEditSubmit,
-    handleCreateNewCourseXblock,
+    handleCreateNewCourseXBlock,
   };
 };

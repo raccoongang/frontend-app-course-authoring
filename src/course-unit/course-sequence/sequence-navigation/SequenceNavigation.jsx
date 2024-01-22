@@ -23,7 +23,7 @@ const SequenceNavigation = ({
   unitId,
   sequenceId,
   className,
-  handleCreateNewCourseXblock,
+  handleCreateNewCourseXBlock,
 }) => {
   const sequenceStatus = useSelector(getSequenceStatus);
   const {
@@ -43,7 +43,7 @@ const SequenceNavigation = ({
       <SequenceNavigationTabs
         unitIds={sequence.unitIds || []}
         unitId={unitId}
-        handleCreateNewCourseXblock={handleCreateNewCourseXblock}
+        handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
       />
     );
   };
@@ -103,7 +103,7 @@ SequenceNavigation.propTypes = {
   unitId: PropTypes.string,
   className: PropTypes.string,
   sequenceId: PropTypes.string,
-  handleCreateNewCourseXblock: PropTypes.func.isRequired,
+  handleCreateNewCourseXBlock: PropTypes.func.isRequired,
 };
 
 SequenceNavigation.defaultProps = {
