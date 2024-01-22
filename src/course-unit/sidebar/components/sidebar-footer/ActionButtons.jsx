@@ -15,7 +15,6 @@ const ActionButtons = () => {
 
   return (
     <>
-      {/* TODO: Sidebar functionality will be added to: https://youtrack.raccoongang.com/issue/AXIMST-24 */}
       {(!published || hasChanges) && (
         <Button
           className="mt-3.5"
@@ -34,7 +33,6 @@ const ActionButtons = () => {
           {intl.formatMessage(messages.actionButtonDiscardChangesTitle)}
         </Button>
       )}
-      {/* TODO: Unit copying functionality will be added to: https://youtrack.raccoongang.com/issue/AXIMST-375 */}
       {enableCopyPasteUnits && (
         <Button
           className="mt-2"

@@ -265,7 +265,7 @@ describe('<CourseUnit />', () => {
 
   it('renders course unit details in the sidebar', async () => {
     const { getByText } = render(<RootWrapper />);
-    const courseUnitLocationId = extractCourseUnitId(courseUnitIndexMock);
+    const courseUnitLocationId = extractCourseUnitId(courseUnitIndexMock.id);
 
     await waitFor(() => {
       expect(getByText(sidebarMessages.sidebarHeaderUnitLocationTitle.defaultMessage)).toBeInTheDocument();

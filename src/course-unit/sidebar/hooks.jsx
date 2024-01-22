@@ -4,34 +4,32 @@ import { getUnitReleaseStatus, UNIT_VISIBILITY_STATES } from '../constants';
 import messages from './messages';
 import { extractCourseUnitId } from './utils';
 
-const useCourseUnitData = (unitData) => {
+const useCourseUnitData = ({
+  hasChanges, published, visibilityState, id,
+}) => {
   const intl = useIntl();
-  const { hasChanges, published, visibilityState } = unitData;
-
-  const locationId = extractCourseUnitId(unitData);
+  const releaseStatus = getUnitReleaseStatus(intl);
+  const locationId = extractCourseUnitId(id);
   const visibleToStaffOnly = visibilityState === UNIT_VISIBILITY_STATES.staffOnly;
-  let title = intl.formatMessage(messages.sidebarTitleDraftNeverPublished);
-  let releaseLabel = getUnitReleaseStatus(intl).release;
+  const titleMessages = {
+    [UNIT_VISIBILITY_STATES.staffOnly]: messages.sidebarTitleVisibleToStaffOnly,
+    [UNIT_VISIBILITY_STATES.live]: messages.sidebarTitlePublishedAndLive,
+    // eslint-disable-next-line no-nested-ternary
+    default: published
+      ? (hasChanges ? messages.sidebarTitleDraftUnpublishedChanges
+        : messages.sidebarTitlePublishedNotYetReleased)
+      : messages.sidebarTitleDraftNeverPublished,
+  };
 
-  switch (visibilityState) {
-  case UNIT_VISIBILITY_STATES.staffOnly:
-    title = intl.formatMessage(messages.sidebarTitleVisibleToStaffOnly);
-    break;
-  case UNIT_VISIBILITY_STATES.live:
-    title = intl.formatMessage(messages.sidebarTitlePublishedAndLive);
-    releaseLabel = getUnitReleaseStatus(intl).released;
-    break;
-  case UNIT_VISIBILITY_STATES.ready:
-    releaseLabel = getUnitReleaseStatus(intl).scheduled;
-    break;
-  default:
-    if (published) {
-      title = hasChanges
-        ? intl.formatMessage(messages.sidebarTitleDraftUnpublishedChanges)
-        : intl.formatMessage(messages.sidebarTitlePublishedNotYetReleased);
-    }
-    break;
-  }
+  const releaseLabels = {
+    [UNIT_VISIBILITY_STATES.staffOnly]: releaseStatus.release,
+    [UNIT_VISIBILITY_STATES.live]: releaseStatus.released,
+    [UNIT_VISIBILITY_STATES.ready]: releaseStatus.scheduled,
+    default: releaseStatus.release,
+  };
+
+  const title = intl.formatMessage(titleMessages[visibilityState] || titleMessages.default);
+  const releaseLabel = releaseLabels[visibilityState] || releaseLabels.default;
 
   return {
     title,

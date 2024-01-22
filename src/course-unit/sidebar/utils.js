@@ -18,13 +18,16 @@ import messages from './messages';
  * @returns {string} Publish information based on the provided parameters.
  */
 export const getPublishInfo = (intl, hasChanges, editedBy, editedOn, publishedBy, publishedOn) => {
+  let publishInfoText;
   if (hasChanges && editedOn && editedBy) {
-    return intl.formatMessage(messages.publishInfoDraftSaved, { editedOn, editedBy });
-  } if (publishedOn && publishedBy) {
-    return intl.formatMessage(messages.publishLastPublished, { publishedOn, publishedBy });
+    publishInfoText = intl.formatMessage(messages.publishInfoDraftSaved, { editedOn, editedBy });
+  } else if (publishedOn && publishedBy) {
+    publishInfoText = intl.formatMessage(messages.publishLastPublished, { publishedOn, publishedBy });
+  } else {
+    publishInfoText = intl.formatMessage(messages.publishInfoPreviouslyPublished);
   }
 
-  return intl.formatMessage(messages.publishInfoPreviouslyPublished);
+  return publishInfoText;
 };
 
 /**
@@ -36,17 +39,17 @@ export const getPublishInfo = (intl, hasChanges, editedBy, editedOn, publishedBy
  */
 export const getReleaseInfo = (intl, releaseDate, releaseDateFrom) => {
   if (releaseDate) {
-    return (
-      <span className="course-unit-sidebar-date-and-with">
-        <h6 className="course-unit-sidebar-date-timestamp m-0 d-inline">
-          {releaseDate}&nbsp;
-        </h6>
-        {intl.formatMessage(messages.releaseInfoWithSection, { sectionName: releaseDateFrom })}
-      </span>
-    );
+    return {
+      isScheduled: true,
+      releaseDate,
+      releaseDateFrom,
+      sectionNameMessage: intl.formatMessage(messages.releaseInfoWithSection, { sectionName: releaseDateFrom }),
+    };
   }
-
-  return intl.formatMessage(messages.releaseInfoUnscheduled);
+  return {
+    isScheduled: false,
+    message: intl.formatMessage(messages.releaseInfoUnscheduled),
+  };
 };
 
 /**
@@ -75,26 +78,25 @@ export const getVisibilityTitle = (intl, releasedToStudents, published, hasChang
  *   - colorVariant: The color variant for the icon.
  */
 export const getIconVariant = (visibilityState, published, hasChanges) => {
-  if (visibilityState === UNIT_VISIBILITY_STATES.staffOnly) {
-    // Visible to staff only
-    return { iconSrc: InfoOutlineIcon, colorVariant: COLORS.BLACK };
-  } if (visibilityState === UNIT_VISIBILITY_STATES.live) {
-    // Published and live
-    return { iconSrc: CheckCircleIcon, colorVariant: COLORS.GREEN };
-  } if (published && !hasChanges) {
-    // Published (not yet released)
-    return { iconSrc: CheckCircleOutlineIcon, colorVariant: COLORS.BLACK };
-  } if (published && hasChanges) {
-    // Draft (unpublished changes)
-    return { iconSrc: InfoOutlineIcon, colorVariant: COLORS.BLACK };
+  const iconVariants = {
+    [UNIT_VISIBILITY_STATES.staffOnly]: { iconSrc: InfoOutlineIcon, colorVariant: COLORS.BLACK },
+    [UNIT_VISIBILITY_STATES.live]: { iconSrc: CheckCircleIcon, colorVariant: COLORS.GREEN },
+    publishedNoChanges: { iconSrc: CheckCircleOutlineIcon, colorVariant: COLORS.BLACK },
+    publishedWithChanges: { iconSrc: InfoOutlineIcon, colorVariant: COLORS.BLACK },
+    default: { iconSrc: InfoOutlineIcon, colorVariant: COLORS.BLACK },
+  };
+  if (visibilityState in iconVariants) {
+    return iconVariants[visibilityState];
   }
-
-  return { iconSrc: InfoOutlineIcon, colorVariant: COLORS.BLACK };
+  if (published) {
+    return hasChanges ? iconVariants.publishedWithChanges : iconVariants.publishedNoChanges;
+  }
+  return iconVariants.default;
 };
 
 /**
  * Extracts the clear course unit ID from the given course unit data.
- * @param {Object} courseUnitData - The course unit data object containing the ID.
+ * @param {string} id - The course unit ID.
  * @returns {string} The clear course unit ID extracted from the provided data.
  */
-export const extractCourseUnitId = (courseUnitData) => courseUnitData.id.match(/block@(.+)$/)[1];
+export const extractCourseUnitId = (id) => id.match(/block@(.+)$/)[1];

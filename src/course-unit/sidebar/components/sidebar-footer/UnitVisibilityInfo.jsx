@@ -41,10 +41,10 @@ const UnitVisibilityInfo = () => {
           {intl.formatMessage(messages.visibilityStaffAndLearnersTitle)}
         </h6>
       )}
-      {/* TODO: Sidebar functionality will be added to: https://youtrack.raccoongang.com/issue/AXIMST-24 */}
       <Form.Checkbox
         className="course-unit-sidebar-visibility-checkbox"
         checked={hasExplicitStaffLock}
+        onChange={() => {}}
       >
         {intl.formatMessage(messages.visibilityCheckboxTitle)}
       </Form.Checkbox>

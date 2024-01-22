@@ -4,8 +4,9 @@ import { Card, Stack } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../../data/selectors';
-import { getPublishInfo, getReleaseInfo } from '../utils';
+import { getPublishInfo } from '../utils';
 import messages from '../messages';
+import ReleaseInfoComponent from './ReleaseInfoComponent';
 
 const SidebarBody = ({ releaseLabel, isDisplayUnitLocation, locationId }) => {
   const intl = useIntl();
@@ -15,8 +16,6 @@ const SidebarBody = ({ releaseLabel, isDisplayUnitLocation, locationId }) => {
     hasChanges,
     publishedBy,
     publishedOn,
-    releaseDate,
-    releaseDateFrom,
   } = useSelector(getCourseUnitData);
 
   return (
@@ -40,7 +39,7 @@ const SidebarBody = ({ releaseLabel, isDisplayUnitLocation, locationId }) => {
               <h5 className="course-unit-sidebar-date-stage m-0">
                 {releaseLabel}
               </h5>
-              {getReleaseInfo(intl, releaseDate, releaseDateFrom)}
+              <ReleaseInfoComponent />
             </span>
             <p className="mt-3.5 mb-0">
               {intl.formatMessage(messages.sidebarBodyNote)}
