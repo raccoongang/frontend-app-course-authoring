@@ -13,6 +13,7 @@ import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import Loading from '../generic/Loading';
 import AddComponent from './add-component/AddComponent';
+import CourseXBlock from './course-xblock/CourseXBlock';
 import HeaderTitle from './header-title/HeaderTitle';
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
@@ -38,6 +39,7 @@ const CourseUnit = ({ courseId }) => {
     handleTitleEdit,
     handleInternetConnectionFailed,
     handleCreateNewCourseXBlock,
+    courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
 
   document.title = getPageHeadTitle('', unitTitle);
@@ -91,6 +93,15 @@ const CourseUnit = ({ courseId }) => {
             xl={[{ span: 9 }, { span: 3 }]}
           >
             <Layout.Element>
+              <Stack gap={4} className="mb-4">
+                {courseVerticalChildren.children.map(({ name, blockId: id }) => (
+                  <CourseXBlock
+                    id={id}
+                    key={id}
+                    title={name}
+                  />
+                ))}
+              </Stack>
               <AddComponent
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}

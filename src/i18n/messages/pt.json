@@ -1039,5 +1039,12 @@
   "course-authoring.course-unit.action-button.copy-unit.title": "Copy unit",
   "course-authoring.course-unit.status.release.title": "RELEASE",
   "course-authoring.course-unit.status.released.title": "RELEASED",
-  "course-authoring.course-unit.status.scheduled.title": "SCHEDULED"
+  "course-authoring.course-unit.status.scheduled.title": "SCHEDULED",
+  "course-authoring.course-unit.xblock.button.edit.alt": "Edit Item",
+  "course-authoring.course-unit.xblock.button.copy.label": "Copy",
+  "course-authoring.course-unit.xblock.button.duplicate.label": "Duplicate",
+  "course-authoring.course-unit.xblock.button.move.label": "Move",
+  "course-authoring.course-unit.xblock.button.manageAccess.label": "Manage access",
+  "course-authoring.course-unit.xblock.button.delete.label": "Delete",
+  "course-authoring.course-unit.xblock.button.actions.alt": "Actions"
 }

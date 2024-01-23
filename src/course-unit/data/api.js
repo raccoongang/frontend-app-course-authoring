@@ -19,6 +19,7 @@ export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}
 export const getLearningSequencesOutlineApiUrl = (courseId) => `${getLmsBaseUrl()}/api/learning_sequences/v1/course_outline/${courseId}`;
 export const getCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/courseware/course/${courseId}`;
 export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl()}/api/course_home/course_metadata/${courseId}`;
+export const getCourseVerticalChildrenApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container/vertical/${itemId}/children`;
 
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 
@@ -127,4 +128,11 @@ export async function createCourseXblock({
     .post(postXBlockBaseApiUrl(), body);
 
   return data;
+}
+
+export async function getCourseVerticalChildren(itemId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getCourseVerticalChildrenApiUrl(itemId));
+
+  return camelCaseObject(data);
 }

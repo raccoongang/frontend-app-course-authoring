@@ -12,12 +12,14 @@ import { cloneDeep, set } from 'lodash';
 import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
+  getCourseVerticalChildrenApiUrl,
   getXBlockBaseApiUrl,
   postXBlockBaseApiUrl,
 } from './data/api';
 import {
   fetchCourseSectionVerticalData,
   fetchCourseUnitQuery,
+  fetchCourseVerticalChildrenData,
 } from './data/thunk';
 import initializeStore from '../store';
 import {
@@ -25,6 +27,7 @@ import {
   courseSectionVerticalMock,
   courseUnitIndexMock,
   courseUnitMock,
+  courseVerticalChildrenMock,
 } from './__mocks__';
 import { executeThunk } from '../utils';
 import CourseUnit from './CourseUnit';
@@ -77,6 +80,10 @@ describe('<CourseUnit />', () => {
       .onGet(getCourseSectionVerticalApiUrl(blockId))
       .reply(200, courseSectionVerticalMock);
     await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
+    axiosMock
+      .onGet(getCourseVerticalChildrenApiUrl(blockId))
+      .reply(200, courseVerticalChildrenMock);
+    await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
   });
 
   it('render CourseUnit component correctly', async () => {
