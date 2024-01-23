@@ -237,8 +237,6 @@ export function createNewCourseXBlock(body, callback, blockId) {
           }
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
-          const courseUnit = await getCourseUnitData(blockId);
-          dispatch(fetchCourseItemSuccess(courseUnit));
           dispatch(hideProcessingNotification());
           dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
@@ -246,6 +244,8 @@ export function createNewCourseXBlock(body, callback, blockId) {
             callback(result);
           }
         }
+        const courseUnit = await getCourseUnitData(blockId);
+        dispatch(fetchCourseItemSuccess(courseUnit));
       });
     } catch (error) {
       dispatch(hideProcessingNotification());

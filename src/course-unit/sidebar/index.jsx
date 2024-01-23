@@ -42,7 +42,7 @@ const Sidebar = ({ blockId, isDisplayUnitLocation }) => {
 
   return (
     <Card
-      data-testid="course-unit-sidebar"
+      data-testid={isDisplayUnitLocation ? 'course-unit-location-sidebar' : 'course-unit-sidebar'}
       className={classNames('course-unit-sidebar', {
         'is-stuff-only': visibleToStaffOnly,
       })}
@@ -63,6 +63,7 @@ const Sidebar = ({ blockId, isDisplayUnitLocation }) => {
         openVisibleModal={openVisibleModal}
         isDisplayUnitLocation={isDisplayUnitLocation}
         handlePublishing={handleCourseUnitPublish}
+        visibleToStaffOnly={visibleToStaffOnly}
       />
       <ModalNotification
         title={intl.formatMessage(messages.modalDiscardUnitChangesTitle)}

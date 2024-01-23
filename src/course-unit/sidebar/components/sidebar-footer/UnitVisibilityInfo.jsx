@@ -10,7 +10,7 @@ import { PUBLISH_TYPES } from '../../../constants';
 import { getVisibilityTitle } from '../../utils';
 import messages from '../../messages';
 
-const UnitVisibilityInfo = ({ openVisibleModal }) => {
+const UnitVisibilityInfo = ({ openVisibleModal, visibleToStaffOnly }) => {
   const intl = useIntl();
   const { blockId } = useParams();
   const dispatch = useDispatch();
@@ -20,7 +20,6 @@ const UnitVisibilityInfo = ({ openVisibleModal }) => {
     staffLockFrom,
     releaseDateFrom,
     releasedToStudents,
-    visibleToStaffOnly,
     hasExplicitStaffLock,
   } = useSelector(getCourseUnitData);
 
@@ -65,6 +64,7 @@ const UnitVisibilityInfo = ({ openVisibleModal }) => {
 
 UnitVisibilityInfo.propTypes = {
   openVisibleModal: PropTypes.func.isRequired,
+  visibleToStaffOnly: PropTypes.bool.isRequired,
 };
 
 export default UnitVisibilityInfo;
