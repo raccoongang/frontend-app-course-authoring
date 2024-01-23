@@ -93,10 +93,7 @@ const slice = createSlice({
       state.courseVerticalChildren = payload;
     },
     updateCourseVerticalChildrenLoadingStatus: (state, { payload }) => {
-      state.loadingStatus = {
-        ...state.loadingStatus,
-        courseVerticalChildrenLoadingStatus: payload.status,
-      };
+      state.loadingStatus.courseVerticalChildrenLoadingStatus = payload.status;
     },
   },
 });
