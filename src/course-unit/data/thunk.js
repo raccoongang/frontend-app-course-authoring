@@ -19,6 +19,8 @@ import {
   createCourseXblock,
   getCourseVerticalChildren,
   handleCourseUnitVisibilityAndData,
+  deleteUnitItem,
+  duplicateUnitItem,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -37,6 +39,8 @@ import {
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
   updateQueryPendingStatus,
+  deleteXBlock,
+  duplicateXBlock,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -266,6 +270,44 @@ export function fetchCourseVerticalChildrenData(itemId) {
       dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function deleteUnitItemQuery(itemId, XBlockId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.deleting));
+
+    try {
+      await deleteUnitItem(XBlockId);
+      dispatch(deleteXBlock(XBlockId));
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function duplicateUnitItemQuery(itemId, XBlockId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.duplicating));
+
+    try {
+      const { locator } = await duplicateUnitItem(itemId, XBlockId);
+      const newCourseVerticalChildren = await getCourseVerticalChildren(itemId);
+      dispatch(duplicateXBlock({
+        newId: locator,
+        newCourseVerticalChildren,
+      }));
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
     }
   };
 }

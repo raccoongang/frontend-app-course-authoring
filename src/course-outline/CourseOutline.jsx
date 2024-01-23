@@ -27,8 +27,11 @@ import { RequestStatus } from '../data/constants';
 import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
+import DeleteModal from '../generic/delete-modal/DeleteModal';
 import AlertMessage from '../generic/alert-message';
 import getPageHeadTitle from '../generic/utils';
+import { getCurrentItem } from './data/selectors';
+import { COURSE_BLOCK_NAMES } from './constants';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import OutlineSideBar from './outline-sidebar/OutlineSidebar';
 import StatusBar from './status-bar/StatusBar';
@@ -40,7 +43,6 @@ import HighlightsModal from './highlights-modal/HighlightsModal';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import PublishModal from './publish-modal/PublishModal';
 import ConfigureModal from './configure-modal/ConfigureModal';
-import DeleteModal from './delete-modal/DeleteModal';
 import {
   useCourseOutline, useScrollToLocatorElement,
 } from './hooks';
@@ -108,6 +110,9 @@ const CourseOutline = ({ courseId }) => {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
+
+  const { category } = useSelector(getCurrentItem);
+  const deleteCategory = COURSE_BLOCK_NAMES[category]?.name.toLowerCase();
 
   const finalizeSectionOrder = () => (newSections) => {
     initialSections = [...sectionsList];
@@ -435,6 +440,7 @@ const CourseOutline = ({ courseId }) => {
           onConfigureSubmit={handleConfigureItemSubmit}
         />
         <DeleteModal
+          category={deleteCategory}
           isOpen={isDeleteModalOpen}
           close={closeDeleteModal}
           onDeleteSubmit={handleDeleteItemSubmit}

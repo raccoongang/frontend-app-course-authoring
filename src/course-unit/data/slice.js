@@ -95,6 +95,23 @@ const slice = createSlice({
     updateCourseVerticalChildrenLoadingStatus: (state, { payload }) => {
       state.loadingStatus.courseVerticalChildrenLoadingStatus = payload.status;
     },
+    deleteXBlock: (state, { payload }) => {
+      state.courseVerticalChildren = {
+        ...state.courseVerticalChildren,
+        children: state.courseVerticalChildren.children.filter((component) => component.blockId !== payload),
+      };
+    },
+    duplicateXBlock: (state, { payload }) => {
+      state.courseVerticalChildren = {
+        ...payload.newCourseVerticalChildren,
+        children: payload.newCourseVerticalChildren.children.map((component) => {
+          if (component.blockId === payload.newId) {
+            component.shouldScroll = true;
+          }
+          return component;
+        }),
+      };
+    },
   },
 });
 
@@ -117,6 +134,8 @@ export const {
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
+  deleteXBlock,
+  duplicateXBlock,
 } = slice.actions;
 
 export const {

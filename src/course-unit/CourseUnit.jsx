@@ -37,6 +37,7 @@ const CourseUnit = ({ courseId }) => {
     isErrorAlert,
     isLastUnpublishedVersion,
     isInternetConnectionAlertFailed,
+    unitXBlockActions,
     handleTitleEditSubmit,
     headerNavigationsActions,
     handleTitleEdit,
@@ -104,11 +105,13 @@ const CourseUnit = ({ courseId }) => {
                 />
               )}
               <Stack gap={4} className="mb-4">
-                {courseVerticalChildren.children.map(({ name, blockId: id }) => (
+                {courseVerticalChildren.children.map(({ name, blockId: id, shouldScroll }) => (
                   <CourseXBlock
                     id={id}
                     key={id}
                     title={name}
+                    shouldScroll={shouldScroll}
+                    unitXBlockActions={unitXBlockActions}
                   />
                 ))}
               </Stack>

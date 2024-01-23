@@ -155,9 +155,42 @@ export async function handleCourseUnitVisibilityAndData(unitId, type, isVisible)
   return camelCaseObject(data);
 }
 
+/**
+ * Get an object containing course section vertical children data.
+ * @param {string} itemId
+ * @returns {Promise<Object>}
+ */
 export async function getCourseVerticalChildren(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseVerticalChildrenApiUrl(itemId));
 
   return camelCaseObject(data);
+}
+
+/**
+ * Delete a unit item.
+ * @param {string} itemId
+ * @returns {Promise<Object>}
+ */
+export async function deleteUnitItem(itemId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .delete(getXBlockBaseApiUrl(itemId));
+
+  return data;
+}
+
+/**
+ * Duplicate a unit item.
+ * @param {string} itemId
+ * @param {string} XBlockId
+ * @returns {Promise<Object>}
+ */
+export async function duplicateUnitItem(itemId, XBlockId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(postXBlockBaseApiUrl(), {
+      parent_locator: itemId,
+      duplicate_source_locator: XBlockId,
+    });
+
+  return data;
 }
