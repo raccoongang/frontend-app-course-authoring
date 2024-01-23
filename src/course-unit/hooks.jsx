@@ -93,7 +93,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     savingStatus,
     isQueryPending,
     isErrorAlert,
-    isLoading: loadingStatus.fetchUnitLoadingStatus === RequestStatus.IN_PROGRESS,
+    isLoading: loadingStatus.fetchUnitLoadingStatus === RequestStatus.IN_PROGRESS
+      || loadingStatus.courseSectionVerticalLoadingStatus === RequestStatus.IN_PROGRESS,
     isEditTitleFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     handleInternetConnectionFailed,
