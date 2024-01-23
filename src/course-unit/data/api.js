@@ -9,6 +9,7 @@ import {
   appendBrowserTimezoneToUrl,
   normalizeCourseSectionVerticalData,
 } from './utils';
+import { PUBLISH_TYPES } from '../constants';
 
 const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
 const getLmsBaseUrl = () => getConfig().LMS_BASE_URL;
@@ -130,7 +131,40 @@ export async function createCourseXblock({
   return data;
 }
 
-export async function toggleVisibleToStaffOnly(unitId, body) {
+export async function toggleVisibleToStaffOnly(unitId, type, visibility) {
+  // const body = {
+  //   publish: 'republish',
+  //   metadata: {
+  //     visible_to_staff_only: null,
+  //   },
+  // };
+
+  let body;
+
+  if (type === PUBLISH_TYPES.discardChanges) {
+    body = {
+      publish: PUBLISH_TYPES.discardChanges,
+    };
+  } else if (type === PUBLISH_TYPES.makePublic) {
+    body = {
+      publish: PUBLISH_TYPES.makePublic,
+    };
+  } else if (type === PUBLISH_TYPES.republish && !visibility) {
+    body = {
+      publish: PUBLISH_TYPES.republish,
+      metadata: {
+        visible_to_staff_only: visibility,
+      },
+    };
+  } else if (type === PUBLISH_TYPES.republish && visibility) {
+    body = {
+      publish: PUBLISH_TYPES.republish,
+      metadata: {
+        visible_to_staff_only: visibility,
+      },
+    };
+  }
+
   const { data } = await getAuthenticatedHttpClient()
     .post(getXBlockBaseApiUrl(unitId), body);
 

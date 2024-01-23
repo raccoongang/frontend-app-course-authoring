@@ -36,6 +36,7 @@ import {
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
 } from './slice';
+import { PUBLISH_TYPES } from '../constants';
 
 export function fetchCourseUnitQuery(courseId) {
   return async (dispatch) => {
@@ -113,16 +114,27 @@ export function editCourseItemQuery(itemId, displayName, sequenceId) {
   };
 }
 
-export function editVisibleToStaffOnly(itemId, body) {
+export function editVisibleToStaffOnly(itemId, type, visibility) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    if (type === PUBLISH_TYPES.discardChanges) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.discardChanges));
+    } else if (type === PUBLISH_TYPES.makePublic) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.publishing));
+    } else if (type === PUBLISH_TYPES.republish && !visibility) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.makingVisibleToStudents));
+    } else if (type === PUBLISH_TYPES.republish && visibility) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.hidingFromStudents));
+    }
 
     try {
-      await toggleVisibleToStaffOnly(itemId, body).then(async (result) => {
+      await toggleVisibleToStaffOnly(itemId, type, visibility).then(async (result) => {
         if (result) {
           const courseUnit = await getCourseUnitData(itemId);
           dispatch(fetchCourseItemSuccess(courseUnit));
+          const courseVerticalChildrenData = await getCourseVerticalChildren(itemId);
+          dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
         }
@@ -231,6 +243,8 @@ export function createNewCourseXBlock(body, callback, blockId) {
           }
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
+          const courseUnit = await getCourseUnitData(blockId);
+          dispatch(fetchCourseItemSuccess(courseUnit));
           dispatch(hideProcessingNotification());
           dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));

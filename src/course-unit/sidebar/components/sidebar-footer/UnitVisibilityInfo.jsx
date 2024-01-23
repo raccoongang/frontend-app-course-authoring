@@ -7,6 +7,8 @@ import { getCourseUnitData } from '../../../data/selectors';
 import { getVisibilityTitle } from '../../utils';
 import messages from '../../messages';
 import { editVisibleToStaffOnly } from '../../../data/thunk';
+import { PUBLISH_TYPES } from '../../../constants';
+import { updateQueryPendingStatus } from '../../../data/slice';
 
 const UnitVisibilityInfo = ({ openVisibleModal }) => {
   const intl = useIntl();
@@ -20,19 +22,11 @@ const UnitVisibilityInfo = ({ openVisibleModal }) => {
     releasedToStudents,
     visibleToStaffOnly,
     hasExplicitStaffLock,
-    id,
   } = useSelector(getCourseUnitData);
 
   const handleChange = () => {
-    const bodySetCheck = {
-      id,
-      data: null,
-      metadata: {
-        visible_to_staff_only: true,
-      },
-    };
-
-    return dispatch(editVisibleToStaffOnly(blockId, bodySetCheck));
+    dispatch(updateQueryPendingStatus(true));
+    return dispatch(editVisibleToStaffOnly(blockId, PUBLISH_TYPES.republish, true));
   };
 
   return (
