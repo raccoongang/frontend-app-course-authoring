@@ -7,6 +7,7 @@ import { RequestStatus } from '../../data/constants';
 import {
   getCourseSectionVertical,
   getCourseSectionVerticalLoadingStatus,
+  getCourseUnit,
   sequenceIdsSelector,
 } from '../data/selectors';
 
@@ -16,9 +17,10 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const courseSectionVerticalLoadingStatus = useSelector(getCourseSectionVerticalLoadingStatus);
   const { nextUrl, prevUrl } = useSelector(getCourseSectionVertical);
   const sequence = useModel('sequences', currentSequenceId);
-  const { courseId, status } = useSelector(state => state.courseDetail);
+  const { courseId, courseStatus } = useSelector(getCourseUnit);
 
-  const isCourseOrSequenceNotSuccessful = status !== SUCCESSFUL || courseSectionVerticalLoadingStatus !== SUCCESSFUL;
+  const isCourseOrSequenceNotSuccessful = courseStatus
+    !== SUCCESSFUL || courseSectionVerticalLoadingStatus !== SUCCESSFUL;
   const areIdsNotValid = !currentSequenceId || !currentUnitId || !sequence.unitIds;
   const isNotSuccessfulCompletion = isCourseOrSequenceNotSuccessful || areIdsNotValid;
 
