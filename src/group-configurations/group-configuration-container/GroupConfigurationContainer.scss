@@ -1,0 +1,79 @@
+.configuration-card {
+  @include pgn-box-shadow(1, "down");
+
+  background: $white;
+  border-radius: .375rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .configuration-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+
+    .configuration-card-header__button {
+      display: flex;
+      align-items: flex-start;
+      padding: 0;
+      height: auto;
+      color: $black;
+
+      .pgn__icon {
+        display: inline-block;
+        margin-right: .25rem;
+        margin-bottom: .75rem;
+      }
+
+      .pgn__hstack {
+        align-items: baseline;
+      }
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    .configuration-card-header__title {
+      text-align: left;
+
+      h3 {
+        margin-bottom: .5rem;
+      }
+    }
+
+    .configuration-card-header__badge {
+      display: flex;
+      padding: .125rem .5rem;
+      justify-content: center;
+      align-items: center;
+      border-radius: .375rem;
+      border: .063rem solid $light-300;
+      background: $white;
+
+      &:first-child {
+        margin-left: .75rem;
+      }
+
+      & span:last-child {
+        color: $primary-700;
+      }
+    }
+  }
+
+  .configuration-card-content {
+    margin: 0 .5rem 0 1.5rem;
+
+    .configuration-card-content__experiment-stack {
+      display: flex;
+      justify-content: space-between;
+      padding: .75rem 0;
+      margin: 0;
+      color: $primary-500;
+
+      &:not(:last-child) {
+        border-bottom: .063rem solid $light-400;
+      }
+    }
+  }
+}
