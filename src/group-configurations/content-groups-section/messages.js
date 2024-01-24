@@ -2,7 +2,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
   addNewGroup: {
-    id: 'course-authoring.group-configurations.content-groups.add-new-group-group',
+    id: 'course-authoring.group-configurations.content-groups.add-new-group',
     defaultMessage: 'New content group',
   },
 });
