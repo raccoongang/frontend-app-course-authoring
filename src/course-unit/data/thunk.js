@@ -18,6 +18,8 @@ import {
   getCourseSectionVerticalData,
   createCourseXblock,
   getCourseVerticalChildren,
+  sendClickboardData,
+  getClickBoardData,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -34,7 +36,7 @@ import {
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
-  updateCourseVerticalChildrenLoadingStatus,
+  updateCourseVerticalChildrenLoadingStatus, addCopyDataSuccess,
 } from './slice';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -198,8 +200,13 @@ export function fetchCourse(courseId) {
 export function createNewCourseXBlock(body, callback, blockId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.IN_PROGRESS }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    if (body.stagedContent) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.pasting));
+    } else {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
+    }
 
     try {
       await createCourseXblock(body).then(async (result) => {
@@ -233,9 +240,30 @@ export function fetchCourseVerticalChildrenData(itemId) {
     try {
       const courseVerticalChildrenData = await getCourseVerticalChildren(itemId);
       dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
+      const clickBoardData = await getClickBoardData();
+      dispatch(addCopyDataSuccess(clickBoardData));
       dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function copyCourseXBlock(itemId) {
+  return async (dispatch) => {
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      await sendClickboardData(itemId).then(async (result) => {
+        if (result) {
+          dispatch(addCopyDataSuccess(result));
+          dispatch(hideProcessingNotification());
+          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      });
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
     }
   };
 }

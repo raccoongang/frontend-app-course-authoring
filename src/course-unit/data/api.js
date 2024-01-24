@@ -22,6 +22,14 @@ export const getCourseHomeCourseMetadataApiUrl = (courseId) => `${getLmsBaseUrl(
 export const getCourseVerticalChildrenApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container/vertical/${itemId}/children`;
 
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
+export const postClickBoardApiUrl = () => `${getStudioBaseUrl()}/api/content-staging/v1/clipboard/`;
+export const getClickBoardApiUrl = () => `${getStudioBaseUrl()}/api/content-staging/v1/clipboard/`;
+
+export async function sendClickboardData(itemId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(postClickBoardApiUrl(), { usage_key: itemId });
+  return data;
+}
 
 /**
  * Get course unit.
@@ -114,7 +122,7 @@ export async function getCourseHomeCourseMetadata(courseId, rootSlug) {
  * @returns {Promise<Object>} A Promise that resolves to the created XBlock data.
  */
 export async function createCourseXblock({
-  type, category, parentLocator, displayName, boilerplate,
+  type, category, parentLocator, displayName, boilerplate, stagedContent,
 }) {
   const body = {
     type,
@@ -122,6 +130,7 @@ export async function createCourseXblock({
     category: category || type,
     parent_locator: parentLocator,
     display_name: displayName,
+    staged_content: stagedContent,
   };
 
   const { data } = await getAuthenticatedHttpClient()
@@ -133,6 +142,25 @@ export async function createCourseXblock({
 export async function getCourseVerticalChildren(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getCourseVerticalChildrenApiUrl(itemId));
+
+  if (data.children && data.children.length > 0) {
+    for (let i = 0; i < data.children.length; i++) {
+      data.children[i].actions = {
+        can_copy: true,
+        can_duplicate: true,
+        can_move: true,
+        can_manage_access: true,
+        can_delete: true,
+      };
+    }
+  }
+
+  return camelCaseObject(data);
+}
+
+export async function getClickBoardData() {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getClickBoardApiUrl());
 
   return camelCaseObject(data);
 }

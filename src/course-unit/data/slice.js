@@ -95,6 +95,12 @@ const slice = createSlice({
     updateCourseVerticalChildrenLoadingStatus: (state, { payload }) => {
       state.loadingStatus.courseVerticalChildrenLoadingStatus = payload.status;
     },
+    addCopyDataSuccess: (state, { payload }) => {
+      state.copyXBlockComponentData = payload;
+      if (payload) {
+        state.hasXBlockComponentData = true;
+      }
+    },
   },
 });
 
@@ -117,6 +123,7 @@ export const {
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
+  addCopyDataSuccess,
 } = slice.actions;
 
 export const {

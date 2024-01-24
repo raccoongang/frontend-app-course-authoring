@@ -21,6 +21,8 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
+import { getCopyXBlockComponentData, hasXBlockComponentData } from './data/selectors';
+import PasteComponent from './paste-component';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -41,6 +43,8 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
+  const isXBlockComponentData = useSelector(hasXBlockComponentData);
+  const copyXBlockComponentData = useSelector(getCopyXBlockComponentData);
 
   document.title = getPageHeadTitle('', unitTitle);
 
@@ -52,6 +56,10 @@ const CourseUnit = ({ courseId }) => {
   if (isLoading) {
     return <Loading />;
   }
+
+  const handlePastXBlockComponent = () => {
+    handleCreateNewCourseXBlock({ stagedContent: 'clipboard', parentLocator: blockId }, null, blockId);
+  };
 
   return (
     <>
@@ -94,11 +102,12 @@ const CourseUnit = ({ courseId }) => {
           >
             <Layout.Element>
               <Stack gap={4} className="mb-4">
-                {courseVerticalChildren.children.map(({ name, blockId: id }) => (
+                {courseVerticalChildren.children.map(({ name, blockId: id, actions }) => (
                   <CourseXBlock
                     id={id}
                     key={id}
                     title={name}
+                    actions={actions}
                   />
                 ))}
               </Stack>
@@ -106,6 +115,12 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
+              {isXBlockComponentData && (
+                <PasteComponent
+                  handlePastXBlockComponent={handlePastXBlockComponent}
+                  copyXBlockComponentData={copyXBlockComponentData}
+                />
+              )}
             </Layout.Element>
             <Layout.Element>
               <Stack gap={3}>

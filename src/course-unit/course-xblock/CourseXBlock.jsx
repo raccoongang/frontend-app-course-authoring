@@ -5,10 +5,20 @@ import {
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { useDispatch } from 'react-redux';
 import messages from './messages';
+import { copyCourseXBlock } from '../data/thunk';
 
-const CourseXBlock = ({ id, title }) => {
+const CourseXBlock = ({
+  id, title, actions,
+}) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
+  const { canCopy } = actions;
+
+  const handleCopyXBlockItem = (blockId) => {
+    dispatch(copyCourseXBlock(blockId));
+  };
 
   return (
     <Card className="mb-1">
@@ -44,6 +54,11 @@ const CourseXBlock = ({ id, title }) => {
                 <Dropdown.Item>
                   {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                 </Dropdown.Item>
+                {canCopy && (
+                  <Dropdown.Item onClick={() => handleCopyXBlockItem(id)}>
+                    Copy to clipboard
+                  </Dropdown.Item>
+                )}
                 <Dropdown.Item>
                   {intl.formatMessage(messages.blockLabelButtonDelete)}
                 </Dropdown.Item>
@@ -63,6 +78,13 @@ const CourseXBlock = ({ id, title }) => {
 CourseXBlock.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  actions: PropTypes.shape({
+    canCopy: PropTypes.bool.isRequired,
+    canDuplicate: PropTypes.bool.isRequired,
+    canMove: PropTypes.bool.isRequired,
+    canManageAccess: PropTypes.bool.isRequired,
+    canDelete: PropTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default CourseXBlock;
