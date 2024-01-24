@@ -2,22 +2,18 @@ import PropTypes from 'prop-types';
 
 import GroupConfigurationContainer from '../group-configuration-container';
 
-const EnrollmentTrackGroupsSection = ({ availableGroup }) => {
-  const { groups, name } = availableGroup;
-
-  return (
-    <div className="mt-2.5">
-      <h2 className="lead text-black mb-3 configuration-section-name">{name}</h2>
-      {groups.map((group) => (
-        <GroupConfigurationContainer
-          group={group}
-          key={group.id}
-          readOnly
-        />
-      ))}
-    </div>
-  );
-};
+const EnrollmentTrackGroupsSection = ({ availableGroup: { groups, name } }) => (
+  <div className="mt-2.5">
+    <h2 className="lead text-black mb-3 configuration-section-name">{name}</h2>
+    {groups.map((group) => (
+      <GroupConfigurationContainer
+        group={group}
+        key={group.id}
+        readOnly
+      />
+    ))}
+  </div>
+);
 
 EnrollmentTrackGroupsSection.propTypes = {
   availableGroup: PropTypes.shape({

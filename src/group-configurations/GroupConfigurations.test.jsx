@@ -59,10 +59,10 @@ describe('<GroupConfigurations />', () => {
         getByText(messages.headingSubtitle.defaultMessage),
       ).toBeInTheDocument();
       expect(
-        getByText(contentGroupsMessages.addNew.defaultMessage),
+        getByText(contentGroupsMessages.addNewGroup.defaultMessage),
       ).toBeInTheDocument();
       expect(
-        getByText(experimentMessages.addNew.defaultMessage),
+        getByText(experimentMessages.addNewGroup.defaultMessage),
       ).toBeInTheDocument();
       expect(
         getByText(experimentMessages.title.defaultMessage),

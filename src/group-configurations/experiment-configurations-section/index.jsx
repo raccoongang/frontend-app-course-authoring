@@ -29,7 +29,7 @@ const ExperimentConfigurationsSection = ({ availableGroups }) => {
             iconBefore={AddIcon}
             block
           >
-            {formatMessage(messages.addNew)}
+            {formatMessage(messages.addNewGroup)}
           </Button>
         </>
       ) : (

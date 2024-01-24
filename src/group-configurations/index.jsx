@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -34,7 +33,6 @@ const GroupConfigurations = ({ courseId }) => {
   );
 
   if (isLoading) {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
     return (
       <Row className="m-0 mt-4 justify-content-center">
         <LoadingSpinner />

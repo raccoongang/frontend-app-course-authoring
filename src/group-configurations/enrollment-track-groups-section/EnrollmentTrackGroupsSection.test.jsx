@@ -1,11 +1,10 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import { enrollmentTrackGroupsMock } from '../__mocks__';
 import EnrollmentTrackGroupsSection from '.';
 
-const renderComponent = (props) => render(
+const renderComponent = (props = {}) => render(
   <IntlProvider locale="en">
     <EnrollmentTrackGroupsSection
       availableGroup={enrollmentTrackGroupsMock}

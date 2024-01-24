@@ -4,12 +4,12 @@ const messages = defineMessages({
   emptyContentGroups: {
     id: 'course-authoring.group-configurations.container.empty-content-groups',
     defaultMessage:
-      'In the {outlineComponentUrl}, use this group to control access to a component.',
+      'In the {outlineComponentLink}, use this group to control access to a component.',
   },
   emptyExperimentGroup: {
     id: 'course-authoring.group-configurations.container.empty-experiment-group',
     defaultMessage:
-      'This group configuration is not in use. Start by adding a content experiment to any Unit via the {outlineComponentUrl}.',
+      'This group configuration is not in use. Start by adding a content experiment to any Unit via the {outlineComponentLink}.',
   },
   courseOutline: {
     id: 'course-authoring.group-configurations.container.course-outline',

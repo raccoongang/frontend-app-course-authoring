@@ -3,8 +3,8 @@
 
   background: $white;
   border-radius: .375rem;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: map-get($spacers, 4);
+  margin-bottom: map-get($spacers, 4);
 
   .configuration-card-header {
     display: flex;
@@ -19,10 +19,14 @@
       height: auto;
       color: $black;
 
+      &:focus::before {
+        display: none;
+      }
+
       .pgn__icon {
         display: inline-block;
-        margin-right: .25rem;
-        margin-bottom: .75rem;
+        margin-right: map-get($spacers, 1);
+        margin-bottom: map-get($spacers, 2\.5);
       }
 
       .pgn__hstack {
@@ -38,21 +42,21 @@
       text-align: left;
 
       h3 {
-        margin-bottom: .5rem;
+        margin-bottom: map-get($spacers, 2);
       }
     }
 
     .configuration-card-header__badge {
       display: flex;
-      padding: .125rem .5rem;
+      padding: .125rem map-get($spacers, 2);
       justify-content: center;
       align-items: center;
-      border-radius: .375rem;
+      border-radius: $border-radius;
       border: .063rem solid $light-300;
       background: $white;
 
       &:first-child {
-        margin-left: .75rem;
+        margin-left: map-get($spacers, 2\.5);
       }
 
       & span:last-child {
@@ -62,12 +66,12 @@
   }
 
   .configuration-card-content {
-    margin: 0 .5rem 0 1.5rem;
+    margin: 0 map-get($spacers, 2) 0 map-get($spacers, 4);
 
     .configuration-card-content__experiment-stack {
       display: flex;
       justify-content: space-between;
-      padding: .75rem 0;
+      padding: map-get($spacers, 2\.5) 0;
       margin: 0;
       color: $primary-500;
 

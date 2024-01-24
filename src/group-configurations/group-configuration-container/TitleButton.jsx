@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, Stack, Badge } from '@edx/paragon';
 import {
@@ -32,18 +31,20 @@ const TitleButton = ({
       </div>
       {!isExpanded && (
         <Stack gap={2.5} direction="horizontal">
-          {getCombinedBadgeList(usage, group, isExperiment, formatMessage).map(
-            (badge) => (
-              <Badge
-                key={uuid()}
-                variant="primary"
-                className="configuration-card-header__badge"
-                data-testid="configuration-card-header__badge"
-              >
-                <span className="small">{badge}</span>
-              </Badge>
-            ),
-          )}
+          {getCombinedBadgeList(
+            usage,
+            group,
+            isExperiment,
+            formatMessage,
+          ).map((badge) => (
+            <Badge
+              key={badge}
+              className="configuration-card-header__badge"
+              data-testid="configuration-card-header__badge"
+            >
+              <span className="small">{badge}</span>
+            </Badge>
+          ))}
         </Stack>
       )}
     </Button>

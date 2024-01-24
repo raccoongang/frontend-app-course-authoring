@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import {
@@ -14,7 +14,7 @@ const experimentGroup = experimentGroupConfigurationsMock[0];
 const contentGroupWithUsages = contentGroupsMock.groups[1];
 const contentGroupWithOnlyOneUsage = contentGroupsMock.groups[2];
 
-const renderComponent = (props) => render(
+const renderComponent = (props = {}) => render(
   <IntlProvider locale="en">
     <GroupConfigurationContainer group={contentGroup} {...props} />
   </IntlProvider>,
@@ -39,13 +39,13 @@ describe('<GroupConfigurationContainer />', () => {
       getByText, queryByTestId, getByTestId, queryByText,
     } = renderComponent();
     const cardTitle = getByTestId('configuration-card-header__button');
-    fireEvent.click(cardTitle);
+    userEvent.click(cardTitle);
     expect(queryByTestId('configuration-card-content')).toBeInTheDocument();
     expect(
       queryByText(messages.notInUse.defaultMessage),
     ).not.toBeInTheDocument();
 
-    fireEvent.click(cardTitle);
+    userEvent.click(cardTitle);
     expect(queryByTestId('configuration-card-content')).not.toBeInTheDocument();
     expect(getByText(messages.notInUse.defaultMessage)).toBeInTheDocument();
   });
@@ -80,7 +80,7 @@ describe('<GroupConfigurationContainer />', () => {
     ).not.toBeInTheDocument();
 
     const cardTitle = getByTestId('configuration-card-header__button');
-    fireEvent.click(cardTitle);
+    userEvent.click(cardTitle);
     expect(getByTestId('configuration-card-usage-empty')).toBeInTheDocument();
   });
 
@@ -115,7 +115,7 @@ describe('<GroupConfigurationContainer />', () => {
     expect(queryByText(experimentGroup.description)).not.toBeInTheDocument();
 
     const cardTitle = getByTestId('configuration-card-header__button');
-    fireEvent.click(cardTitle);
+    userEvent.click(cardTitle);
     expect(queryByTestId('configuration-card-content')).toBeInTheDocument();
     expect(getByText(experimentGroup.description)).toBeInTheDocument();
 

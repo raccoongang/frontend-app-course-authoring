@@ -7,10 +7,8 @@ import GroupConfigurationContainer from '../group-configuration-container';
 import EmptyPlaceholder from '../empty-placeholder';
 import messages from './messages';
 
-const ContentGroupsSection = ({ availableGroup }) => {
+const ContentGroupsSection = ({ availableGroup: { groups, name } }) => {
   const { formatMessage } = useIntl();
-  const { groups, name } = availableGroup;
-
   return (
     <div className="mt-2.5">
       <h2 className="configuration-section-name lead text-black mb-3">{name}</h2>
@@ -26,7 +24,7 @@ const ContentGroupsSection = ({ availableGroup }) => {
             iconBefore={AddIcon}
             block
           >
-            {formatMessage(messages.addNew)}
+            {formatMessage(messages.addNewGroup)}
           </Button>
         </>
       ) : (

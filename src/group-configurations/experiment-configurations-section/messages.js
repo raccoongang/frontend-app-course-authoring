@@ -5,8 +5,8 @@ const messages = defineMessages({
     id: 'course-authoring.group-configurations.experiment-group.title',
     defaultMessage: 'Experiment group configurations',
   },
-  addNew: {
-    id: 'course-authoring.group-configurations.experiment-group.add-new',
+  addNewGroup: {
+    id: 'course-authoring.group-configurations.experiment-group.add-new-group-group',
     defaultMessage: 'New group configuration',
   },
 });

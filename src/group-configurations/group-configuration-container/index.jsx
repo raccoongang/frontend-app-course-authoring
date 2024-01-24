@@ -30,30 +30,26 @@ const GroupConfigurationContainer = ({ group, isExperiment, readOnly }) => {
     getConfig().STUDIO_BASE_URL,
   );
 
-  const outlineComponentUrl = (
+  const outlineComponentLink = (
     <Hyperlink destination={outlineUrl}>
       {formatMessage(messages.courseOutline)}
     </Hyperlink>
   );
 
-  const contentGroupsGuide = (
-    <span
-      className="small text-gray-700"
-      data-testid="configuration-card-usage-empty"
-    >
-      {formatMessage(messages.emptyContentGroups, { outlineComponentUrl })}
+  const createGuide = (emptyMessage, testId) => (
+    <span className="small text-gray-700" data-testid={testId}>
+      {formatMessage(emptyMessage, { outlineComponentLink })}
     </span>
   );
 
-  const experimentalConfigurationsGuide = (
-    <span
-      className="small text-gray-700"
-      data-testid="configuration-card-usage-experiment-empty"
-    >
-      {formatMessage(messages.emptyExperimentGroup, {
-        outlineComponentUrl,
-      })}
-    </span>
+  const contentGroupsGuide = createGuide(
+    messages.emptyContentGroups,
+    'configuration-card-usage-empty',
+  );
+
+  const experimentalConfigurationsGuide = createGuide(
+    messages.emptyExperimentGroup,
+    'configuration-card-usage-experiment-empty',
   );
 
   const displayGuide = isExperiment
@@ -103,7 +99,7 @@ const GroupConfigurationContainer = ({ group, isExperiment, readOnly }) => {
             <span className="x-small text-gray-500">{description}</span>
           )}
           {isExperiment && <ExperimentGroupStack itemList={groupsControl} />}
-          {usage && usage.length ? (
+          {usage?.length ? (
             <UsageList
               className="mt-2.5"
               itemList={usage}

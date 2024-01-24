@@ -14,16 +14,14 @@ const formatUrlToUnitPage = (url, courseId) => `/course/${courseId}${url}`;
  * @param {function} formatMessage - The function for formatting localized messages.
  * @returns {Array} - List of group count.
  */
-const getGroupsCount = (items, formatMessage) => {
-  if (items?.length) {
-    const message = items.length === 1
-      ? formatMessage(messages.containsGroup, { len: items.length })
-      : formatMessage(messages.containsGroups, { len: items.length });
-
-    return [message];
+const getGroupsCountMessage = (items, formatMessage) => {
+  if (!items?.length) {
+    return [];
   }
 
-  return [];
+  const messageKey = items.length === 1 ? messages.containsGroup : messages.containsGroups;
+  const message = formatMessage(messageKey, { len: items.length });
+  return [message];
 };
 
 /**
@@ -32,16 +30,15 @@ const getGroupsCount = (items, formatMessage) => {
  * @param {function} formatMessage - The function for formatting localized messages.
  * @returns {Array} - List of usage count.
  */
-const getUsageCount = (items, formatMessage) => {
-  if (items?.length) {
-    const message = items.length === 1
-      ? formatMessage(messages.usedInLocation)
-      : formatMessage(messages.usedInLocations, { len: items.length });
-
-    return [message];
+const getUsageCountMessage = (items, formatMessage) => {
+  if (!items?.length) {
+    return [formatMessage(messages.notInUse)];
   }
 
-  return [formatMessage(messages.notInUse)];
+  const message = items.length === 1
+    ? formatMessage(messages.usedInLocation)
+    : formatMessage(messages.usedInLocations, { len: items.length });
+  return [message];
 };
 
 /**
@@ -53,9 +50,8 @@ const getUsageCount = (items, formatMessage) => {
  * @returns {Array} - Combined list of badges.
  */
 const getCombinedBadgeList = (usage, group, isExperiment, formatMessage) => [
-  ...(isExperiment ? getGroupsCount(group.groups, formatMessage) : []),
-  ...getUsageCount(usage, formatMessage),
+  ...(isExperiment ? getGroupsCountMessage(group.groups, formatMessage) : []),
+  ...getUsageCountMessage(usage, formatMessage),
 ];
 
-// eslint-disable-next-line import/prefer-default-export
 export { formatUrlToUnitPage, getCombinedBadgeList };

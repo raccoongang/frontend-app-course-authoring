@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
@@ -20,7 +19,7 @@ describe('<ExperimentConfigurationsSection />', () => {
     const { getByText, getByRole, getAllByTestId } = renderComponent();
     expect(getByText(messages.title.defaultMessage)).toBeInTheDocument();
     expect(
-      getByRole('button', { name: messages.addNew.defaultMessage }),
+      getByRole('button', { name: messages.addNewGroup.defaultMessage }),
     ).toBeInTheDocument();
     expect(getAllByTestId('configuration-card')).toHaveLength(
       experimentGroupConfigurationsMock.length,
