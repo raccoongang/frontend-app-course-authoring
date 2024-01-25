@@ -25,6 +25,7 @@ import { reducer as videosReducer } from './files-and-videos/videos-page/data/sl
 import { reducer as courseOutlineReducer } from './course-outline/data/slice';
 import { reducer as courseUnitReducer } from './course-unit/data/slice';
 import { reducer as certificatesReducer } from './certificates/data/slice';
+import { reducer as groupConfigurationsReducer } from './group-configurations/data/slice';
 
 export default function initializeStore(preloadedState = undefined) {
   return configureStore({
@@ -51,6 +52,7 @@ export default function initializeStore(preloadedState = undefined) {
       courseOutline: courseOutlineReducer,
       courseUnit: courseUnitReducer,
       certificates: certificatesReducer,
+      groupConfigurations: groupConfigurationsReducer,
     },
     preloadedState,
   });
