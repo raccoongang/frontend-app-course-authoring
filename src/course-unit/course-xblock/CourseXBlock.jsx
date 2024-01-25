@@ -5,16 +5,21 @@ import {
 } from '@edx/paragon';
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { useDispatch, useSelector } from 'react-redux';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import { scrollToElement } from '../../course-outline/utils';
 import messages from './messages';
+import { copyToClipboard } from '../data/thunk';
+import { getCourseUnitEnableCopyPaste } from '../data/selectors';
 
 const CourseXBlock = ({
   id, title, unitXBlockActions, shouldScroll, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
+  const dispatch = useDispatch();
+  const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const intl = useIntl();
 
   const onXBlockDelete = () => {
@@ -61,10 +66,15 @@ const CourseXBlock = ({
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    {intl.formatMessage(messages.blockLabelButtonManageAccess)}
+                  {enableCopyPasteUnits && (
+                  <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                    {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={openDeleteModal}>
+                )}
+                <Dropdown.Item>
+                  {intl.formatMessage(messages.blockLabelButtonManageAccess)}
+                </Dropdown.Item>
+                <Dropdown.ItemonClick={openDeleteModal}>
                     {intl.formatMessage(messages.blockLabelButtonDelete)}
                   </Dropdown.Item>
                 </Dropdown.Menu>

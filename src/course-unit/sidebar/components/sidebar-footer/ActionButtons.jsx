@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../../../data/selectors';
 import messages from '../../messages';
+import { copyToClipboard } from '../../../data/thunk';
 
 const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
+  const dispatch = useDispatch();
   const intl = useIntl();
   const {
+    id,
     published,
     hasChanges,
     enableCopyPasteUnits,
@@ -27,7 +30,12 @@ const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
         </Button>
       )}
       {enableCopyPasteUnits && (
-        <Button size="sm" className="mt-2" variant="outline-primary">
+        <Button
+          onClick={() => dispatch(copyToClipboard(id))}
+          className="mt-2"
+          variant="outline-primary"
+          size="sm"
+        >
           {intl.formatMessage(messages.actionButtonCopyUnitTitle)}
         </Button>
       )}

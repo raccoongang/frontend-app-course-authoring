@@ -9,4 +9,4 @@ export const getCourseId = state => state.courseDetail.courseId;
 export const getSequenceId = state => state.courseUnit.sequenceId;
 export const getCourseVerticalChildren = state => state.courseUnit.courseVerticalChildren;
 export const getClipboardData = state => state.courseUnit.clipboardData;
-export const getClipboardStatus = state => state.courseUnit.clipboardStatus;
+export const getCourseUnitEnableCopyPaste = state => state.courseUnit.unit.enableCopyPasteUnits;

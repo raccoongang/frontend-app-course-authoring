@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Layout, Stack } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
@@ -23,8 +23,6 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import useClipboard from './clipboard/useClipboard';
-import { copyToClipboard } from './data/thunk';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -47,9 +45,6 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-  const { showPasteUnit, showPasteXBlock, isClipboardLoading } = useClipboard();
-
-  console.log(`showPasteUnit: ${showPasteUnit}, showPasteXBlock: ${showPasteXBlock}, isClipboardLoading: ${isClipboardLoading}`);
 
   document.title = getPageHeadTitle('', unitTitle);
 

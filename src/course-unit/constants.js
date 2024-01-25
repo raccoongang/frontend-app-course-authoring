@@ -25,11 +25,11 @@ export const STUDIO_CLIPBOARD_CHANNEL = 'studio_clipboard_channel';
  * @readonly
  * @enum {string}
  */
-export const ClipboardStatus = {
-  LOADING: 'loading',
-  READY: 'ready',
-  EXPIRED: 'expired',
-  ERROR: 'error',
+export const CLIPBOARD_STATUS = {
+  loading: 'loading',
+  ready: 'ready',
+  expired: 'expired',
+  error: 'error',
 };
 
 export const COMPONENT_ICON_TYPES = {

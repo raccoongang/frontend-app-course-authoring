@@ -18,7 +18,6 @@ const slice = createSlice({
     courseSectionVertical: {},
     courseVerticalChildren: [],
     clipboardData: null,
-    clipboardStatus: '',
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {

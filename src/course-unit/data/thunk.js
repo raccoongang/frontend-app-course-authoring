@@ -37,6 +37,7 @@ import {
   deleteXBlock,
   duplicateXBlock,
 } from './slice';
+import { CLIPBOARD_STATUS } from '../constants';
 import { getNotificationMessage } from './utils';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -176,6 +177,9 @@ export function createNewCourseXBlock(body, callback, blockId) {
 export function fetchCourseVerticalChildrenData(itemId) {
   return async (dispatch) => {
     dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
+    getClipboard().then(clipboardData => {
+      dispatch(updateClipboardData(clipboardData));
+    });
 
     try {
       const courseVerticalChildrenData = await getCourseVerticalChildren(itemId);
@@ -230,28 +234,31 @@ export function copyToClipboard(usageKey) {
 
   return async (dispatch) => {
     dispatch(updateClipboardData(null));
-    dispatch(updateClipboardStatus({ status: ClipboardStatus.LOADING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.copying));
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateQueryPendingStatus(true));
 
     try {
       let clipboardData = await updateClipboard(usageKey);
 
-      // Enter the loop only if the status is LOADING
-      while (clipboardData.content?.status === ClipboardStatus.LOADING) {
+      while (clipboardData.content?.status === CLIPBOARD_STATUS.loading) {
         // eslint-disable-next-line no-await-in-loop,no-promise-executor-return
         await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
-        // eslint-disable-next-line no-await-in-loop
-        clipboardData = await getClipboard();
+        clipboardData = await getClipboard(); // eslint-disable-line no-await-in-loop
       }
 
-      if (clipboardData.content?.status === ClipboardStatus.READY) {
+      if (clipboardData.content?.status === CLIPBOARD_STATUS.ready) {
         dispatch(updateClipboardData(clipboardData));
-        dispatch(updateClipboardStatus({ status: ClipboardStatus.READY }));
+        dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       } else {
         throw new Error(`Unexpected clipboard status "${clipboardData.content?.status}" in successful API response.`);
       }
     } catch (error) {
-      dispatch(updateClipboardStatus({ status: ClipboardStatus.ERROR }));
+      dispatch(updateClipboardStatus({ status: CLIPBOARD_STATUS.error }));
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       logError('Error copying to clipboard:', error);
+    } finally {
+      dispatch(hideProcessingNotification());
     }
   };
 }

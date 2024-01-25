@@ -90,7 +90,7 @@ export async function createCourseXblock({
 export async function getClipboard() {
   const { data } = await getAuthenticatedHttpClient().get(getClipboardUrl());
 
-  return data;
+  return camelCaseObject(data);
 }
 
 /**
@@ -101,7 +101,7 @@ export async function getClipboard() {
 export async function updateClipboard(usageKey) {
   const { data } = await getAuthenticatedHttpClient().post(getClipboardUrl(), { usage_key: usageKey });
 
-  return data;
+  return camelCaseObject(data);
 }
 
 /**
