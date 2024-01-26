@@ -5,7 +5,7 @@ import { PopoverContent, PasteComponentButton, WhatsInClipboard } from './compon
 
 const OVERLAY_TRIGGERS = ['hover', 'focus'];
 
-const PasteComponent = ({ handlePastXBlockComponent, copyXBlockComponentData }) => {
+const PasteComponent = ({ handlePastXBlockComponent }) => {
   const [showPopover, togglePopover] = useState(false);
   const popoverElementRef = useRef(null);
 
@@ -22,9 +22,7 @@ const PasteComponent = ({ handlePastXBlockComponent, copyXBlockComponentData }) 
         onBlur={() => handlePopoverToggle(false)}
         {...props}
       >
-        <PopoverContent
-          copyXBlockComponentData={copyXBlockComponentData}
-        />
+        <PopoverContent />
       </Popover>
     </div>
   );

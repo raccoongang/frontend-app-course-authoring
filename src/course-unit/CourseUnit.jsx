@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Layout, Stack } from '@edx/paragon';
+import {
+  Container, Layout, Stack,
+} from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
 
@@ -21,8 +23,9 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import { getCopyXBlockComponentData, hasXBlockComponentData } from './data/selectors';
 import PasteComponent from './paste-component';
+import { getUserClipboardData } from './data/selectors';
+import usePastNotificationAlerts from './paste-notifications/usePastNotificationAlerts';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -43,9 +46,13 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-  const isXBlockComponentData = useSelector(hasXBlockComponentData);
-  const copyXBlockComponentData = useSelector(getCopyXBlockComponentData);
-
+  const userClipboardData = useSelector(getUserClipboardData);
+  const errorFiles = ['Item-1', 'Item-2', 'Item-3'];
+  const conflictingFiles = ['Item-1', 'Item-2', 'Item-3'];
+  const newFiles = ['Item-1', 'Item-2', 'Item-3'];
+  const STORE = useSelector(state => state);
+  console.log({ STORE });
+  const alerts = usePastNotificationAlerts(conflictingFiles, errorFiles, newFiles, courseId);
   document.title = getPageHeadTitle('', unitTitle);
 
   const {
@@ -101,6 +108,7 @@ const CourseUnit = ({ courseId }) => {
             xl={[{ span: 9 }, { span: 3 }]}
           >
             <Layout.Element>
+              {alerts}
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({ name, blockId: id, actions }) => (
                   <CourseXBlock
@@ -115,11 +123,8 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
-              {isXBlockComponentData && (
-                <PasteComponent
-                  handlePastXBlockComponent={handlePastXBlockComponent}
-                  copyXBlockComponentData={copyXBlockComponentData}
-                />
+              {userClipboardData && (
+                <PasteComponent handlePastXBlockComponent={handlePastXBlockComponent} />
               )}
             </Layout.Element>
             <Layout.Element>

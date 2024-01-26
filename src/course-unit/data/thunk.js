@@ -19,7 +19,6 @@ import {
   createCourseXblock,
   getCourseVerticalChildren,
   sendClickboardData,
-  getClickBoardData,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -36,7 +35,7 @@ import {
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
-  updateCourseVerticalChildrenLoadingStatus, addCopyDataSuccess,
+  updateCourseVerticalChildrenLoadingStatus,
 } from './slice';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -211,6 +210,7 @@ export function createNewCourseXBlock(body, callback, blockId) {
     try {
       await createCourseXblock(body).then(async (result) => {
         if (result) {
+          console.log('result', result);
           if (body.category === 'vertical') {
             const courseSectionVerticalData = await getCourseSectionVerticalData(result.locator);
             dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
@@ -240,8 +240,6 @@ export function fetchCourseVerticalChildrenData(itemId) {
     try {
       const courseVerticalChildrenData = await getCourseVerticalChildren(itemId);
       dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
-      const clickBoardData = await getClickBoardData();
-      dispatch(addCopyDataSuccess(clickBoardData));
       dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.FAILED }));
@@ -256,7 +254,6 @@ export function copyCourseXBlock(itemId) {
     try {
       await sendClickboardData(itemId).then(async (result) => {
         if (result) {
-          dispatch(addCopyDataSuccess(result));
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
         }
