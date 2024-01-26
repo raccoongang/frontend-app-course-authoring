@@ -35,6 +35,7 @@ const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
           className="mt-2"
           variant="outline-primary"
           size="sm"
+          data-testid="copy-xblock-to-clipboard"
         >
           {intl.formatMessage(messages.actionButtonCopyUnitTitle)}
         </Button>

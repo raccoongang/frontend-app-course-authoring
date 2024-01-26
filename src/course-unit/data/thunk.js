@@ -73,6 +73,7 @@ export function fetchCourseSectionVerticalData(courseId, sequenceId) {
         modelType: 'units',
         models: courseSectionVerticalData.units,
       }));
+      dispatch(updateClipboardData(courseSectionVerticalData.userClipboard));
       dispatch(fetchSequenceSuccess({ sequenceId }));
       return true;
     } catch (error) {
@@ -177,9 +178,6 @@ export function createNewCourseXBlock(body, callback, blockId) {
 export function fetchCourseVerticalChildrenData(itemId) {
   return async (dispatch) => {
     dispatch(updateCourseVerticalChildrenLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
-    getClipboard().then(clipboardData => {
-      dispatch(updateClipboardData(clipboardData));
-    });
 
     try {
       const courseVerticalChildrenData = await getCourseVerticalChildren(itemId);

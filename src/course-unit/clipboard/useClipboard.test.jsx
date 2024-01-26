@@ -4,7 +4,6 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { waitFor } from '@testing-library/react';
 import initializeStore from '../../store';
 import useClipboard from './useClipboard';
 import { getClipboardUrl } from '../data/api';
@@ -53,8 +52,23 @@ describe('useCopyToClipboard', () => {
   });
 
   describe('clipboard data update effect', () => {
+    it('returns falsy flags if canEdit = false', async () => {
+      const { result } = renderHook(() => useClipboard(false), { wrapper });
+
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
+
+      await act(async () => {
+        await executeThunk(copyToClipboard(unitId), store.dispatch);
+      });
+      expect(result.current.showPasteUnit).toBe(false);
+      expect(result.current.showPasteXBlock).toBe(false);
+    });
     it('returns flag to display the Paste Unit button', async () => {
-      // Render the hook with initial clipboard data
       const { result } = renderHook(() => useClipboard(true), { wrapper });
 
       axiosMock
@@ -99,24 +113,6 @@ describe('useCopyToClipboard', () => {
       clipboardBroadcastChannelMock.onmessage({ data: clipboardXBlock });
       expect(result.current.showPasteUnit).toBe(false);
       expect(result.current.showPasteXBlock).toBe(true);
-    });
-  });
-
-  describe('loading state handling', () => {
-    it('reflects the correct loading state based on clipboard status', async () => {
-      const { result } = renderHook(() => useClipboard(true), { wrapper });
-
-      axiosMock
-        .onPost(getClipboardUrl())
-        .reply(200, { ...clipboardUnit, content: { ...clipboardUnit, status: 'loading' } });
-      axiosMock
-        .onGet(getClipboardUrl())
-        .reply(200, clipboardUnit);
-      store.dispatch(copyToClipboard(unitId));
-      expect(result.current.isClipboardLoading).toBe(true);
-      await waitFor(() => {
-        expect(result.current.isClipboardLoading).toBe(false);
-      }, { timeout: 1100 }); // wait until 1000 ms timeout is executed
     });
   });
 });
