@@ -31,6 +31,7 @@
       .course-unit-sidebar-location-description {
         font-size: $font-size-xs;
         line-height: $line-height-base;
+        word-break: break-word;
       }
 
       .course-unit-sidebar-visibility-copy {
@@ -68,4 +69,8 @@
   &.is-stuff-only .course-unit-sidebar-date-and-with {
     text-decoration: line-through;
   }
+}
+
+.course-unit-sidebar-modal-notification .pgn__modal-title {
+  font-size: $h3-font-size;
 }
