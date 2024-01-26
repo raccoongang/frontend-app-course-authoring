@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Layout, Stack } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
+import { Warning as WarningIcon } from '@edx/paragon/icons';
 
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import SubHeader from '../generic/sub-header/SubHeader';
@@ -21,6 +22,7 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
+import AlertMessage from '../generic/alert-message';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -33,6 +35,7 @@ const CourseUnit = ({ courseId }) => {
     savingStatus,
     isEditTitleFormOpen,
     isErrorAlert,
+    isLastUnpublishedVersion,
     isInternetConnectionAlertFailed,
     handleTitleEditSubmit,
     headerNavigationsActions,
@@ -93,6 +96,14 @@ const CourseUnit = ({ courseId }) => {
             xl={[{ span: 9 }, { span: 3 }]}
           >
             <Layout.Element>
+              {isLastUnpublishedVersion && (
+                <AlertMessage
+                  className="course-unit-unpublished-alert"
+                  title={intl.formatMessage(messages.alertUnpublishedVersion)}
+                  variant="warning"
+                  icon={WarningIcon}
+                />
+              )}
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({ name, blockId: id }) => (
                   <CourseXBlock
