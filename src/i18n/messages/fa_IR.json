@@ -91,5 +91,6 @@
   "course-authoring.group-configurations.experimental-empty-placeholder.title": "You have not created any group configurations yet.",
   "course-authoring.group-configurations.empty-placeholder.button": "Add your first content group",
   "course-authoring.group-configurations.experimental-empty-placeholder.button": "Add your first group configuration",
-  "course-authoring.group-configurations.content-groups.add-new-group": "New content group"
+  "course-authoring.group-configurations.content-groups.add-new-group": "New content group",
+  "course-authoring.course-unit.general.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience."
 }

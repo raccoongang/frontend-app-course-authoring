@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Stack } from '@edx/paragon';
+import { Stack } from '@openedx/paragon';
 
 const ExperimentGroupStack = ({ itemList }) => (
   <Stack className="mb-3">

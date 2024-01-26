@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Button, Stack, Badge } from '@edx/paragon';
+import { Button, Stack, Badge } from '@openedx/paragon';
 import {
   ArrowDropDown as ArrowDownIcon,
   ArrowRight as ArrowRightIcon,
-} from '@edx/paragon/icons';
+} from '@openedx/paragon/icons';
 
 import { getCombinedBadgeList } from './utils';
 import messages from './messages';

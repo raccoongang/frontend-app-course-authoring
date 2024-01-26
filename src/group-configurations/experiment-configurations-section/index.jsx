@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { Button } from '@edx/paragon';
+import { Button } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Add as AddIcon } from '@edx/paragon/icons';
+import { Add as AddIcon } from '@openedx/paragon/icons';
 
 import GroupConfigurationContainer from '../group-configuration-container';
 import EmptyPlaceholder from '../empty-placeholder';

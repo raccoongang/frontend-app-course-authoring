@@ -8,11 +8,11 @@ import {
   Hyperlink,
   Icon,
   IconButtonWithTooltip,
-} from '@edx/paragon';
+} from '@openedx/paragon';
 import {
   DeleteOutline as DeleteOutlineIcon,
   EditOutline as EditOutlineIcon,
-} from '@edx/paragon/icons';
+} from '@openedx/paragon/icons';
 
 import ExperimentGroupStack from './ExperimentGroupStack';
 import TitleButton from './TitleButton';
