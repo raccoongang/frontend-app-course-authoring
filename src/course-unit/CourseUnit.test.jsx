@@ -30,13 +30,13 @@ import {
   courseVerticalChildrenMock,
 } from './__mocks__';
 import { executeThunk } from '../utils';
-import CourseUnit from './CourseUnit';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
 import courseSequenceMessages from './course-sequence/messages';
 import addComponentMessages from './add-component/messages';
 import sidebarMessages from './sidebar/messages';
 import { extractCourseUnitId } from './sidebar/utils';
+import CourseUnit from './CourseUnit';
 import messages from './messages';
 
 let axiosMock;

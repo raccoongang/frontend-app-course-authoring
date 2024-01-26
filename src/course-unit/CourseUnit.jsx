@@ -10,6 +10,7 @@ import { getProcessingNotification } from '../generic/processing-notification/da
 import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
+import AlertMessage from '../generic/alert-message';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import Loading from '../generic/Loading';
@@ -22,7 +23,6 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import AlertMessage from '../generic/alert-message';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -98,7 +98,6 @@ const CourseUnit = ({ courseId }) => {
             <Layout.Element>
               {isLastUnpublishedVersion && (
                 <AlertMessage
-                  className="course-unit-unpublished-alert"
                   title={intl.formatMessage(messages.alertUnpublishedVersion)}
                   variant="warning"
                   icon={WarningIcon}
