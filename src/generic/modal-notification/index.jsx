@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { ActionRow, AlertModal, Button } from '@edx/paragon';
 
 const ModalNotification = ({
-  isOpen, title, message, handleCancel, handleAction, cancelButtonText, actionButtonText, variant, icon, className,
+  isOpen, title, message, handleCancel, handleAction, cancelButtonText, actionButtonText, variant, icon,
 }) => (
   <AlertModal
-    className={className}
     title={title}
     isOpen={isOpen}
     variant={variant}
@@ -31,14 +30,12 @@ ModalNotification.propTypes = {
   cancelButtonText: PropTypes.string.isRequired,
   actionButtonText: PropTypes.string.isRequired,
   variant: PropTypes.string,
-  className: PropTypes.string,
   icon: PropTypes.elementType,
 };
 
 ModalNotification.defaultProps = {
   variant: 'default',
   icon: undefined,
-  className: undefined,
 };
 
 export default ModalNotification;

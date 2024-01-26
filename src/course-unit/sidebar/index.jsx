@@ -66,7 +66,6 @@ const Sidebar = ({ blockId, isDisplayUnitLocation }) => {
         visibleToStaffOnly={visibleToStaffOnly}
       />
       <ModalNotification
-        className="course-unit-sidebar-modal-notification"
         title={intl.formatMessage(messages.modalDiscardUnitChangesTitle)}
         isOpen={isOpenDiscardModal}
         actionButtonText={intl.formatMessage(messages.modalDiscardUnitChangesActionButtonText)}
@@ -77,7 +76,6 @@ const Sidebar = ({ blockId, isDisplayUnitLocation }) => {
         icon={InfoOutlineIcon}
       />
       <ModalNotification
-        className="course-unit-sidebar-modal-notification"
         title={intl.formatMessage(messages.modalMakeVisibilityTitle)}
         isOpen={isOpenVisibleModal}
         actionButtonText={intl.formatMessage(messages.modalMakeVisibilityActionButtonText)}
