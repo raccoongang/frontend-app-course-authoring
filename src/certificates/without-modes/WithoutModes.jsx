@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Card } from '@edx/paragon';
 
-import MainLayout from '../layout';
+import MainLayout from '../layout/MainLayout';
 import messages from '../messages';
 
 const WithoutModes = ({ courseId }) => {
