@@ -13,7 +13,7 @@ import { SidebarBody, SidebarFooter, SidebarHeader } from './components';
 import useCourseUnitData from './hooks';
 import messages from './messages';
 
-const Sidebar = ({ blockId, isDisplayUnitLocation }) => {
+const Sidebar = ({ blockId, isDisplayUnitLocation, ...props }) => {
   const {
     title,
     locationId,
@@ -42,10 +42,10 @@ const Sidebar = ({ blockId, isDisplayUnitLocation }) => {
 
   return (
     <Card
-      data-testid={isDisplayUnitLocation ? 'course-unit-location-sidebar' : 'course-unit-sidebar'}
       className={classNames('course-unit-sidebar', {
         'is-stuff-only': visibleToStaffOnly,
       })}
+      {...props}
     >
       <SidebarHeader
         title={title}

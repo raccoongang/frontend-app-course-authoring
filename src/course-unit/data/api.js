@@ -2,6 +2,7 @@
 import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
+import { PUBLISH_TYPES } from '../constants';
 import {
   normalizeLearningSequencesData,
   normalizeMetadata,
@@ -9,7 +10,6 @@ import {
   appendBrowserTimezoneToUrl,
   normalizeCourseSectionVerticalData,
 } from './utils';
-import { PUBLISH_TYPES } from '../constants';
 
 const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
 const getLmsBaseUrl = () => getConfig().LMS_BASE_URL;
@@ -152,7 +152,7 @@ export async function handleCourseUnitVisibilityAndData(unitId, type, isVisible)
   const { data } = await getAuthenticatedHttpClient()
     .post(getXBlockBaseApiUrl(unitId), body);
 
-  return data;
+  return camelCaseObject(data);
 }
 
 export async function getCourseVerticalChildren(itemId) {

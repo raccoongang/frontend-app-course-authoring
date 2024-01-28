@@ -35,7 +35,8 @@ import {
   updateLoadingCourseSectionVerticalDataStatus,
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
-  updateCourseVerticalChildrenLoadingStatus, updateQueryPendingStatus,
+  updateCourseVerticalChildrenLoadingStatus,
+  updateQueryPendingStatus,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
