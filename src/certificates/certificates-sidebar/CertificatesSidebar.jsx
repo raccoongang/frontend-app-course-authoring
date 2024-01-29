@@ -5,7 +5,7 @@ import { Button, Hyperlink } from '@openedx/paragon';
 import { HelpSidebar } from '../../generic/help-sidebar';
 import { useHelpUrls } from '../../help-urls/hooks';
 import { getSidebarData } from './utils';
-import SidebarBlock from './sidebar-block';
+import SidebarBlock from './sidebar-block/SidebarBlock';
 import messages from './messages';
 
 const CertificatesSidebar = ({ courseId }) => {
@@ -26,6 +26,7 @@ const CertificatesSidebar = ({ courseId }) => {
       ))}
       <Button
         as={Hyperlink}
+        target="_blank"
         size="sm"
         href={learnMoreCertificates}
         variant="outline-primary"
