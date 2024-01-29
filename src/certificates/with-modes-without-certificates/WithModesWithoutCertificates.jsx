@@ -3,7 +3,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, Stack, Card } from '@openedx/paragon';
 import { Add as AddIcon } from '@openedx/paragon/icons';
 
-import MainLayout from '../layout';
+import MainLayout from '../layout/MainLayout';
 import messages from '../messages';
 
 const WithModesWithoutCertificates = ({ courseId }) => {

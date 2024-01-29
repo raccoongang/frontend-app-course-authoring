@@ -4,7 +4,7 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
 
 import initializeStore from '../../store';
-import CertificatesSidebar from '.';
+import CertificatesSidebar from './CertificatesSidebar';
 import messages from './messages';
 
 const courseId = 'course-123';
