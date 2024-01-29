@@ -1068,5 +1068,13 @@
   "course-authoring.group-configurations.empty-placeholder.button": "Add your first content group",
   "course-authoring.group-configurations.experimental-empty-placeholder.button": "Add your first group configuration",
   "course-authoring.group-configurations.content-groups.add-new-group": "New content group",
-  "course-authoring.course-unit.general.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience."
+  "course-authoring.course-unit.general.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience.",
+  "course-authoring.course-unit.modal.discard-unit-changes.title": "Discard changes",
+  "course-authoring.course-unit.modal.discard-unit-changes.btn.action.text": "Discard changes",
+  "course-authoring.course-unit.modal.discard-unit-changes.btn.cancel.text": "Cancel",
+  "course-authoring.course-unit.modal.discard-unit-changes.description": "Are you sure you want to revert to the last published version of the unit? You cannot undo this action.",
+  "course-authoring.course-unit.modal.make-visibility.title": "Make visible to students",
+  "course-authoring.course-unit.modal.make-visibility.btn.action.text": "Make visible to students",
+  "course-authoring.course-unit.modal.make-visibility.btn.cancel.text": "Cancel",
+  "course-authoring.course-unit.modal.make-visibility.description": "If the unit was previously published and released to students, any changes you made to the unit when it was hidden will now be visible to students. Do you want to proceed?"
 }
