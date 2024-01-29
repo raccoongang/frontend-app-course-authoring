@@ -88,7 +88,8 @@ export async function createCourseXblock({
  * @returns {Promise<Object>} - A Promise that resolves clipboard data.
  */
 export async function getClipboard() {
-  const { data } = await getAuthenticatedHttpClient().get(getClipboardUrl());
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getClipboardUrl());
 
   return camelCaseObject(data);
 }
@@ -99,7 +100,8 @@ export async function getClipboard() {
  * @returns {Promise<Object>} - A Promise that resolves clipboard data.
  */
 export async function updateClipboard(usageKey) {
-  const { data } = await getAuthenticatedHttpClient().post(getClipboardUrl(), { usage_key: usageKey });
+  const { data } = await getAuthenticatedHttpClient()
+    .post(getClipboardUrl(), { usage_key: usageKey });
 
   return camelCaseObject(data);
 }

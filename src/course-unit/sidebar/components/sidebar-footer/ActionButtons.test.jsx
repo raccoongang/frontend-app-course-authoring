@@ -1,4 +1,4 @@
-import { render, act } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { initializeMockApp } from '@edx/frontend-platform';
@@ -7,11 +7,12 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import userEvent from '@testing-library/user-event';
 
 import initializeStore from '../../../../store';
-import ActionButtons from './ActionButtons';
-import { getClipboardUrl, getCourseUnitApiUrl } from '../../../data/api';
-import { clipboardUnit, courseUnitIndexMock } from '../../../__mocks__';
 import { executeThunk } from '../../../../utils';
+import { getClipboardUrl, getCourseUnitApiUrl } from '../../../data/api';
 import { copyToClipboard, fetchCourseUnitQuery } from '../../../data/thunk';
+import { clipboardUnit, courseUnitIndexMock } from '../../../__mocks__';
+import messages from '../../messages';
+import ActionButtons from './ActionButtons';
 
 jest.mock('../../../data/thunk', () => ({
   ...jest.requireActual('../../../data/thunk'),
@@ -52,21 +53,24 @@ describe('<ActionButtons />', () => {
     axiosMock
       .onGet(getClipboardUrl())
       .reply(200, clipboardUnit);
+
     await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
   });
 
   it('render ActionButtons component with Copy to clipboard', () => {
-    const { getByTestId } = renderComponent();
+    const { getByRole } = renderComponent();
 
-    expect(getByTestId('copy-xblock-to-clipboard')).toBeInTheDocument();
+    const copyXBlockBtn = getByRole('button', { name: messages.actionButtonCopyUnitTitle.defaultMessage });
+    expect(copyXBlockBtn).toBeInTheDocument();
   });
-  it('click on the Copy to clipboard button updates clipboardData', async () => {
-    const { getByTestId } = renderComponent();
 
-    const copyToClipboardButton = getByTestId('copy-xblock-to-clipboard');
-    await act(async () => {
-      userEvent.click(copyToClipboardButton);
-    });
+  it('click on the Copy to clipboard button updates clipboardData', async () => {
+    const { getByRole } = renderComponent();
+
+    const copyXBlockBtn = getByRole('button', { name: messages.actionButtonCopyUnitTitle.defaultMessage });
+
+    userEvent.click(copyXBlockBtn);
+
     expect(copyToClipboard).toHaveBeenCalledWith(courseUnitIndexMock.id);
     jest.resetAllMocks();
   });

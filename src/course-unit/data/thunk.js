@@ -232,7 +232,7 @@ export function copyToClipboard(usageKey) {
   return async (dispatch) => {
     dispatch(updateClipboardData(null));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.copying));
-    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(updateQueryPendingStatus(true));
 
     try {

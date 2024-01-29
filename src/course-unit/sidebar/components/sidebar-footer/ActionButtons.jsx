@@ -4,8 +4,8 @@ import { Button } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../../../data/selectors';
-import messages from '../../messages';
 import { copyToClipboard } from '../../../data/thunk';
+import messages from '../../messages';
 
 const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
   const dispatch = useDispatch();
@@ -35,7 +35,6 @@ const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
           className="mt-2"
           variant="outline-primary"
           size="sm"
-          data-testid="copy-xblock-to-clipboard"
         >
           {intl.formatMessage(messages.actionButtonCopyUnitTitle)}
         </Button>
