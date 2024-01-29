@@ -5,7 +5,7 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import SubHeader from '../../generic/sub-header/SubHeader';
-import CertificatesSidebar from '../certificates-sidebar';
+import CertificatesSidebar from '../certificates-sidebar/CertificatesSidebar';
 import messages from '../messages';
 
 const MainLayout = ({ courseId, showHeaderButtons, children }) => {
