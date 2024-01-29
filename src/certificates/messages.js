@@ -5,6 +5,10 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.heading.title',
     defaultMessage: 'Certificates',
   },
+  headingTitleTabText: {
+    id: 'course-authoring.certificates.heading.title.tab.text',
+    defaultMessage: 'Course certificates',
+  },
   headingSubtitle: {
     id: 'course-authoring.certificates.heading.subtitle',
     defaultMessage: 'Settings',

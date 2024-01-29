@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import SidebarBlock from '.';
+import SidebarBlock from './SidebarBlock';
 
 const testProps = {
   title: 'Test Title',
