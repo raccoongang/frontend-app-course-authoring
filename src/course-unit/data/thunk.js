@@ -18,7 +18,6 @@ import {
   deleteUnitItem,
   duplicateUnitItem,
 } from './api';
-import { ClipboardStatus } from '../constants';
 import {
   updateLoadingCourseUnitStatus,
   fetchCourseItemSuccess,

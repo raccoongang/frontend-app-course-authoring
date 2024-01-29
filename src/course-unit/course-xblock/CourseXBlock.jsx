@@ -57,9 +57,6 @@ const CourseXBlock = ({
                   iconAs={Icon}
                 />
                 <Dropdown.Menu>
-                  <Dropdown.Item>
-                    {intl.formatMessage(messages.blockLabelButtonCopy)}
-                  </Dropdown.Item>
                   <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
                     {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                   </Dropdown.Item>
@@ -67,14 +64,14 @@ const CourseXBlock = ({
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
                   {enableCopyPasteUnits && (
-                  <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                    {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                    </Dropdown.Item>
+                  )}
+                  <Dropdown.Item>
+                    {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                   </Dropdown.Item>
-                )}
-                <Dropdown.Item>
-                  {intl.formatMessage(messages.blockLabelButtonManageAccess)}
-                </Dropdown.Item>
-                <Dropdown.ItemonClick={openDeleteModal}>
+                  <Dropdown.Item onClick={openDeleteModal}>
                     {intl.formatMessage(messages.blockLabelButtonDelete)}
                   </Dropdown.Item>
                 </Dropdown.Menu>
