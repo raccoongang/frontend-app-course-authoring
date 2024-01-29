@@ -119,8 +119,8 @@ const CourseUnit = ({ courseId }) => {
             </Layout.Element>
             <Layout.Element>
               <Stack gap={3}>
-                <Sidebar />
-                <Sidebar isDisplayUnitLocation />
+                <Sidebar blockId={blockId} data-testid="course-unit-sidebar" />
+                <Sidebar isDisplayUnitLocation data-testid="course-unit-location-sidebar" />
               </Stack>
             </Layout.Element>
           </Layout>
