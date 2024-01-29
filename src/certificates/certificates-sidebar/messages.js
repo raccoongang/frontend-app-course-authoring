@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   about: {
     id: 'course-authoring.certificates.sidebar.about.title',
-    defaultMessage: 'Working with Certificates',
+    defaultMessage: 'Working with certificates',
   },
   aboutDescription_1: {
     id: 'course-authoring.certificates.sidebar.about.description-1',
@@ -23,11 +23,11 @@ const messages = defineMessages({
   },
   aboutDescription_3_strong: {
     id: 'course-authoring.certificates.sidebar.about.description-3.strong',
-    defaultMessage: 'Preview Certificate',
+    defaultMessage: 'Preview certificate',
   },
   about_2: {
     id: 'course-authoring.certificates.sidebar.about2.title',
-    defaultMessage: 'Issuing Certificates to Learners',
+    defaultMessage: 'Issuing certificates to learners',
   },
   about_2_Description_1: {
     id: 'course-authoring.certificates.sidebar.about2.description-1',

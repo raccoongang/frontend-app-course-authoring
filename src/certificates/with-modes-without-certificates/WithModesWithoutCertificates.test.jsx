@@ -5,7 +5,7 @@ import { AppProvider } from '@edx/frontend-platform/react';
 
 import initializeStore from '../../store';
 import messages from '../messages';
-import WithModesWithoutCertificates from '.';
+import WithModesWithoutCertificates from './WithModesWithoutCertificates';
 
 const courseId = 'course-123';
 let store;
