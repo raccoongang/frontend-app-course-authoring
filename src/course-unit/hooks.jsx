@@ -9,6 +9,8 @@ import {
   editCourseItemQuery,
   fetchCourseSectionVerticalData,
   fetchCourseVerticalChildrenData,
+  deleteUnitItemQuery,
+  duplicateUnitItemQuery,
 } from './data/thunk';
 import {
   getCourseSectionVertical,
@@ -74,6 +76,15 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(createNewCourseXBlock(body, callback, blockId))
   );
 
+  const unitXBlockActions = {
+    handleDelete: (XBlockId) => {
+      dispatch(deleteUnitItemQuery(blockId, XBlockId));
+    },
+    handleDuplicate: (XBlockId) => {
+      dispatch(duplicateUnitItemQuery(blockId, XBlockId));
+    },
+  };
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       dispatch(updateQueryPendingStatus(false));
@@ -103,6 +114,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     isTitleEditFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     handleInternetConnectionFailed,
+    unitXBlockActions,
     headerNavigationsActions,
     handleTitleEdit,
     handleTitleEditSubmit,
