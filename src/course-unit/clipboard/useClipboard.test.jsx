@@ -4,12 +4,13 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
+
 import initializeStore from '../../store';
-import useClipboard from './useClipboard';
+import { executeThunk } from '../../utils';
+import { copyToClipboard } from '../data/thunk';
 import { getClipboardUrl } from '../data/api';
 import { clipboardUnit, clipboardXBlock } from '../__mocks__';
-import { copyToClipboard } from '../data/thunk';
-import { executeThunk } from '../../utils';
+import useClipboard from './useClipboard';
 
 let axiosMock;
 let store;
@@ -68,6 +69,7 @@ describe('useCopyToClipboard', () => {
       expect(result.current.showPasteUnit).toBe(false);
       expect(result.current.showPasteXBlock).toBe(false);
     });
+
     it('returns flag to display the Paste Unit button', async () => {
       const { result } = renderHook(() => useClipboard(true), { wrapper });
 
@@ -84,6 +86,7 @@ describe('useCopyToClipboard', () => {
       expect(result.current.showPasteUnit).toBe(true);
       expect(result.current.showPasteXBlock).toBe(false);
     });
+
     it('returns flag to display the Paste XBlock button', async () => {
       const { result } = renderHook(() => useClipboard(true), { wrapper });
 

@@ -31,7 +31,6 @@ import {
   updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
-  updateClipboardStatus,
   updateClipboardData,
   updateQueryPendingStatus,
   deleteXBlock,
@@ -252,7 +251,6 @@ export function copyToClipboard(usageKey) {
         throw new Error(`Unexpected clipboard status "${clipboardData.content?.status}" in successful API response.`);
       }
     } catch (error) {
-      dispatch(updateClipboardStatus({ status: CLIPBOARD_STATUS.error }));
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       logError('Error copying to clipboard:', error);
     } finally {

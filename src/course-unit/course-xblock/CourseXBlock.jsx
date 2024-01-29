@@ -9,9 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import { scrollToElement } from '../../course-outline/utils';
-import messages from './messages';
 import { copyToClipboard } from '../data/thunk';
 import { getCourseUnitEnableCopyPaste } from '../data/selectors';
+import messages from './messages';
 
 const CourseXBlock = ({
   id, title, unitXBlockActions, shouldScroll, ...props

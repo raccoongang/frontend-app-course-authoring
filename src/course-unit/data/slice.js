@@ -99,9 +99,6 @@ const slice = createSlice({
     updateClipboardData: (state, { payload }) => {
       state.clipboardData = payload;
     },
-    updateClipboardStatus: (state, { payload }) => {
-      state.clipboardStatus = payload.status;
-    },
   },
 });
 
@@ -123,7 +120,6 @@ export const {
   deleteXBlock,
   duplicateXBlock,
   updateClipboardData,
-  updateClipboardStatus,
 } = slice.actions;
 
 export const {
