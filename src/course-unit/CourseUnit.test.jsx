@@ -38,10 +38,11 @@ import addComponentMessages from './add-component/messages';
 import sidebarMessages from './sidebar/messages';
 import { extractCourseUnitId } from './sidebar/utils';
 import CourseUnit from './CourseUnit';
-import messages from './messages';
-import courseXBlockmessages from './course-xblock/messages';
-import deleteModalMessages from '../generic/delete-modal/messages';
 import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
+
+import deleteModalMessages from '../generic/delete-modal/messages';
+import courseXBlockMessages from './course-xblock/messages';
+import messages from './messages';
 
 let axiosMock;
 let store;
@@ -546,10 +547,10 @@ describe('<CourseUnit />', () => {
 
     await waitFor(() => {
       expect(getByText(unitDisplayName)).toBeInTheDocument();
-      const [xblockActionBtn] = getAllByLabelText(courseXBlockmessages.blockActionsDropdownAlt.defaultMessage);
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
       userEvent.click(xblockActionBtn);
 
-      const deleteBtn = getByRole('button', { name: courseXBlockmessages.blockLabelButtonDelete.defaultMessage });
+      const deleteBtn = getByRole('button', { name: courseXBlockMessages.blockLabelButtonDelete.defaultMessage });
       userEvent.click(deleteBtn);
       expect(getByText(/Delete this component?/)).toBeInTheDocument();
 
@@ -590,10 +591,10 @@ describe('<CourseUnit />', () => {
 
     await waitFor(() => {
       expect(getByText(unitDisplayName)).toBeInTheDocument();
-      const [xblockActionBtn] = getAllByLabelText(courseXBlockmessages.blockActionsDropdownAlt.defaultMessage);
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
       userEvent.click(xblockActionBtn);
 
-      const duplicateBtn = getByText(courseXBlockmessages.blockLabelButtonDuplicate.defaultMessage);
+      const duplicateBtn = getByText(courseXBlockMessages.blockLabelButtonDuplicate.defaultMessage);
       userEvent.click(duplicateBtn);
 
       expect(getAllByTestId('course-xblock')).toHaveLength(3);
