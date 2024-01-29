@@ -87,7 +87,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
-      dispatch(updateQueryPendingStatus(false));
+      dispatch(updateQueryPendingStatus(true));
     } else if (savingStatus === RequestStatus.FAILED && !hasInternetConnectionError) {
       toggleErrorAlert(true);
     }
