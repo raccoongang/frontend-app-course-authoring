@@ -112,6 +112,7 @@ const CourseUnit = ({ courseId }) => {
                     title={name}
                     shouldScroll={shouldScroll}
                     unitXBlockActions={unitXBlockActions}
+                    data-testid="course-xblock"
                   />
                 ))}
               </Stack>

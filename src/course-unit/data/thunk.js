@@ -274,14 +274,14 @@ export function fetchCourseVerticalChildrenData(itemId) {
   };
 }
 
-export function deleteUnitItemQuery(itemId, XBlockId) {
+export function deleteUnitItemQuery(itemId, xblockId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.deleting));
 
     try {
-      await deleteUnitItem(XBlockId);
-      dispatch(deleteXBlock(XBlockId));
+      await deleteUnitItem(xblockId);
+      dispatch(deleteXBlock(xblockId));
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
@@ -291,13 +291,13 @@ export function deleteUnitItemQuery(itemId, XBlockId) {
   };
 }
 
-export function duplicateUnitItemQuery(itemId, XBlockId) {
+export function duplicateUnitItemQuery(itemId, xblockId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.duplicating));
 
     try {
-      const { locator } = await duplicateUnitItem(itemId, XBlockId);
+      const { locator } = await duplicateUnitItem(itemId, xblockId);
       const newCourseVerticalChildren = await getCourseVerticalChildren(itemId);
       dispatch(duplicateXBlock({
         newId: locator,

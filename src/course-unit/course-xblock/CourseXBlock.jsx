@@ -11,9 +11,9 @@ import { scrollToElement } from '../../course-outline/utils';
 import messages from './messages';
 
 const CourseXBlock = ({
-  id, title, unitXBlockActions, shouldScroll,
+  id, title, unitXBlockActions, shouldScroll, ...props
 }) => {
-  const currentRef = useRef(null);
+  const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const intl = useIntl();
 
@@ -24,13 +24,13 @@ const CourseXBlock = ({
 
   useEffect(() => {
     // if this item has been newly added, scroll to it.
-    if (currentRef.current && shouldScroll) {
-      scrollToElement(currentRef.current);
+    if (courseXBlockElementRef.current && shouldScroll) {
+      scrollToElement(courseXBlockElementRef.current);
     }
   }, []);
 
   return (
-    <div ref={currentRef} data-testid="course-xblock">
+    <div ref={courseXBlockElementRef} {...props}>
       <Card className="mb-1">
         <Card.Header
           title={title}

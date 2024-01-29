@@ -7,13 +7,13 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { courseVerticalChildrenMock } from '../__mocks__';
 import CourseXBlock from './CourseXBlock';
 
-import messages from './messages';
 import deleteModalMessages from '../../generic/delete-modal/messages';
+import messages from './messages';
 
 let store;
 const handleDeleteMock = jest.fn();
 const handleDuplicateMock = jest.fn();
-const XblockData = courseVerticalChildrenMock.children[0];
+const xblockData = courseVerticalChildrenMock.children[0];
 const unitXBlockActionsMock = {
   handleDelete: handleDeleteMock,
   handleDuplicate: handleDuplicateMock,
@@ -23,8 +23,8 @@ const renderComponent = () => render(
   <AppProvider store={store}>
     <IntlProvider locale="en">
       <CourseXBlock
-        id={XblockData.block_id}
-        title={XblockData.block_id}
+        id={xblockData.block_id}
+        title={xblockData.block_id}
         unitXBlockActions={unitXBlockActionsMock}
         shouldScroll={false}
       />
@@ -48,22 +48,22 @@ describe('<CourseXBlock />', () => {
     const { getByText, getByLabelText } = renderComponent();
 
     await waitFor(() => {
-      expect(getByText(XblockData.block_id)).toBeInTheDocument();
+      expect(getByText(xblockData.block_id)).toBeInTheDocument();
       expect(getByLabelText(messages.blockAltButtonEdit.defaultMessage)).toBeInTheDocument();
       expect(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage)).toBeInTheDocument();
     });
   });
 
   it('render CourseXBlock component action dropdown correctly', async () => {
-    const { getByText, getByLabelText } = renderComponent();
+    const { getByRole, getByLabelText } = renderComponent();
 
     await waitFor(() => {
       userEvent.click(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage));
-      expect(getByText(messages.blockLabelButtonCopy.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.blockLabelButtonDuplicate.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.blockLabelButtonMove.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.blockLabelButtonManageAccess.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.blockLabelButtonDelete.defaultMessage)).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.blockLabelButtonCopy.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.blockLabelButtonDuplicate.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.blockLabelButtonMove.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.blockLabelButtonManageAccess.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.blockLabelButtonDelete.defaultMessage })).toBeInTheDocument();
     });
   });
 
@@ -76,7 +76,7 @@ describe('<CourseXBlock />', () => {
 
       userEvent.click(duplicateBtn);
       expect(handleDuplicateMock).toHaveBeenCalledTimes(1);
-      expect(handleDuplicateMock).toHaveBeenCalledWith(XblockData.block_id);
+      expect(handleDuplicateMock).toHaveBeenCalledWith(xblockData.block_id);
     });
   });
 
@@ -102,7 +102,7 @@ describe('<CourseXBlock />', () => {
       userEvent.click(deleteBtn);
       userEvent.click(getByRole('button', { name: deleteModalMessages.deleteButton.defaultMessage }));
       expect(handleDeleteMock).toHaveBeenCalled();
-      expect(handleDeleteMock).toHaveBeenCalledWith(XblockData.block_id);
+      expect(handleDeleteMock).toHaveBeenCalledWith(xblockData.block_id);
     });
   });
 });

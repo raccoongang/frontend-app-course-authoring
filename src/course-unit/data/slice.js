@@ -96,10 +96,9 @@ const slice = createSlice({
       state.loadingStatus.courseVerticalChildrenLoadingStatus = payload.status;
     },
     deleteXBlock: (state, { payload }) => {
-      state.courseVerticalChildren = {
-        ...state.courseVerticalChildren,
-        children: state.courseVerticalChildren.children.filter((component) => component.blockId !== payload),
-      };
+      state.courseVerticalChildren.children = state.courseVerticalChildren.children.filter(
+        (component) => component.blockId !== payload,
+      );
     },
     duplicateXBlock: (state, { payload }) => {
       state.courseVerticalChildren = {

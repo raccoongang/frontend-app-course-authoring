@@ -549,7 +549,7 @@ describe('<CourseUnit />', () => {
       const [xblockActionBtn] = getAllByLabelText(courseXBlockmessages.blockActionsDropdownAlt.defaultMessage);
       userEvent.click(xblockActionBtn);
 
-      const deleteBtn = getByText(courseXBlockmessages.blockLabelButtonDelete.defaultMessage);
+      const deleteBtn = getByRole('button', { name: courseXBlockmessages.blockLabelButtonDelete.defaultMessage });
       userEvent.click(deleteBtn);
       expect(getByText(/Delete this component?/)).toBeInTheDocument();
 
