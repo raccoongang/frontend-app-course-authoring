@@ -38,8 +38,11 @@ import addComponentMessages from './add-component/messages';
 import sidebarMessages from './sidebar/messages';
 import { extractCourseUnitId } from './sidebar/utils';
 import CourseUnit from './CourseUnit';
-import messages from './messages';
 import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
+
+import deleteModalMessages from '../generic/delete-modal/messages';
+import courseXBlockMessages from './course-xblock/messages';
+import messages from './messages';
 
 let axiosMock;
 let store;
@@ -528,5 +531,74 @@ describe('<CourseUnit />', () => {
     expect(within(courseUnitSidebar)
       .getByText(sidebarMessages.sidebarTitlePublishedNotYetReleased.defaultMessage)).toBeInTheDocument();
     expect(discardChangesBtn).not.toBeInTheDocument();
+  });
+
+  it('checks whether xblock is deleted when corresponding delete button is clicked', async () => {
+    axiosMock
+      .onDelete(getXBlockBaseApiUrl(courseVerticalChildrenMock.children[0].block_id))
+      .replyOnce(200, { dummy: 'value' });
+
+    const {
+      getByText,
+      getAllByLabelText,
+      getByRole,
+      getAllByTestId,
+    } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(getByText(unitDisplayName)).toBeInTheDocument();
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
+      userEvent.click(xblockActionBtn);
+
+      const deleteBtn = getByRole('button', { name: courseXBlockMessages.blockLabelButtonDelete.defaultMessage });
+      userEvent.click(deleteBtn);
+      expect(getByText(/Delete this component?/)).toBeInTheDocument();
+
+      const deleteConfirmBtn = getByRole('button', { name: deleteModalMessages.deleteButton.defaultMessage });
+      userEvent.click(deleteConfirmBtn);
+
+      expect(getAllByTestId('course-xblock')).toHaveLength(1);
+    });
+  });
+
+  it('checks whether xblock is duplicate when corresponding delete button is clicked', async () => {
+    axiosMock
+      .onPost(postXBlockBaseApiUrl({
+        parent_locator: blockId,
+        duplicate_source_locator: courseVerticalChildrenMock.children[0].block_id,
+      }))
+      .replyOnce(200, { locator: '1234567890' });
+
+    axiosMock
+      .onGet(getCourseVerticalChildrenApiUrl(blockId))
+      .reply(200, {
+        ...courseVerticalChildrenMock,
+        children: [
+          ...courseVerticalChildrenMock.children,
+          {
+            name: 'New Cloned XBlock',
+            block_id: '1234567890',
+            block_type: 'drag-and-drop-v2',
+          },
+        ],
+      });
+
+    const {
+      getByText,
+      getAllByLabelText,
+      getAllByTestId,
+    } = render(<RootWrapper />);
+
+    await waitFor(() => {
+      expect(getByText(unitDisplayName)).toBeInTheDocument();
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
+      userEvent.click(xblockActionBtn);
+
+      const duplicateBtn = getByText(courseXBlockMessages.blockLabelButtonDuplicate.defaultMessage);
+      userEvent.click(duplicateBtn);
+
+      expect(getAllByTestId('course-xblock')).toHaveLength(3);
+      expect(getByText('New Cloned XBlock')).toBeInTheDocument();
+    });
   });
 });
