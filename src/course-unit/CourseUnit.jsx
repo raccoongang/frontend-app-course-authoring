@@ -13,6 +13,7 @@ import getPageHeadTitle from '../generic/utils';
 import AlertMessage from '../generic/alert-message';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
+import ConnectionErrorAlert from '../generic/ConnectionErrorAlert';
 import Loading from '../generic/Loading';
 import AddComponent from './add-component/AddComponent';
 import CourseXBlock from './course-xblock/CourseXBlock';
@@ -31,6 +32,7 @@ const CourseUnit = ({ courseId }) => {
     isLoading,
     sequenceId,
     unitTitle,
+    courseStatus,
     isQueryPending,
     savingStatus,
     isEditTitleFormOpen,
@@ -55,6 +57,14 @@ const CourseUnit = ({ courseId }) => {
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (courseStatus === RequestStatus.FAILED) {
+    return (
+      <Container size="xl" className="course-unit px-4 mt-4">
+        <ConnectionErrorAlert />
+      </Container>
+    );
   }
 
   return (

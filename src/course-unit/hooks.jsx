@@ -18,6 +18,7 @@ import {
   getCourseUnitData,
   getLoadingStatus,
   getSavingStatus,
+  getCourseStatus,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
@@ -28,6 +29,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const [isErrorAlert, toggleErrorAlert] = useState(false);
   const [hasInternetConnectionError, setInternetConnectionError] = useState(false);
   const courseUnit = useSelector(getCourseUnitData);
+  const courseStatus = useSelector(getCourseStatus);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
@@ -106,6 +108,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     courseUnit,
     unitTitle,
     savingStatus,
+    courseStatus,
     isQueryPending,
     isErrorAlert,
     isLastUnpublishedVersion,
