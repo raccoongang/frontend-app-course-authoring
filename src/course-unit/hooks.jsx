@@ -7,7 +7,6 @@ import {
   createNewCourseXBlock,
   fetchCourseUnitQuery,
   editCourseItemQuery,
-  fetchCourse,
   fetchCourseSectionVerticalData,
   fetchCourseVerticalChildrenData,
 } from './data/thunk';
@@ -87,7 +86,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(fetchCourseUnitQuery(blockId));
     dispatch(fetchCourseSectionVerticalData(blockId, sequenceId));
     dispatch(fetchCourseVerticalChildrenData(blockId));
-    dispatch(fetchCourse(courseId));
 
     handleNavigate(sequenceId);
   }, [courseId, blockId, sequenceId]);
