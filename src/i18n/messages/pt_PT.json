@@ -993,7 +993,7 @@
   "course-authoring.course-unit.add.component.title": "Add a new component",
   "course-authoring.course-unit.add.component.button.text": "Add Component:",
   "course-authoring.certificates.heading.title": "Certificates",
-  "course-authoring.certificates.heading.title.tab.text": "Course Certificates",
+  "course-authoring.certificates.heading.title.tab.text": "Course certificates",
   "course-authoring.certificates.heading.subtitle": "Settings",
   "course-authoring.certificates.heading.action.button.preview": "Preview certificate",
   "course-authoring.certificates.heading.action.button.deactivate": "Deactivate",
