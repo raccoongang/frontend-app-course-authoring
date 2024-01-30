@@ -33,10 +33,11 @@ import {
   updateClipboardData,
   updateQueryPendingStatus,
   deleteXBlock,
-  duplicateXBlock,
+  duplicateXBlock, fetchStaticFileNoticesSuccess,
 } from './slice';
 import { CLIPBOARD_STATUS } from '../constants';
 import { getNotificationMessage } from './utils';
+import { camelCaseObject } from '@edx/frontend-platform';
 
 export function fetchCourseUnitQuery(courseId) {
   return async (dispatch) => {
@@ -154,12 +155,15 @@ export function createNewCourseXBlock(body, callback, blockId) {
     try {
       await createCourseXblock(body).then(async (result) => {
         if (result) {
+          // console.log('RESULT', camelCaseObject(result));
+          const formattedResult = camelCaseObject(result);
           if (body.category === 'vertical') {
-            const courseSectionVerticalData = await getCourseSectionVerticalData(result.locator);
+            const courseSectionVerticalData = await getCourseSectionVerticalData(formattedResult.locator);
             dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
           }
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
+          dispatch(fetchStaticFileNoticesSuccess(formattedResult.staticFileNotices));
           dispatch(hideProcessingNotification());
           dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));

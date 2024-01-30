@@ -24,8 +24,9 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import { getCourseUnit } from './data/selectors';
+import { getStaticFileNotices } from './data/selectors';
 import PasteComponent from './paste-component';
+import usePastNotificationAlerts from './paste-notifications/usePasteNotificationAlert';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -51,10 +52,10 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-  const STORE = useSelector(getCourseUnit);
-  console.log('clipboardData ===>', STORE.clipboardData);
-  document.title = getPageHeadTitle('', unitTitle);
+  const staticFileNotices = useSelector(getStaticFileNotices);
 
+  document.title = getPageHeadTitle('', unitTitle);
+  const alerts = usePastNotificationAlerts(staticFileNotices, courseId);
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
@@ -119,6 +120,7 @@ const CourseUnit = ({ courseId }) => {
                   icon={WarningIcon}
                 />
               )}
+              {alerts}
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({ name, blockId: id, shouldScroll }) => (
                   <CourseXBlock
