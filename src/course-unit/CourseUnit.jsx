@@ -37,6 +37,7 @@ const CourseUnit = ({ courseId }) => {
     isQueryPending,
     savingStatus,
     isEditTitleFormOpen,
+    renderPasteComponentAlerts,
     isErrorAlert,
     isLastUnpublishedVersion,
     isInternetConnectionAlertFailed,
@@ -50,10 +51,9 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-  const staticFileNotices = useSelector(getStaticFileNotices);
 
   document.title = getPageHeadTitle('', unitTitle);
-  const alerts = usePastNotificationAlerts(staticFileNotices, courseId);
+
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
@@ -110,7 +110,7 @@ const CourseUnit = ({ courseId }) => {
                   icon={WarningIcon}
                 />
               )}
-              {alerts}
+              {renderPasteComponentAlerts}
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({ name, blockId: id, shouldScroll }) => (
                   <CourseXBlock

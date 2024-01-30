@@ -17,9 +17,10 @@ import {
   getCourseVerticalChildren,
   getCourseUnitData,
   getLoadingStatus,
-  getSavingStatus, getClipboardData, getCourseUnitEnableCopyPaste,
+  getSavingStatus, getClipboardData, getCourseUnitEnableCopyPaste, getStaticFileNotices,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
+import usePastNotificationAlerts from './paste-notifications/usePasteNotificationAlert';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -34,11 +35,13 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const courseVerticalChildren = useSelector(getCourseVerticalChildren);
   const clipboardData = useSelector(getClipboardData);
   const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
+  const staticFileNotices = useSelector(getStaticFileNotices);
   const navigate = useNavigate();
   const isEditTitleFormOpen = useSelector(state => state.courseUnit.isEditTitleFormOpen);
   const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
   const { hasExplicitStaffLock, published, releaseDate } = courseUnit;
   const isLastUnpublishedVersion = !hasExplicitStaffLock && published && releaseDate;
+  const renderPasteComponentAlerts = usePastNotificationAlerts(staticFileNotices, courseId);
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
@@ -110,6 +113,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     savingStatus,
     isQueryPending,
     isErrorAlert,
+    renderPasteComponentAlerts,
     isLastUnpublishedVersion,
     isLoading: loadingStatus.fetchUnitLoadingStatus === RequestStatus.IN_PROGRESS
       || loadingStatus.courseSectionVerticalLoadingStatus === RequestStatus.IN_PROGRESS,
