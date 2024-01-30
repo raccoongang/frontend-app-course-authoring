@@ -9,12 +9,12 @@ import messages from '../messages';
 const PopoverContent = ({ clipboardData }) => {
   const intl = useIntl();
   const { sourceEditUrl, content, sourceContextTitle } = clipboardData;
-
+  console.log('sourceEditUrl', sourceEditUrl);
   return (
     <Popover.Title
       className="clipboard-popover-title"
       as={sourceEditUrl ? Link : 'div'}
-      to={sourceEditUrl ? Link : null}
+      to={sourceEditUrl || null}
       target="_blank"
     >
       <Stack>

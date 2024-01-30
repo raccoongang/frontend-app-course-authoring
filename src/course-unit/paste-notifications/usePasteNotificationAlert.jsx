@@ -1,20 +1,38 @@
-import { Error as ErrorIcon, Info as InfoIcon, Warning as WarningIcon } from '@edx/paragon/icons/es5';
 import { useState } from 'react';
+import {
+  Error as ErrorIcon,
+  Info as InfoIcon,
+  Warning as WarningIcon,
+} from '@edx/paragon/icons';
+import { useIntl } from '@edx/frontend-platform/i18n';
+
 import AlertMessage from '../../generic/alert-message';
 import ActionButton from './ActionButton';
 import AlertContent from './AlertContent';
+import messages from './messages';
 
-const usePastNotificationAlerts = (staticFileNotices, courseId) => {
-  const [alerts, setAlerts] = useState({
-    conflictingFilesAlert: true,
-    errorFilesAlert: true,
-    newFilesAlert: true,
-  });
+const initialState = {
+  conflictingFilesAlert: true,
+  errorFilesAlert: true,
+  newFilesAlert: true,
+};
 
+const usePastNotificationAlerts = (staticFileNotices2, courseId) => {
+  const intl = useIntl();
+  const [notificationAlerts, toggleNotificationAlerts] = useState(initialState);
+  const staticFileNotices = {
+    newFiles: ['item 1'],
+    conflictingFiles: ['item 1'],
+    errorFiles: ['item 1'],
+  };
   const { conflictingFiles, errorFiles, newFiles } = staticFileNotices;
-  console.log({ staticFileNotices });
-  const handleClose = (alertKey) => {
-    setAlerts((prevAlerts) => ({
+  console.log('staticFileNotices', staticFileNotices);
+  const hasConflictingErrors = conflictingFiles.length
+    ? conflictingFiles && notificationAlerts.conflictingFilesAlert : null;
+  const hasErrorFiles = errorFiles.length ? errorFiles && notificationAlerts.errorFilesAlert : null;
+  const hasNewFiles = newFiles.length ? newFiles && notificationAlerts.newFilesAlert : null;
+  const handleCloseNotificationAlert = (alertKey) => {
+    toggleNotificationAlerts((prevAlerts) => ({
       ...prevAlerts,
       [alertKey]: false,
     }));
@@ -22,30 +40,35 @@ const usePastNotificationAlerts = (staticFileNotices, courseId) => {
 
   return (
     <>
-      {conflictingFiles && alerts.conflictingFilesAlert && (
+      {hasConflictingErrors && (
         <AlertMessage
-          title="Files need to be updated manually."
-          onClose={() => handleClose('conflictingFilesAlert')}
+          title={intl.formatMessage(messages.hasConflictingErrorsTitle)}
+          onClose={() => handleCloseNotificationAlert('conflictingFilesAlert')}
           description={(
             <AlertContent
-              files={conflictingFiles}
-              text="The following files must be updated manually for components to work as intended:"
+              fileList={conflictingFiles}
+              text={intl.formatMessage(messages.hasConflictingErrorsDescription)}
             />
           )}
           variant="warning"
           icon={WarningIcon}
           dismissible
-          actions={[<ActionButton courseId={courseId} title="Upload files" />]}
+          actions={[
+            <ActionButton
+              courseId={courseId}
+              title={intl.formatMessage(messages.hasConflictingErrorsButtonText)}
+            />,
+          ]}
         />
       )}
-      {errorFiles && alerts.errorFilesAlert && (
+      {hasErrorFiles && (
         <AlertMessage
-          title="Some errors occurred"
-          onClose={() => handleClose('errorFilesAlert')}
+          title={intl.formatMessage(messages.hasErrorsTitle)}
+          onClose={() => handleCloseNotificationAlert('errorFilesAlert')}
           description={(
             <AlertContent
-              files={errorFiles}
-              text="The following required files could not be added to the course:"
+              fileList={errorFiles}
+              text={intl.formatMessage(messages.hasErrorsDescription)}
             />
           )}
           variant="danger"
@@ -53,14 +76,14 @@ const usePastNotificationAlerts = (staticFileNotices, courseId) => {
           dismissible
         />
       )}
-      {newFiles && alerts.newFilesAlert && (
+      {hasNewFiles && (
         <AlertMessage
-          title="New file(s) added to Files & Uploads."
-          onClose={() => handleClose('newFilesAlert')}
+          title={intl.formatMessage(messages.hasNewFilesTitle)}
+          onClose={() => handleCloseNotificationAlert('newFilesAlert')}
           description={(
             <AlertContent
-              files={newFiles}
-              text="The following required files were imported to this course:"
+              fileList={newFiles}
+              text={intl.formatMessage(messages.hasNewFilesDescription)}
             />
           )}
           variant="info"
