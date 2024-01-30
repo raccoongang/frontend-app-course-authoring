@@ -17,6 +17,7 @@ const slice = createSlice({
     unit: {},
     courseSectionVertical: {},
     courseVerticalChildren: [],
+    clipboardData: null,
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -95,6 +96,9 @@ const slice = createSlice({
         }),
       };
     },
+    updateClipboardData: (state, { payload }) => {
+      state.clipboardData = payload;
+    },
   },
 });
 
@@ -115,6 +119,7 @@ export const {
   updateCourseVerticalChildrenLoadingStatus,
   deleteXBlock,
   duplicateXBlock,
+  updateClipboardData,
 } = slice.actions;
 
 export const {
