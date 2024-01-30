@@ -23,6 +23,8 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
+import { getCourseUnit } from './data/selectors';
+import PasteComponent from './paste-component';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -37,15 +39,18 @@ const CourseUnit = ({ courseId }) => {
     isErrorAlert,
     isLastUnpublishedVersion,
     isInternetConnectionAlertFailed,
+    enableCopyPasteUnits,
     unitXBlockActions,
     handleTitleEditSubmit,
     headerNavigationsActions,
     handleTitleEdit,
+    clipboardData,
     handleInternetConnectionFailed,
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-
+  const STORE = useSelector(getCourseUnit);
+  console.log('clipboardData ===>', STORE.clipboardData);
   document.title = getPageHeadTitle('', unitTitle);
 
   const {
@@ -120,6 +125,12 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
+              {enableCopyPasteUnits && (
+                <PasteComponent
+                  clipboardData={clipboardData}
+                  handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+                />
+              )}
             </Layout.Element>
             <Layout.Element>
               <Stack gap={3}>

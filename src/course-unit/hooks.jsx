@@ -17,7 +17,7 @@ import {
   getCourseVerticalChildren,
   getCourseUnitData,
   getLoadingStatus,
-  getSavingStatus,
+  getSavingStatus, getClipboardData, getCourseUnitEnableCopyPaste,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
@@ -32,6 +32,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const loadingStatus = useSelector(getLoadingStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const courseVerticalChildren = useSelector(getCourseVerticalChildren);
+  const clipboardData = useSelector(getClipboardData);
+  const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const navigate = useNavigate();
   const isEditTitleFormOpen = useSelector(state => state.courseUnit.isEditTitleFormOpen);
   const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
@@ -113,10 +115,12 @@ export const useCourseUnit = ({ courseId, blockId }) => {
       || loadingStatus.courseSectionVerticalLoadingStatus === RequestStatus.IN_PROGRESS,
     isEditTitleFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
+    enableCopyPasteUnits,
     handleInternetConnectionFailed,
     unitXBlockActions,
     headerNavigationsActions,
     handleTitleEdit,
+    clipboardData,
     handleTitleEditSubmit,
     handleCreateNewCourseXBlock,
     courseVerticalChildren,

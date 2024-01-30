@@ -143,8 +143,13 @@ export function editCourseUnitVisibilityAndData(itemId, type, isVisible) {
 export function createNewCourseXBlock(body, callback, blockId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.IN_PROGRESS }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    if (body.stagedContent) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.pasting));
+    } else {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
+    }
 
     try {
       await createCourseXblock(body).then(async (result) => {
@@ -195,6 +200,8 @@ export function deleteUnitItemQuery(itemId, xblockId) {
     try {
       await deleteUnitItem(xblockId);
       dispatch(deleteXBlock(xblockId));
+      const { userClipboard } = await getCourseSectionVerticalData(itemId);
+      dispatch(updateClipboardData(userClipboard));
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
