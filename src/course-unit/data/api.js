@@ -64,10 +64,11 @@ export async function getCourseSectionVerticalData(unitId) {
  * @param {string} options.parentLocator - The parent locator of the XBlock.
  * @param {string} [options.displayName] - The display name for the XBlock.
  * @param {string} [options.boilerplate] - The boilerplate for the XBlock.
+ * @param {string} [options.stagedContent] - The staged content for the XBlock.
  * @returns {Promise<Object>} A Promise that resolves to the created XBlock data.
  */
 export async function createCourseXblock({
-  type, category, parentLocator, displayName, boilerplate,
+  type, category, parentLocator, displayName, boilerplate, stagedContent,
 }) {
   const body = {
     type,
@@ -75,6 +76,7 @@ export async function createCourseXblock({
     category: category || type,
     parent_locator: parentLocator,
     display_name: displayName,
+    staged_content: stagedContent,
   };
 
   const { data } = await getAuthenticatedHttpClient()
