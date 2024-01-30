@@ -32,8 +32,8 @@ const CourseUnit = ({ courseId }) => {
     isLoading,
     sequenceId,
     unitTitle,
-    courseStatus,
     isQueryPending,
+    sequenceStatus,
     savingStatus,
     isEditTitleFormOpen,
     isErrorAlert,
@@ -59,7 +59,7 @@ const CourseUnit = ({ courseId }) => {
     return <Loading />;
   }
 
-  if (courseStatus === RequestStatus.FAILED) {
+  if (sequenceStatus === RequestStatus.FAILED) {
     return (
       <Container size="xl" className="course-unit px-4 mt-4">
         <ConnectionErrorAlert />
