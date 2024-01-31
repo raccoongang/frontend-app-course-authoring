@@ -1078,5 +1078,17 @@
   "course-authoring.course-unit.modal.make-visibility.title": "Make visible to students",
   "course-authoring.course-unit.modal.make-visibility.btn.action.text": "Make visible to students",
   "course-authoring.course-unit.modal.make-visibility.btn.cancel.text": "Cancel",
-  "course-authoring.course-unit.modal.make-visibility.description": "If the unit was previously published and released to students, any changes you made to the unit when it was hidden will now be visible to students. Do you want to proceed?"
+  "course-authoring.course-unit.modal.make-visibility.description": "If the unit was previously published and released to students, any changes you made to the unit when it was hidden will now be visible to students. Do you want to proceed?",
+  "course-authoring.textbooks.header.title": "Textbooks",
+  "course-authoring.textbooks.header.breadcrumb.content": "Content",
+  "course-authoring.textbooks.header.breadcrumb.pages-and-resources": "Pages & resources",
+  "course-authoring.textbooks.header.breadcrumb.aria-label": "Textbook breadcrumb",
+  "course-authoring.textbooks.header.new-textbook": "New textbook",
+  "course-authoring.textbooks.empty-placeholder.title": "You haven't added any textbooks to this course yet.",
+  "course-authoring.textbooks.empty-placeholder.button.new-textbook": "New textbook",
+  "course-authoring.textbooks.empty-placeholder.button.tooltip": "Click to add a new textbook",
+  "course-authoring.textbooks.chapters.title": "{count} PDF chapters",
+  "course-authoring.textbooks.button.view": "View the PDF live",
+  "course-authoring.textbooks.button.edit": "Edit",
+  "course-authoring.textbooks.button.delete": "Delete"
 }
