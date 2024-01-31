@@ -50,8 +50,7 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-  const STORE = useSelector(state => state);
-  console.log({ STORE });
+
   document.title = getPageHeadTitle('', unitTitle);
 
   const {

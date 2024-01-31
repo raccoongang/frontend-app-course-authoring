@@ -7,7 +7,6 @@ import { PopoverContent, PasteComponentButton, WhatsInClipboard } from './compon
 const OVERLAY_TRIGGERS = ['hover', 'focus'];
 
 const PasteComponent = ({ handleCreateNewCourseXBlock, clipboardData }) => {
-  console.log('clipboardData', clipboardData);
   const [showPopover, togglePopover] = useState(false);
   const popoverElementRef = useRef(null);
 

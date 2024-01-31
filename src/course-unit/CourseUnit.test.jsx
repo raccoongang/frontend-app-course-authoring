@@ -660,13 +660,18 @@ describe('<CourseUnit />', () => {
 
     it('increases the number of xblocks after clicking on Paste component button', async () => {
       const { getByText, getAllByTestId } = render(<RootWrapper />);
-
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
       axiosMock
         .onPost(postXBlockBaseApiUrl(body))
         .reply(200, courseCreateXblockMock);
 
       await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
-
+      await executeThunk(copyToClipboard(unitId), store.dispatch);
       expect(getByText(pasteComponentMessages.pasteComponentButtonText.defaultMessage)).toBeInTheDocument();
       expect(getAllByTestId('course-xblock')).toHaveLength(2);
 
@@ -696,12 +701,18 @@ describe('<CourseUnit />', () => {
       } = render(<RootWrapper />);
 
       await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
-
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
       axiosMock
         .onPost(postXBlockBaseApiUrl(body))
         .reply(200, clipboardMockResponse);
 
       await executeThunk(createNewCourseXBlock(camelCaseObject(body), null, blockId), store.dispatch);
+      await executeThunk(copyToClipboard(unitId), store.dispatch);
 
       const newFilesAlert = getByTestId('has-new-files-alert');
 
@@ -728,12 +739,18 @@ describe('<CourseUnit />', () => {
       } = render(<RootWrapper />);
 
       await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
-
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
       axiosMock
         .onPost(postXBlockBaseApiUrl(body))
         .reply(200, clipboardMockResponse);
 
       await executeThunk(createNewCourseXBlock(camelCaseObject(body), null, blockId), store.dispatch);
+      await executeThunk(copyToClipboard(unitId), store.dispatch);
 
       const conflictingErrorsAlert = getByTestId('has-conflicting-errors-alert');
 
@@ -760,12 +777,18 @@ describe('<CourseUnit />', () => {
       } = render(<RootWrapper />);
 
       await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
-
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
       axiosMock
         .onPost(postXBlockBaseApiUrl(body))
         .reply(200, clipboardMockResponse);
 
       await executeThunk(createNewCourseXBlock(camelCaseObject(body), null, blockId), store.dispatch);
+      await executeThunk(copyToClipboard(unitId), store.dispatch);
 
       const errorFilesAlert = getByTestId('has-error-files-alert');
 
