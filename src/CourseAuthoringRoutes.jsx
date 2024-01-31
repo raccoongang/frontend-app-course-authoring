@@ -21,6 +21,7 @@ import CourseExportPage from './export-page/CourseExportPage';
 import CourseImportPage from './import-page/CourseImportPage';
 import { DECODED_ROUTES } from './constants';
 import GroupConfigurations from './group-configurations';
+import { Textbooks } from './textbooks';
 
 /**
  * As of this writing, these routes are mounted at a path prefixed with the following:
@@ -118,6 +119,10 @@ const CourseAuthoringRoutes = () => {
         <Route
           path="certificates"
           element={<PageWrap><Certificates courseId={courseId} /></PageWrap>}
+        />
+        <Route
+          path="/pages-and-resources/textbooks"
+          element={<PageWrap><Textbooks courseId={courseId} /></PageWrap>}
         />
       </Routes>
     </CourseAuthoringPage>
