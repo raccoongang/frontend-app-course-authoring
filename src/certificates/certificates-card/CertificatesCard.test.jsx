@@ -63,6 +63,12 @@ describe('CertificatesCard', () => {
     store = initializeStore(initialState);
   });
 
+  it('renders CertificateDetails and CertificateSignatories in view mode', () => {
+    const { getByText } = renderComponent();
+    expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.signatoriesSectionTitle.defaultMessage)).toBeInTheDocument();
+  });
+
   it('renders form elements in create mode', () => {
     useSelector.mockImplementation(selector => {
       if (selector === getComponentMode) {

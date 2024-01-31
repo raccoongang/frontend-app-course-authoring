@@ -6,7 +6,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { MODE_STATES } from '../data/constants';
 import {
-  getComponentMode, getCourseTitle, getCourseNumber,
+  getComponentMode, getCourseTitle, getCourseNumber, getCourseNumberOverride,
 } from '../data/selectors';
 import { setMode } from '../data/slice';
 import { createCourseCertificate } from '../data/thunks';
@@ -16,13 +16,14 @@ import { defaultCertificate } from '../constants';
 import messages from './messages';
 
 const CertificatesCard = ({
-  courseId,
+  id: certificateId, courseTitle: courseTitleOverride, signatories, courseId,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
   const componentMode = useSelector(getComponentMode);
   const courseTitle = useSelector(getCourseTitle);
   const courseNumber = useSelector(getCourseNumber);
+  const courseNumberOverride = useSelector(getCourseNumberOverride);
 
   const handleSubmit = (values) => {
     dispatch(createCourseCertificate(courseId, values));
@@ -90,12 +91,45 @@ const CertificatesCard = ({
   }
 
   return (
-    null
-    // <article></article> TODO https://youtrack.raccoongang.com/issue/AXIMST-166
+    <article>
+      <Card>
+        <Card.Section>
+          <Stack gap="2">
+            <CertificateDetails
+              detailsCourseTitle={courseTitle}
+              detailsCourseNumber={courseNumber}
+              courseNumberOverride={courseNumberOverride}
+              courseTitleOverride={courseTitleOverride}
+              mode={componentMode}
+              certificateId={certificateId}
+            />
+            <CertificateSignatories
+              signatories={signatories}
+              mode={componentMode}
+            />
+          </Stack>
+        </Card.Section>
+      </Card>
+    </article>
   );
 };
 
+CertificatesCard.defaultProps = {
+  id: undefined,
+  courseTitle: '',
+};
+
+const SignatoryPropType = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  organization: PropTypes.string.isRequired,
+  signatureImagePath: PropTypes.string.isRequired,
+});
+
 CertificatesCard.propTypes = {
+  id: PropTypes.number,
+  courseTitle: PropTypes.string,
+  signatories: PropTypes.arrayOf(SignatoryPropType).isRequired,
   courseId: PropTypes.string.isRequired,
 };
 
