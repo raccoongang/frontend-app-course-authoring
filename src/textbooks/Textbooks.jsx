@@ -15,6 +15,7 @@ import SubHeader from '../generic/sub-header/SubHeader';
 import getPageHeadTitle from '../generic/utils';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import TextbookCard from './textbook-card/TextbooksCard';
+import TextbookSidebar from './textbook-sidebar/TextbookSidebar';
 import { useTextbooks } from './hooks';
 import messages from './messages';
 
@@ -76,7 +77,9 @@ const Textbooks = ({ courseId }) => {
             </article>
           </Layout.Element>
           <Layout.Element>
-            {/* TODO: add Sidebar */}
+            <TextbookSidebar
+              courseId={courseId}
+            />
           </Layout.Element>
         </Layout>
       </section>
