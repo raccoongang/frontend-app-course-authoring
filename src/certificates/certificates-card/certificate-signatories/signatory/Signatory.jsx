@@ -9,6 +9,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
 import ModalDropzone from '../../../../generic/modal-dropzone/ModalDropzone';
+import ConfirmModal from '../../../confirm-modal/ConfirmModal';
 import { MODE_STATES } from '../../../data/constants';
 import messages from '../../messages';
 
@@ -23,9 +24,11 @@ const Signatory = ({
   setFieldValue,
   showDeleteButton,
   signatureImagePath,
+  handleDeleteSignatory,
 }) => {
   const intl = useIntl();
   const [isOpen, open, close] = useToggle(false);
+  const [isConfirmOpen, confirmOpen, confirmClose] = useToggle(false);
 
   const handleImageUpload = (newImagePath) => {
     setFieldValue(`signatories[${id}].signatureImagePath`, newImagePath);
@@ -81,7 +84,7 @@ const Signatory = ({
               iconAs={Icon}
               alt={intl.formatMessage(messages.deleteTooltip)}
               tooltipContent={<div>{intl.formatMessage(messages.deleteTooltip)}</div>}
-              // onClick={confirmOpen} TODO https://youtrack.raccoongang.com/issue/AXIMST-172
+              onClick={confirmOpen}
             />
           )}
         </Stack>
@@ -142,6 +145,18 @@ const Signatory = ({
         onClose={close}
         onCancel={close}
         onChange={handleImageUpload}
+      />
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        title={intl.formatMessage(messages.deleteSignatoryConfirmation, { name })}
+        message={intl.formatMessage(messages.deleteSignatoryConfirmationMessage)}
+        actionButtonText={intl.formatMessage(messages.deleteTooltip)}
+        cancelButtonText={intl.formatMessage(messages.cancelModal)}
+        handleCancel={confirmClose}
+        handleAction={() => {
+          confirmClose();
+          handleDeleteSignatory();
+        }}
       />
     </div>
   );

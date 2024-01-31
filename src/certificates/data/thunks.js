@@ -5,13 +5,14 @@ import {
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
 import { NOTIFICATION_MESSAGES } from '../../constants';
-import { getCertificates, createCertificate } from './api';
+import { getCertificates, createCertificate, deleteCertificate } from './api';
 import {
   fetchCertificatesSuccess,
   updateLoadingStatus,
   getDataSendErrors,
   updateSavingStatus,
   createCertificateSuccess,
+  deleteCertificateSuccess,
 } from './slice';
 
 export function fetchCertificates(courseId) {
@@ -56,6 +57,33 @@ export function createCourseCertificate(courseId, certificates) {
 
       dispatch(getDataSendErrors(errorData));
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    }
+  };
+}
+
+export function deleteCourseCertificate(courseId, certificateId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.deleting));
+
+    try {
+      const certificatesValues = await deleteCertificate(courseId, certificateId);
+      dispatch(deleteCertificateSuccess(certificatesValues));
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      return true;
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      let errorData;
+      try {
+        const { customAttributes: { httpErrorResponseData } } = error;
+        errorData = JSON.parse(httpErrorResponseData);
+      } catch (err) {
+        errorData = {};
+        dispatch(getDataSendErrors(errorData));
+        dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      }
       return false;
     }
   };

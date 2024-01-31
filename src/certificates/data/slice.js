@@ -38,6 +38,9 @@ const slice = createSlice({
     setMode: (state, action) => {
       state.mode = action.payload;
     },
+    deleteCertificateSuccess: (state) => {
+      state.certificatesData.certificates = [];
+    },
   },
 });
 
