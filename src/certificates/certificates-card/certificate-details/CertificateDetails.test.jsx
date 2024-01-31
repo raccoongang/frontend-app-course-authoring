@@ -7,11 +7,14 @@ import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../../store';
 import { MODE_STATES } from '../../data/constants';
+import { setMode } from '../../data/slice';
+import { deleteCourseCertificate } from '../../data/thunks';
 import messages from '../messages';
 import CertificateDetails from './CertificateDetails';
 
 let store;
 const courseId = 'course-v1:edX+DemoX+Demo_Course';
+const certificateId = 123;
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -91,6 +94,33 @@ describe('CertificateDetails', () => {
     expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(defaultProps.detailsCourseTitle)).toBeInTheDocument();
   });
+  it('handles edit button click', () => {
+    const { getByLabelText } = renderComponent(defaultProps);
+    const editButton = getByLabelText(messages.editTooltip.defaultMessage);
+    fireEvent.click(editButton);
+
+    expect(mockDispatch).toHaveBeenCalledWith(setMode(MODE_STATES.EDIT_ALL));
+  });
+  it('opens confirm modal on delete button click', () => {
+    const { getByLabelText, getByText } = renderComponent(defaultProps);
+    const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
+    fireEvent.click(deleteButton);
+    expect(getByText('Delete this certificate?')).toBeInTheDocument();
+  });
+  it('dispatches delete action on confirm modal action', async () => {
+    const props = { ...defaultProps, courseId, certificateId };
+    const { getByLabelText, getByText } = renderComponent(props);
+
+    const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      const confirmActionButton = getByText(messages.deleteTooltip.defaultMessage);
+      fireEvent.click(confirmActionButton);
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith(deleteCourseCertificate(courseId, certificateId));
+  });
 
   it('renders correctly in create mode', () => {
     const props = { ...defaultProps, componentMode: MODE_STATES.create };
@@ -111,6 +141,12 @@ describe('CertificateDetails', () => {
     waitFor(() => {
       expect(input.value).toBe(newInputValue);
     });
+  });
+
+  it('does not show delete button in create mode', () => {
+    const props = { ...defaultProps, mode: MODE_STATES.CREATE };
+    const { queryByLabelText } = renderComponent(props);
+    expect(queryByLabelText(messages.deleteTooltip.defaultMessage)).not.toBeInTheDocument();
   });
 
   it('shows course title override in view mode', () => {

@@ -1,4 +1,6 @@
-import { render } from '@testing-library/react';
+import {
+  render, fireEvent, waitFor, act,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
@@ -46,6 +48,21 @@ describe('CertificateSignatories', () => {
       title: '',
       organization: '',
       signatureImagePath: '',
+    });
+  });
+
+  it('calls remove for the correct signatory when delete button is clicked', async () => {
+    const { getAllByLabelText } = renderComponent({ ...defaultProps, mode: MODE_STATES.CREATE });
+
+    const deleteButtons = getAllByLabelText(messages.deleteTooltip.defaultMessage);
+    expect(deleteButtons.length).toBe(mockSignatories.length);
+
+    await act(async () => {
+      fireEvent.click(deleteButtons[0]);
+    });
+
+    waitFor(() => {
+      expect(mockArrayHelpers.remove).toHaveBeenCalledWith(0);
     });
   });
 });
