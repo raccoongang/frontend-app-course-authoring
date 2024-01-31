@@ -100,5 +100,16 @@
   "course-authoring.group-configurations.empty-placeholder.button": "Add your first content group",
   "course-authoring.group-configurations.experimental-empty-placeholder.button": "Add your first group configuration",
   "course-authoring.group-configurations.content-groups.add-new-group": "New content group",
-  "course-authoring.course-unit.general.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience."
+  "course-authoring.course-unit.general.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience.",
+  "course-authoring.textbooks.header.title": "Textbooks",
+  "course-authoring.textbooks.header.breadcrumb.content": "Content",
+  "course-authoring.textbooks.header.breadcrumb.pages-and-resources": "Pages & resources",
+  "course-authoring.textbooks.header.breadcrumb.aria-label": "Textbook breadcrumb",
+  "course-authoring.textbooks.header.new-textbook": "New textbook",
+  "course-authoring.textbooks.empty-placeholder.title": "You haven't added any textbooks to this course yet.",
+  "course-authoring.textbooks.empty-placeholder.button.new-textbook": "New textbook",
+  "course-authoring.textbooks.chapters.title": "{count} PDF chapters",
+  "course-authoring.textbooks.button.view": "View the PDF live",
+  "course-authoring.textbooks.button.edit": "Edit",
+  "course-authoring.textbooks.button.delete": "Delete"
 }
