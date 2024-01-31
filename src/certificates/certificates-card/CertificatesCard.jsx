@@ -10,9 +10,9 @@ import {
 } from '../data/selectors';
 import { setMode } from '../data/slice';
 import { createCourseCertificate } from '../data/thunks';
+import { defaultCertificate } from '../constants';
 import CertificateDetails from './certificate-details/CertificateDetails';
 import CertificateSignatories from './certificate-signatories/CertificateSignatories';
-import { defaultCertificate } from '../constants';
 import messages from './messages';
 
 const CertificatesCard = ({
