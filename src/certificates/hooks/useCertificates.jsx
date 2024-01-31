@@ -1,11 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import { getHasCertificates, getHasCertificateModes } from '../data/selectors';
-import { fetchCertificates } from '../data/thunks';
-import { useModel } from '../../generic/model-store';
+import { RequestStatus } from '../../data/constants';
 import getPageHeadTitle from '../../generic/utils';
+import {
+  getMode, getLoadingStatus, getCertificates, getHasCertificateModes, getCourseTitle,
+} from '../data/selectors';
+import { setMode } from '../data/slice';
+import { fetchCertificates } from '../data/thunks';
+import { MODE_STATES } from '../data/constants';
 
 import messages from '../messages';
 
@@ -13,17 +17,33 @@ const useCertificates = ({ courseId }) => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const hasCertificates = useSelector(getHasCertificates);
+  const mode = useSelector(getMode);
+  const certificates = useSelector(getCertificates);
+  const loadingStatus = useSelector(getLoadingStatus);
   const hasCertificateModes = useSelector(getHasCertificateModes);
+  const title = useSelector(getCourseTitle);
+
+  const isLoading = useMemo(() => loadingStatus === RequestStatus.IN_PROGRESS, [loadingStatus]);
+
+  useEffect(() => {
+    if (!hasCertificateModes) {
+      dispatch(setMode(MODE_STATES.NO_MODES));
+    } else if (hasCertificateModes && !certificates.length) {
+      dispatch(setMode(MODE_STATES.NO_CERTIFICATES));
+    } else if (hasCertificateModes && certificates.length) {
+      dispatch(setMode(MODE_STATES.VIEW));
+    }
+  }, [hasCertificateModes, certificates]);
 
   useEffect(() => {
     dispatch(fetchCertificates(courseId));
   }, [courseId]);
 
-  const courseDetails = useModel('courseDetails', courseId);
-  document.title = getPageHeadTitle(courseDetails?.name, intl.formatMessage(messages.headingTitleTabText));
+  document.title = getPageHeadTitle(title, intl.formatMessage(messages.headingTitleTabText));
 
-  return { hasCertificates, hasCertificateModes };
+  return {
+    mode, isLoading, loadingStatus,
+  };
 };
 
 export default useCertificates;

@@ -1,34 +1,35 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, Stack, Card } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons';
 
-import MainLayout from '../layout/MainLayout';
+import { setMode } from '../data/slice';
 import messages from '../messages';
+import { MODE_STATES } from '../data/constants';
 
-const WithModesWithoutCertificates = ({ courseId }) => {
+const WithModesWithoutCertificates = () => {
   const intl = useIntl();
-  return (
-    <MainLayout showHeaderButtons={false} courseId={courseId}>
-      <Card>
-        <Card.Section>
-          <Stack direction="horizontal" className="justify-content-center align-items-center" gap="3.5">
-            <span className="small">{intl.formatMessage(messages.noCertificatesText)}</span>
-            <Button
-              iconBefore={AddIcon}
-            // TODO: Add handler in the task (https://youtrack.raccoongang.com/issue/AXIMST-160)
-            >
-              {intl.formatMessage(messages.setupCertificateBtn)}
-            </Button>
-          </Stack>
-        </Card.Section>
-      </Card>
-    </MainLayout>
-  );
-};
+  const dispatch = useDispatch();
 
-WithModesWithoutCertificates.propTypes = {
-  courseId: PropTypes.string.isRequired,
+  const handleCreateMode = () => {
+    dispatch(setMode(MODE_STATES.CREATE));
+  };
+
+  return (
+    <Card>
+      <Card.Section>
+        <Stack direction="horizontal" className="justify-content-center align-items-center" gap="3.5">
+          <span className="small">{intl.formatMessage(messages.noCertificatesText)}</span>
+          <Button
+            iconBefore={AddIcon}
+            onClick={handleCreateMode}
+          >
+            {intl.formatMessage(messages.setupCertificateBtn)}
+          </Button>
+        </Stack>
+      </Card.Section>
+    </Card>
+  );
 };
 
 export default WithModesWithoutCertificates;

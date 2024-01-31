@@ -34,7 +34,7 @@ const messages = defineMessages({
     defaultMessage: 'To begin issuing course certificates, a course team member with either the Staff or Admin role selects {strongText}. Only course team members with these roles can edit or delete an activated certificate.',
   },
   about_2_Description_1_strong: {
-    id: 'course-authoring.certificates.sidebar.about2.description-1',
+    id: 'course-authoring.certificates.sidebar.about2.description-1.strong',
     defaultMessage: 'Activate',
   },
   about_2_Description_2: {
@@ -42,7 +42,7 @@ const messages = defineMessages({
     defaultMessage: '{strongText} delete certificates after a course has started; learners who have already earned certificates will no longer be able to access them.',
   },
   about_2_Description_2_strong: {
-    id: 'course-authoring.certificates.sidebar.about2.description-2',
+    id: 'course-authoring.certificates.sidebar.about2.description-2.strong',
     defaultMessage: 'Do not',
   },
   learnMoreBtn: {

@@ -7,6 +7,7 @@ import initializeStore from '../store';
 import Certificates from './Certificates';
 import useCertificates from './hooks/useCertificates';
 import messages from './messages';
+import { MODE_STATES } from './data/constants';
 
 let store;
 const courseId = 'course-123';
@@ -20,10 +21,7 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
 
 jest.mock('./hooks/useCertificates', () => ({
   __esModule: true,
-  default: jest.fn(() => ({
-    hasCertificates: false,
-    hasCertificateModes: false,
-  })),
+  default: jest.fn(),
 }));
 
 const renderComponent = (props) => render(
@@ -57,13 +55,14 @@ describe('Certificates', () => {
   });
 
   it('renders WithoutModes when there are no certificate modes', () => {
+    useCertificates.mockReturnValue({ mode: MODE_STATES.NO_MODES, isLoading: false, loadingStatus: 'Loaded' });
     const { getByText, queryByText } = renderComponent();
     expect(getByText(messages.withoutModesText.defaultMessage)).toBeInTheDocument();
     expect(queryByText(messages.noCertificatesText.defaultMessage)).not.toBeInTheDocument();
   });
 
   it('renders WithModesWithoutCertificates when there are modes but no certificates', () => {
-    useCertificates.mockReturnValue({ hasCertificates: false, hasCertificateModes: true });
+    useCertificates.mockReturnValue({ mode: MODE_STATES.NO_CERTIFICATES, isLoading: false, loadingStatus: 'Loaded' });
     const { getByText, queryByText } = renderComponent();
     expect(getByText(messages.noCertificatesText.defaultMessage)).toBeInTheDocument();
     expect(queryByText(messages.withoutModesText.defaultMessage)).not.toBeInTheDocument();

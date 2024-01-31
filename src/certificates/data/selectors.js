@@ -2,8 +2,17 @@ import { createSelector } from '@reduxjs/toolkit';
 
 export const getLoadingStatus = (state) => state.certificates.loadingStatus;
 export const getSavingStatus = (state) => state.certificates.savingStatus;
+export const getSendRequestErrors = (state) => state.certificates.sendRequestErrors.developer_message;
 export const getCertificates = state => state.certificates.certificatesData.certificates;
 export const getHasCertificateModes = state => state.certificates.certificatesData.hasCertificateModes;
+export const getCourseModes = state => state.certificates.certificatesData.courseModes;
+export const getCertificateActivationUrl = state => state.certificates.certificatesData.certificateActivationHandlerUrl;
+export const getCertificateWebViewUrl = state => state.certificates.certificatesData.certificateWebViewUrl;
+export const getIsCertificateActive = state => state.certificates.certificatesData.isActive;
+export const getMode = state => state.certificates.mode;
+export const getCourseNumber = state => state.certificates.courseNumber;
+export const getCourseNumberOverride = state => state.certificates.courseNumberOverride;
+export const getCourseTitle = state => state.certificates.courseTitle;
 
 export const getHasCertificates = createSelector(
   [getCertificates],

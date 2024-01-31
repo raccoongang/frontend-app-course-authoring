@@ -2,13 +2,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { RequestStatus } from '../../data/constants';
+import { MODE_STATES } from './constants';
 
 const slice = createSlice({
   name: 'certificates',
   initialState: {
+    certificatesData: {},
+    mode: MODE_STATES.NO_MODES,
     loadingStatus: RequestStatus.PENDING,
     savingStatus: '',
-    certificatesData: {},
+    sendRequestErrors: {},
   },
   reducers: {
     updateSavingStatus: (state, { payload }) => {
@@ -17,16 +20,35 @@ const slice = createSlice({
     updateLoadingStatus: (state, { payload }) => {
       state.loadingStatus = payload.status;
     },
+    getDataSendErrors: (state, { payload }) => {
+      Object.assign(state.sendRequestErrors, payload);
+    },
     fetchCertificatesSuccess: (state, { payload }) => {
       Object.assign(state.certificatesData, payload);
+    },
+    createCertificateSuccess: (state, action) => {
+      const index = state.certificatesData.certificates.findIndex(c => c.id === action.payload.id);
+
+      state.certificatesData.certificates = index !== -1
+        ? state.certificatesData.certificates.map(
+          (certificate, idx) => (idx === index ? action.payload : certificate),
+        )
+        : [...state.certificatesData.certificates, action.payload];
+    },
+    setMode: (state, action) => {
+      state.mode = action.payload;
     },
   },
 });
 
 export const {
+  setMode,
+  getDataSendErrors,
   updateSavingStatus,
   updateLoadingStatus,
   fetchCertificatesSuccess,
+  createCertificateSuccess,
+  deleteCertificateSuccess,
 } = slice.actions;
 
 export const { reducer } = slice;
