@@ -658,6 +658,71 @@ describe('<CourseUnit />', () => {
       expect(within(popoverContent).getByText(clipboardUnit.content.blockTypeDisplay)).toBeInTheDocument();
     });
 
+    it('displays detailed clipboard information on hover2', async () => {
+      const { getByText, queryByTestId, getByTestId } = render(<RootWrapper />);
+
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
+
+      await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
+      await executeThunk(copyToClipboard(unitId), store.dispatch);
+
+      fireEvent.mouseEnter(getByText(pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage));
+
+      const popoverContent = getByTestId('popover-content');
+
+      expect(popoverContent.tagName).toBe('A');
+      expect(popoverContent).toHaveAttribute('href', clipboardUnit.sourceEditUrl);
+
+      expect(within(popoverContent).getByText(clipboardUnit.content.displayName)).toBeInTheDocument();
+      expect(within(popoverContent).getByText(clipboardUnit.sourceContextTitle)).toBeInTheDocument();
+      expect(within(popoverContent).getByText(clipboardUnit.content.blockTypeDisplay)).toBeInTheDocument();
+
+      fireEvent.mouseLeave(getByText(pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage));
+
+      await waitFor(() => {
+        const popoverContent2 = queryByTestId('popover-content');
+        expect(popoverContent2)
+          .toBeNull();
+      });
+    });
+
+    it('displays detailed clipboard information on hover3', async () => {
+      const { getByText, queryByTestId, getByTestId } = render(<RootWrapper />);
+
+      axiosMock
+        .onPost(getClipboardUrl())
+        .reply(200, clipboardUnit);
+      axiosMock
+        .onGet(getClipboardUrl())
+        .reply(200, clipboardUnit);
+
+      await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
+      await executeThunk(copyToClipboard(unitId), store.dispatch);
+
+      fireEvent.focus(getByText(pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage));
+
+      const popoverContent = getByTestId('popover-content');
+
+      expect(popoverContent.tagName).toBe('A');
+      expect(popoverContent).toHaveAttribute('href', clipboardUnit.sourceEditUrl);
+
+      expect(within(popoverContent).getByText(clipboardUnit.content.displayName)).toBeInTheDocument();
+      expect(within(popoverContent).getByText(clipboardUnit.sourceContextTitle)).toBeInTheDocument();
+      expect(within(popoverContent).getByText(clipboardUnit.content.blockTypeDisplay)).toBeInTheDocument();
+
+      fireEvent.blur(getByText(pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage));
+      await waitFor(() => {
+        const popoverContent2 = queryByTestId('popover-content');
+        expect(popoverContent2)
+          .toBeNull();
+      });
+    });
+
     it('increases the number of xblocks after clicking on Paste component button', async () => {
       const { getByText, getAllByTestId } = render(<RootWrapper />);
       axiosMock

@@ -172,6 +172,8 @@ export function createNewCourseXBlock(body, callback, blockId) {
             callback(result);
           }
         }
+        const { userClipboard } = await getCourseSectionVerticalData(blockId);
+        dispatch(updateClipboardData(userClipboard));
         const courseUnit = await getCourseUnitData(blockId);
         dispatch(fetchCourseItemSuccess(courseUnit));
       });
@@ -241,7 +243,6 @@ export function copyToClipboard(usageKey) {
   const POLL_INTERVAL_MS = 1000; // Timeout duration for polling in milliseconds
 
   return async (dispatch) => {
-    dispatch(updateClipboardData(null));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.copying));
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(updateQueryPendingStatus(true));
