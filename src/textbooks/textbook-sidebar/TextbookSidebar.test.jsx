@@ -49,8 +49,7 @@ describe('<TextbookSidebar />', () => {
       expect(getByText(messages.section_1_descriptions.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.section_2_title.defaultMessage)).toBeInTheDocument();
       expect(getByText(messages.section_2_descriptions.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.section_link.defaultMessage)).toBeInTheDocument();
-      expect(getByText(messages.section_link.defaultMessage)).toHaveAttribute('href', helpUrls.textbooks);
+      expect(getByText(messages.sectionLink.defaultMessage)).toHaveAttribute('href', helpUrls.textbooks);
     });
   });
 });

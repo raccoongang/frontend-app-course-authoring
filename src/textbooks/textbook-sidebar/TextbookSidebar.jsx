@@ -32,7 +32,7 @@ const TextbookSidebar = ({ courseId }) => {
         target="_blank"
         showLaunchIcon={false}
       >
-        {intl.formatMessage(messages.section_link)}
+        {intl.formatMessage(messages.sectionLink)}
       </Hyperlink>
     </HelpSidebar>
   );

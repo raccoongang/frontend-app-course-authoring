@@ -17,7 +17,7 @@ const messages = defineMessages({
     id: 'course-authoring.textbooks.sidebar.section-2.descriptions',
     defaultMessage: 'If your textbook doesn\'t have individual chapters, you can upload the entire text as a single chapter and enter a name of your choice in the Chapter Name field.',
   },
-  section_link: {
+  sectionLink: {
     id: 'course-authoring.textbooks.sidebar.section-link',
     defaultMessage: 'Learn more',
   },
