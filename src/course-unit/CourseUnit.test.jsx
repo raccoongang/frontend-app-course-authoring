@@ -658,7 +658,7 @@ describe('<CourseUnit />', () => {
       expect(within(popoverContent).getByText(clipboardUnit.content.blockTypeDisplay)).toBeInTheDocument();
     });
 
-    it('displays detailed clipboard information on hover2', async () => {
+    it('displays clipboard content in a popover on mouse enter and hides it on mouse leave', async () => {
       const { getByText, queryByTestId, getByTestId } = render(<RootWrapper />);
 
       axiosMock
@@ -685,13 +685,11 @@ describe('<CourseUnit />', () => {
       fireEvent.mouseLeave(getByText(pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage));
 
       await waitFor(() => {
-        const popoverContent2 = queryByTestId('popover-content');
-        expect(popoverContent2)
-          .toBeNull();
+        expect(queryByTestId('popover-content')).toBeNull();
       });
     });
 
-    it('displays detailed clipboard information on hover3', async () => {
+    it('displays clipboard content in a popover on focus and hides it on blur', async () => {
       const { getByText, queryByTestId, getByTestId } = render(<RootWrapper />);
 
       axiosMock
@@ -716,10 +714,9 @@ describe('<CourseUnit />', () => {
       expect(within(popoverContent).getByText(clipboardUnit.content.blockTypeDisplay)).toBeInTheDocument();
 
       fireEvent.blur(getByText(pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage));
+
       await waitFor(() => {
-        const popoverContent2 = queryByTestId('popover-content');
-        expect(popoverContent2)
-          .toBeNull();
+        expect(queryByTestId('popover-content')).toBeNull();
       });
     });
 

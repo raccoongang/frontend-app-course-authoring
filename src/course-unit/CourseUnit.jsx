@@ -134,7 +134,7 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
-              {clipboardData?.content && (
+              {clipboardData.content && (
                 <PasteComponent
                   clipboardData={clipboardData}
                   handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}

@@ -1,5 +1,6 @@
 import { logError } from '@edx/frontend-platform/logging';
 import { camelCaseObject } from '@edx/frontend-platform';
+
 import {
   hideProcessingNotification,
   showProcessingNotification,
@@ -35,7 +36,8 @@ import {
   updateClipboardData,
   updateQueryPendingStatus,
   deleteXBlock,
-  duplicateXBlock, fetchStaticFileNoticesSuccess,
+  duplicateXBlock,
+  fetchStaticFileNoticesSuccess,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
