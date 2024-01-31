@@ -1,4 +1,5 @@
 import { logError } from '@edx/frontend-platform/logging';
+import { camelCaseObject } from '@edx/frontend-platform';
 import {
   hideProcessingNotification,
   showProcessingNotification,
@@ -6,6 +7,7 @@ import {
 import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
 import { updateModel, updateModels } from '../../generic/model-store';
+import { CLIPBOARD_STATUS } from '../constants';
 import {
   getCourseUnitData,
   editUnitDisplayName,
@@ -35,9 +37,7 @@ import {
   deleteXBlock,
   duplicateXBlock, fetchStaticFileNoticesSuccess,
 } from './slice';
-import { CLIPBOARD_STATUS } from '../constants';
 import { getNotificationMessage } from './utils';
-import { camelCaseObject } from '@edx/frontend-platform';
 
 export function fetchCourseUnitQuery(courseId) {
   return async (dispatch) => {
@@ -155,15 +155,16 @@ export function createNewCourseXBlock(body, callback, blockId) {
     try {
       await createCourseXblock(body).then(async (result) => {
         if (result) {
-          // console.log('RESULT', camelCaseObject(result));
           const formattedResult = camelCaseObject(result);
           if (body.category === 'vertical') {
             const courseSectionVerticalData = await getCourseSectionVerticalData(formattedResult.locator);
             dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
           }
+          if (body.stagedContent) {
+            dispatch(fetchStaticFileNoticesSuccess(formattedResult.staticFileNotices));
+          }
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
-          dispatch(fetchStaticFileNoticesSuccess(formattedResult.staticFileNotices));
           dispatch(hideProcessingNotification());
           dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
