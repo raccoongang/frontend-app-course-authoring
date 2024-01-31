@@ -29,6 +29,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.paste-notification.has-new-files.description',
     defaultMessage: 'The following required files were imported to this course:',
   },
+  hasNewFilesButtonText: {
+    id: 'course-authoring.course-unit.paste-notification.has-new-files.button.text',
+    defaultMessage: 'View files',
+  },
 });
 
 export default messages;

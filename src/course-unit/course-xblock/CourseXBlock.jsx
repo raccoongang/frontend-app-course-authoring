@@ -66,11 +66,9 @@ const CourseXBlock = ({
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
-                  {enableCopyPasteUnits && (
-                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
-                    </Dropdown.Item>
-                  )}
+                  <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                    {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                  </Dropdown.Item>
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                   </Dropdown.Item>

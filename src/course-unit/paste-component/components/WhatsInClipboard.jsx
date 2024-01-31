@@ -22,6 +22,7 @@ const WhatsInClipboard = ({
   return (
     <div
       className="paste-component-whats-in-clipboard mt-2 d-flex align-items-center"
+      data-testid="whats-in-clipboard"
       onMouseEnter={() => handlePopoverToggle(true)}
       onMouseLeave={() => handlePopoverToggle(false)}
       onFocus={() => togglePopover(true)}

@@ -24,9 +24,7 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import { getStaticFileNotices } from './data/selectors';
 import PasteComponent from './paste-component';
-import usePastNotificationAlerts from './paste-notifications/usePasteNotificationAlert';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -43,7 +41,6 @@ const CourseUnit = ({ courseId }) => {
     isErrorAlert,
     isLastUnpublishedVersion,
     isInternetConnectionAlertFailed,
-    enableCopyPasteUnits,
     unitXBlockActions,
     handleTitleEditSubmit,
     headerNavigationsActions,
@@ -53,7 +50,8 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
   } = useCourseUnit({ courseId, blockId });
-
+  const STORE = useSelector(state => state);
+  console.log({ STORE });
   document.title = getPageHeadTitle('', unitTitle);
 
   const {
@@ -137,7 +135,7 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
-              {enableCopyPasteUnits && (
+              {clipboardData?.content && (
                 <PasteComponent
                   clipboardData={clipboardData}
                   handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}

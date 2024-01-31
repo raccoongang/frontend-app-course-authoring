@@ -17,20 +17,16 @@ const initialState = {
   newFilesAlert: true,
 };
 
-const usePastNotificationAlerts = (staticFileNotices2, courseId) => {
+const usePastNotificationAlerts = (staticFileNotices, courseId) => {
   const intl = useIntl();
   const [notificationAlerts, toggleNotificationAlerts] = useState(initialState);
-  const staticFileNotices = {
-    newFiles: ['item 1'],
-    conflictingFiles: ['item 1'],
-    errorFiles: ['item 1'],
-  };
   const { conflictingFiles, errorFiles, newFiles } = staticFileNotices;
-  console.log('staticFileNotices', staticFileNotices);
-  const hasConflictingErrors = conflictingFiles.length
+
+  const hasConflictingErrors = conflictingFiles?.length
     ? conflictingFiles && notificationAlerts.conflictingFilesAlert : null;
-  const hasErrorFiles = errorFiles.length ? errorFiles && notificationAlerts.errorFilesAlert : null;
-  const hasNewFiles = newFiles.length ? newFiles && notificationAlerts.newFilesAlert : null;
+  const hasErrorFiles = errorFiles?.length ? errorFiles && notificationAlerts.errorFilesAlert : null;
+  const hasNewFiles = newFiles?.length ? newFiles && notificationAlerts.newFilesAlert : null;
+
   const handleCloseNotificationAlert = (alertKey) => {
     toggleNotificationAlerts((prevAlerts) => ({
       ...prevAlerts,
@@ -42,6 +38,7 @@ const usePastNotificationAlerts = (staticFileNotices2, courseId) => {
     <>
       {hasConflictingErrors && (
         <AlertMessage
+          data-testid="has-conflicting-errors-alert"
           title={intl.formatMessage(messages.hasConflictingErrorsTitle)}
           onClose={() => handleCloseNotificationAlert('conflictingFilesAlert')}
           description={(
@@ -63,6 +60,7 @@ const usePastNotificationAlerts = (staticFileNotices2, courseId) => {
       )}
       {hasErrorFiles && (
         <AlertMessage
+          data-testid="has-error-files-alert"
           title={intl.formatMessage(messages.hasErrorsTitle)}
           onClose={() => handleCloseNotificationAlert('errorFilesAlert')}
           description={(
@@ -78,6 +76,7 @@ const usePastNotificationAlerts = (staticFileNotices2, courseId) => {
       )}
       {hasNewFiles && (
         <AlertMessage
+          data-testid="has-new-files-alert"
           title={intl.formatMessage(messages.hasNewFilesTitle)}
           onClose={() => handleCloseNotificationAlert('newFilesAlert')}
           description={(
@@ -89,7 +88,12 @@ const usePastNotificationAlerts = (staticFileNotices2, courseId) => {
           variant="info"
           icon={InfoIcon}
           dismissible
-          actions={[<ActionButton courseId={courseId} title="View files" />]}
+          actions={[
+            <ActionButton
+              courseId={courseId}
+              title={intl.formatMessage(messages.hasNewFilesButtonText)}
+            />,
+          ]}
         />
       )}
     </>
