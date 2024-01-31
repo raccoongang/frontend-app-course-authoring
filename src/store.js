@@ -26,6 +26,7 @@ import { reducer as courseOutlineReducer } from './course-outline/data/slice';
 import { reducer as courseUnitReducer } from './course-unit/data/slice';
 import { reducer as certificatesReducer } from './certificates/data/slice';
 import { reducer as groupConfigurationsReducer } from './group-configurations/data/slice';
+import { reducer as textbooksReducer } from './textbooks/data/slice';
 
 export default function initializeStore(preloadedState = undefined) {
   return configureStore({
@@ -53,6 +54,7 @@ export default function initializeStore(preloadedState = undefined) {
       courseUnit: courseUnitReducer,
       certificates: certificatesReducer,
       groupConfigurations: groupConfigurationsReducer,
+      textbooks: textbooksReducer,
     },
     preloadedState,
   });
