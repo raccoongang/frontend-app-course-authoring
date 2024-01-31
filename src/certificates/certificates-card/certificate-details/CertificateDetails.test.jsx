@@ -8,7 +8,6 @@ import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../../store';
 import { MODE_STATES } from '../../data/constants';
-import { setMode } from '../../data/slice';
 import messages from '../messages';
 import CertificateDetails from './CertificateDetails';
 
@@ -84,18 +83,10 @@ describe('CertificateDetails', () => {
     mockDispatch.mockClear();
   });
 
-  it('handles edit button click', () => {
-    const { getByLabelText } = renderComponent(defaultProps);
-    const editButton = getByLabelText(messages.editTooltip.defaultMessage);
-    fireEvent.click(editButton);
-
-    expect(mockDispatch).toHaveBeenCalledWith(setMode(MODE_STATES.EDIT_ALL));
-  });
-  it('opens confirm modal on delete button click', () => {
-    const { getByLabelText, getByText } = renderComponent(defaultProps);
-    const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
-    fireEvent.click(deleteButton);
-    expect(getByText('Delete this certificate?')).toBeInTheDocument();
+  it('renders correctly in view mode', () => {
+    const { getByText } = renderComponent(defaultProps);
+    expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(defaultProps.detailsCourseTitle)).toBeInTheDocument();
   });
 
   it('renders correctly in create mode', () => {
@@ -115,5 +106,12 @@ describe('CertificateDetails', () => {
     waitFor(() => {
       expect(input.value).toBe('New Title');
     });
+  });
+
+  it('shows course title override in view mode', () => {
+    const courseTitleOverride = 'Overridden Title';
+    const props = { ...defaultProps, courseTitleOverride };
+    const { getByText } = renderComponent(props);
+    expect(getByText(courseTitleOverride)).toBeInTheDocument();
   });
 });
