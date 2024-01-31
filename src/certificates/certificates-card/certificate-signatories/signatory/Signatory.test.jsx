@@ -32,12 +32,14 @@ describe('Signatory Component', () => {
     const { queryByTestId, getByPlaceholderText } = renderSignatory(
       { ...defaultProps, componentMode: MODE_STATES.create },
     );
+
     expect(queryByTestId('signatory-view')).not.toBeInTheDocument();
     expect(getByPlaceholderText(messages.namePlaceholder.defaultMessage)).toBeInTheDocument();
   });
 
   it('renders in VIEW mode', () => {
     const { getByText, queryByText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.view });
+
     expect(getByText(defaultProps.name)).toBeInTheDocument();
     expect(getByText(defaultProps.title)).toBeInTheDocument();
     expect(queryByText(messages.namePlaceholder.defaultMessage)).not.toBeInTheDocument();
