@@ -18,6 +18,8 @@ import { COURSE_BLOCK_NAMES } from '../../constants';
 import { copyToClipboard } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
+import ContentIFrame from './ContentIFrame';
+import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
@@ -32,6 +34,7 @@ const CourseXBlock = ({
   const canEdit = useSelector(getCanEdit);
   const courseId = useSelector(getCourseId);
   const intl = useIntl();
+  const iframeUrl = getIFrameUrl({ blockId: id });
 
   const [searchParams] = useSearchParams();
   const locatorId = searchParams.get('show');
@@ -145,8 +148,7 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          <XBlockMessages validationMessages={validationMessages} />
-          <div className="w-100 bg-gray-100" style={{ height: 200 }} data-block-id={id} />
+          <ContentIFrame id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
         </Card.Section>
       </Card>
     </div>
