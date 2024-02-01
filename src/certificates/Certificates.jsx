@@ -10,15 +10,15 @@ import CertificateCreate from './certificate-create/CertificateCreate';
 import { MODE_STATES } from './data/constants';
 import MainLayout from './layout/MainLayout';
 
-const modeCertificatesMap = {
-  [MODE_STATES.NO_MODES]: WithoutModes,
-  [MODE_STATES.NO_CERTIFICATES]: WithModesWithoutCertificates,
-  [MODE_STATES.CREATE]: CertificateCreate,
-  [MODE_STATES.VIEW]: CertificatesCards,
+const MODE_COMPONENTS = {
+  [MODE_STATES.noModes]: WithoutModes,
+  [MODE_STATES.noCertificates]: WithModesWithoutCertificates,
+  [MODE_STATES.create]: CertificateCreate,
+  [MODE_STATES.view]: CertificatesCards,
 };
 
 const Certificates = ({ courseId }) => {
-  const { mode, isLoading, loadingStatus } = useCertificates({ courseId });
+  const { componentMode, isLoading, loadingStatus } = useCertificates({ courseId });
 
   if (isLoading) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -33,10 +33,10 @@ const Certificates = ({ courseId }) => {
     );
   }
 
-  const ModeComponent = modeCertificatesMap[mode] || modeCertificatesMap[MODE_STATES.NO_MODES];
+  const ModeComponent = MODE_COMPONENTS[componentMode] || MODE_COMPONENTS[MODE_STATES.noModes];
 
   return (
-    <MainLayout courseId={courseId} showHeaderButtons={mode === MODE_STATES.VIEW}>
+    <MainLayout courseId={courseId} showHeaderButtons={componentMode === MODE_STATES.view}>
       <ModeComponent courseId={courseId} />
     </MainLayout>
   );

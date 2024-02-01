@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {
-  Stack, FormLabel, Form, Button, useToggle,
+  Stack, FormLabel, Form, Button, useToggle, Image,
 } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
@@ -11,7 +11,7 @@ import messages from '../../messages';
 
 const Signatory = ({
   id,
-  mode,
+  componentMode,
   name,
   title,
   handleBlur,
@@ -59,14 +59,14 @@ const Signatory = ({
   ];
 
   return (
-    <div className="bg-light-200 p-2.5">
+    <div className="bg-light-200 p-2.5 signatory">
       <Stack className="justify-content-between mb-3" direction="horizontal">
-        <h3>{`${intl.formatMessage(messages.signatoryTitle)} ${id + 1}`}</h3>
+        <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${id + 1}`}</h3>
         <Stack direction="horizontal" gap="2">
-          {/* {mode === MODE_STATES.VIEW && ()} TODO https://youtrack.raccoongang.com/issue/AXIMST-166 */}
+          {/* {mode === MODE_STATES && ()} TODO https://youtrack.raccoongang.com/issue/AXIMST-166 */}
         </Stack>
       </Stack>
-      {mode === MODE_STATES.CREATE ? (
+      {componentMode === MODE_STATES.create ? (
         <Stack gap="4">
           {formData.map(({ labelText, feedback, ...rest }) => (
             <Form.Group className="m-0" key={labelText}>
@@ -80,13 +80,11 @@ const Signatory = ({
           <Form.Group className="m-0">
             <FormLabel> {intl.formatMessage(messages.imageLabel)}</FormLabel>
             {signatureImagePath && (
-              <img
+              <Image
                 src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
-                style={{
-                  maxWidth: '375px', minHeight: '100%', objectFit: 'cover', objectPosition: 'center', margin: '10px auto',
-                }}
-                alt="signature"
-                className="d-block w-100"
+                fluid
+                alt={intl.formatMessage(messages.imageLabel)}
+                className="signatory-image"
               />
             )}
             <Stack direction="horizontal" className="align-items-baseline">
@@ -120,7 +118,7 @@ const Signatory = ({
 };
 
 Signatory.defaultProps = {
-  mode: MODE_STATES.VIEW,
+  componentMode: MODE_STATES.view,
   handleChange: null,
   handleBlur: null,
   handleDeleteSignatory: null,
@@ -134,7 +132,7 @@ Signatory.propTypes = {
   showDeleteButton: PropTypes.bool.isRequired,
   signatureImagePath: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
-  mode: PropTypes.string,
+  componentMode: PropTypes.string,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   setFieldValue: PropTypes.func,

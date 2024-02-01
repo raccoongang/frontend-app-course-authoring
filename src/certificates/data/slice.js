@@ -8,7 +8,7 @@ const slice = createSlice({
   name: 'certificates',
   initialState: {
     certificatesData: {},
-    mode: MODE_STATES.NO_MODES,
+    componentMode: MODE_STATES.noModes,
     loadingStatus: RequestStatus.PENDING,
     savingStatus: '',
     sendRequestErrors: {},
@@ -36,7 +36,7 @@ const slice = createSlice({
         : [...state.certificatesData.certificates, action.payload];
     },
     setMode: (state, action) => {
-      state.mode = action.payload;
+      state.componentMode = action.payload;
     },
   },
 });

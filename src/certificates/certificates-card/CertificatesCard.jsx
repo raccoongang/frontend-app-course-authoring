@@ -6,12 +6,13 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { MODE_STATES } from '../data/constants';
 import {
-  getMode, getCourseTitle, getCourseNumber,
+  getComponentMode, getCourseTitle, getCourseNumber,
 } from '../data/selectors';
 import { setMode } from '../data/slice';
 import { createCourseCertificate } from '../data/thunks';
 import CertificateDetails from './certificate-details/CertificateDetails';
 import CertificateSignatories from './certificate-signatories/CertificateSignatories';
+import { defaultCertificate } from '../constants';
 import messages from './messages';
 
 const CertificatesCard = ({
@@ -19,67 +20,45 @@ const CertificatesCard = ({
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
-  const mode = useSelector(getMode);
-  const title = useSelector(getCourseTitle);
-  const number = useSelector(getCourseNumber);
-
-  const initialValues = {
-    courseTitle: '',
-    signatories: [{
-      name: '', title: '', organization: '', signatureImagePath: '',
-    }],
-  };
+  const componentMode = useSelector(getComponentMode);
+  const courseTitle = useSelector(getCourseTitle);
+  const courseNumber = useSelector(getCourseNumber);
 
   const handleSubmit = (values) => {
-    const certificateData = {
-      courseTitle: values.courseTitle,
-      description: 'Description of the certificate',
-      editing: true,
-      isActive: false,
-      name: 'Name of the certificate',
-      signatories: values.signatories.map(sig => ({
-        name: sig.name,
-        title: sig.title,
-        organization: sig.organization,
-        signature_image_path: sig.signatureImagePath,
-        certificate: null,
-      })),
-      version: 1,
-    };
-    dispatch(createCourseCertificate(courseId, certificateData));
+    dispatch(createCourseCertificate(courseId, values));
   };
 
   const cardCreateCancel = (resetForm) => {
-    dispatch(setMode(MODE_STATES.NO_CERTIFICATES));
+    dispatch(setMode(MODE_STATES.noCertificates));
     resetForm();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (mode === MODE_STATES.CREATE) {
+  if (componentMode === MODE_STATES.create) {
     return (
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik initialValues={defaultCertificate} onSubmit={handleSubmit}>
         {({
           values, handleChange, handleBlur, resetForm, setFieldValue,
         }) => (
-          <Form className="certificates__card-form">
+          <Form className="certificates-card-form">
             <article>
               <Card>
                 <Card.Section>
                   <Stack gap="4">
                     <CertificateDetails
-                      detailsCourseTitle={title}
-                      detailsCourseNumber={number}
+                      detailsCourseTitle={courseTitle}
+                      detailsCourseNumber={courseNumber}
                       courseTitleOverride={values.courseTitle}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      mode={mode}
+                      componentMode={componentMode}
                     />
                     <FieldArray
                       name="signatories"
                       render={arrayHelpers => (
                         <CertificateSignatories
                           signatories={values.signatories}
-                          mode={mode}
+                          componentMode={componentMode}
                           arrayHelpers={arrayHelpers}
                           handleChange={handleChange}
                           handleBlur={handleBlur}

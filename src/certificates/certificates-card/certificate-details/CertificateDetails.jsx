@@ -6,7 +6,7 @@ import { MODE_STATES } from '../../data/constants';
 import messages from '../messages';
 
 const CertificateDetails = ({
-  mode,
+  componentMode,
   handleChange,
   handleBlur,
   detailsCourseTitle,
@@ -16,8 +16,8 @@ const CertificateDetails = ({
 
   return (
     <section>
-      <Stack className="justify-content-between" direction="horizontal">
-        <h2 className="lead">{intl.formatMessage(messages.detailsSectionTitle)}</h2>
+      <Stack className="justify-content-between certificate-details" direction="horizontal">
+        <h2 className="lead section-title">{intl.formatMessage(messages.detailsSectionTitle)}</h2>
         <Stack direction="horizontal" gap="2">
           {/* {mode === MODE_STATES.VIEW && ()} TODO https://youtrack.raccoongang.com/issue/AXIMST-166 */}
         </Stack>
@@ -33,7 +33,7 @@ const CertificateDetails = ({
           </Stack>
           <Stack direction="horizontal" gap="1.5" className="details-info justify-content-between align-items-baseline">
             {/* {mode === MODE_STATES.VIEW && ()} TODO https://youtrack.raccoongang.com/issue/AXIMST-166 */}
-            {mode === MODE_STATES.CREATE && (
+            {componentMode === MODE_STATES.create && (
               <Form.Group className="m-0 w-100">
                 <Form.Label>{intl.formatMessage(messages.detailsCourseTitleOverride)}</Form.Label>
                 <Form.Control
@@ -64,7 +64,7 @@ CertificateDetails.defaultProps = {
 CertificateDetails.propTypes = {
   courseTitleOverride: PropTypes.string,
   detailsCourseTitle: PropTypes.string.isRequired,
-  mode: PropTypes.string.isRequired,
+  componentMode: PropTypes.string.isRequired,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
 };

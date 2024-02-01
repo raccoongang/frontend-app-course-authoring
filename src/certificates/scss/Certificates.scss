@@ -1,75 +1,88 @@
 .certificates {
-    h2, h3 {
-        color: $black;
-    }
+  .section-title {
+    color: $black;
+  }
 
+  .certificate-details {
     .details-info {
-        color: $black;
-        justify-content: space-between; 
-        align-items: baseline;
+      color: $black;
+      justify-content: space-between;
+      align-items: baseline;
 
-        p {
-            flex: 1;
-        }
+      p {
+        flex: 1;
+      }
 
-        .details-course-number {
-            color: $gray-700;
-            text-align: right;
-        }
+      .details-course-number {
+        color: $gray-700;
+        text-align: right;
+      }
     }
+  }
 
+  .certificate-signatories {
+    .signatory-image {
+      display: flex;
+      margin: 10px auto;
+      max-width: 23.5rem;
+    }
+  }
+
+
+  .stack-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .text-stack {
+    flex: 1;
+    max-width: 18.75rem;
+
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .image-container {
+    flex: 2;
+    max-width: 18.75rem;
+    margin: auto;
+  }
+
+  .image-container img {
+    min-height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+
+  .certificates-card-form {
+    .pgn__form-control-description,
+    .pgn__form-text {
+      margin-top: .62rem;
+    }
+  }
+
+  @media (max-width: map-get($grid-breakpoints, "lg")) {
     .stack-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
     }
 
     .text-stack {
-        flex: 1;
-        max-width: 300px;
+      max-width: none;
 
-        p {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+      p {
+        white-space: wrap;
+      }
     }
 
     .image-container {
-        flex: 2;
-        max-width: 300px;
-        margin: auto;
+      max-width: none;
     }
-
-    .image-container img {
-        min-height: 100%;
-        object-fit: cover;
-        object-position: center;
-        width: 100%;
-    }
-
-    .certificates__card-form {
-        .pgn__form-control-description,
-        .pgn__form-text {
-            margin-top: .62rem;
-        }
-    }
-
-    @media (max-width: map-get($grid-breakpoints, "lg")) {
-        .stack-container {
-            flex-direction: column;
-            align-items: center;
-          }
-          .text-stack {
-            max-width: none;
-
-            p {
-                white-space: wrap;
-            }
-          }
-          .image-container {
-            max-width: none;
-          }
-      }
+  }
 }

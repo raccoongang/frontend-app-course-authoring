@@ -5,17 +5,25 @@ import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../store';
 import { MODE_STATES } from '../data/constants';
-import { getMode } from '../data/selectors';
+import { getComponentMode } from '../data/selectors';
 import messages from '../certificates-card/messages';
 import CertificateCreate from './CertificateCreate';
+
+const courseId = 'course-123';
+let store;
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn(),
 }));
 
-const courseId = 'course-123';
-let store;
+const renderComponent = () => render(
+  <Provider store={store}>
+    <IntlProvider locale="en">
+      <CertificateCreate courseId={courseId} />
+    </IntlProvider>
+  </Provider>,
+);
 
 const initialState = {
   certificates: {
@@ -23,7 +31,7 @@ const initialState = {
       certificates: [],
       hasCertificateModes: true,
     },
-    mode: MODE_STATES.CREATE,
+    mode: MODE_STATES.create,
   },
 };
 
@@ -39,8 +47,8 @@ describe('CertificateCreate', () => {
     });
     store = initializeStore(initialState);
     useSelector.mockImplementation((selector) => {
-      if (selector === getMode) {
-        return MODE_STATES.CREATE;
+      if (selector === getComponentMode) {
+        return MODE_STATES.create;
       }
       return jest.requireActual('react-redux').useSelector(selector);
     });
@@ -49,14 +57,6 @@ describe('CertificateCreate', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
-
-  const renderComponent = () => render(
-    <Provider store={store}>
-      <IntlProvider locale="en">
-        <CertificateCreate courseId={courseId} />
-      </IntlProvider>
-    </Provider>,
-  );
 
   it('renders with empty fields', () => {
     const { getByPlaceholderText } = renderComponent();

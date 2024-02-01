@@ -1,8 +1,7 @@
 import { Provider, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  render, fireEvent, waitFor, act,
-} from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 
@@ -45,7 +44,7 @@ const renderComponent = (props) => render(
 );
 
 const defaultProps = {
-  mode: MODE_STATES.VIEW,
+  componentMode: MODE_STATES.view,
   detailsCourseTitle: 'Course Title',
   detailsCourseNumber: 'Course Number',
   handleChange: jest.fn(),
@@ -87,31 +86,35 @@ describe('CertificateDetails', () => {
   it('handles edit button click', () => {
     const { getByLabelText } = renderComponent(defaultProps);
     const editButton = getByLabelText(messages.editTooltip.defaultMessage);
-    fireEvent.click(editButton);
+    userEvent.click(editButton);
 
-    expect(mockDispatch).toHaveBeenCalledWith(setMode(MODE_STATES.EDIT_ALL));
+    expect(mockDispatch).toHaveBeenCalledWith(setMode(MODE_STATES.editAll));
   });
+
   it('opens confirm modal on delete button click', () => {
     const { getByLabelText, getByText } = renderComponent(defaultProps);
     const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
-    fireEvent.click(deleteButton);
+    userEvent.click(deleteButton);
+
     expect(getByText('Delete this certificate?')).toBeInTheDocument();
   });
 
   it('renders correctly in create mode', () => {
-    const props = { ...defaultProps, mode: MODE_STATES.CREATE };
+    const props = { ...defaultProps, componentMode: MODE_STATES.create };
     const { getByText, getByPlaceholderText } = renderComponent(props);
+
     expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
     expect(getByPlaceholderText(messages.detailsCourseTitleOverride.defaultMessage)).toBeInTheDocument();
   });
 
   it('handles input change in create mode', async () => {
-    const props = { ...defaultProps, mode: MODE_STATES.CREATE };
+    const props = { ...defaultProps, componentMode: MODE_STATES.create };
     const { getByPlaceholderText } = renderComponent(props);
     const input = getByPlaceholderText(messages.detailsCourseTitleOverride.defaultMessage);
     await act(async () => {
-      fireEvent.change(input, { target: { value: 'New Title' } });
+      userEvent.type(input, 'New Title');
     });
+
     waitFor(() => {
       expect(input.value).toBe('New Title');
     });

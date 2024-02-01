@@ -13,8 +13,9 @@ import {
 } from '@edx/paragon';
 import { FileUpload as FileUploadIcon } from '@edx/paragon/icons';
 
-import messages from './messages';
+import InternetConnectionAlert from '../internet-connection-alert';
 import useModalDropzone from './useModalDropzone';
+import messages from './messages';
 
 const ModalDropzone = ({
   isOpen,
@@ -27,7 +28,9 @@ const ModalDropzone = ({
     previewUrl,
     uploadProgress,
     disabledUploadBtn,
-    imageDimensionValidator,
+    isQueryFailed,
+    isQueryPending,
+    imageValidator,
     handleUpload,
     handleCancel,
     handleSelectFile,
@@ -82,7 +85,7 @@ const ModalDropzone = ({
                   onProcessUpload={handleSelectFile}
                   inputComponent={inputComponent}
                   accept={{ 'image/*': ['.png'] }}
-                  validator={imageDimensionValidator}
+                  validator={imageValidator}
                 />
               )}
             </Card.Body>
@@ -99,8 +102,11 @@ const ModalDropzone = ({
           </Button>
         </ActionRow>
       </ModalDialog.Footer>
+      <InternetConnectionAlert
+        isFailed={isQueryFailed}
+        isQueryPending={isQueryPending}
+      />
     </ModalDialog>
-
   );
 };
 

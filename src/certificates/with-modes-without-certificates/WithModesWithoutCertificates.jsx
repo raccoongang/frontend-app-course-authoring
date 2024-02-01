@@ -4,15 +4,15 @@ import { Button, Stack, Card } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons';
 
 import { setMode } from '../data/slice';
-import messages from '../messages';
 import { MODE_STATES } from '../data/constants';
+import messages from '../messages';
 
 const WithModesWithoutCertificates = () => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
   const handleCreateMode = () => {
-    dispatch(setMode(MODE_STATES.CREATE));
+    dispatch(setMode(MODE_STATES.create));
   };
 
   return (

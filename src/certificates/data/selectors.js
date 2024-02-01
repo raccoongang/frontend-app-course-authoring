@@ -9,10 +9,10 @@ export const getCourseModes = state => state.certificates.certificatesData.cours
 export const getCertificateActivationUrl = state => state.certificates.certificatesData.certificateActivationHandlerUrl;
 export const getCertificateWebViewUrl = state => state.certificates.certificatesData.certificateWebViewUrl;
 export const getIsCertificateActive = state => state.certificates.certificatesData.isActive;
-export const getMode = state => state.certificates.mode;
-export const getCourseNumber = state => state.certificates.courseNumber;
-export const getCourseNumberOverride = state => state.certificates.courseNumberOverride;
-export const getCourseTitle = state => state.certificates.courseTitle;
+export const getComponentMode = state => state.certificates.componentMode;
+export const getCourseNumber = state => state.certificates.certificatesData.courseNumber;
+export const getCourseNumberOverride = state => state.certificates.certificatesData.courseNumberOverride;
+export const getCourseTitle = state => state.certificates.certificatesData.courseTitle;
 
 export const getHasCertificates = createSelector(
   [getCertificates],

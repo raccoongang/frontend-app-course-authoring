@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { RequestStatus } from '../../data/constants';
 import {
   hideProcessingNotification,

@@ -1,16 +1,22 @@
-import {
-  render, fireEvent, waitFor, act,
-} from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../store';
-import { getMode } from '../data/selectors';
+import { getComponentMode } from '../data/selectors';
 import { MODE_STATES } from '../data/constants';
 import { createCourseCertificate } from '../data/thunks';
 import CertificatesCard from './CertificatesCard';
 import messages from './messages';
+
+let store;
+const courseId = 'course-123';
+const certificateId = 1;
+const signatories = [{
+  name: 'John Doe', title: 'CEO', organization: 'Company', signatureImagePath: '',
+}];
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -21,23 +27,6 @@ jest.mock('react-redux', () => ({
 jest.mock('../data/thunks', () => ({
   createCourseCertificate: jest.fn(),
 }));
-
-let store;
-const courseId = 'course-123';
-const certificateId = 1;
-const signatories = [{
-  name: 'John Doe', title: 'CEO', organization: 'Company', signatureImagePath: '',
-}];
-
-const initialState = {
-  certificates: {
-    certificatesData: {
-      certificates: [],
-      hasCertificateModes: true,
-    },
-    mode: MODE_STATES.CREATE,
-  },
-};
 
 const renderComponent = () => render(
   <Provider store={store}>
@@ -50,6 +39,16 @@ const renderComponent = () => render(
     </IntlProvider>
   </Provider>,
 );
+
+const initialState = {
+  certificates: {
+    certificatesData: {
+      certificates: [],
+      hasCertificateModes: true,
+    },
+    componentMode: MODE_STATES.create,
+  },
+};
 
 describe('CertificatesCard', () => {
   beforeEach(() => {
@@ -66,10 +65,10 @@ describe('CertificatesCard', () => {
 
   it('renders form elements in create mode', () => {
     useSelector.mockImplementation(selector => {
-      if (selector === getMode) {
-        return MODE_STATES.CREATE;
+      if (selector === getComponentMode) {
+        return MODE_STATES.create;
       }
-      return MODE_STATES.VIEW;
+      return MODE_STATES.view;
     });
     const { getByText } = renderComponent();
     expect(getByText(messages.cardCreate.defaultMessage)).toBeInTheDocument();
@@ -82,8 +81,8 @@ describe('CertificatesCard', () => {
     const { getByText, getByLabelText } = renderComponent();
 
     await act(async () => {
-      fireEvent.change(getByLabelText(messages.detailsCourseTitleOverride.defaultMessage), { target: { value: 'New Title' } });
-      fireEvent.click(getByText(messages.cardCreate.defaultMessage));
+      userEvent.type(getByLabelText(messages.detailsCourseTitleOverride.defaultMessage), 'New Title');
+      userEvent.click(getByText(messages.cardCreate.defaultMessage));
     });
 
     await waitFor(() => {

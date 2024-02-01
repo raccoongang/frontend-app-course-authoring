@@ -8,7 +8,7 @@ import messages from '../messages';
 import Signatory from './signatory/Signatory';
 
 const CertificateSignatories = ({
-  signatories, mode, handleChange, handleBlur, arrayHelpers, setFieldValue,
+  signatories, componentMode, handleChange, handleBlur, arrayHelpers, setFieldValue,
 }) => {
   const intl = useIntl();
   const handleAddSignatory = () => {
@@ -22,21 +22,21 @@ const CertificateSignatories = ({
   };
 
   return (
-    <section>
+    <section className="certificate-signatories">
       <h2 className="lead section-title">{intl.formatMessage(messages.signatoriesSectionTitle)}</h2>
       <hr />
       <div>
         <p className="mb-4.5">
           {intl.formatMessage(messages.signatoriesRecommendation)}
         </p>
-        <Stack className="signatories" gap="4.5">
+        <Stack gap="4.5">
           {signatories.map(({
             id, name, title, organization, signatureImagePath,
           }, idx) => (
             <Signatory
               key={`signatory-${id}`}
               id={idx}
-              mode={mode}
+              componentMode={componentMode}
               name={name}
               title={title}
               signatureImagePath={signatureImagePath}
@@ -49,7 +49,7 @@ const CertificateSignatories = ({
             />
           ))}
         </Stack>
-        {mode === MODE_STATES.CREATE && (
+        {componentMode === MODE_STATES.create && (
           <>
             <Button variant="outline-primary" onClick={handleAddSignatory} className="w-100 mt-4">
               {intl.formatMessage(messages.addSignatoryButton)}
@@ -72,7 +72,7 @@ CertificateSignatories.defaultProps = {
 };
 
 CertificateSignatories.propTypes = {
-  mode: PropTypes.string.isRequired,
+  componentMode: PropTypes.string.isRequired,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   setFieldValue: PropTypes.func,

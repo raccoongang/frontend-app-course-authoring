@@ -18,11 +18,12 @@ export async function uploadAssets(courseId, fileData, onUploadProgress) {
     onUploadProgress,
   };
 
-  const { data } = await getAuthenticatedHttpClient().post(
-    `${getUploadAssetsUrl(courseId).href}`,
-    fileData,
-    config,
-  );
+  const { data } = await getAuthenticatedHttpClient()
+    .post(
+      getUploadAssetsUrl(courseId).href,
+      fileData,
+      config,
+    );
 
   return camelCaseObject(data);
 }

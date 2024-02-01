@@ -1,6 +1,5 @@
-import {
-  render, fireEvent, waitFor, act,
-} from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import { MODE_STATES } from '../../../data/constants';
@@ -24,29 +23,33 @@ const renderSignatory = (props) => render(
   </IntlProvider>,
 );
 
-describe('Signatory Component', () => {
-  const defaultProps = {
-    id: 0,
-    name: 'John Doe',
-    title: 'Director',
-    organization: 'Organization',
-    signatureImagePath: '/path/to/image.png',
-    showDeleteButton: true,
-  };
+const defaultProps = {
+  id: 0,
+  name: 'John Doe',
+  title: 'Director',
+  organization: 'Organization',
+  signatureImagePath: '/path/to/image.png',
+  showDeleteButton: true,
+};
 
+describe('Signatory Component', () => {
   it('renders in CREATE mode', () => {
-    const { queryByTestId, getByPlaceholderText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.CREATE });
+    const { queryByTestId, getByPlaceholderText } = renderSignatory(
+      { ...defaultProps, componentMode: MODE_STATES.create },
+    );
     expect(queryByTestId('signatory-view')).not.toBeInTheDocument();
     expect(getByPlaceholderText(messages.namePlaceholder.defaultMessage)).toBeInTheDocument();
   });
 
   it('handles input change', async () => {
     const handleChange = jest.fn();
-    const { getByPlaceholderText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.CREATE, handleChange });
+    const { getByPlaceholderText } = renderSignatory(
+      { ...defaultProps, componentMode: MODE_STATES.create, handleChange },
+    );
     const input = getByPlaceholderText(messages.namePlaceholder.defaultMessage);
 
     await act(async () => {
-      fireEvent.change(input, { target: { value: 'Jane Doe', name: 'signatories[0].name' } });
+      userEvent.type(input, 'Jane Doe', { name: 'signatories[0].name' });
     });
 
     waitFor(() => {
@@ -56,12 +59,14 @@ describe('Signatory Component', () => {
   });
 
   it('opens image upload modal on button click', () => {
-    const { getByText, getByRole, queryByRole } = renderSignatory({ ...defaultProps, mode: MODE_STATES.CREATE });
-    const uploadButton = getByText(messages.uploadImageButton.defaultMessage);
+    const { getByRole, queryByRole } = renderSignatory(
+      { ...defaultProps, componentMode: MODE_STATES.create },
+    );
+    const uploadButton = getByRole('button', { name: messages.uploadImageButton.defaultMessage });
 
     expect(queryByRole('presentation')).not.toBeInTheDocument();
 
-    fireEvent.click(uploadButton);
+    userEvent.click(uploadButton);
 
     expect(getByRole('presentation')).toBeInTheDocument();
   });

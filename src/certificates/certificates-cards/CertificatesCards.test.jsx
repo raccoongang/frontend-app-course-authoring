@@ -30,19 +30,6 @@ const mockCertificates = [
   },
 ];
 
-const initialState = {
-  certificates: {
-    certificatesData: {
-      certificates: mockCertificates,
-      hasCertificateModes: true,
-      mode: MODE_STATES.VIEW,
-      courseTitle: 'Course Title 1',
-      courseNumber: 'Demox',
-      courseNumberOverride: 'Course 101',
-    },
-  },
-};
-
 const renderComponent = () => render(
   <Provider store={store}>
     <IntlProvider locale="en">
@@ -50,6 +37,19 @@ const renderComponent = () => render(
     </IntlProvider>
   </Provider>,
 );
+
+const initialState = {
+  certificates: {
+    certificatesData: {
+      certificates: mockCertificates,
+      hasCertificateModes: true,
+      componentMode: MODE_STATES.view,
+      courseTitle: 'Course Title 1',
+      courseNumber: 'Demox',
+      courseNumberOverride: 'Course 101',
+    },
+  },
+};
 
 describe('CertificatesCards Component', () => {
   beforeEach(() => {

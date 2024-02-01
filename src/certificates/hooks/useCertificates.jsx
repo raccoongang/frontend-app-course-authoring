@@ -5,7 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { RequestStatus } from '../../data/constants';
 import getPageHeadTitle from '../../generic/utils';
 import {
-  getMode, getLoadingStatus, getCertificates, getHasCertificateModes, getCourseTitle,
+  getComponentMode, getLoadingStatus, getCertificates, getHasCertificateModes, getCourseTitle,
 } from '../data/selectors';
 import { setMode } from '../data/slice';
 import { fetchCertificates } from '../data/thunks';
@@ -17,7 +17,7 @@ const useCertificates = ({ courseId }) => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const mode = useSelector(getMode);
+  const componentMode = useSelector(getComponentMode);
   const certificates = useSelector(getCertificates);
   const loadingStatus = useSelector(getLoadingStatus);
   const hasCertificateModes = useSelector(getHasCertificateModes);
@@ -27,11 +27,11 @@ const useCertificates = ({ courseId }) => {
 
   useEffect(() => {
     if (!hasCertificateModes) {
-      dispatch(setMode(MODE_STATES.NO_MODES));
+      dispatch(setMode(MODE_STATES.noModes));
     } else if (hasCertificateModes && !certificates.length) {
-      dispatch(setMode(MODE_STATES.NO_CERTIFICATES));
+      dispatch(setMode(MODE_STATES.noCertificates));
     } else if (hasCertificateModes && certificates.length) {
-      dispatch(setMode(MODE_STATES.VIEW));
+      dispatch(setMode(MODE_STATES.view));
     }
   }, [hasCertificateModes, certificates]);
 
@@ -42,7 +42,7 @@ const useCertificates = ({ courseId }) => {
   document.title = getPageHeadTitle(title, intl.formatMessage(messages.headingTitleTabText));
 
   return {
-    mode, isLoading, loadingStatus,
+    componentMode, isLoading, loadingStatus,
   };
 };
 
