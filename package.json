@@ -46,6 +46,7 @@
     "@edx/frontend-platform": "5.6.1",
     "@edx/openedx-atlas": "^0.6.0",
     "@edx/paragon": "^21.5.6",
+    "@edx/react-unit-test-utils": "^1.7.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
@@ -82,7 +83,6 @@
   "devDependencies": {
     "@edx/browserslist-config": "1.2.0",
     "@edx/frontend-build": "13.0.5",
-    "@edx/react-unit-test-utils": "^1.7.0",
     "@edx/reactifex": "^1.0.3",
     "@edx/stylelint-config-edx": "^2.3.0",
     "@edx/typescript-config": "^1.0.1",
