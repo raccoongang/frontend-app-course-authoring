@@ -37,7 +37,7 @@ const CourseUnit = ({ courseId }) => {
     savingStatus,
     isTitleEditFormOpen,
     isErrorAlert,
-    isLastUnpublishedVersion,
+    currentlyVisibleToStudents,
     isInternetConnectionAlertFailed,
     unitXBlockActions,
     handleTitleEditSubmit,
@@ -107,7 +107,7 @@ const CourseUnit = ({ courseId }) => {
             xl={[{ span: 9 }, { span: 3 }]}
           >
             <Layout.Element>
-              {isLastUnpublishedVersion && (
+              {currentlyVisibleToStudents && (
                 <AlertMessage
                   title={intl.formatMessage(messages.alertUnpublishedVersion)}
                   variant="warning"
