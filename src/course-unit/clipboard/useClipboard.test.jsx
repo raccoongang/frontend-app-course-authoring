@@ -84,7 +84,7 @@ describe('useCopyToClipboard', () => {
         await executeThunk(copyToClipboard(unitId), store.dispatch);
       });
       expect(result.current.showPasteUnit).toBe(true);
-      expect(result.current.showPasteXBlock).toBe(false);
+      expect(result.current.showPasteXBlock).toBe(true);
     });
 
     it('returns flag to display the Paste XBlock button', async () => {
@@ -111,7 +111,7 @@ describe('useCopyToClipboard', () => {
       clipboardBroadcastChannelMock.onmessage({ data: clipboardUnit });
 
       expect(result.current.showPasteUnit).toBe(true);
-      expect(result.current.showPasteXBlock).toBe(false);
+      expect(result.current.showPasteXBlock).toBe(true);
 
       clipboardBroadcastChannelMock.onmessage({ data: clipboardXBlock });
       expect(result.current.showPasteUnit).toBe(false);

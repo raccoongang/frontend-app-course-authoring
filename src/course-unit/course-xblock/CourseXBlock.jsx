@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import { scrollToElement } from '../../course-outline/utils';
 import { copyToClipboard } from '../data/thunk';
-import { getCourseUnitEnableCopyPaste } from '../data/selectors';
 import ContentIFrame from './ContentIFrame';
 import { getIFrameUrl } from './urls';
 import messages from './messages';

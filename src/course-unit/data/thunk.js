@@ -174,10 +174,6 @@ export function createNewCourseXBlock(body, callback, blockId) {
             callback(result);
           }
         }
-        const { userClipboard } = await getCourseSectionVerticalData(blockId);
-        dispatch(updateClipboardData(userClipboard));
-        const courseUnit = await getCourseUnitData(blockId);
-        dispatch(fetchCourseItemSuccess(courseUnit));
       });
     } catch (error) {
       dispatch(hideProcessingNotification());

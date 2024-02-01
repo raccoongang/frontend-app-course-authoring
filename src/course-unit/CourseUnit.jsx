@@ -42,10 +42,11 @@ const CourseUnit = ({ courseId }) => {
     isLastUnpublishedVersion,
     isInternetConnectionAlertFailed,
     unitXBlockActions,
+    sharedClipboardData,
+    showPasteXBlock,
     handleTitleEditSubmit,
     headerNavigationsActions,
     handleTitleEdit,
-    clipboardData,
     handleInternetConnectionFailed,
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
@@ -134,9 +135,9 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
-              {clipboardData.content && (
+              {showPasteXBlock && (
                 <PasteComponent
-                  clipboardData={clipboardData}
+                  clipboardData={sharedClipboardData}
                   handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
                 />
               )}

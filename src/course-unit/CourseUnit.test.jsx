@@ -74,6 +74,12 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }));
 
+const clipboardBroadcastChannelMock = {
+  postMessage: jest.fn(),
+  close: jest.fn(),
+};
+global.BroadcastChannel = jest.fn(() => clipboardBroadcastChannelMock);
+
 const RootWrapper = () => (
   <AppProvider store={store}>
     <IntlProvider locale="en">

@@ -19,11 +19,11 @@ import {
   getLoadingStatus,
   getSavingStatus,
   getSequenceStatus,
-  getClipboardData,
   getCourseUnitEnableCopyPaste, getStaticFileNotices,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 import usePastNotificationAlerts from './paste-notifications/usePasteNotificationAlert';
+import useCopyToClipboard from './clipboard/useClipboard';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -37,7 +37,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const sequenceStatus = useSelector(getSequenceStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const courseVerticalChildren = useSelector(getCourseVerticalChildren);
-  const clipboardData = useSelector(getClipboardData);
   const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const staticFileNotices = useSelector(getStaticFileNotices);
   const navigate = useNavigate();
@@ -46,6 +45,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const { hasExplicitStaffLock, published, releaseDate } = courseUnit;
   const isLastUnpublishedVersion = !hasExplicitStaffLock && published && releaseDate;
   const renderPasteComponentAlerts = usePastNotificationAlerts(staticFileNotices, courseId);
+  const { sharedClipboardData, showPasteXBlock } = useCopyToClipboard();
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
@@ -125,11 +125,12 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     isEditTitleFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     enableCopyPasteUnits,
+    sharedClipboardData,
+    showPasteXBlock,
     handleInternetConnectionFailed,
     unitXBlockActions,
     headerNavigationsActions,
     handleTitleEdit,
-    clipboardData,
     handleTitleEditSubmit,
     handleCreateNewCourseXBlock,
     courseVerticalChildren,
