@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import PropTypes from 'prop-types';
 
-import { Hyperlink } from '@edx/paragon';
+import { Hyperlink } from '@openedx/paragon';
 import { HelpSidebar } from '../../generic/help-sidebar';
 import messages from './messages';
 import { useHelpUrls } from '../../help-urls/hooks';

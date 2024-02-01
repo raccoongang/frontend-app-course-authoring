@@ -16,6 +16,8 @@ import { COURSE_BLOCK_NAMES } from '../../constants';
 import { copyToClipboard } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
+import ContentIFrame from './ContentIFrame';
+import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
@@ -30,6 +32,7 @@ const CourseXBlock = ({
   const canEdit = useSelector(getCanEdit);
   const courseId = useSelector(getCourseId);
   const intl = useIntl();
+  const iframeUrl = getIFrameUrl({ blockId: id });
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
@@ -130,8 +133,7 @@ const CourseXBlock = ({
           size="md"
         />
         <Card.Section>
-          <XBlockMessages validationMessages={validationMessages} />
-          <div className="w-100 bg-gray-100" style={{ height: 200 }} data-block-id={id} />
+          <ContentIFrame id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
         </Card.Section>
       </Card>
     </div>
