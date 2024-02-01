@@ -11,6 +11,8 @@ import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import { scrollToElement } from '../../course-outline/utils';
 import { copyToClipboard } from '../data/thunk';
 import { getCourseUnitEnableCopyPaste } from '../data/selectors';
+import ContentIFrame from './ContentIFrame';
+import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
@@ -21,6 +23,7 @@ const CourseXBlock = ({
   const dispatch = useDispatch();
   const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const intl = useIntl();
+  const iframeUrl = getIFrameUrl({ blockId: id });
 
   const onXBlockDelete = () => {
     unitXBlockActions.handleDelete(id);
@@ -87,7 +90,7 @@ const CourseXBlock = ({
           size="md"
         />
         <Card.Section>
-          <div className="w-100 bg-gray-100" style={{ height: 200 }} data-block-id={id} />
+          <ContentIFrame id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
         </Card.Section>
       </Card>
     </div>
