@@ -6,7 +6,6 @@ import { Add as AddIcon } from '@edx/paragon/icons';
 import { setMode } from '../data/slice';
 import { MODE_STATES } from '../data/constants';
 import messages from '../messages';
-import { MODE_STATES } from '../data/constants';
 
 const WithModesWithoutCertificates = () => {
   const intl = useIntl();
