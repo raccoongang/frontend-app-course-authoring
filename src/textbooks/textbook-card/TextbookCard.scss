@@ -26,6 +26,15 @@
 .textbook-card__chapter-item {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: $spacer;
+
+  & span:first-of-type {
+    word-break: break-word;
+  }
+
+  & span:last-of-type {
+    word-break: break-all;
+  }
 
   &:not(:last-of-type) {
     margin-bottom: map-get($spacers, 2);
