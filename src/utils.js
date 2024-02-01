@@ -287,3 +287,14 @@ export const createCorrectInternalRoute = (checkPath) => {
 
   return checkPath;
 };
+
+/**
+ * The method takes an object and converts it into an equivalent URL query string.
+ * @param {object} obj - an Object to convert.
+ * @returns {string} - the equivalent URL query String.
+ */
+export const objectToQueryString = (obj) => (
+  Object.keys(obj).map(
+    (key) => `${key }=${ obj[key]}`,
+  ).join('&')
+);
