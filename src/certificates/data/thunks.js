@@ -1,7 +1,17 @@
-/* eslint-disable import/prefer-default-export */
 import { RequestStatus } from '../../data/constants';
-import { getCertificates } from './api';
-import { fetchCertificatesSuccess, updateLoadingStatus } from './slice';
+import {
+  hideProcessingNotification,
+  showProcessingNotification,
+} from '../../generic/processing-notification/data/slice';
+import { NOTIFICATION_MESSAGES } from '../../constants';
+import { getCertificates, createCertificate } from './api';
+import {
+  fetchCertificatesSuccess,
+  updateLoadingStatus,
+  getDataSendErrors,
+  updateSavingStatus,
+  createCertificateSuccess,
+} from './slice';
 
 export function fetchCertificates(courseId) {
   return async (dispatch) => {
@@ -18,6 +28,34 @@ export function fetchCertificates(courseId) {
       } else {
         dispatch(updateLoadingStatus({ courseId, status: RequestStatus.FAILED }));
       }
+    }
+  };
+}
+
+export function createCourseCertificate(courseId, certificates) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      const certificatesValues = await createCertificate(courseId, certificates);
+      dispatch(createCertificateSuccess(certificatesValues));
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      return true;
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      let errorData;
+      try {
+        const { customAttributes: { httpErrorResponseData } } = error;
+        errorData = JSON.parse(httpErrorResponseData);
+      } catch (err) {
+        errorData = {};
+      }
+
+      dispatch(getDataSendErrors(errorData));
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
     }
   };
 }

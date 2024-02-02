@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, Hyperlink } from '@openedx/paragon';
 
-import { HelpSidebar } from '../../generic/help-sidebar';
-import { useHelpUrls } from '../../help-urls/hooks';
+import { HelpSidebar } from '../../../generic/help-sidebar';
+import { useHelpUrls } from '../../../help-urls/hooks';
 import { getSidebarData } from './utils';
 import SidebarBlock from './sidebar-block/SidebarBlock';
 import messages from './messages';
