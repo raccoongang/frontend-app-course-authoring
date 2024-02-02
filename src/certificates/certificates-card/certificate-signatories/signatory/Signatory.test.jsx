@@ -1,8 +1,9 @@
-import { render, waitFor, act } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import { MODE_STATES } from '../../../data/constants';
+import { signatoriesMock } from '../../../__mocks__';
 import messages from '../../messages';
 import Signatory from './Signatory';
 
@@ -12,6 +13,7 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
     formatMessage: (message) => message.defaultMessage,
   }),
 }));
+
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getConfig: () => ({ STUDIO_BASE_URL: 'http://localhost' }),
@@ -23,14 +25,7 @@ const renderSignatory = (props) => render(
   </IntlProvider>,
 );
 
-const defaultProps = {
-  id: 0,
-  name: 'John Doe',
-  title: 'Director',
-  organization: 'Organization',
-  signatureImagePath: '/path/to/image.png',
-  showDeleteButton: true,
-};
+const defaultProps = signatoriesMock[0];
 
 describe('Signatory Component', () => {
   it('renders in CREATE mode', () => {
@@ -54,14 +49,13 @@ describe('Signatory Component', () => {
       { ...defaultProps, componentMode: MODE_STATES.create, handleChange },
     );
     const input = getByPlaceholderText(messages.namePlaceholder.defaultMessage);
+    const newInputValue = 'Jane Doe';
 
-    await act(async () => {
-      userEvent.type(input, 'Jane Doe', { name: 'signatories[0].name' });
-    });
+    userEvent.type(input, newInputValue, { name: 'signatories[0].name' });
 
     waitFor(() => {
       expect(handleChange).toHaveBeenCalledWith(expect.anything());
-      expect(input.value).toBe('Jane Doe');
+      expect(input.value).toBe(newInputValue);
     });
   });
 

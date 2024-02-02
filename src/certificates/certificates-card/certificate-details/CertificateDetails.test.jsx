@@ -1,13 +1,12 @@
 import { Provider, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { render, waitFor, act } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../../store';
 import { MODE_STATES } from '../../data/constants';
-// import { setMode } from '../../data/slice';
 import messages from '../messages';
 import CertificateDetails from './CertificateDetails';
 
@@ -18,19 +17,23 @@ jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useDispatch: jest.fn(),
 }));
+
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   useIntl: () => ({
     formatMessage: (message) => message.defaultMessage,
   }),
 }));
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: jest.fn(),
 }));
+
 jest.mock('../../data/slice', () => ({
   setMode: jest.fn(),
 }));
+
 jest.mock('../../data/thunks', () => ({
   deleteCourseCertificate: jest.fn(),
 }));
@@ -83,22 +86,6 @@ describe('CertificateDetails', () => {
     mockDispatch.mockClear();
   });
 
-  // it('handles edit button click', () => {
-  //   const { getByLabelText } = renderComponent(defaultProps);
-  //   const editButton = getByLabelText(messages.editTooltip.defaultMessage);
-  //   userEvent.click(editButton);
-
-  //   expect(mockDispatch).toHaveBeenCalledWith(setMode(MODE_STATES.editAll));
-  // });
-
-  // it('opens confirm modal on delete button click', () => {
-  //   const { getByLabelText, getByText } = renderComponent(defaultProps);
-  //   const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
-  //   userEvent.click(deleteButton);
-
-  //   expect(getByText('Delete this certificate?')).toBeInTheDocument();
-  // });
-
   it('renders correctly in view mode', () => {
     const { getByText } = renderComponent(defaultProps);
     expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
@@ -117,12 +104,12 @@ describe('CertificateDetails', () => {
     const props = { ...defaultProps, componentMode: MODE_STATES.create };
     const { getByPlaceholderText } = renderComponent(props);
     const input = getByPlaceholderText(messages.detailsCourseTitleOverride.defaultMessage);
-    await act(async () => {
-      userEvent.type(input, 'New Title');
-    });
+    const newInputValue = 'New Title';
+
+    userEvent.type(input, newInputValue);
 
     waitFor(() => {
-      expect(input.value).toBe('New Title');
+      expect(input.value).toBe(newInputValue);
     });
   });
 

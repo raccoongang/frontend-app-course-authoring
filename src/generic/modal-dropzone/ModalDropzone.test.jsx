@@ -1,5 +1,5 @@
 import { AppProvider } from '@edx/frontend-platform/react';
-import { render, act, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
@@ -76,9 +76,8 @@ describe('<ModalDropzone />', () => {
     const dropzoneInput = getByRole('presentation', { hidden: true });
 
     const file = new File(['dummy content'], 'test-file.png', { type: 'image/png' });
-    await act(async () => {
-      userEvent.upload(dropzoneInput.firstChild, file);
-    });
+
+    userEvent.upload(dropzoneInput.firstChild, file);
 
     await waitFor(() => {
       const uploadButton = getByText(messages.uploadModal.defaultMessage);
