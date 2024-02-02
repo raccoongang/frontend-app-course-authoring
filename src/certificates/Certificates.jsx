@@ -2,17 +2,18 @@ import PropTypes from 'prop-types';
 import Placeholder from '@edx/frontend-lib-content-components';
 
 import { RequestStatus } from '../data/constants';
+import Loading from '../generic/Loading';
 import useCertificates from './hooks/useCertificates';
-import WithoutModes from './without-modes/WithoutModes';
-import WithModesWithoutCertificates from './with-modes-without-certificates/WithModesWithoutCertificates';
+import CertificateWithoutModes from './certificate-without-modes/CertificateWithoutModes';
+import EmptyCertificatesWithModes from './empty-certificates-with-modes/EmptyCertificatesWithModes';
 import CertificatesCards from './certificates-cards/CertificatesCards';
 import CertificateCreate from './certificate-create/CertificateCreate';
 import { MODE_STATES } from './data/constants';
 import MainLayout from './layout/MainLayout';
 
 const MODE_COMPONENTS = {
-  [MODE_STATES.noModes]: WithoutModes,
-  [MODE_STATES.noCertificates]: WithModesWithoutCertificates,
+  [MODE_STATES.noModes]: CertificateWithoutModes,
+  [MODE_STATES.noCertificates]: EmptyCertificatesWithModes,
   [MODE_STATES.create]: CertificateCreate,
   [MODE_STATES.view]: CertificatesCards,
 };
@@ -21,8 +22,7 @@ const Certificates = ({ courseId }) => {
   const { componentMode, isLoading, loadingStatus } = useCertificates({ courseId });
 
   if (isLoading) {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
+    return <Loading />;
   }
 
   if (loadingStatus === RequestStatus.DENIED) {

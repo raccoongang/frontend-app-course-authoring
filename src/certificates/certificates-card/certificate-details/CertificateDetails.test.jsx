@@ -86,6 +86,12 @@ describe('CertificateDetails', () => {
     mockDispatch.mockClear();
   });
 
+  it('renders correctly in view mode', () => {
+    const { getByText } = renderComponent(defaultProps);
+    expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
+    expect(getByText(defaultProps.detailsCourseTitle)).toBeInTheDocument();
+  });
+
   it('renders correctly in create mode', () => {
     const props = { ...defaultProps, componentMode: MODE_STATES.create };
     const { getByText, getByPlaceholderText } = renderComponent(props);
@@ -105,5 +111,12 @@ describe('CertificateDetails', () => {
     waitFor(() => {
       expect(input.value).toBe(newInputValue);
     });
+  });
+
+  it('shows course title override in view mode', () => {
+    const courseTitleOverride = 'Overridden Title';
+    const props = { ...defaultProps, courseTitleOverride };
+    const { getByText } = renderComponent(props);
+    expect(getByText(courseTitleOverride)).toBeInTheDocument();
   });
 });

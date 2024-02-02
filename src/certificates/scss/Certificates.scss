@@ -4,85 +4,78 @@
   }
 
   .certificate-details {
-    .details-info {
+    .certificate-details__info {
       color: $black;
       justify-content: space-between;
       align-items: baseline;
+    }
 
-      p {
-        flex: 1;
-      }
+    .certificate-details__info__paragraph {
+      flex: 1;
+    }
 
-      .details-course-number {
-        color: $gray-700;
-        text-align: right;
-      }
+    .certificate-details__info__paragraph--course-number {
+      color: $gray-700;
+      text-align: right;
     }
   }
 
-  .certificate-signatories {
-    .signatory-image {
+  .signatory {
+    .signatory__fields-container {
       display: flex;
-      margin: .625rem auto;
-      max-width: 23.5rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
     }
-  }
 
+    .signatory__text-fields-stack {
+      flex: 1;
+      max-width: 18.75rem;
+    }
 
-  .stack-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .text-stack {
-    flex: 1;
-    max-width: 18.75rem;
-
-    p {
+    .signatory__text {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-  }
 
-  .image-container {
-    flex: 2;
-    max-width: 18.75rem;
-    margin: auto;
-  }
+    .signatory__image {
+      display: flex;
+      margin: .625rem auto;
+      max-width: 23.5rem;
+      width: 100%;
+    }
 
-  .image-container img {
-    min-height: 100%;
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
+    .signatory__image-container {
+      flex: 2;
+      max-width: 18.75rem;
+      margin: auto;
+    }
+
+    @media (max-width: map-get($grid-breakpoints, "lg")) {
+      .signatory__fields-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .signatory__text-fields-stack {
+        max-width: none;
+      }
+
+      .signatory__text {
+        white-space: normal;
+      }
+
+      .signatory__image-container {
+        max-width: none;
+      }
+    }
   }
 
   .certificates-card-form {
     .pgn__form-control-description,
     .pgn__form-text {
       margin-top: .62rem;
-    }
-  }
-
-  @media (max-width: map-get($grid-breakpoints, "lg")) {
-    .stack-container {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .text-stack {
-      max-width: none;
-
-      p {
-        white-space: wrap;
-      }
-    }
-
-    .image-container {
-      max-width: none;
     }
   }
 }
