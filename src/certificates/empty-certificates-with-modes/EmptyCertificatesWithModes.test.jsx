@@ -5,7 +5,7 @@ import { AppProvider } from '@edx/frontend-platform/react';
 
 import initializeStore from '../../store';
 import messages from '../messages';
-import WithModesWithoutCertificates from './WithModesWithoutCertificates';
+import WithModesWithoutCertificates from './EmptyCertificatesWithModes';
 
 const courseId = 'course-123';
 let store;
@@ -25,7 +25,7 @@ const renderComponent = (props) => render(
   </AppProvider>,
 );
 
-describe('WithModesWithoutCertificates', () => {
+describe('EmptyCertificatesWithModes', () => {
   beforeEach(() => {
     initializeMockApp({
       authenticatedUser: {
