@@ -3,7 +3,7 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
 
-import initializeStore from '../../store';
+import initializeStore from '../../../store';
 import CertificatesSidebar from './CertificatesSidebar';
 import messages from './messages';
 

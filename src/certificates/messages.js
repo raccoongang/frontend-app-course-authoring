@@ -21,6 +21,10 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.heading.action.button.deactivate',
     defaultMessage: 'Deactivate',
   },
+  headingActionsActivate: {
+    id: 'course-authoring.certificates.heading.action.button.activate',
+    defaultMessage: 'Activate',
+  },
   noCertificatesText: {
     id: 'course-authoring.certificates.nocertificate.text',
     defaultMessage: 'You haven\'t added any certificates to this course yet.',
