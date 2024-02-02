@@ -36,6 +36,13 @@ describe('Signatory Component', () => {
     expect(getByPlaceholderText(messages.namePlaceholder.defaultMessage)).toBeInTheDocument();
   });
 
+  it('renders in VIEW mode', () => {
+    const { getByText, queryByText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.view });
+    expect(getByText(defaultProps.name)).toBeInTheDocument();
+    expect(getByText(defaultProps.title)).toBeInTheDocument();
+    expect(queryByText(messages.namePlaceholder.defaultMessage)).not.toBeInTheDocument();
+  });
+
   it('handles input change', async () => {
     const handleChange = jest.fn();
     const { getByPlaceholderText } = renderSignatory(
