@@ -19,9 +19,6 @@ const slice = createSlice({
     updateLoadingStatus: (state, { payload }) => {
       state.loadingStatus = payload.status;
     },
-    getDataSendErrors: (state, { payload }) => {
-      Object.assign(state.sendRequestErrors, payload);
-    },
     fetchCertificatesSuccess: (state, { payload }) => {
       Object.assign(state.certificatesData, payload);
     },
