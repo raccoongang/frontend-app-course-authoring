@@ -1,7 +1,6 @@
 import { AppProvider } from '@edx/frontend-platform/react';
-import {
-  fireEvent, render, act, waitFor,
-} from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
@@ -25,6 +24,7 @@ const mockOnChange = jest.fn();
 
 const props = {
   isOpen: true,
+  fileTypes: ['png'],
   onClose: mockOnClose,
   onCancel: mockOnCancel,
   onChange: mockOnChange,
@@ -52,30 +52,35 @@ describe('<ModalDropzone />', () => {
 
   it('calls onClose when close button is clicked', async () => {
     const { getByText } = render(<RootWrapper {...props} />);
-    fireEvent.click(getByText(messages.cancelModal.defaultMessage));
+    userEvent.click(getByText(messages.cancelModal.defaultMessage));
+
     expect(mockOnClose).toHaveBeenCalled();
   });
 
   it('calls onCancel when cancel button is clicked', () => {
     const { getByText } = render(<RootWrapper {...props} />);
-    fireEvent.click(getByText(messages.cancelModal.defaultMessage));
+    userEvent.click(getByText(messages.cancelModal.defaultMessage));
+
     expect(mockOnCancel).toHaveBeenCalled();
   });
 
   it('disables the upload button initially', () => {
     const { getByText } = render(<RootWrapper {...props} />);
     const uploadButton = getByText(messages.uploadModal.defaultMessage);
+
     expect(uploadButton).toBeDisabled();
   });
 
   it('enables the upload button after a file is selected', async () => {
     const { getByText, getByRole } = render(<RootWrapper {...props} />);
-    const dropzoneInput = getByRole('presentation');
+    const dropzoneInput = getByRole('presentation', { hidden: true });
 
+    const file = new File(['dummy content'], 'test-file.png', { type: 'image/png' });
     await act(async () => {
-      fireEvent.change(dropzoneInput, { target: { files: ['test-file.png'] } });
+      userEvent.upload(dropzoneInput.firstChild, file);
     });
-    waitFor(() => {
+
+    await waitFor(() => {
       const uploadButton = getByText(messages.uploadModal.defaultMessage);
       expect(uploadButton).not.toBeDisabled();
     });
