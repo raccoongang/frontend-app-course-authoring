@@ -65,13 +65,14 @@ describe('CertificatesCards Component', () => {
   });
 
   it('renders a CertificatesCard for each certificate', () => {
-    renderComponent();
-    // mockCertificates.forEach((certificate) => {
-    //   certificate.signatories.forEach((signatory) => {
-    //     expect(getByText(signatory.name)).toBeInTheDocument();
-    //     expect(getByText(signatory.title)).toBeInTheDocument();
-    //     expect(getByText(signatory.organization)).toBeInTheDocument();
-    //   });
-    // });
+    const { getByText } = renderComponent();
+
+    mockCertificates.forEach((certificate) => {
+      certificate.signatories.forEach((signatory) => {
+        expect(getByText(signatory.name)).toBeInTheDocument();
+        expect(getByText(signatory.title)).toBeInTheDocument();
+        expect(getByText(signatory.organization)).toBeInTheDocument();
+      });
+    });
   });
 });

@@ -22,8 +22,8 @@ const CertificateDetails = ({
   const intl = useIntl();
 
   return (
-    <section>
-      <Stack className="justify-content-between certificate-details" direction="horizontal">
+    <section className="certificate-details">
+      <Stack className="justify-content-between" direction="horizontal">
         <h2 className="lead section-title">{intl.formatMessage(messages.detailsSectionTitle)}</h2>
         <Stack direction="horizontal" gap="2">
           {componentMode === MODE_STATES.view && (
@@ -31,7 +31,6 @@ const CertificateDetails = ({
               <IconButtonWithTooltip
                 src={EditOutlineIcon}
                 iconAs={Icon}
-                variant="primary"
                 tooltipContent={<div>{intl.formatMessage(messages.editTooltip)}</div>}
                 alt={intl.formatMessage(messages.editTooltip)}
                 // onClick={handleEditAll} TODO https://youtrack.raccoongang.com/issue/AXIMST-178
@@ -39,7 +38,6 @@ const CertificateDetails = ({
               <IconButtonWithTooltip
                 src={DeleteOutlineIcon}
                 iconAs={Icon}
-                variant="primary"
                 tooltipContent={<div>{intl.formatMessage(messages.deleteTooltip)}</div>}
                 alt={intl.formatMessage(messages.deleteTooltip)}
                 // onClick={confirmOpen} TODO https://youtrack.raccoongang.com/issue/AXIMST-172
@@ -53,22 +51,26 @@ const CertificateDetails = ({
 
       <div>
         <Stack>
-          <Stack direction="horizontal" gap="1.5" className="details-info">
-            <p><strong>{intl.formatMessage(messages.detailsCourseTitle)}:</strong> {detailsCourseTitle}</p>
+          <Stack direction="horizontal" gap="1.5" className="certificate-details__info">
+            <p className="certificate-details__info__paragraph">
+              <strong>{intl.formatMessage(messages.detailsCourseTitle)}:</strong> {detailsCourseTitle}
+            </p>
             {componentMode === MODE_STATES.view && (
-              <p className="details-course-number"><strong>{intl.formatMessage(messages.detailsCourseNumber)}:</strong> {detailsCourseNumber}</p>
+              <p className="certificate-details__info__paragraph--course-number">
+                <strong>{intl.formatMessage(messages.detailsCourseNumber)}:</strong> {detailsCourseNumber}
+              </p>
             )}
           </Stack>
-          <Stack direction="horizontal" gap="1.5" className="details-info justify-content-between align-items-baseline">
+          <Stack direction="horizontal" gap="1.5" className="certificate-details__info">
             {componentMode === MODE_STATES.view && (
               <>
                 {courseTitleOverride && (
-                  <p>
+                  <p className="certificate-details__info__paragraph">
                     <strong>{intl.formatMessage(messages.detailsCourseTitleOverride)}:</strong> {courseTitleOverride}
                   </p>
                 )}
                 {courseNumberOverride && (
-                  <p className="text-right">
+                  <p className="certificate-details__info__paragraph text-right">
                     <strong>{intl.formatMessage(messages.detailsCourseNumberOverride)}:</strong> {courseNumberOverride}
                   </p>
                 )}

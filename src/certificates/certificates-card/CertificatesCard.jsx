@@ -100,12 +100,12 @@ const CertificatesCard = ({
               detailsCourseNumber={courseNumber}
               courseNumberOverride={courseNumberOverride}
               courseTitleOverride={courseTitleOverride}
-              mode={componentMode}
+              componentMode={componentMode}
               certificateId={certificateId}
             />
             <CertificateSignatories
               signatories={signatories}
-              mode={componentMode}
+              componentMode={componentMode}
             />
           </Stack>
         </Card.Section>
