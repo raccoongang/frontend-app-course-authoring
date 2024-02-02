@@ -18,19 +18,23 @@ jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useDispatch: jest.fn(),
 }));
+
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   useIntl: () => ({
     formatMessage: (message) => message.defaultMessage,
   }),
 }));
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: jest.fn(),
 }));
+
 jest.mock('../../data/slice', () => ({
   setMode: jest.fn(),
 }));
+
 jest.mock('../../data/thunks', () => ({
   deleteCourseCertificate: jest.fn(),
 }));
@@ -82,22 +86,6 @@ describe('CertificateDetails', () => {
     useParams.mockClear();
     mockDispatch.mockClear();
   });
-
-  // it('handles edit button click', () => {
-  //   const { getByLabelText } = renderComponent(defaultProps);
-  //   const editButton = getByLabelText(messages.editTooltip.defaultMessage);
-  //   userEvent.click(editButton);
-
-  //   expect(mockDispatch).toHaveBeenCalledWith(setMode(MODE_STATES.editAll));
-  // });
-
-  // it('opens confirm modal on delete button click', () => {
-  //   const { getByLabelText, getByText } = renderComponent(defaultProps);
-  //   const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
-  //   userEvent.click(deleteButton);
-
-  //   expect(getByText('Delete this certificate?')).toBeInTheDocument();
-  // });
 
   it('renders correctly in create mode', () => {
     const props = { ...defaultProps, componentMode: MODE_STATES.create };

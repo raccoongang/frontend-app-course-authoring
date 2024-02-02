@@ -1,10 +1,11 @@
-import { render, waitFor, act } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../store';
+import { signatoriesMock } from '../__mocks__';
 import { getComponentMode } from '../data/selectors';
 import { MODE_STATES } from '../data/constants';
 import { createCourseCertificate } from '../data/thunks';
@@ -14,9 +15,6 @@ import messages from './messages';
 let store;
 const courseId = 'course-123';
 const certificateId = 1;
-const signatories = [{
-  name: 'John Doe', title: 'CEO', organization: 'Company', signatureImagePath: '',
-}];
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -33,7 +31,7 @@ const renderComponent = () => render(
     <IntlProvider locale="en">
       <CertificatesCard
         id={certificateId}
-        signatories={signatories}
+        signatories={signatoriesMock}
         courseId={courseId}
       />
     </IntlProvider>
@@ -80,10 +78,8 @@ describe('CertificatesCard', () => {
 
     const { getByText, getByLabelText } = renderComponent();
 
-    await act(async () => {
-      userEvent.type(getByLabelText(messages.detailsCourseTitleOverride.defaultMessage), 'New Title');
-      userEvent.click(getByText(messages.cardCreate.defaultMessage));
-    });
+    userEvent.type(getByLabelText(messages.detailsCourseTitleOverride.defaultMessage), 'New Title');
+    userEvent.click(getByText(messages.cardCreate.defaultMessage));
 
     await waitFor(() => {
       expect(mockDispatch).toHaveBeenCalledWith(

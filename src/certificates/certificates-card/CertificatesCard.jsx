@@ -74,9 +74,7 @@ const CertificatesCard = ({
                   </Button>
                   <Button
                     variant="tertiary"
-                    onClick={() => {
-                      cardCreateCancel(resetForm);
-                    }}
+                    onClick={() => cardCreateCancel(resetForm)}
                   >
                     {intl.formatMessage(messages.cardCancel)}
                   </Button>

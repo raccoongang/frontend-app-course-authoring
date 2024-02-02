@@ -21,7 +21,7 @@ const useCertificates = ({ courseId }) => {
   const certificates = useSelector(getCertificates);
   const loadingStatus = useSelector(getLoadingStatus);
   const hasCertificateModes = useSelector(getHasCertificateModes);
-  const title = useSelector(getCourseTitle);
+  const courseTitle = useSelector(getCourseTitle);
 
   const isLoading = useMemo(() => loadingStatus === RequestStatus.IN_PROGRESS, [loadingStatus]);
 
@@ -39,7 +39,7 @@ const useCertificates = ({ courseId }) => {
     dispatch(fetchCertificates(courseId));
   }, [courseId]);
 
-  document.title = getPageHeadTitle(title, intl.formatMessage(messages.headingTitleTabText));
+  document.title = getPageHeadTitle(courseTitle, intl.formatMessage(messages.headingTitleTabText));
 
   return {
     componentMode, isLoading, loadingStatus,

@@ -11,12 +11,14 @@ const CertificateSignatories = ({
   signatories, componentMode, handleChange, handleBlur, arrayHelpers, setFieldValue,
 }) => {
   const intl = useIntl();
+
   const handleAddSignatory = () => {
     const newSignatory = {
       id: uuid(), name: '', title: '', organization: '', signatureImagePath: '',
     };
     arrayHelpers.push(newSignatory);
   };
+
   const handleDeleteSignatory = (id) => {
     arrayHelpers.remove(id);
   };
