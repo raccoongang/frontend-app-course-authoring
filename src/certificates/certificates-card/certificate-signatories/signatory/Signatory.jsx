@@ -104,7 +104,7 @@ const Signatory = ({
                 src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
                 fluid
                 alt={intl.formatMessage(messages.imageLabel)}
-                className="signatory-image"
+                className="signatory__image"
               />
             )}
             <Stack direction="horizontal" className="align-items-baseline">
@@ -124,14 +124,21 @@ const Signatory = ({
           </Form.Group>
         </Stack>
       ) : (
-        <Stack direction="horizontal" gap="2" className="stack-container" data-testid="signatory-view">
-          <Stack className="text-stack">
-            <p><b>{intl.formatMessage(messages.nameLabel)}</b> {name}</p>
-            <p><b>{intl.formatMessage(messages.titleLabel)}</b> {title}</p>
-            <p><b>{intl.formatMessage(messages.organizationLabel)}</b> {organization}</p>
+        <Stack direction="horizontal" gap="2" className="signatory__fields-container" data-testid="signatory-view">
+          <Stack className="signatory__text-fields-stack">
+            <p className="signatory__text"><b>{intl.formatMessage(messages.nameLabel)}</b> {name}</p>
+            <p className="signatory__text"><b>{intl.formatMessage(messages.titleLabel)}</b> {title}</p>
+            <p className="signatory__text"><b>{intl.formatMessage(messages.organizationLabel)}</b> {organization}</p>
           </Stack>
-          <div className="image-container">
-            {signatureImagePath && <img src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`} alt="signature" className="d-block w-100" />}
+          <div className="signatory__image-container">
+            {signatureImagePath && (
+              <Image
+                src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
+                fluid
+                alt={intl.formatMessage(messages.imageLabel)}
+                className="signatory__image"
+              />
+            )}
           </div>
         </Stack>
       )}
@@ -140,6 +147,7 @@ const Signatory = ({
         onClose={close}
         onCancel={close}
         onChange={handleImageUpload}
+        fileTypes={['png']}
       />
     </div>
   );

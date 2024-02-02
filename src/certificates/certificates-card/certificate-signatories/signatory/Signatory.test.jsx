@@ -37,9 +37,9 @@ describe('Signatory Component', () => {
   });
 
   it('renders in VIEW mode', () => {
-    const { getByText, queryByText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.VIEW });
-    expect(getByText('John Doe')).toBeInTheDocument();
-    expect(getByText('Director')).toBeInTheDocument();
+    const { getByText, queryByText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.view });
+    expect(getByText(defaultProps.name)).toBeInTheDocument();
+    expect(getByText(defaultProps.title)).toBeInTheDocument();
     expect(queryByText(messages.namePlaceholder.defaultMessage)).not.toBeInTheDocument();
   });
 
