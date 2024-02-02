@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import {
-  Stack, FormLabel, Form, Button, useToggle, Image,
+  Image, Icon, Stack, IconButtonWithTooltip, FormLabel, Form, Button, useToggle,
 } from '@edx/paragon';
+import {
+  EditOutline as EditOutlineIcon, DeleteOutline as DeleteOutlineIcon,
+} from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
@@ -18,6 +21,7 @@ const Signatory = ({
   organization,
   handleChange,
   setFieldValue,
+  showDeleteButton,
   signatureImagePath,
 }) => {
   const intl = useIntl();
@@ -63,7 +67,23 @@ const Signatory = ({
       <Stack className="justify-content-between mb-3" direction="horizontal">
         <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${id + 1}`}</h3>
         <Stack direction="horizontal" gap="2">
-          {/* {mode === MODE_STATES && ()} TODO https://youtrack.raccoongang.com/issue/AXIMST-166 */}
+          {componentMode === MODE_STATES.view && (
+            <IconButtonWithTooltip
+              src={EditOutlineIcon}
+              iconAs={Icon}
+              alt={intl.formatMessage(messages.editTooltip)}
+              tooltipContent={<div>{intl.formatMessage(messages.editTooltip)}</div>}
+            />
+          )}
+          {componentMode === MODE_STATES.create && showDeleteButton && (
+            <IconButtonWithTooltip
+              src={DeleteOutlineIcon}
+              iconAs={Icon}
+              alt={intl.formatMessage(messages.deleteTooltip)}
+              tooltipContent={<div>{intl.formatMessage(messages.deleteTooltip)}</div>}
+              // onClick={confirmOpen} TODO https://youtrack.raccoongang.com/issue/AXIMST-172
+            />
+          )}
         </Stack>
       </Stack>
       {componentMode === MODE_STATES.create ? (
@@ -84,7 +104,7 @@ const Signatory = ({
                 src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
                 fluid
                 alt={intl.formatMessage(messages.imageLabel)}
-                className="signatory-image"
+                className="signatory__image"
               />
             )}
             <Stack direction="horizontal" className="align-items-baseline">
@@ -104,14 +124,30 @@ const Signatory = ({
           </Form.Group>
         </Stack>
       ) : (
-        null
-        // <Stack direction="horizontal" gap="2" className="stack-container" data-testid="signatory-view" /> TODO https://youtrack.raccoongang.com/issue/AXIMST-166
+        <Stack direction="horizontal" gap="2" className="signatory__fields-container" data-testid="signatory-view">
+          <Stack className="signatory__text-fields-stack">
+            <p className="signatory__text"><b>{intl.formatMessage(messages.nameLabel)}</b> {name}</p>
+            <p className="signatory__text"><b>{intl.formatMessage(messages.titleLabel)}</b> {title}</p>
+            <p className="signatory__text"><b>{intl.formatMessage(messages.organizationLabel)}</b> {organization}</p>
+          </Stack>
+          <div className="signatory__image-container">
+            {signatureImagePath && (
+              <Image
+                src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
+                fluid
+                alt={intl.formatMessage(messages.imageLabel)}
+                className="signatory__image"
+              />
+            )}
+          </div>
+        </Stack>
       )}
       <ModalDropzone
         isOpen={isOpen}
         onClose={close}
         onCancel={close}
         onChange={handleImageUpload}
+        fileTypes={['png']}
       />
     </div>
   );

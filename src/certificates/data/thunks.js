@@ -8,7 +8,6 @@ import { getCertificates, createCertificate } from './api';
 import {
   fetchCertificatesSuccess,
   updateLoadingStatus,
-  getDataSendErrors,
   updateSavingStatus,
   createCertificateSuccess,
 } from './slice';
@@ -40,22 +39,13 @@ export function createCourseCertificate(courseId, certificates) {
     try {
       const certificatesValues = await createCertificate(courseId, certificates);
       dispatch(createCertificateSuccess(certificatesValues));
-      dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
-      dispatch(hideProcessingNotification());
-      let errorData;
-      try {
-        const { customAttributes: { httpErrorResponseData } } = error;
-        errorData = JSON.parse(httpErrorResponseData);
-      } catch (err) {
-        errorData = {};
-      }
-
-      dispatch(getDataSendErrors(errorData));
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
+    } finally {
+      dispatch(hideProcessingNotification());
     }
   };
 }

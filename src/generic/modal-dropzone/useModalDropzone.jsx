@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
@@ -6,7 +6,9 @@ import { RequestStatus } from '../../data/constants';
 import { uploadAssets } from './data/api';
 import messages from './messages';
 
-const useModalDropzone = ({ onChange, onCancel, onClose }) => {
+const useModalDropzone = ({
+  onChange, onCancel, onClose, fileTypes,
+}) => {
   const { courseId } = useParams();
   const intl = useIntl();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,8 +17,51 @@ const useModalDropzone = ({ onChange, onCancel, onClose }) => {
   const [disabledUploadBtn, setDisabledUploadBtn] = useState(true);
   const [uploadStatus, setUploadStatus] = useState(RequestStatus.CLEAR);
 
+  const VALID_IMAGE_TYPES = ['png', 'jpeg'];
+
   const isQueryFailed = uploadStatus === RequestStatus.FAILED;
   const isQueryPending = uploadStatus === RequestStatus.PENDING;
+
+  const imageValidator = (file) => {
+    const fileType = file.name.split('.').pop().toLowerCase();
+
+    const extensionsList = fileTypes.map(type => `.${type.toLowerCase()}`).join(', ');
+    const typesList = fileTypes.map(type => type.toUpperCase()).join(', ');
+
+    if (!fileTypes.map(type => type.toLowerCase()).includes(fileType)) {
+      return intl.formatMessage(messages.uploadImageValidationText, {
+        types: typesList,
+        extensions: extensionsList,
+      });
+    }
+    return null;
+  };
+
+  /**
+   * Constructs an accept object for Dropzone based on provided file types.
+   *
+   * @param {string[]} types - Array of file extensions.
+   * @returns {Object} Accept object for Dropzone.
+   *
+   * Example:
+   * input: ['png', 'jpg', 'pdf', 'docx']
+   * output:
+   *  {
+   *    "image/*": [".png", ".jpg"],
+   *    "* /*": [".pdf", ".docx"]
+   *  }
+   */
+  const constructAcceptObject = (types) => types
+    .reduce((acc, type) => {
+      const mimeType = VALID_IMAGE_TYPES.includes(type) ? 'image/*' : '*/*';
+      if (!acc[mimeType]) {
+        acc[mimeType] = [];
+      }
+      acc[mimeType].push(`.${type}`);
+      return acc;
+    }, {});
+
+  const accept = useMemo(() => constructAcceptObject(fileTypes), [fileTypes]);
 
   const handleSelectFile = ({ fileData }) => {
     const file = fileData.get('file');
@@ -30,14 +75,6 @@ const useModalDropzone = ({ onChange, onCancel, onClose }) => {
       reader.readAsDataURL(file);
       setSelectedFile(fileData);
     }
-  };
-
-  const imageValidator = async (file) => {
-    if (file.type !== 'image/png') {
-      return intl.formatMessage(messages.uploadImageValidationText);
-    }
-
-    return null;
   };
 
   const handleCancel = () => {
@@ -80,6 +117,7 @@ const useModalDropzone = ({ onChange, onCancel, onClose }) => {
 
   return {
     intl,
+    accept,
     uploadProgress,
     previewUrl,
     disabledUploadBtn,
