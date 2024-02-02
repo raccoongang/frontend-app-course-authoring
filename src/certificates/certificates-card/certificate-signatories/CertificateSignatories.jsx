@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
 import { Stack, Button, Form } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
@@ -13,10 +12,11 @@ const CertificateSignatories = ({
   const intl = useIntl();
 
   const handleAddSignatory = () => {
-    const newSignatory = {
-      id: uuid(), name: '', title: '', organization: '', signatureImagePath: '',
-    };
-    arrayHelpers.push(newSignatory);
+    const getNewSignatory = () => ({
+      name: '', title: '', organization: '', signatureImagePath: '',
+    });
+
+    arrayHelpers.push(getNewSignatory());
   };
 
   const handleDeleteSignatory = (id) => {
@@ -33,11 +33,12 @@ const CertificateSignatories = ({
         </p>
         <Stack gap="4.5">
           {signatories.map(({
-            id, name, title, organization, signatureImagePath,
-          }, idx) => (
+            name, title, organization, signatureImagePath,
+          }, id) => (
             <Signatory
+              // eslint-disable-next-line react/no-array-index-key
               key={`signatory-${id}`}
-              id={idx}
+              id={id}
               componentMode={componentMode}
               name={name}
               title={title}

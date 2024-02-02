@@ -7,7 +7,7 @@ import { setMode } from '../data/slice';
 import { MODE_STATES } from '../data/constants';
 import messages from '../messages';
 
-const WithModesWithoutCertificates = () => {
+const EmptyCertificatesWithModes = () => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
@@ -32,4 +32,4 @@ const WithModesWithoutCertificates = () => {
   );
 };
 
-export default WithModesWithoutCertificates;
+export default EmptyCertificatesWithModes;

@@ -18,6 +18,7 @@ import useModalDropzone from './useModalDropzone';
 import messages from './messages';
 
 const ModalDropzone = ({
+  fileTypes,
   isOpen,
   onClose,
   onCancel,
@@ -25,6 +26,7 @@ const ModalDropzone = ({
 }) => {
   const {
     intl,
+    accept,
     previewUrl,
     uploadProgress,
     disabledUploadBtn,
@@ -34,7 +36,9 @@ const ModalDropzone = ({
     handleUpload,
     handleCancel,
     handleSelectFile,
-  } = useModalDropzone({ onChange, onCancel, onClose });
+  } = useModalDropzone({
+    onChange, onCancel, onClose, fileTypes,
+  });
 
   const inputComponent = previewUrl ? (
     <div>
@@ -84,7 +88,7 @@ const ModalDropzone = ({
                 <Dropzone
                   onProcessUpload={handleSelectFile}
                   inputComponent={inputComponent}
-                  accept={{ 'image/*': ['.png'] }}
+                  accept={accept}
                   validator={imageValidator}
                 />
               )}
@@ -111,6 +115,7 @@ const ModalDropzone = ({
 };
 
 ModalDropzone.propTypes = {
+  fileTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

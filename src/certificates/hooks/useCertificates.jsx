@@ -28,9 +28,9 @@ const useCertificates = ({ courseId }) => {
   useEffect(() => {
     if (!hasCertificateModes) {
       dispatch(setMode(MODE_STATES.noModes));
-    } else if (hasCertificateModes && !certificates.length) {
+    } else if (certificates.length === 0) {
       dispatch(setMode(MODE_STATES.noCertificates));
-    } else if (hasCertificateModes && certificates.length) {
+    } else {
       dispatch(setMode(MODE_STATES.view));
     }
   }, [hasCertificateModes, certificates]);
