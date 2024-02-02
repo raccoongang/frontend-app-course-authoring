@@ -47,6 +47,7 @@ describe('<ModalDropzone />', () => {
 
   it('renders successfully when open', () => {
     const { getByText } = render(<RootWrapper {...props} />);
+
     expect(getByText(messages.uploadImageDropzoneText.defaultMessage)).toBeInTheDocument();
   });
 

@@ -59,21 +59,13 @@ export function deleteCourseCertificate(courseId, certificateId) {
     try {
       const certificatesValues = await deleteCertificate(courseId, certificateId);
       dispatch(deleteCertificateSuccess(certificatesValues));
-      dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
-      dispatch(hideProcessingNotification());
-      let errorData;
-      try {
-        const { customAttributes: { httpErrorResponseData } } = error;
-        errorData = JSON.parse(httpErrorResponseData);
-      } catch (err) {
-        errorData = {};
-        dispatch(getDataSendErrors(errorData));
-        dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
-      }
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       return false;
+    } finally {
+      dispatch(hideProcessingNotification());
     }
   };
 }

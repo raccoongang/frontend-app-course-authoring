@@ -63,6 +63,7 @@ describe('CertificatesCard', () => {
 
   it('renders CertificateDetails and CertificateSignatories in view mode', () => {
     const { getByText } = renderComponent();
+
     expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.signatoriesSectionTitle.defaultMessage)).toBeInTheDocument();
   });
@@ -75,6 +76,7 @@ describe('CertificatesCard', () => {
       return MODE_STATES.view;
     });
     const { getByText } = renderComponent();
+
     expect(getByText(messages.cardCreate.defaultMessage)).toBeInTheDocument();
   });
 
@@ -82,10 +84,10 @@ describe('CertificatesCard', () => {
     const mockDispatch = jest.fn();
     useDispatch.mockReturnValue(mockDispatch);
 
-    const { getByText, getByLabelText } = renderComponent();
+    const { getByRole, getByLabelText } = renderComponent();
 
     userEvent.type(getByLabelText(messages.detailsCourseTitleOverride.defaultMessage), 'New Title');
-    userEvent.click(getByText(messages.cardCreate.defaultMessage));
+    userEvent.click(getByRole('button', { name: messages.cardCreate.defaultMessage }));
 
     await waitFor(() => {
       expect(mockDispatch).toHaveBeenCalledWith(

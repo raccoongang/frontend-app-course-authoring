@@ -1,4 +1,5 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import messages from '../certificates-card/messages';
@@ -33,19 +34,19 @@ describe('ConfirmModal', () => {
   });
 
   it('calls handleCancel when the cancel button is clicked', () => {
-    const { getByText } = renderComponent(defaultProps);
-    const cancelButton = getByText(defaultProps.cancelButtonText);
+    const { getByRole } = renderComponent(defaultProps);
+    const cancelButton = getByRole('button', { name: defaultProps.cancelButtonText });
 
-    fireEvent.click(cancelButton);
+    userEvent.click(cancelButton);
 
     expect(defaultProps.handleCancel).toHaveBeenCalled();
   });
 
   it('calls handleAction when the confirm button is clicked', () => {
-    const { getByText } = renderComponent(defaultProps);
-    const actionButton = getByText(defaultProps.actionButtonText);
+    const { getByRole } = renderComponent(defaultProps);
+    const actionButton = getByRole('button', { name: defaultProps.actionButtonText });
 
-    fireEvent.click(actionButton);
+    userEvent.click(actionButton);
 
     expect(defaultProps.handleAction).toHaveBeenCalled();
   });

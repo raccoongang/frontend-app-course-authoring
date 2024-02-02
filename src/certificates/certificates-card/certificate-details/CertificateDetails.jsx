@@ -9,7 +9,6 @@ import {
   EditOutline as EditOutlineIcon, DeleteOutline as DeleteOutlineIcon,
 } from '@edx/paragon/icons';
 
-import { setMode } from '../../data/slice';
 import { deleteCourseCertificate } from '../../data/thunks';
 import { MODE_STATES } from '../../data/constants';
 import ConfirmModal from '../../confirm-modal/ConfirmModal';
@@ -30,10 +29,6 @@ const CertificateDetails = ({
   const [isConfirmOpen, confirmOpen, confirmClose] = useToggle(false);
   const { courseId } = useParams();
 
-  const handleEditAll = () => {
-    dispatch(setMode(MODE_STATES.EDIT_ALL));
-  };
-
   const handleDeleteCard = () => {
     if (certificateId) {
       dispatch(deleteCourseCertificate(courseId, certificateId));
@@ -52,7 +47,7 @@ const CertificateDetails = ({
                 iconAs={Icon}
                 tooltipContent={<div>{intl.formatMessage(messages.editTooltip)}</div>}
                 alt={intl.formatMessage(messages.editTooltip)}
-                onClick={handleEditAll}
+                // TODO add handler in https://youtrack.raccoongang.com/issue/AXIMST-178
               />
               <IconButtonWithTooltip
                 src={DeleteOutlineIcon}

@@ -72,10 +72,14 @@ describe('Signatory Component', () => {
     expect(getByRole('presentation')).toBeInTheDocument();
   });
 
-  it('shows confirm modal on delete button click', async () => {
-    const { getByLabelText, getByText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.CREATE });
-    const deleteButton = getByLabelText(messages.deleteTooltip.defaultMessage);
-    fireEvent.click(deleteButton);
+  it('shows confirm modal on delete icon click', async () => {
+    const { getByLabelText, getByText } = renderSignatory(
+      { ...defaultProps, componentMode: MODE_STATES.create, showDeleteButton: true },
+    );
+    const deleteIcon = getByLabelText(messages.deleteTooltip.defaultMessage);
+
+    userEvent.click(deleteIcon);
+
     expect(getByText(`Delete "${defaultProps.name}" from the list of signatories?`)).toBeInTheDocument();
   });
 });
