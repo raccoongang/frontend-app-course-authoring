@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { useSelector } from 'react-redux';
 import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
@@ -111,6 +110,7 @@ const renderComponent = () => render(
         isOpen
         onClose={onCloseMock}
         onConfigureSubmit={onConfigureSubmitMock}
+        currentItemData={currentSectionMock}
       />
     </IntlProvider>,
   </AppProvider>,
@@ -129,7 +129,6 @@ describe('<ConfigureModal /> for Section', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    useSelector.mockReturnValue(currentSectionMock);
   });
 
   it('renders ConfigureModal component correctly', () => {
@@ -203,6 +202,7 @@ const renderSubsectionComponent = () => render(
         isOpen
         onClose={onCloseMock}
         onConfigureSubmit={onConfigureSubmitMock}
+        currentItemData={currentSubsectionMock}
       />
     </IntlProvider>,
   </AppProvider>,
@@ -221,7 +221,6 @@ describe('<ConfigureModal /> for Subsection', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    useSelector.mockReturnValue(currentSubsectionMock);
   });
 
   it('renders subsection ConfigureModal component correctly', () => {
@@ -334,13 +333,15 @@ const currentUnitMock = {
   },
 };
 
-const renderUnitComponent = () => render(
+const renderUnitComponent = (props) => render(
   <AppProvider store={store}>
     <IntlProvider locale="en">
       <ConfigureModal
         isOpen
         onClose={onCloseMock}
         onConfigureSubmit={onConfigureSubmitMock}
+        currentItemData={currentUnitMock}
+        {...props}
       />
     </IntlProvider>,
   </AppProvider>,
@@ -359,7 +360,6 @@ describe('<ConfigureModal /> for Unit', () => {
 
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    useSelector.mockReturnValue(currentUnitMock);
   });
 
   it('renders unit ConfigureModal component correctly', () => {
@@ -390,16 +390,152 @@ describe('<ConfigureModal /> for Unit', () => {
   });
 
   it('disables the Save button and enables it if there is a change', () => {
-    useSelector.mockReturnValue(
-      {
-        ...currentUnitMock,
-        userPartitionInfo: {
-          ...currentUnitMock.userPartitionInfo,
-          selectedPartitionIndex: 0,
-        },
+    const newCurrentItemData = {
+      ...currentUnitMock,
+      userPartitionInfo: {
+        ...currentUnitMock.userPartitionInfo,
+        selectedPartitionIndex: 0,
       },
-    );
-    const { getByRole, getByTestId } = renderUnitComponent();
+    };
+    const { getByRole, getByTestId } = renderUnitComponent({
+      currentItemData: newCurrentItemData,
+    });
+
+    const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
+    expect(saveButton).toBeDisabled();
+
+    const input = getByTestId('group-type-select');
+    // unrestrict access
+    fireEvent.change(input, { target: { value: -1 } });
+    expect(saveButton).not.toBeDisabled();
+
+    fireEvent.change(input, { target: { value: 0 } });
+    expect(saveButton).toBeDisabled();
+
+    const checkbox = getByTestId('unit-visibility-checkbox');
+    fireEvent.click(checkbox);
+    expect(saveButton).not.toBeDisabled();
+  });
+});
+
+const currentXBlockMock = {
+  displayName: 'Unit 1',
+  id: 1,
+  category: 'component',
+  due: '',
+  start: '2025-08-10T10:00:00Z',
+  visibilityState: true,
+  defaultTimeLimitMinutes: null,
+  hideAfterDue: false,
+  showCorrectness: false,
+  userPartitionInfo: {
+    selectablePartitions: [
+      {
+        id: 50,
+        name: 'Enrollment Track Groups',
+        scheme: 'enrollment_track',
+        groups: [
+          {
+            id: 6,
+            name: 'Honor',
+            selected: false,
+            deleted: false,
+          },
+          {
+            id: 2,
+            name: 'Verified',
+            selected: false,
+            deleted: false,
+          },
+        ],
+      },
+      {
+        id: 1508065533,
+        name: 'Content Groups',
+        scheme: 'cohort',
+        groups: [
+          {
+            id: 1224170703,
+            name: 'Content Group 1',
+            selected: false,
+            deleted: false,
+          },
+        ],
+      },
+    ],
+    selectedPartitionIndex: -1,
+    selectedGroupsLabel: '',
+  },
+};
+
+const renderXBlockComponent = (props) => render(
+  <AppProvider store={store}>
+    <IntlProvider locale="en">
+      <ConfigureModal
+        isOpen
+        isXBlockComponent
+        onClose={onCloseMock}
+        onConfigureSubmit={onConfigureSubmitMock}
+        currentItemData={currentXBlockMock}
+        {...props}
+      />
+    </IntlProvider>,
+  </AppProvider>,
+);
+
+describe('<ConfigureModal /> for XBlock', () => {
+  beforeEach(() => {
+    initializeMockApp({
+      authenticatedUser: {
+        userId: 3,
+        username: 'abc123',
+        administrator: true,
+        roles: [],
+      },
+    });
+
+    store = initializeStore();
+    axiosMock = new MockAdapter(getAuthenticatedHttpClient());
+  });
+
+  it('renders unit ConfigureModal component correctly', () => {
+    const {
+      getByText, queryByText, getByRole, getByTestId,
+    } = renderXBlockComponent();
+    expect(getByText(`Editing access for: ${currentUnitMock.displayName}`)).toBeInTheDocument();
+    expect(queryByText(messages.unitVisibility.defaultMessage)).not.toBeInTheDocument();
+    expect(queryByText(messages.hideFromLearners.defaultMessage)).not.toBeInTheDocument();
+    expect(getByText(messages.restrictAccessTo.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.unitSelectGroupType.defaultMessage)).toBeInTheDocument();
+
+    expect(queryByText(messages.unitSelectGroup.defaultMessage)).not.toBeInTheDocument();
+    const input = getByTestId('group-type-select');
+
+    [0, 1].forEach(groupeTypeIndex => {
+      fireEvent.change(input, { target: { value: groupeTypeIndex } });
+
+      expect(getByText(messages.unitSelectGroup.defaultMessage)).toBeInTheDocument();
+      currentUnitMock
+        .userPartitionInfo
+        .selectablePartitions[groupeTypeIndex].groups
+        .forEach(g => expect(getByText(g.name)).toBeInTheDocument());
+    });
+
+    expect(getByRole('button', { name: messages.cancelButton.defaultMessage })).toBeInTheDocument();
+    expect(getByRole('button', { name: messages.saveButton.defaultMessage })).toBeInTheDocument();
+  });
+
+  it('disables the Save button and enables it if there is a change', () => {
+    const newCurrentItemData = {
+      ...currentUnitMock,
+      userPartitionInfo: {
+        ...currentUnitMock.userPartitionInfo,
+        selectedPartitionIndex: 0,
+      },
+    };
+    const { getByRole, getByTestId } = renderXBlockComponent({
+      currentItemData: newCurrentItemData,
+    });
 
     const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
     expect(saveButton).toBeDisabled();

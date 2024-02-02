@@ -5,6 +5,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-outline.configure-modal.title',
     defaultMessage: '{title} Settings',
   },
+  componentTitle: {
+    id: 'course-authoring.course-outline.configure-modal.component.title',
+    defaultMessage: 'Editing access for: {title}',
+  },
   basicTabTitle: {
     id: 'course-authoring.course-outline.configure-modal.basic-tab.title',
     defaultMessage: 'Basic',

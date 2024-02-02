@@ -6,6 +6,7 @@ import messages from './messages';
 
 const UnitTab = ({
   intl,
+  isXBlockComponent,
   isVisibleToStaffOnly,
   setIsVisibleToStaffOnly,
   showWarning,
@@ -33,17 +34,21 @@ const UnitTab = ({
   };
   return (
     <>
-      <h3 className="mt-3"><FormattedMessage {...messages.unitVisibility} /></h3>
-      <hr />
-      <Form.Checkbox checked={isVisibleToStaffOnly} onChange={handleChange} data-testid="unit-visibility-checkbox">
-        <FormattedMessage {...messages.hideFromLearners} />
-      </Form.Checkbox>
-      {showWarning && (
-        <Alert variant="warning">
-          <FormattedMessage {...messages.unitVisibilityWarning} />
-        </Alert>
+      {!isXBlockComponent && (
+        <>
+          <h3 className="mt-3"><FormattedMessage {...messages.unitVisibility} /></h3>
+          <hr />
+          <Form.Checkbox checked={isVisibleToStaffOnly} onChange={handleChange} data-testid="unit-visibility-checkbox">
+            <FormattedMessage {...messages.hideFromLearners} />
+          </Form.Checkbox>
+          {showWarning && (
+            <Alert variant="warning">
+              <FormattedMessage {...messages.unitVisibilityWarning} />
+            </Alert>
+          )}
+          <hr />
+        </>
       )}
-      <hr />
       <Form.Group controlId="groupSelect">
         <Form.Label as="legend" className="font-weight-bold">
           <FormattedMessage {...messages.restrictAccessTo} />
@@ -89,8 +94,13 @@ const UnitTab = ({
   );
 };
 
+UnitTab.defaultProps = {
+  isXBlockComponent: false,
+};
+
 UnitTab.propTypes = {
   intl: intlShape.isRequired,
+  isXBlockComponent: PropTypes.bool,
   isVisibleToStaffOnly: PropTypes.bool.isRequired,
   setIsVisibleToStaffOnly: PropTypes.func.isRequired,
   showWarning: PropTypes.bool.isRequired,

@@ -36,12 +36,13 @@ import {
 import { executeThunk } from '../utils';
 import { COURSE_BLOCK_NAMES, VIDEO_SHARING_OPTIONS } from './constants';
 import CourseOutline from './CourseOutline';
-import messages from './messages';
+
+import configureModalMessages from '../generic/configure-modal/messages';
 import headerMessages from './header-navigations/messages';
 import cardHeaderMessages from './card-header/messages';
 import enableHighlightsModalMessages from './enable-highlights-modal/messages';
 import statusBarMessages from './status-bar/messages';
-import configureModalMessages from './configure-modal/messages';
+import messages from './messages';
 
 let axiosMock;
 let store;
