@@ -15,7 +15,7 @@ const messages = defineMessages({
   },
   uploadImageValidationText: {
     id: 'course-authoring.certificates.modal-dropzone.validation.text',
-    defaultMessage: 'Only PNG files can be uploaded. Please select a file ending in .png to upload.',
+    defaultMessage: 'Only {types} files can be uploaded. Please select a file ending in {extensions} to upload.',
   },
   uploadImageButton: {
     id: 'course-authoring.certificates.modal-dropzone.image.button',

@@ -3,7 +3,7 @@ import { Card } from '@edx/paragon';
 
 import messages from '../messages';
 
-const WithoutModes = () => {
+const CertificateWithoutModes = () => {
   const intl = useIntl();
   return (
     <Card>
@@ -14,4 +14,4 @@ const WithoutModes = () => {
   );
 };
 
-export default WithoutModes;
+export default CertificateWithoutModes;

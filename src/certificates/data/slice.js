@@ -11,7 +11,6 @@ const slice = createSlice({
     componentMode: MODE_STATES.noModes,
     loadingStatus: RequestStatus.PENDING,
     savingStatus: '',
-    sendRequestErrors: {},
   },
   reducers: {
     updateSavingStatus: (state, { payload }) => {
@@ -19,9 +18,6 @@ const slice = createSlice({
     },
     updateLoadingStatus: (state, { payload }) => {
       state.loadingStatus = payload.status;
-    },
-    getDataSendErrors: (state, { payload }) => {
-      Object.assign(state.sendRequestErrors, payload);
     },
     fetchCertificatesSuccess: (state, { payload }) => {
       Object.assign(state.certificatesData, payload);
@@ -43,7 +39,6 @@ const slice = createSlice({
 
 export const {
   setMode,
-  getDataSendErrors,
   updateSavingStatus,
   updateLoadingStatus,
   fetchCertificatesSuccess,
