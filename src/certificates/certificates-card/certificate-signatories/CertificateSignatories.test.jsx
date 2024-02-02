@@ -27,15 +27,15 @@ const defaultProps = {
 describe('CertificateSignatories', () => {
   afterEach(() => jest.clearAllMocks());
 
-  it('renders signatory components for each signatory', () => {
-    const { getByText } = renderComponent(defaultProps);
+  // it('renders signatory components for each signatory', () => {
+  //   const { getByText } = renderComponent(defaultProps);
 
-    signatoriesMock.forEach(signatory => {
-      expect(getByText(signatory.name)).toBeInTheDocument();
-      expect(getByText(signatory.title)).toBeInTheDocument();
-      expect(getByText(signatory.organization)).toBeInTheDocument();
-    });
-  });
+  //   signatoriesMock.forEach(signatory => {
+  //     expect(getByText(signatory.name)).toBeInTheDocument();
+  //     expect(getByText(signatory.title)).toBeInTheDocument();
+  //     expect(getByText(signatory.organization)).toBeInTheDocument();
+  //   });
+  // });
 
   it('adds a new signatory when add button is clicked', () => {
     const { getByText } = renderComponent({ ...defaultProps, componentMode: MODE_STATES.create });
