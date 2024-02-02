@@ -3,32 +3,12 @@ import { render } from '@testing-library/react';
 import { initializeMockApp } from '@edx/frontend-platform';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
+import { certificatesMock } from '../__mocks__';
 import initializeStore from '../../store';
 import { MODE_STATES } from '../data/constants';
 import CertificatesCards from './CertificatesCards';
 
 let store;
-
-const mockCertificates = [
-  {
-    id: 1,
-    courseTitle: 'Course Title 1',
-    signatories: [
-      {
-        name: 'Signatory Name 1',
-        title: 'Signatory Title 1',
-        organization: 'Signatory Organization 1',
-        signatureImagePath: '/path/to/signature1/image.png',
-      },
-      {
-        name: 'Signatory Name 2',
-        title: 'Signatory Title 2',
-        organization: 'Signatory Organization 2',
-        signatureImagePath: '/path/to/signature2/image.png',
-      },
-    ],
-  },
-];
 
 const renderComponent = () => render(
   <Provider store={store}>
@@ -41,7 +21,7 @@ const renderComponent = () => render(
 const initialState = {
   certificates: {
     certificatesData: {
-      certificates: mockCertificates,
+      certificates: certificatesMock,
       hasCertificateModes: true,
       componentMode: MODE_STATES.view,
       courseTitle: 'Course Title 1',
@@ -67,7 +47,7 @@ describe('CertificatesCards Component', () => {
   it('renders a CertificatesCard for each certificate', () => {
     const { getByText } = renderComponent();
 
-    mockCertificates.forEach((certificate) => {
+    certificatesMock.forEach((certificate) => {
       certificate.signatories.forEach((signatory) => {
         expect(getByText(signatory.name)).toBeInTheDocument();
         expect(getByText(signatory.title)).toBeInTheDocument();

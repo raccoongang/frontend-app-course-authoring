@@ -4,69 +4,69 @@
   }
 
   .certificate-details {
-    &__info {
+    .certificate-details__info {
       color: $black;
       justify-content: space-between;
       align-items: baseline;
+    }
 
-      &__paragraph {
-        flex: 1;
+    .certificate-details__info__paragraph {
+      flex: 1;
+    }
 
-        &--course-number {
-          color: $gray-700;
-          text-align: right;
-        }
-      }
+    .certificate-details__info__paragraph--course-number {
+      color: $gray-700;
+      text-align: right;
     }
   }
 
   .signatory {
-    &__fields-container {
+    .signatory__fields-container {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       flex-wrap: wrap;
     }
 
-    &__text-fields-stack {
+    .signatory__text-fields-stack {
       flex: 1;
       max-width: 18.75rem;
     }
 
-    &__text {
+    .signatory__text {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    &__image {
+    .signatory__image {
       display: flex;
       margin: .625rem auto;
       max-width: 23.5rem;
       width: 100%;
     }
 
-    &__image-container {
+    .signatory__image-container {
       flex: 2;
       max-width: 18.75rem;
       margin: auto;
     }
 
     @media (max-width: map-get($grid-breakpoints, "lg")) {
-      &__fields-container {
+      .signatory__fields-container {
         flex-direction: column;
         align-items: center;
       }
 
-      &__text-fields-stack {
+      .signatory__text-fields-stack {
         max-width: none;
       }
 
-      &__text {
+      .signatory__text {
         white-space: normal;
       }
 
-      &__image-container {
+      .signatory__image-container {
         max-width: none;
       }
     }

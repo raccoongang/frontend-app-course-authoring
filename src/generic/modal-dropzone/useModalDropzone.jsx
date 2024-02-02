@@ -17,6 +17,8 @@ const useModalDropzone = ({
   const [disabledUploadBtn, setDisabledUploadBtn] = useState(true);
   const [uploadStatus, setUploadStatus] = useState(RequestStatus.CLEAR);
 
+  const VALID_IMAGE_TYPES = ['png', 'jpeg'];
+
   const isQueryFailed = uploadStatus === RequestStatus.FAILED;
   const isQueryPending = uploadStatus === RequestStatus.PENDING;
 
@@ -51,7 +53,7 @@ const useModalDropzone = ({
    */
   const constructAcceptObject = (types) => types
     .reduce((acc, type) => {
-      const mimeType = type === 'png' || type === 'jpg' ? 'image/*' : '*/*';
+      const mimeType = VALID_IMAGE_TYPES.includes(type) ? 'image/*' : '*/*';
       if (!acc[mimeType]) {
         acc[mimeType] = [];
       }
