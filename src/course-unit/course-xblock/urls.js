@@ -7,7 +7,7 @@ export const iframeParams = {
   show_bookmark: 0,
   recheck_access: 1,
   view: 'student_view',
-  allow_render_for_mfe: 1,
+  is_authoring_mfe: 1,
 };
 
 export const getIFrameUrl = ({ blockId }) => {
