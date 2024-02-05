@@ -9,6 +9,7 @@ import { Field } from 'formik';
 import messages from './messages';
 
 const UnitTab = ({
+  isXBlockComponent,
   values,
   setFieldValue,
   showWarning,
@@ -30,17 +31,21 @@ const UnitTab = ({
 
   return (
     <>
-      <h3 className="mt-3"><FormattedMessage {...messages.unitVisibility} /></h3>
-      <hr />
-      <Form.Checkbox checked={isVisibleToStaffOnly} onChange={handleChange} data-testid="unit-visibility-checkbox">
-        <FormattedMessage {...messages.hideFromLearners} />
-      </Form.Checkbox>
-      {showWarning && (
-        <Alert className="mt-2" variant="warning">
-          <FormattedMessage {...messages.unitVisibilityWarning} />
-        </Alert>
+      {!isXBlockComponent && (
+        <>
+          <h3 className="mt-3"><FormattedMessage {...messages.unitVisibility} /></h3>
+          <hr />
+          <Form.Checkbox checked={isVisibleToStaffOnly} onChange={handleChange} data-testid="unit-visibility-checkbox">
+            <FormattedMessage {...messages.hideFromLearners} />
+          </Form.Checkbox>
+          {showWarning && (
+            <Alert className="mt-2" variant="warning">
+              <FormattedMessage {...messages.unitVisibilityWarning} />
+            </Alert>
+          )}
+          <hr />
+        </>
       )}
-      <hr />
       <Form.Group controlId="groupSelect">
         <Form.Label as="legend" className="font-weight-bold">
           <FormattedMessage {...messages.restrictAccessTo} />
@@ -103,7 +108,12 @@ const UnitTab = ({
   );
 };
 
+UnitTab.defaultProps = {
+  isXBlockComponent: false,
+};
+
 UnitTab.propTypes = {
+  isXBlockComponent: PropTypes.bool,
   values: PropTypes.shape({
     isVisibleToStaffOnly: PropTypes.bool.isRequired,
     selectedPartitionIndex: PropTypes.oneOfType([

@@ -45,6 +45,7 @@ import courseXBlockMessages from './course-xblock/messages';
 import addComponentMessages from './add-component/messages';
 import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
 import { getContentTaxonomyTagsApiUrl, getContentTaxonomyTagsCountApiUrl } from '../content-tags-drawer/data/api';
+import configureModalMessages from '../generic/configure-modal/messages';
 
 let axiosMock;
 let store;
@@ -617,7 +618,7 @@ describe('<CourseUnit />', () => {
     axiosMock
       .onPost(getXBlockBaseApiUrl(blockId), {
         publish: PUBLISH_TYPES.republish,
-        metadata: { visible_to_staff_only: true },
+        metadata: { visible_to_staff_only: true, group_access: null },
       })
       .reply(200, { dummy: 'value' });
     axiosMock
@@ -654,7 +655,7 @@ describe('<CourseUnit />', () => {
     axiosMock
       .onPost(getXBlockBaseApiUrl(blockId), {
         publish: PUBLISH_TYPES.republish,
-        metadata: { visible_to_staff_only: null },
+        metadata: { visible_to_staff_only: null, group_access: null },
       })
       .reply(200, { dummy: 'value' });
     axiosMock
@@ -941,5 +942,74 @@ describe('<CourseUnit />', () => {
       sidebarMessages.releaseInfoWithSection.defaultMessage
         .replace('{sectionName}', courseUnitIndexMock.release_date_from),
     )).toBeInTheDocument();
+  });
+
+  it('should toggle visibility from header configure modal and update course unit state accordingly', async () => {
+    const { getByRole, getByTestId } = render(<RootWrapper />);
+    let courseUnitSidebar;
+    let sidebarVisibilityCheckbox;
+    let modalVisibilityCheckbox;
+    let configureModal;
+    let restrictAccessSelect;
+
+    await waitFor(() => {
+      courseUnitSidebar = getByTestId('course-unit-sidebar');
+      sidebarVisibilityCheckbox = within(courseUnitSidebar)
+        .getByLabelText(sidebarMessages.visibilityCheckboxTitle.defaultMessage);
+      expect(sidebarVisibilityCheckbox).not.toBeChecked();
+
+      const headerConfigureBtn = getByRole('button', { name: /settings/i });
+      expect(headerConfigureBtn).toBeInTheDocument();
+
+      userEvent.click(headerConfigureBtn);
+      configureModal = getByTestId('configure-modal');
+      restrictAccessSelect = within(configureModal)
+        .getByRole('combobox', { name: configureModalMessages.restrictAccessTo.defaultMessage });
+      expect(within(configureModal)
+        .getByText(configureModalMessages.unitVisibility.defaultMessage)).toBeInTheDocument();
+      expect(within(configureModal)
+        .getByText(configureModalMessages.restrictAccessTo.defaultMessage)).toBeInTheDocument();
+      expect(restrictAccessSelect).toBeInTheDocument();
+      expect(restrictAccessSelect).toHaveValue('-1');
+
+      modalVisibilityCheckbox = within(configureModal)
+        .getByRole('checkbox', { name: configureModalMessages.hideFromLearners.defaultMessage });
+      expect(modalVisibilityCheckbox).not.toBeChecked();
+
+      userEvent.click(modalVisibilityCheckbox);
+      expect(modalVisibilityCheckbox).toBeChecked();
+
+      userEvent.selectOptions(restrictAccessSelect, '0');
+      const [, group1Checkbox] = within(configureModal).getAllByRole('checkbox');
+
+      userEvent.click(group1Checkbox);
+      expect(group1Checkbox).toBeChecked();
+    });
+
+    axiosMock
+      .onPost(getXBlockBaseApiUrl(courseUnitIndexMock.id), {
+        publish: PUBLISH_TYPES.republish,
+        metadata: { visible_to_staff_only: true, group_access: { 50: [2] } },
+      })
+      .reply(200, { dummy: 'value' });
+    axiosMock
+      .onGet(getCourseUnitApiUrl(blockId))
+      .replyOnce(200, {
+        ...courseUnitIndexMock,
+        visibility_state: UNIT_VISIBILITY_STATES.staffOnly,
+        has_explicit_staff_lock: true,
+      });
+
+    const modalSaveBtn = within(configureModal)
+      .getByRole('button', { name: configureModalMessages.saveButton.defaultMessage });
+    userEvent.click(modalSaveBtn);
+
+    await waitFor(() => {
+      expect(sidebarVisibilityCheckbox).toBeChecked();
+      expect(within(courseUnitSidebar)
+        .getByText(sidebarMessages.sidebarTitleVisibleToStaffOnly.defaultMessage)).toBeInTheDocument();
+      expect(within(courseUnitSidebar)
+        .getByText(sidebarMessages.visibilityStaffOnlyTitle.defaultMessage)).toBeInTheDocument();
+    });
   });
 });
