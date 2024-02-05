@@ -28,6 +28,7 @@ import SubHeader from '../generic/sub-header/SubHeader';
 import ProcessingNotification from '../generic/processing-notification';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
 import DeleteModal from '../generic/delete-modal/DeleteModal';
+import ConfigureModal from '../generic/configure-modal/ConfigureModal';
 import AlertMessage from '../generic/alert-message';
 import getPageHeadTitle from '../generic/utils';
 import { getCurrentItem } from './data/selectors';
@@ -42,7 +43,6 @@ import UnitCard from './unit-card/UnitCard';
 import HighlightsModal from './highlights-modal/HighlightsModal';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
 import PublishModal from './publish-modal/PublishModal';
-import ConfigureModal from './configure-modal/ConfigureModal';
 import { useCourseOutline } from './hooks';
 import messages from './messages';
 
@@ -110,8 +110,8 @@ const CourseOutline = ({ courseId }) => {
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
 
-  const { category } = useSelector(getCurrentItem);
-  const deleteCategory = COURSE_BLOCK_NAMES[category]?.name.toLowerCase();
+  const currentItemData = useSelector(getCurrentItem);
+  const deleteCategory = COURSE_BLOCK_NAMES[currentItemData.category]?.name.toLowerCase();
 
   const finalizeSectionOrder = () => (newSections) => {
     initialSections = [...sectionsList];
@@ -445,6 +445,7 @@ const CourseOutline = ({ courseId }) => {
           isOpen={isConfigureModalOpen}
           onClose={handleConfigureModalClose}
           onConfigureSubmit={handleConfigureItemSubmit}
+          currentItemData={currentItemData}
         />
         <DeleteModal
           category={deleteCategory}
