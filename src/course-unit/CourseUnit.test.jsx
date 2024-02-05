@@ -43,6 +43,7 @@ import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
 import deleteModalMessages from '../generic/delete-modal/messages';
 import courseXBlockMessages from './course-xblock/messages';
 import messages from './messages';
+import configureModalMessages from '../generic/configure-modal/messages';
 
 let axiosMock;
 let store;
@@ -382,7 +383,7 @@ describe('<CourseUnit />', () => {
     });
   });
 
-  it('should toggle visibility and update course unit state accordingly', async () => {
+  it('should toggle visibility from sidebar and update course unit state accordingly', async () => {
     const { getByRole, getByTestId } = render(<RootWrapper />);
     let courseUnitSidebar;
     let draftUnpublishedChangesHeading;
@@ -405,7 +406,7 @@ describe('<CourseUnit />', () => {
     axiosMock
       .onPost(getXBlockBaseApiUrl(blockId), {
         publish: PUBLISH_TYPES.republish,
-        metadata: { visible_to_staff_only: true },
+        metadata: { visible_to_staff_only: true, group_access: null },
       })
       .reply(200, { dummy: 'value' });
     axiosMock
@@ -442,7 +443,7 @@ describe('<CourseUnit />', () => {
     axiosMock
       .onPost(getXBlockBaseApiUrl(blockId), {
         publish: PUBLISH_TYPES.republish,
-        metadata: { visible_to_staff_only: null },
+        metadata: { visible_to_staff_only: null, group_access: null },
       })
       .reply(200, { dummy: 'value' });
     axiosMock
@@ -548,7 +549,7 @@ describe('<CourseUnit />', () => {
     expect(discardChangesBtn).not.toBeInTheDocument();
   });
 
-  it('checks whether xblock is deleted when corresponding delete button is clicked', async () => {
+  it('checks whether xblock is removed when the corresponding delete button is clicked', async () => {
     axiosMock
       .onDelete(getXBlockBaseApiUrl(courseVerticalChildrenMock.children[0].block_id))
       .replyOnce(200, { dummy: 'value' });
@@ -576,7 +577,7 @@ describe('<CourseUnit />', () => {
     });
   });
 
-  it('checks whether xblock is duplicate when corresponding delete button is clicked', async () => {
+  it('checks whether xblock is duplicate when the corresponding duplicate button is clicked', async () => {
     axiosMock
       .onPost(postXBlockBaseApiUrl({
         parent_locator: blockId,
@@ -591,9 +592,8 @@ describe('<CourseUnit />', () => {
         children: [
           ...courseVerticalChildrenMock.children,
           {
+            ...courseVerticalChildrenMock.children[0],
             name: 'New Cloned XBlock',
-            block_id: '1234567890',
-            block_type: 'drag-and-drop-v2',
           },
         ],
       });
@@ -614,6 +614,75 @@ describe('<CourseUnit />', () => {
 
       expect(getAllByTestId('course-xblock')).toHaveLength(3);
       expect(getByText('New Cloned XBlock')).toBeInTheDocument();
+    });
+  });
+
+  it('should toggle visibility from header configure modal and update course unit state accordingly', async () => {
+    const { getByRole, getByTestId } = render(<RootWrapper />);
+    let courseUnitSidebar;
+    let sidebarVisibilityCheckbox;
+    let modalVisibilityCheckbox;
+    let configureModal;
+    let restrictAccessSelect;
+
+    await waitFor(() => {
+      courseUnitSidebar = getByTestId('course-unit-sidebar');
+      sidebarVisibilityCheckbox = within(courseUnitSidebar)
+        .getByLabelText(sidebarMessages.visibilityCheckboxTitle.defaultMessage);
+      expect(sidebarVisibilityCheckbox).not.toBeChecked();
+
+      const headerConfigureBtn = getByRole('button', { name: /settings/i });
+      expect(headerConfigureBtn).toBeInTheDocument();
+
+      userEvent.click(headerConfigureBtn);
+      configureModal = getByTestId('configure-modal');
+      restrictAccessSelect = within(configureModal)
+        .getByRole('combobox', { name: configureModalMessages.restrictAccessTo.defaultMessage });
+      expect(within(configureModal)
+        .getByText(configureModalMessages.unitVisibility.defaultMessage)).toBeInTheDocument();
+      expect(within(configureModal)
+        .getByText(configureModalMessages.restrictAccessTo.defaultMessage)).toBeInTheDocument();
+      expect(restrictAccessSelect).toBeInTheDocument();
+      expect(restrictAccessSelect).toHaveValue('-1');
+
+      modalVisibilityCheckbox = within(configureModal)
+        .getByRole('checkbox', { name: configureModalMessages.hideFromLearners.defaultMessage });
+      expect(modalVisibilityCheckbox).not.toBeChecked();
+
+      userEvent.click(modalVisibilityCheckbox);
+      expect(modalVisibilityCheckbox).toBeChecked();
+
+      userEvent.selectOptions(restrictAccessSelect, '0');
+      const [, group1Checkbox] = within(configureModal).getAllByRole('checkbox');
+
+      userEvent.click(group1Checkbox);
+      expect(group1Checkbox).toBeChecked();
+    });
+
+    axiosMock
+      .onPost(getXBlockBaseApiUrl(courseUnitIndexMock.id), {
+        publish: PUBLISH_TYPES.republish,
+        metadata: { visible_to_staff_only: true, group_access: { 50: [2] } },
+      })
+      .reply(200, { dummy: 'value' });
+    axiosMock
+      .onGet(getCourseUnitApiUrl(blockId))
+      .replyOnce(200, {
+        ...courseUnitIndexMock,
+        visibility_state: UNIT_VISIBILITY_STATES.staffOnly,
+        has_explicit_staff_lock: true,
+      });
+
+    const modalSaveBtn = within(configureModal)
+      .getByRole('button', { name: configureModalMessages.saveButton.defaultMessage });
+    userEvent.click(modalSaveBtn);
+
+    await waitFor(() => {
+      expect(sidebarVisibilityCheckbox).toBeChecked();
+      expect(within(courseUnitSidebar)
+        .getByText(sidebarMessages.sidebarTitleVisibleToStaffOnly.defaultMessage)).toBeInTheDocument();
+      expect(within(courseUnitSidebar)
+        .getByText(sidebarMessages.visibilityStaffOnlyTitle.defaultMessage)).toBeInTheDocument();
     });
   });
 });
