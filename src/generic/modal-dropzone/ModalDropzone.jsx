@@ -13,16 +13,20 @@ import {
 } from '@edx/paragon';
 import { FileUpload as FileUploadIcon } from '@edx/paragon/icons';
 
-import InternetConnectionAlert from '../internet-connection-alert';
 import useModalDropzone from './useModalDropzone';
 import messages from './messages';
 
 const ModalDropzone = ({
   fileTypes,
+  modalTitle,
+  imageHelpText,
+  previewComponent,
+  imageDropzoneText,
   isOpen,
   onClose,
   onCancel,
   onChange,
+  onSavingStatus,
 }) => {
   const {
     intl,
@@ -30,23 +34,23 @@ const ModalDropzone = ({
     previewUrl,
     uploadProgress,
     disabledUploadBtn,
-    isQueryFailed,
-    isQueryPending,
     imageValidator,
     handleUpload,
     handleCancel,
     handleSelectFile,
   } = useModalDropzone({
-    onChange, onCancel, onClose, fileTypes,
+    onChange, onCancel, onClose, fileTypes, onSavingStatus,
   });
 
   const inputComponent = previewUrl ? (
     <div>
-      <Image
-        src={previewUrl}
-        alt={intl.formatMessage(messages.uploadImageDropzoneAlt)}
-        fluid
-      />
+      {previewComponent || (
+        <Image
+          src={previewUrl}
+          alt={intl.formatMessage(messages.uploadImageDropzoneAlt)}
+          fluid
+        />
+      )}
     </div>
   ) : (
     <>
@@ -58,14 +62,14 @@ const ModalDropzone = ({
         alt={intl.formatMessage(messages.uploadImageDropzoneAlt)}
         className="mb-3"
       />
-      <p>{intl.formatMessage(messages.uploadImageDropzoneText)}</p>
-      <p className="x-small text-center mt-1.5">{intl.formatMessage(messages.uploadImageHelpText)}</p>
+      <p>{imageDropzoneText || intl.formatMessage(messages.uploadImageDropzoneText)}</p>
+      <p className="x-small text-center mt-1.5">{imageHelpText || intl.formatMessage(messages.uploadImageHelpText)}</p>
     </>
   );
 
   return (
     <ModalDialog
-      title={intl.formatMessage(messages.uploadImageButton)}
+      title={modalTitle}
       size="lg"
       isOpen={isOpen}
       onClose={handleCancel}
@@ -75,7 +79,7 @@ const ModalDropzone = ({
     >
       <ModalDialog.Header>
         <ModalDialog.Title>
-          {intl.formatMessage(messages.uploadImageButton)}
+          {modalTitle}
         </ModalDialog.Title>
       </ModalDialog.Header>
       <ModalDialog.Body>
@@ -106,20 +110,27 @@ const ModalDropzone = ({
           </Button>
         </ActionRow>
       </ModalDialog.Footer>
-      <InternetConnectionAlert
-        isFailed={isQueryFailed}
-        isQueryPending={isQueryPending}
-      />
     </ModalDialog>
   );
 };
 
+ModalDropzone.defaultProps = {
+  imageHelpText: '',
+  previewComponent: null,
+  imageDropzoneText: '',
+};
+
 ModalDropzone.propTypes = {
+  imageHelpText: PropTypes.string,
+  previewComponent: PropTypes.element,
+  imageDropzoneText: PropTypes.string,
+  modalTitle: PropTypes.string.isRequired,
   fileTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  onSavingStatus: PropTypes.func.isRequired,
 };
 
 export default ModalDropzone;

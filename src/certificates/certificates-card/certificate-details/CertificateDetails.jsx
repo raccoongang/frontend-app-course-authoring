@@ -9,9 +9,10 @@ import {
   EditOutline as EditOutlineIcon, DeleteOutline as DeleteOutlineIcon,
 } from '@edx/paragon/icons';
 
+import ModalNotification from '../../../generic/modal-notification';
 import { deleteCourseCertificate } from '../../data/thunks';
 import { MODE_STATES } from '../../data/constants';
-import ConfirmModal from '../../confirm-modal/ConfirmModal';
+
 import messages from '../messages';
 
 const CertificateDetails = ({
@@ -108,7 +109,7 @@ const CertificateDetails = ({
           </Stack>
         </Stack>
       </div>
-      <ConfirmModal
+      <ModalNotification
         isOpen={isConfirmOpen}
         title={intl.formatMessage(messages.deleteCertificateConfirmation)}
         message={intl.formatMessage(messages.deleteCertificateMessage)}

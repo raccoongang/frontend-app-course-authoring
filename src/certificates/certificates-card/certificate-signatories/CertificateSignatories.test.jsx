@@ -1,11 +1,16 @@
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { initializeMockApp } from '@edx/frontend-platform';
 
+import initializeStore from '../../../store';
 import { MODE_STATES } from '../../data/constants';
 import { signatoriesMock } from '../../__mocks__';
 import messages from '../messages';
 import CertificateSignatories from './CertificateSignatories';
+
+let store;
 
 const mockArrayHelpers = {
   push: jest.fn(),
@@ -13,9 +18,11 @@ const mockArrayHelpers = {
 };
 
 const renderComponent = (props) => render(
-  <IntlProvider locale="en">
-    <CertificateSignatories {...props} />
-  </IntlProvider>,
+  <Provider store={store}>
+    <IntlProvider locale="en">
+      <CertificateSignatories {...props} />
+    </IntlProvider>,
+  </Provider>,
 );
 
 const defaultProps = {
@@ -24,7 +31,29 @@ const defaultProps = {
   arrayHelpers: mockArrayHelpers,
 };
 
+const initialState = {
+  certificates: {
+    certificatesData: {
+      certificates: [],
+      hasCertificateModes: true,
+    },
+    componentMode: MODE_STATES.create,
+  },
+};
+
 describe('CertificateSignatories', () => {
+  beforeEach(() => {
+    initializeMockApp({
+      authenticatedUser: {
+        userId: 3,
+        username: 'abc123',
+        administrator: true,
+        roles: [],
+      },
+    });
+    store = initializeStore(initialState);
+  });
+
   afterEach(() => jest.clearAllMocks());
 
   it('renders signatory components for each signatory', () => {

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import {
   Image, Icon, Stack, IconButtonWithTooltip, FormLabel, Form, Button, useToggle,
 } from '@edx/paragon';
@@ -8,8 +9,9 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
+import { updateSavingStatus } from '../../../data/slice';
 import ModalDropzone from '../../../../generic/modal-dropzone/ModalDropzone';
-import ConfirmModal from '../../../confirm-modal/ConfirmModal';
+import ModalNotification from '../../../../generic/modal-notification';
 import { MODE_STATES } from '../../../data/constants';
 import messages from '../../messages';
 
@@ -27,11 +29,16 @@ const Signatory = ({
   handleDeleteSignatory,
 }) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
   const [isOpen, open, close] = useToggle(false);
   const [isConfirmOpen, confirmOpen, confirmClose] = useToggle(false);
 
   const handleImageUpload = (newImagePath) => {
     setFieldValue(`signatories[${id}].signatureImagePath`, newImagePath);
+  };
+
+  const handleSavingStatusDispatch = (status) => {
+    dispatch(updateSavingStatus(status));
   };
 
   const formData = [
@@ -151,8 +158,10 @@ const Signatory = ({
         onCancel={close}
         onChange={handleImageUpload}
         fileTypes={['png']}
+        onSavingStatus={handleSavingStatusDispatch}
+        modalTitle={intl.formatMessage(messages.uploadImageButton)}
       />
-      <ConfirmModal
+      <ModalNotification
         isOpen={isConfirmOpen}
         title={intl.formatMessage(messages.deleteSignatoryConfirmation, { name })}
         message={intl.formatMessage(messages.deleteSignatoryConfirmationMessage)}
