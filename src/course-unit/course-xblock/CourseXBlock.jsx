@@ -8,7 +8,9 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
+import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import { scrollToElement } from '../../course-outline/utils';
+import { COURSE_BLOCK_NAMES } from '../../constants';
 import { copyToClipboard } from '../data/thunk';
 import { getCourseUnitEnableCopyPaste } from '../data/selectors';
 import ContentIFrame from './ContentIFrame';
@@ -16,18 +18,29 @@ import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
-  id, title, unitXBlockActions, shouldScroll, ...props
+  id, title, unitXBlockActions, shouldScroll, userPartitionInfo, handleConfigureSubmit, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
+  const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
   const dispatch = useDispatch();
   const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
 
-  const onXBlockDelete = () => {
+  const currentItemData = {
+    category: COURSE_BLOCK_NAMES.component.id,
+    displayName: title,
+    userPartitionInfo,
+  };
+
+  const onDeleteSubmit = () => {
     unitXBlockActions.handleDelete(id);
     closeDeleteModal();
+  };
+
+  const onConfigureSubmit = (...arg) => {
+    handleConfigureSubmit(id, ...arg, closeConfigureModal);
   };
 
   useEffect(() => {
@@ -71,7 +84,7 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
                     </Dropdown.Item>
                   )}
-                  <Dropdown.Item>
+                  <Dropdown.Item onClick={openConfigureModal}>
                     {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                   </Dropdown.Item>
                   <Dropdown.Item onClick={openDeleteModal}>
@@ -83,7 +96,14 @@ const CourseXBlock = ({
                 category="component"
                 isOpen={isDeleteModalOpen}
                 close={closeDeleteModal}
-                onDeleteSubmit={onXBlockDelete}
+                onDeleteSubmit={onDeleteSubmit}
+              />
+              <ConfigureModal
+                isXBlockComponent
+                isOpen={isConfigureModalOpen}
+                onClose={closeConfigureModal}
+                onConfigureSubmit={onConfigureSubmit}
+                currentItemData={currentItemData}
               />
             </ActionRow>
           )}
@@ -109,6 +129,22 @@ CourseXBlock.propTypes = {
     handleDelete: PropTypes.func,
     handleDuplicate: PropTypes.func,
   }).isRequired,
+  userPartitionInfo: PropTypes.shape({
+    selectablePartitions: PropTypes.arrayOf(PropTypes.shape({
+      groups: PropTypes.arrayOf(PropTypes.shape({
+        deleted: PropTypes.bool,
+        id: PropTypes.number,
+        name: PropTypes.string,
+        selected: PropTypes.bool,
+      })),
+      id: PropTypes.number,
+      name: PropTypes.string,
+      scheme: PropTypes.string,
+    })),
+    selectedPartitionIndex: PropTypes.number,
+    selectedGroupsLabel: PropTypes.string,
+  }).isRequired,
+  handleConfigureSubmit: PropTypes.func.isRequired,
 };
 
 export default CourseXBlock;
