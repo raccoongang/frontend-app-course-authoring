@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Form, IconButton } from '@openedx/paragon';
+import { Form, IconButton, useToggle } from '@openedx/paragon';
 import {
   EditOutline as EditIcon,
   Settings as SettingsIcon,
 } from '@openedx/paragon/icons';
 
+import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
+import { getCourseUnitData } from '../data/selectors';
 import { updateQueryPendingStatus } from '../data/slice';
 import messages from './messages';
 
@@ -16,10 +18,17 @@ const HeaderTitle = ({
   isTitleEditFormOpen,
   handleTitleEdit,
   handleTitleEditSubmit,
+  handleConfigureSubmit,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState(unitTitle);
+  const currentItemData = useSelector(getCourseUnitData);
+  const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
+
+  const onConfigureSubmit = (...arg) => {
+    handleConfigureSubmit(currentItemData.id, ...arg, closeConfigureModal);
+  };
 
   useEffect(() => {
     setTitleValue(unitTitle);
@@ -55,7 +64,13 @@ const HeaderTitle = ({
         alt={intl.formatMessage(messages.altButtonSettings)}
         className="flex-shrink-0"
         iconAs={SettingsIcon}
-        onClick={() => {}}
+        onClick={openConfigureModal}
+      />
+      <ConfigureModal
+        isOpen={isConfigureModalOpen}
+        onClose={closeConfigureModal}
+        onConfigureSubmit={onConfigureSubmit}
+        currentItemData={currentItemData}
       />
     </div>
   );
@@ -66,6 +81,7 @@ HeaderTitle.propTypes = {
   isTitleEditFormOpen: PropTypes.bool.isRequired,
   handleTitleEdit: PropTypes.func.isRequired,
   handleTitleEditSubmit: PropTypes.func.isRequired,
+  handleConfigureSubmit: PropTypes.func.isRequired,
 };
 
 export default HeaderTitle;
