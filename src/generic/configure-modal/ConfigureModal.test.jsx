@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
@@ -8,6 +9,12 @@ import { AppProvider } from '@edx/frontend-platform/react';
 
 import initializeStore from '../../store';
 import ConfigureModal from './ConfigureModal';
+import {
+  currentSectionMock,
+  currentSubsectionMock,
+  currentUnitMock,
+  currentXBlockMock,
+} from './__mocks__';
 import messages from './messages';
 
 // eslint-disable-next-line no-unused-vars
@@ -26,79 +33,6 @@ jest.mock('react-router-dom', () => ({
     pathname: mockPathname,
   }),
 }));
-
-const currentSectionMock = {
-  displayName: 'Section1',
-  category: 'chapter',
-  start: '2025-08-10T10:00:00Z',
-  visibilityState: true,
-  format: 'Not Graded',
-  childInfo: {
-    displayName: 'Subsection',
-    children: [
-      {
-        displayName: 'Subsection 1',
-        id: 1,
-        category: 'sequential',
-        due: '',
-        start: '2025-08-10T10:00:00Z',
-        visibilityState: true,
-        defaultTimeLimitMinutes: null,
-        hideAfterDue: false,
-        showCorrectness: false,
-        format: 'Homework',
-        courseGraders: ['Homework', 'Exam'],
-        childInfo: {
-          displayName: 'Unit',
-          children: [
-            {
-              id: 11,
-              displayName: 'Subsection_1 Unit 1',
-            },
-          ],
-        },
-      },
-      {
-        displayName: 'Subsection 2',
-        id: 2,
-        category: 'sequential',
-        due: '',
-        start: '2025-08-10T10:00:00Z',
-        visibilityState: true,
-        defaultTimeLimitMinutes: null,
-        hideAfterDue: false,
-        showCorrectness: false,
-        format: 'Homework',
-        courseGraders: ['Homework', 'Exam'],
-        childInfo: {
-          displayName: 'Unit',
-          children: [
-            {
-              id: 21,
-              displayName: 'Subsection_2 Unit 1',
-            },
-          ],
-        },
-      },
-      {
-        displayName: 'Subsection 3',
-        id: 3,
-        category: 'sequential',
-        due: '',
-        start: '2025-08-10T10:00:00Z',
-        visibilityState: true,
-        defaultTimeLimitMinutes: null,
-        hideAfterDue: false,
-        showCorrectness: false,
-        format: 'Homework',
-        courseGraders: ['Homework', 'Exam'],
-        childInfo: {
-          children: [],
-        },
-      },
-    ],
-  },
-};
 
 const onCloseMock = jest.fn();
 const onConfigureSubmitMock = jest.fn();
@@ -146,7 +80,7 @@ describe('<ConfigureModal /> for Section', () => {
     const { getByRole, getByText } = renderComponent();
 
     const visibilityTab = getByRole('tab', { name: messages.visibilityTabTitle.defaultMessage });
-    fireEvent.click(visibilityTab);
+    userEvent.click(visibilityTab);
     expect(getByText('Section Visibility')).toBeInTheDocument();
     expect(getByText(messages.hideFromLearners.defaultMessage)).toBeInTheDocument();
   });
@@ -158,42 +92,15 @@ describe('<ConfigureModal /> for Section', () => {
     expect(saveButton).toBeDisabled();
 
     const input = getByPlaceholderText('MM/DD/YYYY');
-    fireEvent.change(input, { target: { value: '12/15/2023' } });
+    userEvent.type(input, '12/15/2023');
 
     const visibilityTab = getByRole('tab', { name: messages.visibilityTabTitle.defaultMessage });
-    fireEvent.click(visibilityTab);
+    userEvent.click(visibilityTab);
     const checkbox = getByTestId('visibility-checkbox');
-    fireEvent.click(checkbox);
+    userEvent.click(checkbox);
     expect(saveButton).not.toBeDisabled();
   });
 });
-
-const currentSubsectionMock = {
-  displayName: 'Subsection 1',
-  id: 1,
-  category: 'sequential',
-  due: '',
-  start: '2025-08-10T10:00:00Z',
-  visibilityState: true,
-  defaultTimeLimitMinutes: null,
-  hideAfterDue: false,
-  showCorrectness: false,
-  format: 'Homework',
-  courseGraders: ['Homework', 'Exam'],
-  childInfo: {
-    displayName: 'Unit',
-    children: [
-      {
-        id: 11,
-        displayName: 'Subsection_1 Unit 1',
-      },
-      {
-        id: 12,
-        displayName: 'Subsection_1 Unit 2',
-      },
-    ],
-  },
-};
 
 const renderSubsectionComponent = () => render(
   <AppProvider store={store}>
@@ -243,7 +150,7 @@ describe('<ConfigureModal /> for Subsection', () => {
     const { getByRole, getByText } = renderSubsectionComponent();
 
     const visibilityTab = getByRole('tab', { name: messages.visibilityTabTitle.defaultMessage });
-    fireEvent.click(visibilityTab);
+    userEvent.click(visibilityTab);
     expect(getByText('Subsection Visibility')).toBeInTheDocument();
     expect(getByText(messages.showEntireSubsection.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.showEntireSubsectionDescription.defaultMessage)).toBeInTheDocument();
@@ -264,7 +171,7 @@ describe('<ConfigureModal /> for Subsection', () => {
     const { getByRole, getByText } = renderSubsectionComponent();
 
     const advancedTab = getByRole('tab', { name: messages.advancedTabTitle.defaultMessage });
-    fireEvent.click(advancedTab);
+    userEvent.click(advancedTab);
     expect(getByText(messages.setSpecialExam.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.none.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.timed.defaultMessage)).toBeInTheDocument();
@@ -278,60 +185,10 @@ describe('<ConfigureModal /> for Subsection', () => {
     expect(saveButton).toBeDisabled();
 
     const input = getByTestId('grader-type-select');
-    fireEvent.change(input, { target: { value: 'Exam' } });
+    userEvent.selectOptions(input, 'Exam');
     expect(saveButton).not.toBeDisabled();
   });
 });
-
-const currentUnitMock = {
-  displayName: 'Unit 1',
-  id: 1,
-  category: 'vertical',
-  due: '',
-  start: '2025-08-10T10:00:00Z',
-  visibilityState: true,
-  defaultTimeLimitMinutes: null,
-  hideAfterDue: false,
-  showCorrectness: false,
-  userPartitionInfo: {
-    selectablePartitions: [
-      {
-        id: 50,
-        name: 'Enrollment Track Groups',
-        scheme: 'enrollment_track',
-        groups: [
-          {
-            id: 6,
-            name: 'Honor',
-            selected: false,
-            deleted: false,
-          },
-          {
-            id: 2,
-            name: 'Verified',
-            selected: false,
-            deleted: false,
-          },
-        ],
-      },
-      {
-        id: 1508065533,
-        name: 'Content Groups',
-        scheme: 'cohort',
-        groups: [
-          {
-            id: 1224170703,
-            name: 'Content Group 1',
-            selected: false,
-            deleted: false,
-          },
-        ],
-      },
-    ],
-    selectedPartitionIndex: -1,
-    selectedGroupsLabel: '',
-  },
-};
 
 const renderUnitComponent = (props) => render(
   <AppProvider store={store}>
@@ -375,8 +232,8 @@ describe('<ConfigureModal /> for Unit', () => {
     expect(queryByText(messages.unitSelectGroup.defaultMessage)).not.toBeInTheDocument();
     const input = getByTestId('group-type-select');
 
-    [0, 1].forEach(groupeTypeIndex => {
-      fireEvent.change(input, { target: { value: groupeTypeIndex } });
+    ['0', '1'].forEach(groupeTypeIndex => {
+      userEvent.selectOptions(input, groupeTypeIndex);
 
       expect(getByText(messages.unitSelectGroup.defaultMessage)).toBeInTheDocument();
       currentUnitMock
@@ -406,67 +263,17 @@ describe('<ConfigureModal /> for Unit', () => {
 
     const input = getByTestId('group-type-select');
     // unrestrict access
-    fireEvent.change(input, { target: { value: -1 } });
+    userEvent.selectOptions(input, '-1');
     expect(saveButton).not.toBeDisabled();
 
-    fireEvent.change(input, { target: { value: 0 } });
+    userEvent.selectOptions(input, '0');
     expect(saveButton).toBeDisabled();
 
     const checkbox = getByTestId('unit-visibility-checkbox');
-    fireEvent.click(checkbox);
+    userEvent.click(checkbox);
     expect(saveButton).not.toBeDisabled();
   });
 });
-
-const currentXBlockMock = {
-  displayName: 'Unit 1',
-  id: 1,
-  category: 'component',
-  due: '',
-  start: '2025-08-10T10:00:00Z',
-  visibilityState: true,
-  defaultTimeLimitMinutes: null,
-  hideAfterDue: false,
-  showCorrectness: false,
-  userPartitionInfo: {
-    selectablePartitions: [
-      {
-        id: 50,
-        name: 'Enrollment Track Groups',
-        scheme: 'enrollment_track',
-        groups: [
-          {
-            id: 6,
-            name: 'Honor',
-            selected: false,
-            deleted: false,
-          },
-          {
-            id: 2,
-            name: 'Verified',
-            selected: false,
-            deleted: false,
-          },
-        ],
-      },
-      {
-        id: 1508065533,
-        name: 'Content Groups',
-        scheme: 'cohort',
-        groups: [
-          {
-            id: 1224170703,
-            name: 'Content Group 1',
-            selected: false,
-            deleted: false,
-          },
-        ],
-      },
-    ],
-    selectedPartitionIndex: -1,
-    selectedGroupsLabel: '',
-  },
-};
 
 const renderXBlockComponent = (props) => render(
   <AppProvider store={store}>
@@ -512,7 +319,7 @@ describe('<ConfigureModal /> for XBlock', () => {
     const input = getByTestId('group-type-select');
 
     [0, 1].forEach(groupeTypeIndex => {
-      fireEvent.change(input, { target: { value: groupeTypeIndex } });
+      userEvent.selectOptions(input, groupeTypeIndex);
 
       expect(getByText(messages.unitSelectGroup.defaultMessage)).toBeInTheDocument();
       currentUnitMock
@@ -542,14 +349,14 @@ describe('<ConfigureModal /> for XBlock', () => {
 
     const input = getByTestId('group-type-select');
     // unrestrict access
-    fireEvent.change(input, { target: { value: -1 } });
+    userEvent.selectOptions(input,  -1);
     expect(saveButton).not.toBeDisabled();
 
-    fireEvent.change(input, { target: { value: 0 } });
+    userEvent.selectOptions(input,  0);
     expect(saveButton).toBeDisabled();
 
     const checkbox = getByTestId('unit-visibility-checkbox');
-    fireEvent.click(checkbox);
+    userEvent.click(checkbox);
     expect(saveButton).not.toBeDisabled();
   });
 });

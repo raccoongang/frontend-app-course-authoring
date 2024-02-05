@@ -534,7 +534,7 @@ describe('<CourseUnit />', () => {
     expect(discardChangesBtn).not.toBeInTheDocument();
   });
 
-  it('checks whether xblock is deleted when corresponding to delete button is clicked', async () => {
+  it('checks whether xblock is removed when the corresponding delete button is clicked', async () => {
     axiosMock
       .onDelete(getXBlockBaseApiUrl(courseVerticalChildrenMock.children[0].block_id))
       .replyOnce(200, { dummy: 'value' });
@@ -562,7 +562,7 @@ describe('<CourseUnit />', () => {
     });
   });
 
-  it('checks whether xblock is duplicate when corresponding to duplicate button is clicked', async () => {
+  it('checks whether xblock is duplicate when the corresponding duplicate button is clicked', async () => {
     axiosMock
       .onPost(postXBlockBaseApiUrl({
         parent_locator: blockId,
