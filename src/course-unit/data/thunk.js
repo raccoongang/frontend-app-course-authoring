@@ -195,6 +195,8 @@ export function deleteUnitItemQuery(itemId, xblockId) {
     try {
       await deleteUnitItem(xblockId);
       dispatch(deleteXBlock(xblockId));
+      const courseUnit = await getCourseUnitData(itemId);
+      dispatch(fetchCourseItemSuccess(courseUnit));
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
@@ -216,6 +218,8 @@ export function duplicateUnitItemQuery(itemId, xblockId) {
         newId: locator,
         newCourseVerticalChildren,
       }));
+      const courseUnit = await getCourseUnitData(itemId);
+      dispatch(fetchCourseItemSuccess(courseUnit));
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
