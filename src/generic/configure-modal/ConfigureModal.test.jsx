@@ -1,5 +1,4 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
@@ -67,7 +66,7 @@ describe('<ConfigureModal /> for Section', () => {
 
   it('renders ConfigureModal component correctly', () => {
     const { getByText, getByRole } = renderComponent();
-    expect(getByText(`${currentSectionMock.displayName} Settings`)).toBeInTheDocument();
+    expect(getByText(`${currentSectionMock.displayName} settings`)).toBeInTheDocument();
     expect(getByText(messages.basicTabTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.visibilityTabTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.releaseDate.defaultMessage)).toBeInTheDocument();
@@ -81,7 +80,7 @@ describe('<ConfigureModal /> for Section', () => {
 
     const visibilityTab = getByRole('tab', { name: messages.visibilityTabTitle.defaultMessage });
     userEvent.click(visibilityTab);
-    expect(getByText('Section Visibility')).toBeInTheDocument();
+    expect(getByText('Section visibility')).toBeInTheDocument();
     expect(getByText(messages.hideFromLearners.defaultMessage)).toBeInTheDocument();
   });
 
@@ -132,7 +131,7 @@ describe('<ConfigureModal /> for Subsection', () => {
 
   it('renders subsection ConfigureModal component correctly', () => {
     const { getByText, getByRole } = renderSubsectionComponent();
-    expect(getByText(`${currentSubsectionMock.displayName} Settings`)).toBeInTheDocument();
+    expect(getByText(`${currentSubsectionMock.displayName} settings`)).toBeInTheDocument();
     expect(getByText(messages.basicTabTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.visibilityTabTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.advancedTabTitle.defaultMessage)).toBeInTheDocument();
@@ -151,7 +150,7 @@ describe('<ConfigureModal /> for Subsection', () => {
 
     const visibilityTab = getByRole('tab', { name: messages.visibilityTabTitle.defaultMessage });
     userEvent.click(visibilityTab);
-    expect(getByText('Subsection Visibility')).toBeInTheDocument();
+    expect(getByText('Subsection visibility')).toBeInTheDocument();
     expect(getByText(messages.showEntireSubsection.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.showEntireSubsectionDescription.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.hideContentAfterDue.defaultMessage)).toBeInTheDocument();
@@ -223,7 +222,7 @@ describe('<ConfigureModal /> for Unit', () => {
     const {
       getByText, queryByText, getByRole, getByTestId,
     } = renderUnitComponent();
-    expect(getByText(`${currentUnitMock.displayName} Settings`)).toBeInTheDocument();
+    expect(getByText(`${currentUnitMock.displayName} settings`)).toBeInTheDocument();
     expect(getByText(messages.unitVisibility.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.hideFromLearners.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.restrictAccessTo.defaultMessage)).toBeInTheDocument();
@@ -318,7 +317,7 @@ describe('<ConfigureModal /> for XBlock', () => {
     expect(queryByText(messages.unitSelectGroup.defaultMessage)).not.toBeInTheDocument();
     const input = getByTestId('group-type-select');
 
-    [0, 1].forEach(groupeTypeIndex => {
+    ['0', '1'].forEach(groupeTypeIndex => {
       userEvent.selectOptions(input, groupeTypeIndex);
 
       expect(getByText(messages.unitSelectGroup.defaultMessage)).toBeInTheDocument();
@@ -349,10 +348,10 @@ describe('<ConfigureModal /> for XBlock', () => {
 
     const input = getByTestId('group-type-select');
     // unrestrict access
-    userEvent.selectOptions(input,  -1);
+    userEvent.selectOptions(input, '-1');
     expect(saveButton).not.toBeDisabled();
 
-    userEvent.selectOptions(input,  0);
+    userEvent.selectOptions(input, '0');
     expect(saveButton).toBeDisabled();
 
     const checkbox = getByTestId('unit-visibility-checkbox');
