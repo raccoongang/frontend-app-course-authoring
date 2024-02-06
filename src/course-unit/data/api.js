@@ -118,7 +118,7 @@ export async function updateClipboard(usageKey) {
  */
 export async function handleCourseUnitVisibilityAndData(unitId, type, isVisible, groupAccess) {
   const body = {
-    publish: type,
+    publish: groupAccess ? null : type,
     ...(type === PUBLISH_TYPES.republish ? {
       metadata: {
         visible_to_staff_only: isVisible ? true : null,
