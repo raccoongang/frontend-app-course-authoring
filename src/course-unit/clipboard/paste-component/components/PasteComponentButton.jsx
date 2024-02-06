@@ -10,7 +10,7 @@ const PasteComponentButton = ({ handleCreateNewCourseXBlock }) => {
   const intl = useIntl();
   const { blockId } = useParams();
 
-  const handlePastXBlockComponent = () => {
+  const handlePasteXBlockComponent = () => {
     handleCreateNewCourseXBlock({ stagedContent: 'clipboard', parentLocator: blockId }, null, blockId);
   };
 
@@ -19,7 +19,7 @@ const PasteComponentButton = ({ handleCreateNewCourseXBlock }) => {
       iconBefore={ContentCopyIcon}
       variant="outline-primary"
       block
-      onClick={handlePastXBlockComponent}
+      onClick={handlePasteXBlockComponent}
     >
       {intl.formatMessage(messages.pasteComponentButtonText)}
     </Button>

@@ -30,7 +30,7 @@ const PopoverContent = ({ clipboardData }) => {
           <small className="clipboard-popover-detail-block-type">
             {content.blockTypeDisplay}
           </small>
-          <span>{intl.formatMessage(messages.popoverContentText)} </span>
+          <span className="mr-1">{intl.formatMessage(messages.popoverContentText)}</span>
           <span className="clipboard-popover-detail-course-name">
             {sourceContextTitle}
           </span>

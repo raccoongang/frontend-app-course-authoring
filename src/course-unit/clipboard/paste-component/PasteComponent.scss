@@ -1,15 +1,15 @@
-.paste-component-whats-in-clipboard {
+.whats-in-clipboard {
   cursor: help;
   width: fit-content;
   margin-left: auto;
 
-  .paste-component-whats-in-clipboard-icon {
+  .whats-in-clipboard-icon {
     width: 1.125rem;
     height: 1.125rem;
     margin-bottom: 1px;
   }
 
-  .paste-component-whats-in-clipboard-text {
+  .whats-in-clipboard-text {
     font-size: $font-size-sm;
   }
 }

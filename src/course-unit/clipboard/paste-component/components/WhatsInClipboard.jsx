@@ -21,7 +21,7 @@ const WhatsInClipboard = ({
 
   return (
     <div
-      className="paste-component-whats-in-clipboard mt-2 d-flex align-items-center"
+      className="whats-in-clipboard mt-2 d-flex align-items-center"
       data-testid="whats-in-clipboard"
       onMouseEnter={() => handlePopoverToggle(true)}
       onMouseLeave={() => handlePopoverToggle(false)}
@@ -29,7 +29,7 @@ const WhatsInClipboard = ({
       onBlur={() => togglePopover(false)}
     >
       <Icon
-        className="paste-component-whats-in-clipboard-icon mr-1"
+        className="whats-in-clipboard-icon mr-1"
         src={QuestionIcon}
       />
       <p
@@ -37,7 +37,7 @@ const WhatsInClipboard = ({
         tabIndex="0"
         role="presentation"
         ref={triggerElementRef}
-        className="paste-component-whats-in-clipboard-text m-0"
+        className="whats-in-clipboard-text m-0"
         onKeyDown={handleKeyDown}
       >
         {intl.formatMessage(messages.pasteComponentWhatsInClipboardText)}

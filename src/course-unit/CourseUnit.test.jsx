@@ -1053,7 +1053,7 @@ describe('<CourseUnit />', () => {
         .getByText(pasteNotificationsMessages.hasNewFilesDescription.defaultMessage)).toBeInTheDocument();
       expect(within(newFilesAlert)
         .getByText(pasteNotificationsMessages.hasNewFilesButtonText.defaultMessage)).toBeInTheDocument();
-      clipboardMockResponse.static_file_notices.new_files.forEach((fileName) => {
+      clipboardMockResponse.staticFileNotices.newFiles.forEach((fileName) => {
         expect(within(newFilesAlert).getByText(fileName)).toBeInTheDocument();
       });
 
@@ -1118,7 +1118,7 @@ describe('<CourseUnit />', () => {
         .getByText(pasteNotificationsMessages.hasConflictingErrorsDescription.defaultMessage)).toBeInTheDocument();
       expect(within(conflictingErrorsAlert)
         .getByText(pasteNotificationsMessages.hasConflictingErrorsButtonText.defaultMessage)).toBeInTheDocument();
-      clipboardMockResponse.static_file_notices.conflicting_files.forEach((fileName) => {
+      clipboardMockResponse.staticFileNotices.conflictingFiles.forEach((fileName) => {
         expect(within(conflictingErrorsAlert).getByText(fileName)).toBeInTheDocument();
       });
 
