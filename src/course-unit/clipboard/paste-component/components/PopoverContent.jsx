@@ -5,7 +5,7 @@ import { Icon, Popover, Stack } from '@edx/paragon';
 import { OpenInNew as OpenInNewIcon } from '@edx/paragon/icons';
 
 import messages from '../messages';
-import { clipboardProps } from '../constants';
+import { clipboardPropsTypes } from '../constants';
 
 const PopoverContent = ({ clipboardData }) => {
   const intl = useIntl();
@@ -41,7 +41,7 @@ const PopoverContent = ({ clipboardData }) => {
 };
 
 PopoverContent.propTypes = {
-  clipboardData: PropTypes.shape(clipboardProps).isRequired,
+  clipboardData: PropTypes.shape(clipboardPropsTypes).isRequired,
 };
 
 export default PopoverContent;

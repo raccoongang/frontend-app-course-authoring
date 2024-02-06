@@ -227,7 +227,7 @@ describe('<CourseUnit />', () => {
     await waitFor(async () => {
       units = getAllByTestId('course-unit-btn');
       const courseUnits = courseSectionVerticalMock.xblock_info.ancestor_info.ancestors[0].child_info.children;
-      expect(units.length).toEqual(courseUnits.length);
+      expect(units).toHaveLength(courseUnits.length);
     });
 
     axiosMock
@@ -974,7 +974,7 @@ describe('<CourseUnit />', () => {
 
       units = getAllByTestId('course-unit-btn');
       const courseUnits = courseSectionVerticalMock.xblock_info.ancestor_info.ancestors[0].child_info.children;
-      expect(units.length).toEqual(courseUnits.length);
+      expect(units).toHaveLength(courseUnits.length);
 
       axiosMock
         .onPost(postXBlockBaseApiUrl(), postXBlockBody)

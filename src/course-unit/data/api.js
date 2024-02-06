@@ -61,11 +61,10 @@ export async function getCourseSectionVerticalData(unitId) {
  * @param {Object} options - The options for creating the XBlock.
  * @param {string} options.type - The type of the XBlock.
  * @param {string} [options.category] - The category of the XBlock. Defaults to the type if not provided.
- * @param {string} options.parentLocator - The parent locator of the XBlock.
- * @param {string} [options.displayName] - The display name for the XBlock.
- * @param {string} [options.boilerplate] - The boilerplate for the XBlock.
- * @param {string} [options.stagedContent] - The staged content for the XBlock.
- * @returns {Promise<Object>} A Promise that resolves to the created XBlock data.
+ * @param {string} options.parentLocator - The parent locator.
+ * @param {string} [options.displayName] - The display name.
+ * @param {string} [options.boilerplate] - The boilerplate.
+ * @param {string} [options.stagedContent] - The staged content.
  */
 export async function createCourseXblock({
   type, category, parentLocator, displayName, boilerplate, stagedContent,

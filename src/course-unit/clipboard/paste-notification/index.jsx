@@ -13,10 +13,7 @@ import { getAlertStatus } from './utils';
 import { initialNotificationAlertsState } from './constants';
 import messages from './messages';
 
-const PastNotificationAlert = ({
-  staticFileNotices,
-  courseId,
-}) => {
+const PastNotificationAlert = ({ staticFileNotices, courseId }) => {
   const intl = useIntl();
   const [notificationAlerts, toggleNotificationAlerts] = useState(initialNotificationAlertsState);
   const { conflictingFiles, errorFiles, newFiles } = staticFileNotices;

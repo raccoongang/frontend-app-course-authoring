@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { OverlayTrigger, Popover } from '@edx/paragon';
 
 import { PopoverContent, PasteComponentButton, WhatsInClipboard } from './components';
-import { clipboardProps, OVERLAY_TRIGGERS } from './constants';
+import { clipboardPropsTypes, OVERLAY_TRIGGERS } from './constants';
 
 const PasteComponent = ({ handleCreateNewCourseXBlock, clipboardData }) => {
   const [showPopover, togglePopover] = useState(false);
@@ -49,7 +49,7 @@ const PasteComponent = ({ handleCreateNewCourseXBlock, clipboardData }) => {
 
 PasteComponent.propTypes = {
   handleCreateNewCourseXBlock: PropTypes.func.isRequired,
-  clipboardData: PropTypes.shape(clipboardProps),
+  clipboardData: PropTypes.shape(clipboardPropsTypes),
 };
 
 PasteComponent.defaultProps = {

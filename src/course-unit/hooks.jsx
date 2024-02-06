@@ -20,7 +20,8 @@ import {
   getLoadingStatus,
   getSavingStatus,
   getSequenceStatus,
-  getCourseUnitEnableCopyPaste, getStaticFileNotices,
+  getCourseUnitEnableCopyPaste,
+  getStaticFileNotices,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 

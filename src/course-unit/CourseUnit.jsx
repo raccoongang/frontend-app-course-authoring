@@ -122,7 +122,10 @@ const CourseUnit = ({ courseId }) => {
                   icon={WarningIcon}
                 />
               )}
-              <PasteNotificationAlert staticFileNotices={staticFileNotices} courseId={courseId} />
+              <PasteNotificationAlert
+                staticFileNotices={staticFileNotices}
+                courseId={courseId}
+              />
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({
                   name, blockId: id, shouldScroll, userPartitionInfo,
