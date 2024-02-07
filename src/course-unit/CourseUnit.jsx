@@ -27,6 +27,7 @@ import messages from './messages';
 import PublishControls from './sidebar/PublishControls';
 import LocationInfo from './sidebar/LocationInfo';
 import TagsSidebarControls from '../content-tags-drawer/tags-sidebar-controls';
+import { PasteNotificationAlert, PasteComponent } from './clipboard';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -40,9 +41,13 @@ const CourseUnit = ({ courseId }) => {
     savingStatus,
     isTitleEditFormOpen,
     isErrorAlert,
+    staticFileNotices,
     currentlyVisibleToStudents,
     isInternetConnectionAlertFailed,
     unitXBlockActions,
+    sharedClipboardData,
+    showPasteXBlock,
+    showPasteUnit,
     handleTitleEditSubmit,
     headerNavigationsActions,
     handleTitleEdit,
@@ -103,6 +108,7 @@ const CourseUnit = ({ courseId }) => {
             sequenceId={sequenceId}
             unitId={blockId}
             handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+            showPasteUnit={showPasteUnit}
           />
           <Layout
             lg={[{ span: 8 }, { span: 4 }]}
@@ -119,6 +125,10 @@ const CourseUnit = ({ courseId }) => {
                   icon={WarningIcon}
                 />
               )}
+              <PasteNotificationAlert
+                staticFileNotices={staticFileNotices}
+                courseId={courseId}
+              />
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({
                   name, blockId: id, shouldScroll, userPartitionInfo,
@@ -140,6 +150,12 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
+              {showPasteXBlock && (
+                <PasteComponent
+                  clipboardData={sharedClipboardData}
+                  handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+                />
+              )}
             </Layout.Element>
             <Layout.Element>
               <Stack gap={3}>

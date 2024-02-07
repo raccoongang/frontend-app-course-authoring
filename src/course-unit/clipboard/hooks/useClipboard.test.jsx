@@ -5,11 +5,11 @@ import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
-import initializeStore from '../../store';
-import { executeThunk } from '../../utils';
-import { copyToClipboard } from '../data/thunk';
-import { getClipboardUrl } from '../data/api';
-import { clipboardUnit, clipboardXBlock } from '../__mocks__';
+import initializeStore from '../../../store';
+import { executeThunk } from '../../../utils';
+import { copyToClipboard } from '../../data/thunk';
+import { getClipboardUrl } from '../../data/api';
+import { clipboardUnit, clipboardXBlock } from '../../__mocks__';
 import useClipboard from './useClipboard';
 
 let axiosMock;
