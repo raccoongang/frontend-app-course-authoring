@@ -173,6 +173,9 @@ export function createNewCourseXBlock(body, callback, blockId) {
           if (callback) {
             callback(result);
           }
+          const currentBlockId = body.category === 'vertical' ? formattedResult.locator : blockId;
+          const courseUnit = await getCourseUnitData(currentBlockId);
+          dispatch(fetchCourseItemSuccess(courseUnit));
         }
       });
     } catch (error) {
