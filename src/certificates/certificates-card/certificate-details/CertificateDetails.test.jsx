@@ -7,11 +7,13 @@ import { initializeMockApp } from '@edx/frontend-platform';
 
 import initializeStore from '../../../store';
 import { MODE_STATES } from '../../data/constants';
+import { deleteCourseCertificate } from '../../data/thunks';
 import messages from '../messages';
 import CertificateDetails from './CertificateDetails';
 
 let store;
 const courseId = 'course-v1:edX+DemoX+Demo_Course';
+const certificateId = 123;
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -88,8 +90,31 @@ describe('CertificateDetails', () => {
 
   it('renders correctly in view mode', () => {
     const { getByText } = renderComponent(defaultProps);
+
     expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
     expect(getByText(defaultProps.detailsCourseTitle)).toBeInTheDocument();
+  });
+
+  it('opens confirm modal on delete button click', () => {
+    const { getByRole, getByText } = renderComponent(defaultProps);
+    const deleteButton = getByRole('button', { name: messages.deleteTooltip.defaultMessage });
+    userEvent.click(deleteButton);
+
+    expect(getByText(messages.deleteCertificateConfirmation.defaultMessage)).toBeInTheDocument();
+  });
+
+  it('dispatches delete action on confirm modal action', async () => {
+    const props = { ...defaultProps, courseId, certificateId };
+    const { getByRole } = renderComponent(props);
+    const deleteButton = getByRole('button', { name: messages.deleteTooltip.defaultMessage });
+    userEvent.click(deleteButton);
+
+    await waitFor(() => {
+      const confirmActionButton = getByRole('button', { name: messages.deleteTooltip.defaultMessage });
+      userEvent.click(confirmActionButton);
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith(deleteCourseCertificate(courseId, certificateId));
   });
 
   it('renders correctly in create mode', () => {
@@ -113,10 +138,18 @@ describe('CertificateDetails', () => {
     });
   });
 
+  it('does not show delete button in create mode', () => {
+    const props = { ...defaultProps, componentMode: MODE_STATES.create };
+    const { queryByRole } = renderComponent(props);
+
+    expect(queryByRole('button', { name: messages.deleteTooltip.defaultMessage })).not.toBeInTheDocument();
+  });
+
   it('shows course title override in view mode', () => {
     const courseTitleOverride = 'Overridden Title';
     const props = { ...defaultProps, courseTitleOverride };
     const { getByText } = renderComponent(props);
+
     expect(getByText(courseTitleOverride)).toBeInTheDocument();
   });
 });

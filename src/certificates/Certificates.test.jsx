@@ -57,6 +57,7 @@ describe('Certificates', () => {
   it('renders WithoutModes when there are no certificate modes', () => {
     useCertificates.mockReturnValue({ componentMode: MODE_STATES.noModes, isLoading: false, loadingStatus: 'Loaded' });
     const { getByText, queryByText } = renderComponent();
+
     expect(getByText(messages.withoutModesText.defaultMessage)).toBeInTheDocument();
     expect(queryByText(messages.noCertificatesText.defaultMessage)).not.toBeInTheDocument();
   });
@@ -64,6 +65,7 @@ describe('Certificates', () => {
   it('renders WithModesWithoutCertificates when there are modes but no certificates', () => {
     useCertificates.mockReturnValue({ componentMode: MODE_STATES.noCertificates, isLoading: false, loadingStatus: 'Loaded' });
     const { getByText, queryByText } = renderComponent();
+
     expect(getByText(messages.noCertificatesText.defaultMessage)).toBeInTheDocument();
     expect(queryByText(messages.withoutModesText.defaultMessage)).not.toBeInTheDocument();
   });
