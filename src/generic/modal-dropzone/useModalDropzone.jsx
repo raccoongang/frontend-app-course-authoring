@@ -7,7 +7,7 @@ import { uploadAssets } from './data/api';
 import messages from './messages';
 
 const useModalDropzone = ({
-  onChange, onCancel, onClose, fileTypes,
+  onChange, onCancel, onClose, fileTypes, onSavingStatus,
 }) => {
   const { courseId } = useParams();
   const intl = useIntl();
@@ -15,12 +15,8 @@ const useModalDropzone = ({
   const [previewUrl, setPreviewUrl] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [disabledUploadBtn, setDisabledUploadBtn] = useState(true);
-  const [uploadStatus, setUploadStatus] = useState(RequestStatus.CLEAR);
 
   const VALID_IMAGE_TYPES = ['png', 'jpeg'];
-
-  const isQueryFailed = uploadStatus === RequestStatus.FAILED;
-  const isQueryPending = uploadStatus === RequestStatus.PENDING;
 
   const imageValidator = (file) => {
     const fileType = file.name.split('.').pop().toLowerCase();
@@ -80,7 +76,7 @@ const useModalDropzone = ({
   const handleCancel = () => {
     setPreviewUrl(null);
     setDisabledUploadBtn(true);
-    setUploadStatus(RequestStatus.CLEAR);
+    onSavingStatus({ status: RequestStatus.CLEAR });
     setUploadProgress(0);
     onCancel();
     onClose();
@@ -89,7 +85,7 @@ const useModalDropzone = ({
   const handleUpload = async () => {
     if (!selectedFile) { return; }
 
-    setUploadStatus(RequestStatus.PENDING);
+    onSavingStatus(RequestStatus.PENDING);
 
     const onUploadProgress = (progressEvent) => {
       const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -101,7 +97,7 @@ const useModalDropzone = ({
       const url = response?.asset?.url;
       if (url) {
         onChange(url);
-        setUploadStatus(RequestStatus.SUCCESSFUL);
+        onSavingStatus({ status: RequestStatus.SUCCESSFUL });
         setDisabledUploadBtn(true);
         setUploadProgress(0);
         setPreviewUrl(null);
@@ -111,7 +107,7 @@ const useModalDropzone = ({
         }, 1000);
       }
     } catch (error) {
-      setUploadStatus(RequestStatus.FAILED);
+      onSavingStatus({ status: RequestStatus.FAILED });
     }
   };
 
@@ -121,8 +117,6 @@ const useModalDropzone = ({
     uploadProgress,
     previewUrl,
     disabledUploadBtn,
-    isQueryFailed,
-    isQueryPending,
     handleSelectFile,
     imageValidator,
     handleCancel,
