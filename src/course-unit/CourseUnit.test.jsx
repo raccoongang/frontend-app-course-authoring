@@ -1005,7 +1005,7 @@ describe('<CourseUnit />', () => {
 
     axiosMock
       .onPost(getXBlockBaseApiUrl(courseUnitIndexMock.id), {
-        publish: PUBLISH_TYPES.republish,
+        publish: null,
         metadata: { visible_to_staff_only: true, group_access: { 50: [2] } },
       })
       .reply(200, { dummy: 'value' });
