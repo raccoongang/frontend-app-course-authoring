@@ -10,6 +10,11 @@ import messages from './messages';
 
 let store;
 
+const mockOnClose = jest.fn();
+const mockOnCancel = jest.fn();
+const mockOnChange = jest.fn();
+const mockOnSavingStatus = jest.fn();
+
 const RootWrapper = (props) => (
   <IntlProvider locale="en">
     <AppProvider store={store}>
@@ -18,16 +23,13 @@ const RootWrapper = (props) => (
   </IntlProvider>
 );
 
-const mockOnClose = jest.fn();
-const mockOnCancel = jest.fn();
-const mockOnChange = jest.fn();
-
 const props = {
   isOpen: true,
   fileTypes: ['png'],
   onClose: mockOnClose,
   onCancel: mockOnCancel,
   onChange: mockOnChange,
+  onSavingStatus: mockOnSavingStatus,
 };
 
 describe('<ModalDropzone />', () => {
@@ -47,6 +49,7 @@ describe('<ModalDropzone />', () => {
 
   it('renders successfully when open', () => {
     const { getByText } = render(<RootWrapper {...props} />);
+
     expect(getByText(messages.uploadImageDropzoneText.defaultMessage)).toBeInTheDocument();
   });
 

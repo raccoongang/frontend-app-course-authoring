@@ -1052,6 +1052,8 @@
   "course-authoring.certificates.modal-dropzone.image.button": "Upload signature image",
   "course-authoring.certificates.modal-dropzone.cancel.modal": "Cancel",
   "course-authoring.certificates.modal-dropzone.upload.modal": "Upload",
+  "course-authoring.certificates.details.confirm-modal": "Delete this certificate?",
+  "course-authoring.certificates.details.confirm-modal.message": "Deleting this certificate is permanent and cannot be undone.",
   "course-authoring.course-unit.modal.button.text": "Select",
   "course-authoring.course-unit.modal.container.title": "Add {componentTitle} component",
   "course-authoring.course-unit.modal.container.cancel.button.text": "Cancel",
