@@ -1,25 +1,40 @@
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Icon, Stack, IconButtonWithTooltip, Form,
+  Icon, Stack, IconButtonWithTooltip, Form, useToggle,
 } from '@edx/paragon';
 import {
   EditOutline as EditOutlineIcon, DeleteOutline as DeleteOutlineIcon,
 } from '@edx/paragon/icons';
 
+import ModalNotification from '../../../generic/modal-notification';
+import { deleteCourseCertificate } from '../../data/thunks';
 import { MODE_STATES } from '../../data/constants';
+
 import messages from '../messages';
 
 const CertificateDetails = ({
   componentMode,
   handleChange,
   handleBlur,
+  certificateId,
   detailsCourseTitle,
   courseTitleOverride,
   detailsCourseNumber,
   courseNumberOverride,
 }) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
+  const [isConfirmOpen, confirmOpen, confirmClose] = useToggle(false);
+  const { courseId } = useParams();
+
+  const handleDeleteCard = () => {
+    if (certificateId) {
+      dispatch(deleteCourseCertificate(courseId, certificateId));
+    }
+  };
 
   return (
     <section className="certificate-details">
@@ -33,14 +48,14 @@ const CertificateDetails = ({
                 iconAs={Icon}
                 tooltipContent={<div>{intl.formatMessage(messages.editTooltip)}</div>}
                 alt={intl.formatMessage(messages.editTooltip)}
-                // onClick={handleEditAll} TODO https://youtrack.raccoongang.com/issue/AXIMST-178
+                // TODO add handler in https://youtrack.raccoongang.com/issue/AXIMST-178
               />
               <IconButtonWithTooltip
                 src={DeleteOutlineIcon}
                 iconAs={Icon}
                 tooltipContent={<div>{intl.formatMessage(messages.deleteTooltip)}</div>}
                 alt={intl.formatMessage(messages.deleteTooltip)}
-                // onClick={confirmOpen} TODO https://youtrack.raccoongang.com/issue/AXIMST-172
+                onClick={confirmOpen}
               />
             </>
           )}
@@ -94,6 +109,18 @@ const CertificateDetails = ({
           </Stack>
         </Stack>
       </div>
+      <ModalNotification
+        isOpen={isConfirmOpen}
+        title={intl.formatMessage(messages.deleteCertificateConfirmation)}
+        message={intl.formatMessage(messages.deleteCertificateMessage)}
+        actionButtonText={intl.formatMessage(messages.deleteTooltip)}
+        cancelButtonText={intl.formatMessage(messages.cancelModal)}
+        handleCancel={() => confirmClose()}
+        handleAction={() => {
+          confirmClose();
+          handleDeleteCard();
+        }}
+      />
     </section>
   );
 };
@@ -103,9 +130,11 @@ CertificateDetails.defaultProps = {
   courseNumberOverride: '',
   handleChange: null,
   handleBlur: null,
+  certificateId: undefined,
 };
 
 CertificateDetails.propTypes = {
+  certificateId: PropTypes.number,
   courseTitleOverride: PropTypes.string,
   courseNumberOverride: PropTypes.string,
   detailsCourseTitle: PropTypes.string.isRequired,

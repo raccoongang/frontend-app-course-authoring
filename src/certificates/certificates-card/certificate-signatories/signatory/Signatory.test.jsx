@@ -1,11 +1,16 @@
 import { render, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { initializeMockApp } from '@edx/frontend-platform';
 
+import initializeStore from '../../../../store';
 import { MODE_STATES } from '../../../data/constants';
 import { signatoriesMock } from '../../../__mocks__';
 import messages from '../../messages';
 import Signatory from './Signatory';
+
+let store;
 
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
@@ -20,14 +25,37 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
 }));
 
 const renderSignatory = (props) => render(
-  <IntlProvider locale="en">
-    <Signatory {...props} />
-  </IntlProvider>,
+  <Provider store={store}>
+    <IntlProvider locale="en">
+      <Signatory {...props} />
+    </IntlProvider>,
+  </Provider>,
 );
+
+const initialState = {
+  certificates: {
+    certificatesData: {
+      certificates: [],
+      hasCertificateModes: true,
+    },
+    componentMode: MODE_STATES.create,
+  },
+};
 
 const defaultProps = signatoriesMock[0];
 
 describe('Signatory Component', () => {
+  beforeEach(() => {
+    initializeMockApp({
+      authenticatedUser: {
+        userId: 3,
+        username: 'abc123',
+        administrator: true,
+        roles: [],
+      },
+    });
+    store = initializeStore(initialState);
+  });
   it('renders in CREATE mode', () => {
     const { queryByTestId, getByPlaceholderText } = renderSignatory(
       { ...defaultProps, componentMode: MODE_STATES.create },
@@ -70,5 +98,17 @@ describe('Signatory Component', () => {
     userEvent.click(uploadButton);
 
     expect(getByRole('presentation')).toBeInTheDocument();
+  });
+
+  it('shows confirm modal on delete icon click', async () => {
+    const { getByLabelText, getByText } = renderSignatory(
+      { ...defaultProps, componentMode: MODE_STATES.create, showDeleteButton: true },
+    );
+    const deleteIcon = getByLabelText(messages.deleteTooltip.defaultMessage);
+
+    userEvent.click(deleteIcon);
+
+    expect(getByText(messages.deleteSignatoryConfirmation.defaultMessage
+      .replace('{name}', defaultProps.name))).toBeInTheDocument();
   });
 });

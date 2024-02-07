@@ -1,3 +1,5 @@
+@import "variables";
+
 .certificates {
   .section-title {
     color: $black;
@@ -78,4 +80,8 @@
       margin-top: .62rem;
     }
   }
+}
+
+.certificates.alert-toast {
+  z-index: $popover;
 }
