@@ -47,7 +47,7 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
           </Layout>
         </section>
       </Container>
-      <div className="alert-toast">
+      <div className="certificates alert-toast">
         <ProcessingNotification
           isShow={isShowProcessingNotification}
           title={processingNotificationTitle}

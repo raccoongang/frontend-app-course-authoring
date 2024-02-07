@@ -129,6 +129,14 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.signatories.confirm-modal.message',
     defaultMessage: 'This action cannot be undone.',
   },
+  deleteCertificateConfirmation: {
+    id: 'course-authoring.certificates.details.confirm-modal',
+    defaultMessage: 'Delete this certificate?',
+  },
+  deleteCertificateMessage: {
+    id: 'course-authoring.certificates.details.confirm-modal.message',
+    defaultMessage: 'Deleting this certificate is permanent and cannot be undone.',
+  },
 });
 
 export default messages;
