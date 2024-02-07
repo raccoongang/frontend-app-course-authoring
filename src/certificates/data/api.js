@@ -49,3 +49,16 @@ export async function createCertificate(courseId, certificatesData) {
 
   return camelCaseObject(data);
 }
+
+/**
+ * Delete course certificate.
+ * @param {string} courseId
+ * @param {object} certificateId
+ * @returns {Promise<Object>}
+ */
+export async function deleteCertificate(courseId, certificateId) {
+  const { data } = await getAuthenticatedHttpClient().delete(
+    getDeleteCertificateApiUrl(courseId, certificateId),
+  );
+  return data;
+}

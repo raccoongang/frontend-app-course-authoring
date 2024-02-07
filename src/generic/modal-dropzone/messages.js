@@ -17,10 +17,6 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.modal-dropzone.validation.text',
     defaultMessage: 'Only {types} files can be uploaded. Please select a file ending in {extensions} to upload.',
   },
-  uploadImageButton: {
-    id: 'course-authoring.certificates.modal-dropzone.image.button',
-    defaultMessage: 'Upload signature image',
-  },
   cancelModal: {
     id: 'course-authoring.certificates.modal-dropzone.cancel.modal',
     defaultMessage: 'Cancel',
