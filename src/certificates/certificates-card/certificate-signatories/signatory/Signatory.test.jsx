@@ -108,7 +108,6 @@ describe('Signatory Component', () => {
 
     userEvent.click(deleteIcon);
 
-    expect(getByText(`Delete "${defaultProps.name}" from the list of signatories?`)).toBeInTheDocument();
     expect(getByText(messages.deleteSignatoryConfirmation.defaultMessage
       .replace('{name}', defaultProps.name))).toBeInTheDocument();
   });
