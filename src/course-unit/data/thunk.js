@@ -1,6 +1,8 @@
 import { camelCaseObject } from '@edx/frontend-platform';
 
 import { logError } from '@edx/frontend-platform/logging';
+import { camelCaseObject } from '@edx/frontend-platform';
+
 import {
   hideProcessingNotification,
   showProcessingNotification,
@@ -8,6 +10,7 @@ import {
 import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
 import { updateModel, updateModels } from '../../generic/model-store';
+import { CLIPBOARD_STATUS } from '../constants';
 import {
   getCourseUnitData,
   editUnitDisplayName,
@@ -36,8 +39,8 @@ import {
   updateQueryPendingStatus,
   deleteXBlock,
   duplicateXBlock,
+  fetchStaticFileNoticesSuccess,
 } from './slice';
-import { CLIPBOARD_STATUS } from '../constants';
 import { getNotificationMessage } from './utils';
 
 export function fetchCourseUnitQuery(courseId) {
@@ -145,8 +148,13 @@ export function editCourseUnitVisibilityAndData(itemId, type, isVisible, groupAc
 export function createNewCourseXBlock(body, callback, blockId) {
   return async (dispatch) => {
     dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.IN_PROGRESS }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    if (body.stagedContent) {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.pasting));
+    } else {
+      dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
+    }
 
     try {
       await createCourseXblock(body).then(async (result) => {
@@ -155,6 +163,9 @@ export function createNewCourseXBlock(body, callback, blockId) {
           if (body.category === 'vertical') {
             const courseSectionVerticalData = await getCourseSectionVerticalData(formattedResult.locator);
             dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
+          }
+          if (body.stagedContent) {
+            dispatch(fetchStaticFileNoticesSuccess(formattedResult.staticFileNotices));
           }
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
@@ -168,8 +179,6 @@ export function createNewCourseXBlock(body, callback, blockId) {
           const courseUnit = await getCourseUnitData(currentBlockId);
           dispatch(fetchCourseItemSuccess(courseUnit));
         }
-        const courseUnit = await getCourseUnitData(blockId);
-        dispatch(fetchCourseItemSuccess(courseUnit));
       });
     } catch (error) {
       dispatch(hideProcessingNotification());
@@ -201,6 +210,8 @@ export function deleteUnitItemQuery(itemId, xblockId) {
     try {
       await deleteUnitItem(xblockId);
       dispatch(deleteXBlock(xblockId));
+      const { userClipboard } = await getCourseSectionVerticalData(itemId);
+      dispatch(updateClipboardData(userClipboard));
       const courseUnit = await getCourseUnitData(itemId);
       dispatch(fetchCourseItemSuccess(courseUnit));
       dispatch(hideProcessingNotification());
@@ -239,7 +250,6 @@ export function copyToClipboard(usageKey) {
   const POLL_INTERVAL_MS = 1000; // Timeout duration for polling in milliseconds
 
   return async (dispatch) => {
-    dispatch(updateClipboardData(null));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.copying));
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(updateQueryPendingStatus(true));

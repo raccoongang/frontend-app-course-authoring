@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { getClipboardData } from '../data/selectors';
-import { CLIPBOARD_STATUS, NOT_XBLOCK_TYPES, STUDIO_CLIPBOARD_CHANNEL } from '../constants';
+import { getClipboardData } from '../../data/selectors';
+import { CLIPBOARD_STATUS, NOT_XBLOCK_TYPES, STUDIO_CLIPBOARD_CHANNEL } from '../../constants';
 
 const useCopyToClipboard = (canEdit = true) => {
   const [clipboardBroadcastChannel] = useState(() => new BroadcastChannel(STUDIO_CLIPBOARD_CHANNEL));
   const [showPasteUnit, setShowPasteUnit] = useState(false);
   const [showPasteXBlock, setShowPasteXBlock] = useState(false);
   const clipboardData = useSelector(getClipboardData);
+  const [sharedClipboardData, setSharedClipboardData] = useState({});
 
   // Function to refresh the paste button's visibility
   const refreshPasteButton = (data) => {
@@ -24,6 +25,7 @@ const useCopyToClipboard = (canEdit = true) => {
     // Handle updates to clipboard data
     if (canEdit) {
       refreshPasteButton(clipboardData);
+      setSharedClipboardData(clipboardData);
       clipboardBroadcastChannel.postMessage(clipboardData);
     } else {
       setShowPasteXBlock(false);
@@ -34,6 +36,7 @@ const useCopyToClipboard = (canEdit = true) => {
   useEffect(() => {
     // Handle messages from the broadcast channel
     clipboardBroadcastChannel.onmessage = (event) => {
+      setSharedClipboardData(event.data);
       refreshPasteButton(event.data);
     };
 
@@ -43,7 +46,7 @@ const useCopyToClipboard = (canEdit = true) => {
     };
   }, [clipboardBroadcastChannel]);
 
-  return { showPasteUnit, showPasteXBlock };
+  return { showPasteUnit, showPasteXBlock, sharedClipboardData };
 };
 
 export default useCopyToClipboard;

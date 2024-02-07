@@ -5,14 +5,13 @@ import {
 } from '@openedx/paragon';
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { copyToClipboard } from '../data/thunk';
-import { getCourseUnitEnableCopyPaste } from '../data/selectors';
 import ContentIFrame from './ContentIFrame';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
@@ -24,7 +23,6 @@ const CourseXBlock = ({
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
   const dispatch = useDispatch();
-  const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
 
@@ -80,11 +78,9 @@ const CourseXBlock = ({
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
-                  {enableCopyPasteUnits && (
-                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
-                    </Dropdown.Item>
-                  )}
+                  <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                    {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                  </Dropdown.Item>
                   <Dropdown.Item onClick={openConfigureModal}>
                     {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                   </Dropdown.Item>
