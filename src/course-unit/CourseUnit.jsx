@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Layout, Stack } from '@edx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
-import { ErrorAlert } from '@edx/frontend-lib-content-components';
+import { DraggableList, ErrorAlert } from '@edx/frontend-lib-content-components';
 import { Warning as WarningIcon } from '@edx/paragon/icons';
 
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
@@ -52,9 +53,19 @@ const CourseUnit = ({ courseId }) => {
     handleCreateNewCourseXBlock,
     handleConfigureSubmit,
     courseVerticalChildren,
+    handleXBlockDragAndDrop,
   } = useCourseUnit({ courseId, blockId });
 
+  const initialXBlocksData = courseVerticalChildren.children ?? [];
+  const [unitXBlocks, setUnitXBlocks] = useState(initialXBlocksData);
+
   document.title = getPageHeadTitle('', unitTitle);
+
+  let initialUnitXBlocks = [...initialXBlocksData];
+
+  useEffect(() => {
+    setUnitXBlocks(courseVerticalChildren.children);
+  }, [JSON.stringify(courseVerticalChildren)]);
 
   const {
     isShow: isShowProcessingNotification,
@@ -72,6 +83,13 @@ const CourseUnit = ({ courseId }) => {
       </Container>
     );
   }
+
+  const finalizeXBlockOrder = () => (newXBlocks) => {
+    initialUnitXBlocks = [...initialXBlocksData];
+    handleXBlockDragAndDrop(newXBlocks.map(xBlock => xBlock.id), () => {
+      setUnitXBlocks(() => initialUnitXBlocks);
+    });
+  };
 
   return (
     <>
@@ -126,23 +144,28 @@ const CourseUnit = ({ courseId }) => {
                 staticFileNotices={staticFileNotices}
                 courseId={courseId}
               />
-              <Stack gap={4} className="mb-4">
-                {courseVerticalChildren.children.map(({
-                  name, blockId: id, blockType: type, shouldScroll, userPartitionInfo,
-                }) => (
-                  <CourseXBlock
-                    id={id}
-                    key={id}
-                    title={name}
-                    type={type}
-                    blockId={blockId}
-                    shouldScroll={shouldScroll}
-                    unitXBlockActions={unitXBlockActions}
-                    handleConfigureSubmit={handleConfigureSubmit}
-                    data-testid="course-xblock"
-                    userPartitionInfo={userPartitionInfo}
-                  />
-                ))}
+              <Stack gap={4} className="mb-4 course-unit-xblocks">
+                <DraggableList
+                  itemList={unitXBlocks}
+                  setState={setUnitXBlocks}
+                  updateOrder={finalizeXBlockOrder}
+                >
+                  {unitXBlocks.map(({
+                    name, id, blockType: type, shouldScroll, userPartitionInfo,
+                  }) => (
+                    <CourseXBlock
+                      id={id}
+                      key={id}
+                      title={name}
+                      type={type}
+                      shouldScroll={shouldScroll}
+                      unitXBlockActions={unitXBlockActions}
+                      handleConfigureSubmit={handleConfigureSubmit}
+                      data-testid="course-xblock"
+                      userPartitionInfo={userPartitionInfo}
+                    />
+                  ))}
+                </DraggableList>
               </Stack>
               <AddComponent
                 blockId={blockId}

@@ -7,7 +7,7 @@ import { setCurrentItem, setCurrentSection, setCurrentSubsection } from '../data
 import { RequestStatus } from '../../data/constants';
 import CardHeader from '../card-header/CardHeader';
 import BaseTitleWithStatusBadge from '../card-header/BaseTitleWithStatusBadge';
-import ConditionalSortableElement from '../drag-helper/ConditionalSortableElement';
+import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import TitleLink from '../card-header/TitleLink';
 import XBlockStatus from '../xblock-status/XBlockStatus';
 import { getItemStatus, getItemStatusBorder, scrollToElement } from '../utils';

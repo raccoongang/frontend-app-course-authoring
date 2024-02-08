@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from '@edx/paragon';
 import { SortableItem } from '@edx/frontend-lib-content-components';

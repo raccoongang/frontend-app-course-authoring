@@ -103,6 +103,12 @@ const slice = createSlice({
     fetchStaticFileNoticesSuccess: (state, { payload }) => {
       state.staticFileNotices = payload;
     },
+    reorderXBlockList: (state, { payload }) => {
+      const xBlockList = [...state.courseVerticalChildren.children];
+      xBlockList.sort((a, b) => payload.indexOf(a.id) - payload.indexOf(b.id));
+
+      state.courseVerticalChildren.children = [...xBlockList];
+    },
   },
 });
 
@@ -125,6 +131,7 @@ export const {
   duplicateXBlock,
   updateClipboardData,
   fetchStaticFileNoticesSuccess,
+  reorderXBlockList,
 } = slice.actions;
 
 export const {
