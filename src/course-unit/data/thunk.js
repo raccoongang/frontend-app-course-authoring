@@ -76,6 +76,7 @@ export function fetchCourseSectionVerticalData(courseId, sequenceId) {
       }));
       dispatch(updateClipboardData(courseSectionVerticalData.userClipboard));
       dispatch(fetchSequenceSuccess({ sequenceId }));
+      dispatch(fetchStaticFileNoticesSuccess([]));
       return true;
     } catch (error) {
       dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.FAILED }));
