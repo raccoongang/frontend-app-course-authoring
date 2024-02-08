@@ -7,7 +7,7 @@ const messages = defineMessages({
   },
   button: {
     id: 'course-authoring.textbooks.empty-placeholder.button.new-textbook',
-    defaultMessage: 'New textbook',
+    defaultMessage: 'Add your first textbook',
   },
 });
 
