@@ -290,4 +290,22 @@ describe('<CourseXBlock />', () => {
       expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/problem/${id}`);
     });
   });
+
+  it('displays a visibility message if item has accessible restrictions', async () => {
+    const { getByText } = renderComponent(
+      {
+        userPartitionInfo: {
+          ...camelCaseObject(userPartitionInfo),
+          selectedGroupsLabel: 'Visibility group 1',
+        },
+      },
+    );
+
+    await waitFor(() => {
+      // userEvent.click(duplicateBtn);
+      const visibilityMessage = messages.visibilityMessage.defaultMessage
+        .replace('{selectedGroupsLabel}', 'Visibility group 1');
+      expect(getByText(visibilityMessage)).toBeInTheDocument();
+    });
+  });
 });
