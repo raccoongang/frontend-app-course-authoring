@@ -52,7 +52,7 @@ describe('<GroupConfigurations />', () => {
     const { getByText, getAllByText, getByTestId } = renderComponent();
 
     await waitFor(() => {
-      const main = getByTestId('group-configurations-main-content-wrapper');
+      const mainContent = getByTestId('group-configurations-main-content-wrapper');
       const groupConfigurationsElements = getAllByText(messages.headingTitle.defaultMessage);
       const groupConfigurationsTitle = groupConfigurationsElements[0];
 
@@ -61,13 +61,13 @@ describe('<GroupConfigurations />', () => {
         getByText(messages.headingSubtitle.defaultMessage),
       ).toBeInTheDocument();
       expect(
-        within(main).getByText(contentGroupsMessages.addNewGroup.defaultMessage),
+        within(mainContent).getByText(contentGroupsMessages.addNewGroup.defaultMessage),
       ).toBeInTheDocument();
       expect(
-        within(main).getByText(experimentMessages.addNewGroup.defaultMessage),
+        within(mainContent).getByText(experimentMessages.addNewGroup.defaultMessage),
       ).toBeInTheDocument();
       expect(
-        within(main).getByText(experimentMessages.title.defaultMessage),
+        within(mainContent).getByText(experimentMessages.title.defaultMessage),
       ).toBeInTheDocument();
       expect(getByText(contentGroups.name)).toBeInTheDocument();
       expect(getByText(enrollmentTrackGroups.name)).toBeInTheDocument();

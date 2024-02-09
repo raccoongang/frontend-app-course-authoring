@@ -13,14 +13,17 @@ const GroupConfigurationSidebar = ({
 }) => {
   const intl = useIntl();
   const urls = useHelpUrls(['groupConfigurations', 'enrollmentTracks', 'contentGroups']);
+  const sidebarData = getSidebarData({
+    messages, intl, shouldShowExperimentGroups, shouldShowContentGroup, shouldShowEnrollmentTrackGroup,
+  });
+
   return (
     <HelpSidebar
       courseId={courseId}
       showOtherSettings
+      className="mt-4"
     >
-      {getSidebarData({
-        messages, intl, shouldShowExperimentGroups, shouldShowContentGroup, shouldShowEnrollmentTrackGroup,
-      })
+      {sidebarData
         .map(({ title, paragraphs, urlKey }, id) => (
           <React.Fragment key={title}>
             <h4 className="help-sidebar-about-title">
@@ -35,11 +38,11 @@ const GroupConfigurationSidebar = ({
               target="_blank"
               showLaunchIcon={false}
               href={urls[urlKey]}
-              className="mt-2 mb-3.5"
+              className="mt-2 mb-3.5 sidebar-link"
             >
               {intl.formatMessage(messages.learnMoreBtn)}
             </Hyperlink>
-            {!(id === getSidebarData({ messages, intl }).length - 1) && <hr />}
+            {id !== sidebarData.length - 1 && <hr />}
           </React.Fragment>
         ))}
     </HelpSidebar>

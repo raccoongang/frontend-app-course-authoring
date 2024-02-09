@@ -1,3 +1,10 @@
+/**
+ * Generates data for the enrollment track group sidebar section.
+ *
+ * @param {Object} messages - The localized messages.
+ * @param {Object} intl - The intl object for formatting messages.
+ * @returns {Object} The enrollment track group sidebar data.
+ */
 const getEnrollmentTrackGroup = ({ messages, intl }) => ({
   urlKey: 'enrollmentTracks',
   title: intl.formatMessage(messages.about_3_Title),
@@ -8,6 +15,13 @@ const getEnrollmentTrackGroup = ({ messages, intl }) => ({
   ],
 });
 
+/**
+ * Generates data for the content group sidebar section.
+ *
+ * @param {Object} messages - The localized messages.
+ * @param {Object} intl - The intl object for formatting messages.
+ * @returns {Object} The content group sidebar data.
+ */
 const getContentGroup = ({ messages, intl }) => ({
   urlKey: 'contentGroups',
   title: intl.formatMessage(messages.aboutTitle),
@@ -24,6 +38,14 @@ const getContentGroup = ({ messages, intl }) => ({
   ],
 });
 
+/**
+ * Generates data for the experiment group configuration sidebar section.
+ *
+ * @param {Object} messages - The localized messages.
+ * @param {Object} intl - The intl object for formatting messages.
+ * @returns {Object} The experiment group configuration sidebar data.
+ */
+
 const getExperimentGroupConfiguration = ({ messages, intl }) => ({
   urlKey: 'groupConfigurations',
   title: intl.formatMessage(messages.about_2_Title),
@@ -39,6 +61,16 @@ const getExperimentGroupConfiguration = ({ messages, intl }) => ({
   ],
 });
 
+/**
+ * Compiles the sidebar data for the course authoring sidebar.
+ *
+ * @param {Object} messages - The localized messages.
+ * @param {Object} intl - The intl object for formatting messages.
+ * @param {boolean} shouldShowExperimentGroups - Flag to include experiment group configuration data.
+ * @param {boolean} shouldShowContentGroup - Flag to include content group data.
+ * @param {boolean} shouldShowEnrollmentTrackGroup - Flag to include enrollment track group data.
+ * @returns {Object[]} The array of sidebar data groups.
+ */
 // eslint-disable-next-line import/prefer-default-export
 export const getSidebarData = ({
   messages, intl, shouldShowExperimentGroups, shouldShowContentGroup, shouldShowEnrollmentTrackGroup,
