@@ -1,0 +1,117 @@
+import PropTypes from 'prop-types';
+import { Stack, Button, Form } from '@edx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
+
+import CertificateSection from '../certificate-section/CertificateSection';
+import messages from './messages';
+import Signatory from './signatory/Signatory';
+import SignatoryForm from './signatory/SignatoryForm';
+import useEditSignatory from './hooks/useEditSignatory';
+import useCreateSignatory from './hooks/useCreateSignatory';
+
+const CertificateSignatories = ({
+  signatories, handleChange, handleBlur, arrayHelpers, setFieldValue, isForm, resetForm, editModes, setEditModes,
+}) => {
+  const intl = useIntl();
+
+  const {
+    toggleEditSignatory,
+    handleDeleteSignatory,
+    handleCancelUpdateSignatory,
+  } = useEditSignatory({
+    arrayHelpers, editModes, setEditModes, resetForm,
+  });
+
+  const { handleAddSignatory } = useCreateSignatory({ arrayHelpers });
+
+  return (
+    <CertificateSection
+      title={intl.formatMessage(messages.signatoriesSectionTitle)}
+      className="certificate-signatories"
+    >
+      <div>
+        <p className="mb-4.5">
+          {intl.formatMessage(messages.signatoriesRecommendation)}
+        </p>
+        <Stack gap="4.5">
+          {signatories.map(({
+            name, title, organization, signatureImagePath,
+          }, id) => (
+            isForm || editModes[id] ? (
+              <SignatoryForm
+                // eslint-disable-next-line react/no-array-index-key
+                key={`signatory-${id}`}
+                id={id}
+                isEdit={editModes[id]}
+                name={name}
+                title={title}
+                organization={organization}
+                signatureImagePath={signatureImagePath}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                setFieldValue={setFieldValue}
+                showDeleteButton={signatories.length > 1 && !editModes[id]}
+                {...(editModes[id] && {
+                  handleDeleteSignatory: () => handleDeleteSignatory(id),
+                  handleCancelUpdateSignatory: () => handleCancelUpdateSignatory(id),
+                })}
+              />
+            ) : (
+              <Signatory
+                // eslint-disable-next-line react/no-array-index-key
+                key={id}
+                id={id}
+                name={name}
+                title={title}
+                organization={organization}
+                signatureImagePath={signatureImagePath}
+                handleEdit={() => toggleEditSignatory(id)}
+              />
+            )
+          ))}
+        </Stack>
+        {isForm && (
+          <>
+            <Button variant="outline-primary" onClick={handleAddSignatory} className="w-100 mt-4">
+              {intl.formatMessage(messages.addSignatoryButton)}
+            </Button>
+            <Form.Control.Feedback className="x-small">
+              {intl.formatMessage(messages.addSignatoryButtonDescription)}
+            </Form.Control.Feedback>
+          </>
+        )}
+      </div>
+    </CertificateSection>
+  );
+};
+
+CertificateSignatories.defaultProps = {
+  handleChange: null,
+  handleBlur: null,
+  setFieldValue: null,
+  arrayHelpers: null,
+  resetForm: null,
+  isForm: false,
+  editModes: {},
+  setEditModes: null,
+};
+
+CertificateSignatories.propTypes = {
+  isForm: PropTypes.bool,
+  editModes: PropTypes.objectOf(PropTypes.bool),
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  resetForm: PropTypes.func,
+  setFieldValue: PropTypes.func,
+  setEditModes: PropTypes.func,
+  // eslint-disable-next-line react/forbid-prop-types
+  arrayHelpers: PropTypes.object,
+  signatories: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    organization: PropTypes.string.isRequired,
+    signatureImagePath: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  })).isRequired,
+};
+
+export default CertificateSignatories;

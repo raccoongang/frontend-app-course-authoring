@@ -2,13 +2,14 @@
 import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
-import { convertObjectToSnakeCase } from '../../utils';
+import { prepareCertificatePayload } from '../utils';
 
 const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 
 export const getCertificatesApiUrl = (courseId) => `${getApiBaseUrl()}/api/contentstore/v1/certificates/${courseId}`;
 export const getCertificateApiUrl = (courseId) => `${getApiBaseUrl()}/certificates/${courseId}`;
-export const getDeleteCertificateApiUrl = (courseId, certificateId) => `${getCertificateApiUrl(courseId)}/${certificateId}`;
+export const getUpdateCertificateApiUrl = (courseId, certificateId) => `${getCertificateApiUrl(courseId)}/${certificateId}`;
+export const getUpdateActivationCertificateApiUrl = (path) => `${getApiBaseUrl()}${path}`;
 
 /**
  * Gets certificates for a course.
@@ -28,25 +29,29 @@ export async function getCertificates(courseId) {
  * @param {object} certificatesData
  * @returns {Promise<Object>}
  */
-export async function createCertificate(courseId, certificatesData) {
-  const body = {
-    ...certificatesData,
-    description: 'Description of the certificate',
-    editing: true,
-    isActive: false,
-    name: 'Name of the certificate',
-    version: 1,
-    signatories: certificatesData.signatories
-      .map(signatory => convertObjectToSnakeCase(signatory, true))
-      .map(signatorySnakeCase => ({ ...signatorySnakeCase, certificate: null })),
-  };
 
+export async function createCertificate(courseId, certificatesData) {
   const { data } = await getAuthenticatedHttpClient()
     .post(
       getCertificateApiUrl(courseId),
-      convertObjectToSnakeCase(body, true),
+      prepareCertificatePayload(certificatesData),
     );
 
+  return camelCaseObject(data);
+}
+
+/**
+ * Update course certificate.
+ * @param {string} courseId
+ * @param {object} certificateData
+ * @returns {Promise<Object>}
+ */
+export async function updateCertificate(courseId, certificateData) {
+  const { data } = await getAuthenticatedHttpClient()
+    .post(
+      getUpdateCertificateApiUrl(courseId, certificateData.id),
+      prepareCertificatePayload(certificateData),
+    );
   return camelCaseObject(data);
 }
 
@@ -57,8 +62,28 @@ export async function createCertificate(courseId, certificatesData) {
  * @returns {Promise<Object>}
  */
 export async function deleteCertificate(courseId, certificateId) {
-  const { data } = await getAuthenticatedHttpClient().delete(
-    getDeleteCertificateApiUrl(courseId, certificateId),
-  );
+  const { data } = await getAuthenticatedHttpClient()
+    .delete(
+      getUpdateCertificateApiUrl(courseId, certificateId),
+    );
   return data;
+}
+
+/**
+ * Activate/deactivate course certificate.
+ * @param {string} courseId
+ * @param {object} activationStatus
+ * @returns {Promise<Object>}
+ */
+export async function updateActivation(path, activationStatus) {
+  const body = {
+    is_active: activationStatus,
+  };
+
+  const { data } = await getAuthenticatedHttpClient()
+    .post(
+      getUpdateActivationCertificateApiUrl(path),
+      body,
+    );
+  return camelCaseObject(data);
 }

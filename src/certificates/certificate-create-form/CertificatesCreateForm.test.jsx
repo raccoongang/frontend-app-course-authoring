@@ -6,8 +6,9 @@ import { initializeMockApp } from '@edx/frontend-platform';
 import initializeStore from '../../store';
 import { MODE_STATES } from '../data/constants';
 import { getComponentMode } from '../data/selectors';
-import messages from '../certificates-card/messages';
-import CertificateCreate from './CertificateCreate';
+import detailsMessages from '../certificate-details/messages';
+import signatoryMessages from '../certificate-signatories/messages';
+import CertificateCreateForm from './CertificateCreateForm';
 
 const courseId = 'course-123';
 let store;
@@ -20,7 +21,7 @@ jest.mock('react-redux', () => ({
 const renderComponent = () => render(
   <Provider store={store}>
     <IntlProvider locale="en">
-      <CertificateCreate courseId={courseId} />
+      <CertificateCreateForm courseId={courseId} />
     </IntlProvider>
   </Provider>,
 );
@@ -35,7 +36,7 @@ const initialState = {
   },
 };
 
-describe('CertificateCreate', () => {
+describe('CertificateCreateForm', () => {
   beforeEach(() => {
     initializeMockApp({
       authenticatedUser: {
@@ -61,10 +62,10 @@ describe('CertificateCreate', () => {
   it('renders with empty fields', () => {
     const { getByPlaceholderText } = renderComponent();
 
-    expect(getByPlaceholderText(messages.detailsCourseTitleOverride.defaultMessage).value).toBe('');
-    expect(getByPlaceholderText(messages.namePlaceholder.defaultMessage).value).toBe('');
-    expect(getByPlaceholderText(messages.titlePlaceholder.defaultMessage).value).toBe('');
-    expect(getByPlaceholderText(messages.organizationPlaceholder.defaultMessage).value).toBe('');
-    expect(getByPlaceholderText(messages.imagePlaceholder.defaultMessage).value).toBe('');
+    expect(getByPlaceholderText(detailsMessages.detailsCourseTitleOverride.defaultMessage).value).toBe('');
+    expect(getByPlaceholderText(signatoryMessages.namePlaceholder.defaultMessage).value).toBe('');
+    expect(getByPlaceholderText(signatoryMessages.titlePlaceholder.defaultMessage).value).toBe('');
+    expect(getByPlaceholderText(signatoryMessages.organizationPlaceholder.defaultMessage).value).toBe('');
+    expect(getByPlaceholderText(signatoryMessages.imagePlaceholder.defaultMessage).value).toBe('');
   });
 });
