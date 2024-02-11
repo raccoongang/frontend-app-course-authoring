@@ -1,34 +1,85 @@
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Button } from '@edx/paragon';
+import { Button, useToggle } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons';
 
 import GroupConfigurationContainer from '../group-configuration-container';
+import ContentGroupContainer from './ContentGroupContainer';
 import EmptyPlaceholder from '../empty-placeholder';
 import messages from './messages';
 
-const ContentGroupsSection = ({ availableGroup: { groups, name } }) => {
+const ContentGroupsSection = ({
+  availableGroup,
+  groupConfigurationsActions,
+}) => {
   const { formatMessage } = useIntl();
+  const [isNewGroupVisible, openNewGroup, hideNewGroup] = useToggle(false);
+  const { id: parentGroupId, groups, name } = availableGroup;
+  const groupNames = groups?.map((group) => group.name);
+
+  const contentGroupObject = (groupName) => ({
+    name: groupName,
+    version: 1,
+    usage: [],
+  });
+  const handleCreateNewGroup = (values) => {
+    const updatedContentGroups = {
+      ...availableGroup,
+      groups: [
+        ...availableGroup.groups,
+        contentGroupObject(values.newGroupName),
+      ],
+    };
+    groupConfigurationsActions.handleCreateContentGroup(updatedContentGroups, hideNewGroup);
+  };
+  const handleEditContentGroup = (id, { newGroupName }, callbackToClose) => {
+    const updatedContentGroups = {
+      ...availableGroup,
+      groups: availableGroup.groups.map((group) => (group.id === id ? { ...group, name: newGroupName } : group)),
+    };
+    groupConfigurationsActions.handleEditContentGroup(updatedContentGroups, callbackToClose);
+  };
+
   return (
     <div className="mt-2.5">
-      <h2 className="configuration-section-name lead text-black mb-3">{name}</h2>
+      <h2 className="lead text-black mb-3 configuration-section-name">
+        {name}
+      </h2>
       {groups?.length ? (
         <>
           {groups.map((group) => (
-            <GroupConfigurationContainer group={group} key={group.id} />
+            <GroupConfigurationContainer
+              group={group}
+              groupNames={groupNames}
+              parentGroupId={parentGroupId}
+              key={group.id}
+              groupConfigurationsActions={groupConfigurationsActions}
+              handleEditGroup={handleEditContentGroup}
+            />
           ))}
-          <Button
-            className="mt-4"
-            variant="outline-primary"
-            onClick={() => ({})}
-            iconBefore={AddIcon}
-            block
-          >
-            {formatMessage(messages.addNewGroup)}
-          </Button>
+          {!isNewGroupVisible && (
+            <Button
+              className="mt-4"
+              variant="outline-primary"
+              onClick={openNewGroup}
+              iconBefore={AddIcon}
+              block
+            >
+              {formatMessage(messages.addNewGroup)}
+            </Button>
+          )}
         </>
       ) : (
-        <EmptyPlaceholder onCreateNewGroup={() => ({})} />
+        !isNewGroupVisible && (
+          <EmptyPlaceholder onCreateNewGroup={openNewGroup} />
+        )
+      )}
+      {isNewGroupVisible && (
+        <ContentGroupContainer
+          groupNames={groupNames}
+          onCreateClick={handleCreateNewGroup}
+          onCancelClick={hideNewGroup}
+        />
       )}
     </div>
   );
@@ -59,6 +110,11 @@ ContentGroupsSection.propTypes = {
     readOnly: PropTypes.bool,
     scheme: PropTypes.string,
     version: PropTypes.number,
+  }).isRequired,
+  groupConfigurationsActions: PropTypes.shape({
+    handleCreateContentGroup: PropTypes.func,
+    handleDeleteContentGroup: PropTypes.func,
+    handleEditContentGroup: PropTypes.func,
   }).isRequired,
 };
 
