@@ -45,7 +45,6 @@ const getContentGroup = ({ messages, intl }) => ({
  * @param {Object} intl - The intl object for formatting messages.
  * @returns {Object} The experiment group configuration sidebar data.
  */
-
 const getExperimentGroupConfiguration = ({ messages, intl }) => ({
   urlKey: 'groupConfigurations',
   title: intl.formatMessage(messages.about_2_Title),

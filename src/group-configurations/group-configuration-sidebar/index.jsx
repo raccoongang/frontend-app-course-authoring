@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Hyperlink } from '@edx/paragon';
@@ -25,7 +25,7 @@ const GroupConfigurationSidebar = ({
     >
       {sidebarData
         .map(({ title, paragraphs, urlKey }, id) => (
-          <React.Fragment key={title}>
+          <Fragment key={title}>
             <h4 className="help-sidebar-about-title">
               {title}
             </h4>
@@ -43,7 +43,7 @@ const GroupConfigurationSidebar = ({
               {intl.formatMessage(messages.learnMoreBtn)}
             </Hyperlink>
             {id !== sidebarData.length - 1 && <hr />}
-          </React.Fragment>
+          </Fragment>
         ))}
     </HelpSidebar>
   );
