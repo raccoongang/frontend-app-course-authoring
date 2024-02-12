@@ -22,7 +22,9 @@ const PasteComponent = ({ handleCreateNewCourseXBlock, clipboardData }) => {
         onBlur={() => handlePopoverToggle(false)}
         {...props}
       >
-        <PopoverContent clipboardData={clipboardData} />
+        {clipboardData && (
+          <PopoverContent clipboardData={clipboardData} />
+        )}
       </Popover>
     </div>
   );
