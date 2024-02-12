@@ -74,7 +74,7 @@ const TextbookForm = ({
               name="chapters"
               render={(arrayHelpers) => (
                 <>
-                  {Boolean(values?.chapters.length) && values.chapters.map(({ title, url }, index) => (
+                  {!!values?.chapters.length && values.chapters.map(({ title, url }, index) => (
                     <div className="form-chapters-fields" data-testid="form-chapters-fields">
                       <Form.Group size="sm" className="form-field">
                         <Form.Label size="sm" className="form-label font-weight-bold required text-black">
@@ -166,7 +166,7 @@ const TextbookForm = ({
                 <Icon src={PdfIcon} className="modal-preview-icon" />
               )}
             />
-            <PromptIfDirty dirty={dirty} formValues={values} />
+            <PromptIfDirty dirty={dirty} />
           </>
         )}
       </Formik>
