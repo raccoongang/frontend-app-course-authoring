@@ -57,6 +57,22 @@ const messages = defineMessages({
     id: 'course-authoring.textbooks.form.add-chapter.button',
     defaultMessage: 'Add a chapter',
   },
+  uploadButtonTooltip: {
+    id: 'course-authoring.textbooks.form.upload-button.tooltip',
+    defaultMessage: 'Upload',
+  },
+  uploadButtonAlt: {
+    id: 'course-authoring.textbooks.form.upload-button.alt',
+    defaultMessage: 'chapter-upload-button',
+  },
+  deleteButtonTooltip: {
+    id: 'course-authoring.textbooks.form.delete-button.tooltip',
+    defaultMessage: 'Delete',
+  },
+  deleteButtonAlt: {
+    id: 'course-authoring.textbooks.form.delete-button.alt',
+    defaultMessage: 'chapter-delete-button',
+  },
   cancelButton: {
     id: 'course-authoring.textbooks.form.button.cancel',
     defaultMessage: 'Cancel',

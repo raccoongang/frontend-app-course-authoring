@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import * as Yup from 'yup';
 import { FieldArray, Formik } from 'formik';
 import {
   PictureAsPdf as PdfIcon,
@@ -22,6 +21,7 @@ import FormikControl from '../../generic/FormikControl';
 import PromptIfDirty from '../../generic/PromptIfDirty';
 import ModalDropzone from '../../generic/modal-dropzone/ModalDropzone';
 import { useModel } from '../../generic/model-store';
+import textbookFormValidationSchema from './validations';
 import messages from './messages';
 
 const TextbookForm = ({
@@ -39,21 +39,16 @@ const TextbookForm = ({
   const [currentTextbookIndex, setCurrentTextbookIndex] = useState(0);
   const [isUploadModalOpen, openUploadModal, closeUploadModal] = useToggle(false);
 
-  const textbookFormValidationSchema = Yup.object().shape({
-    tab_title: Yup.string().required(intl.formatMessage(messages.tabTitleValidationText)).max(255),
-    chapters: Yup.array().of(
-      Yup.object({
-        title: Yup.string().required((intl.formatMessage(messages.chapterTitleValidationText))).max(255),
-        url: Yup.string().required(intl.formatMessage(messages.chapterUrlValidationText)).max(255),
-      }),
-    ).min(1),
-  });
+  const onUploadButtonClick = (index) => {
+    setCurrentTextbookIndex(index);
+    openUploadModal();
+  };
 
   return (
     <div className="textbook-form">
       <Formik
         initialValues={initialFormValues}
-        validationSchema={textbookFormValidationSchema}
+        validationSchema={textbookFormValidationSchema(intl)}
         onSubmit={onSubmit}
         validateOnBlur
         validateOnMount
@@ -63,7 +58,7 @@ const TextbookForm = ({
         }) => (
           <>
             <Form.Group size="sm" className="form-field">
-              <Form.Label size="sm" className="font-weight-bold form-main-label">
+              <Form.Label size="sm" className="font-weight-bold form-main-label text-black">
                 {intl.formatMessage(messages.tabTitleLabel)} *
               </Form.Label>
               <FormikControl
@@ -82,7 +77,7 @@ const TextbookForm = ({
                   {Boolean(values?.chapters.length) && values.chapters.map(({ title, url }, index) => (
                     <div className="form-chapters-fields" data-testid="form-chapters-fields">
                       <Form.Group size="sm" className="form-field">
-                        <Form.Label size="sm" className="form-label font-weight-bold required">
+                        <Form.Label size="sm" className="form-label font-weight-bold required text-black">
                           {intl.formatMessage(messages.chapterTitleLabel)} *
                         </Form.Label>
                         <FormikControl
@@ -96,30 +91,27 @@ const TextbookForm = ({
                       </Form.Group>
                       <Form.Group size="sm" className="form-field">
                         <div className="d-flex align-items-center mb-1">
-                          <Form.Label size="sm" className="font-weight-bold mb-0">
+                          <Form.Label size="sm" className="font-weight-bold mb-0 text-black">
                             {intl.formatMessage(messages.chapterUrlLabel)} *
                           </Form.Label>
                           <IconButtonWithTooltip
                             size="sm"
-                            variant="primary"
                             className="ml-auto field-icon-button"
-                            tooltipContent="Upload"
+                            tooltipContent={intl.formatMessage(messages.uploadButtonTooltip)}
                             src={UploadIcon}
                             iconAs={Icon}
                             data-testid="chapter-upload-button"
-                            onClick={() => {
-                              setCurrentTextbookIndex(index);
-                              openUploadModal();
-                            }}
+                            alt={intl.formatMessage(messages.uploadButtonAlt)}
+                            onClick={() => onUploadButtonClick(index)}
                           />
                           <IconButtonWithTooltip
                             size="sm"
-                            variant="primary"
                             className="field-icon-button"
-                            tooltipContent="Delete"
+                            tooltipContent={intl.formatMessage(messages.deleteButtonTooltip)}
                             src={DeleteIcon}
                             iconAs={Icon}
                             data-testid="chapter-delete-button"
+                            alt={intl.formatMessage(messages.deleteButtonAlt)}
                             onClick={() => arrayHelpers.remove(index)}
                           />
                         </div>
@@ -141,7 +133,8 @@ const TextbookForm = ({
                       </Form.Control.Feedback>
                     )}
                     <Button
-                      variant="outline-primary w-100"
+                      variant="outline-primary"
+                      className="w-100"
                       iconBefore={AddIcon}
                       onClick={() => arrayHelpers.push({ title: '', url: '' })}
                     >

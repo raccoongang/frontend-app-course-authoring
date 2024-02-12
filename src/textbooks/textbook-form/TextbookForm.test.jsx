@@ -3,7 +3,7 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { act, render, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import initializeStore from '../../store';
@@ -105,9 +105,7 @@ describe('<TextbookForm />', () => {
     userEvent.type(chapterInput, formValues.chapters[0].title);
     userEvent.type(urlInput, formValues.chapters[0].url);
 
-    await act(async () => {
-      userEvent.click(getByRole('button', { name: messages.saveButton.defaultMessage }));
-    });
+    userEvent.click(getByRole('button', { name: messages.saveButton.defaultMessage }));
 
     await waitFor(() => {
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
