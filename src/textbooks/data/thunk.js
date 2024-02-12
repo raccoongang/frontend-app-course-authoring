@@ -1,8 +1,17 @@
+import {
+  hideProcessingNotification,
+  showProcessingNotification,
+} from '../../generic/processing-notification/data/slice';
 import { RequestStatus } from '../../data/constants';
-import { fetchTextbooks, updateLoadingStatus } from './slice';
-import { getTextbooks } from './api';
+import { NOTIFICATION_MESSAGES } from '../../constants';
+import {
+  fetchTextbooks,
+  updateLoadingStatus,
+  updateSavingStatus,
+  createTextbookSuccess,
+} from './slice';
+import { getTextbooks, createTextbook } from './api';
 
-// eslint-disable-next-line import/prefer-default-export
 export function fetchTextbooksQuery(courseId) {
   return async (dispatch) => {
     dispatch(updateLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
@@ -13,6 +22,23 @@ export function fetchTextbooksQuery(courseId) {
       dispatch(updateLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateLoadingStatus({ status: RequestStatus.FAILED }));
+    }
+  };
+}
+
+export function createTextbookQuery(courseId, textbook) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      const data = await createTextbook(courseId, textbook);
+      dispatch(createTextbookSuccess(data));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(hideProcessingNotification());
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      dispatch(hideProcessingNotification());
     }
   };
 }
