@@ -8,9 +8,9 @@ import {
   fetchTextbooks,
   updateLoadingStatus,
   updateSavingStatus,
-  createTextbookSuccess,
+  createTextbookSuccess, editTextbookSuccess,
 } from './slice';
-import { getTextbooks, createTextbook } from './api';
+import { getTextbooks, createTextbook, editTextbook } from './api';
 
 export function fetchTextbooksQuery(courseId) {
   return async (dispatch) => {
@@ -34,6 +34,23 @@ export function createTextbookQuery(courseId, textbook) {
     try {
       const data = await createTextbook(courseId, textbook);
       dispatch(createTextbookSuccess(data));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(hideProcessingNotification());
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function editTextbookQuery(courseId, textbook) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      const data = await editTextbook(courseId, textbook);
+      dispatch(editTextbookSuccess(data));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       dispatch(hideProcessingNotification());
     } catch (error) {
