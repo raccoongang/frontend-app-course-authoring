@@ -247,52 +247,46 @@ describe('<CourseXBlock />', () => {
   });
 
   describe('edit', () => {
-    it('navigates to editor page on edit HTML xblock', async () => {
-      const { getByText, getByLabelText } = renderComponent({
+    it('navigates to editor page on edit HTML xblock', () => {
+      const { getByText, getByRole } = renderComponent({
         type: COMPONENT_ICON_TYPES.html,
       });
 
-      await waitFor(() => {
-        const editButton = getByLabelText(messages.blockAltButtonEdit.defaultMessage);
-        expect(getByText(name)).toBeInTheDocument();
-        expect(editButton).toBeInTheDocument();
+      const editButton = getByRole('button', { name: messages.blockAltButtonEdit.defaultMessage });
+      expect(getByText(name)).toBeInTheDocument();
+      expect(editButton).toBeInTheDocument();
 
-        userEvent.click(editButton);
-        expect(mockedUsedNavigate).toHaveBeenCalled();
-        expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/html/${id}`);
-      });
+      userEvent.click(editButton);
+      expect(mockedUsedNavigate).toHaveBeenCalled();
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/html/${id}`);
     });
 
-    it('navigates to editor page on edit Video xblock', async () => {
-      const { getByText, getByLabelText } = renderComponent({
+    it('navigates to editor page on edit Video xblock', () => {
+      const { getByText, getByRole } = renderComponent({
         type: COMPONENT_ICON_TYPES.video,
       });
 
-      await waitFor(() => {
-        const editButton = getByLabelText(messages.blockAltButtonEdit.defaultMessage);
-        expect(getByText(name)).toBeInTheDocument();
-        expect(editButton).toBeInTheDocument();
+      const editButton = getByRole('button', { name: messages.blockAltButtonEdit.defaultMessage });
+      expect(getByText(name)).toBeInTheDocument();
+      expect(editButton).toBeInTheDocument();
 
-        userEvent.click(editButton);
-        expect(mockedUsedNavigate).toHaveBeenCalled();
-        expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/video/${id}`);
-      });
+      userEvent.click(editButton);
+      expect(mockedUsedNavigate).toHaveBeenCalled();
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/video/${id}`);
     });
 
-    it('navigates to editor page on edit Problem xblock', async () => {
-      const { getByText, getByLabelText } = renderComponent({
+    it('navigates to editor page on edit Problem xblock', () => {
+      const { getByText, getByRole } = renderComponent({
         type: COMPONENT_ICON_TYPES.problem,
       });
 
-      await waitFor(() => {
-        const editButton = getByLabelText(messages.blockAltButtonEdit.defaultMessage);
-        expect(getByText(name)).toBeInTheDocument();
-        expect(editButton).toBeInTheDocument();
+      const editButton = getByRole('button', { name: messages.blockAltButtonEdit.defaultMessage });
+      expect(getByText(name)).toBeInTheDocument();
+      expect(editButton).toBeInTheDocument();
 
-        userEvent.click(editButton);
-        expect(mockedUsedNavigate).toHaveBeenCalled();
-        expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/problem/${id}`);
-      });
+      userEvent.click(editButton);
+      expect(mockedUsedNavigate).toHaveBeenCalled();
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/editor/problem/${id}`);
     });
   });
 });

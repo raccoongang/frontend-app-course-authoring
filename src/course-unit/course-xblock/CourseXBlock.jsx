@@ -12,13 +12,12 @@ import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
+import { getCourseId } from '../data/selectors';
 import { copyToClipboard } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import ContentIFrame from './ContentIFrame';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
-
-import { getCourseId } from '../data/selectors';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo, handleConfigureSubmit, ...props
