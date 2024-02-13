@@ -13,9 +13,10 @@ import {
 import {
   createTextbookQuery,
   fetchTextbooksQuery,
+  editTextbookQuery,
 } from './data/thunk';
-import messages from './messages';
 import { updateSavingStatus } from '../certificates/data/slice';
+import messages from './messages';
 
 const useTextbooks = (courseId) => {
   const intl = useIntl();
@@ -47,6 +48,10 @@ const useTextbooks = (courseId) => {
     dispatch(createTextbookQuery(courseId, formValues));
   };
 
+  const handleTextbookEditFormSubmit = (formValues) => {
+    dispatch(editTextbookQuery(courseId, formValues));
+  };
+
   const handleSavingStatusDispatch = (status) => {
     dispatch(updateSavingStatus(status));
   };
@@ -72,6 +77,7 @@ const useTextbooks = (courseId) => {
     closeTextbookForm,
     handleTextbookFormSubmit,
     handleSavingStatusDispatch,
+    handleTextbookEditFormSubmit,
   };
 };
 

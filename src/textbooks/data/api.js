@@ -1,11 +1,13 @@
 import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { omit } from 'lodash';
 
 const API_PATH_PATTERN = 'textbooks';
 const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
 
 export const getTextbooksApiUrl = (courseId) => `${getStudioBaseUrl()}/api/contentstore/v1/${API_PATH_PATTERN}/${courseId}`;
 export const getUpdateTextbooksApiUrl = (courseId) => `${getStudioBaseUrl()}/${API_PATH_PATTERN}/${courseId}`;
+export const getEditTextbooksApiUrl = (courseId, textbookId) => `${getStudioBaseUrl()}/${API_PATH_PATTERN}/${courseId}/${textbookId}`;
 
 /**
  * Get textbooks for course.
@@ -28,6 +30,20 @@ export async function getTextbooks(courseId) {
 export async function createTextbook(courseId, textbook) {
   const { data } = await getAuthenticatedHttpClient()
     .post(getUpdateTextbooksApiUrl(courseId), textbook);
+
+  return camelCaseObject(data);
+}
+
+/**
+ * Edit textbook for course.
+ * @param {string} courseId
+ * @param {tab_title: string, id: string, chapters: Array<[title: string: url: string]>} textbook
+ * @param {string} textbookId
+ * @returns {Promise<Object>}
+ */
+export async function editTextbook(courseId, textbook) {
+  const { data } = await getAuthenticatedHttpClient()
+    .put(getEditTextbooksApiUrl(courseId, textbook.id), omit(textbook, ['id']));
 
   return camelCaseObject(data);
 }
