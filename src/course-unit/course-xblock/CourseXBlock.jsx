@@ -5,24 +5,29 @@ import {
 } from '@edx/paragon';
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
+import { getCourseId } from '../data/selectors';
 import { copyToClipboard } from '../data/thunk';
+import { COMPONENT_ICON_TYPES } from '../constants';
 import ContentIFrame from './ContentIFrame';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
-  id, title, unitXBlockActions, shouldScroll, userPartitionInfo, handleConfigureSubmit, ...props
+  id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo, handleConfigureSubmit, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const courseId = useSelector(getCourseId);
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
 
@@ -35,6 +40,17 @@ const CourseXBlock = ({
   const onDeleteSubmit = () => {
     unitXBlockActions.handleDelete(id);
     closeDeleteModal();
+  };
+
+  const handleEdit = () => {
+    switch (type) {
+    case COMPONENT_ICON_TYPES.html:
+    case COMPONENT_ICON_TYPES.problem:
+    case COMPONENT_ICON_TYPES.video:
+      navigate(`/course/${courseId}/editor/${type}/${id}`);
+      break;
+    default:
+    }
   };
 
   const onConfigureSubmit = (...arg) => {
@@ -59,7 +75,7 @@ const CourseXBlock = ({
                 alt={intl.formatMessage(messages.blockAltButtonEdit)}
                 iconAs={EditIcon}
                 size="md"
-                onClick={() => {}}
+                onClick={handleEdit}
               />
               <Dropdown>
                 <Dropdown.Toggle
@@ -120,6 +136,7 @@ CourseXBlock.defaultProps = {
 CourseXBlock.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   shouldScroll: PropTypes.bool,
   unitXBlockActions: PropTypes.shape({
     handleDelete: PropTypes.func,
