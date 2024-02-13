@@ -69,7 +69,7 @@ describe('<TextbookCard />', () => {
     });
   });
 
-  it('render edit TextbookForm after clicking on edit button', () => {
+  it('renders edit TextbookForm after clicking on edit button', () => {
     const { getByTestId, queryByTestId } = renderComponent();
 
     const editButton = getByTestId('textbook-edit-button');
@@ -79,7 +79,7 @@ describe('<TextbookCard />', () => {
     expect(queryByTestId('textbook-card')).not.toBeInTheDocument();
   });
 
-  it('close edit TextbookForm after clicking on cancel button', () => {
+  it('closes edit TextbookForm after clicking on cancel button', () => {
     const { getByTestId, queryByTestId } = renderComponent();
 
     const editButton = getByTestId('textbook-edit-button');
