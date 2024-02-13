@@ -42,6 +42,7 @@ const Textbooks = ({ courseId }) => {
     isQueryPending,
     handleTextbookFormSubmit,
     handleSavingStatusDispatch,
+    handleTextbookEditFormSubmit,
   } = useTextbooks(courseId);
 
   const {
@@ -87,11 +88,13 @@ const Textbooks = ({ courseId }) => {
               <article>
                 <section className="textbook-section">
                   <div className="pt-4">
-                    {textbooks.length ? textbooks.map(({ tabTitle, chapters, id }) => (
+                    {textbooks.length ? textbooks.map((textbook) => (
                       <TextbookCard
-                        key={id}
-                        chapters={chapters}
-                        title={tabTitle}
+                        key={textbook.id}
+                        textbook={textbook}
+                        courseId={courseId}
+                        handleSavingStatusDispatch={handleSavingStatusDispatch}
+                        onSubmit={handleTextbookEditFormSubmit}
                       />
                     )) : (
                       !isTextbookFormOpen && <EmptyPlaceholder onCreateNewTextbook={openTextbookForm} />
