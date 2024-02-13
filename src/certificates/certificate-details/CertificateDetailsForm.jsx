@@ -20,7 +20,7 @@ const CertificateDetailsForm = ({
     >
       <Stack>
         <Stack direction="horizontal" gap="1.5" className="certificate-details__info">
-          <p className="certificate-details__info__paragraph">
+          <p className="certificate-details__info-paragraph">
             <strong>{intl.formatMessage(messages.detailsCourseTitle)}:</strong> {detailsCourseTitle}
           </p>
         </Stack>

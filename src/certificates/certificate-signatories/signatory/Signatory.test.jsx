@@ -26,7 +26,7 @@ const renderSignatory = (props) => render(
 const defaultProps = { ...signatoriesMock[0], handleEdit: mockHandleEdit };
 
 describe('Signatory Component', () => {
-  it('renders in VIEW mode', () => {
+  it('renders in MODE_STATES.view mode', () => {
     const { getByText, queryByText } = renderSignatory(defaultProps);
 
     expect(getByText(defaultProps.name)).toBeInTheDocument();

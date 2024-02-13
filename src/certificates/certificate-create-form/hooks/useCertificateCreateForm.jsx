@@ -15,13 +15,13 @@ const useCertificateCreateForm = (courseId) => {
     dispatch(createCourseCertificate(courseId, values));
   };
 
-  const cardCreateCancel = (resetForm) => {
+  const handleFormCancel = (resetForm) => {
     dispatch(setMode(MODE_STATES.noCertificates));
     resetForm();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   return {
-    intl, courseTitle, handleCertificateSubmit, cardCreateCancel,
+    intl, courseTitle, handleCertificateSubmit, handleFormCancel,
   };
 };
 

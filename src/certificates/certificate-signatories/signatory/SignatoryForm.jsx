@@ -14,7 +14,7 @@ import commonMessages from '../../messages';
 import messages from '../messages';
 
 const SignatoryForm = ({
-  id,
+  index,
   name,
   title,
   isEdit,
@@ -33,7 +33,7 @@ const SignatoryForm = ({
   const [isConfirmOpen, confirmOpen, confirmClose] = useToggle(false);
 
   const handleImageUpload = (newImagePath) => {
-    setFieldValue(`signatories[${id}].signatureImagePath`, newImagePath);
+    setFieldValue(`signatories[${index}].signatureImagePath`, newImagePath);
   };
 
   const handleSavingStatusDispatch = (status) => {
@@ -44,7 +44,7 @@ const SignatoryForm = ({
     {
       labelText: intl.formatMessage(messages.nameLabel),
       value: name,
-      name: `signatories[${id}].name`,
+      name: `signatories[${index}].name`,
       placeholder: intl.formatMessage(messages.namePlaceholder),
       feedback: intl.formatMessage(messages.nameDescription),
       onChange: handleChange,
@@ -54,7 +54,7 @@ const SignatoryForm = ({
       as: 'textarea',
       labelText: intl.formatMessage(messages.titleLabel),
       value: title,
-      name: `signatories[${id}].title`,
+      name: `signatories[${index}].title`,
       placeholder: intl.formatMessage(messages.titlePlaceholder),
       feedback: intl.formatMessage(messages.titleDescription),
       onChange: handleChange,
@@ -63,7 +63,7 @@ const SignatoryForm = ({
     {
       labelText: intl.formatMessage(messages.organizationLabel),
       value: organization,
-      name: `signatories[${id}].organization`,
+      name: `signatories[${index}].organization`,
       placeholder: intl.formatMessage(messages.organizationPlaceholder),
       feedback: intl.formatMessage(messages.organizationDescription),
       onChange: handleChange,
@@ -74,7 +74,7 @@ const SignatoryForm = ({
   return (
     <div className="bg-light-200 p-2.5 signatory" data-testid="signatory-form">
       <Stack className="justify-content-between mb-3" direction="horizontal">
-        <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${id + 1}`}</h3>
+        <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${index + 1}`}</h3>
         <Stack direction="horizontal" gap="2">
           {showDeleteButton && (
             <IconButtonWithTooltip
@@ -113,7 +113,7 @@ const SignatoryForm = ({
               <Form.Control
                 readOnly
                 value={signatureImagePath}
-                name={`signatories[${id}].signatureImagePath`}
+                name={`signatories[${index}].signatureImagePath`}
                 placeholder={intl.formatMessage(messages.imagePlaceholder)}
               />
               <Form.Control.Feedback className="x-small">
@@ -178,7 +178,7 @@ SignatoryForm.propTypes = {
   organization: PropTypes.string.isRequired,
   showDeleteButton: PropTypes.bool.isRequired,
   signatureImagePath: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
   isEdit: PropTypes.bool,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,

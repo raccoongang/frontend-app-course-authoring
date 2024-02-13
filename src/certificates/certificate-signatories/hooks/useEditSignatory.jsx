@@ -4,9 +4,11 @@ const useEditSignatory = ({
   const handleDeleteSignatory = (id) => {
     arrayHelpers.remove(id);
 
-    const newEditModes = { ...editModes };
-    delete newEditModes[id];
-    setEditModes(newEditModes);
+    if (editModes && setEditModes) {
+      const newEditModes = { ...editModes };
+      delete newEditModes[id];
+      setEditModes(newEditModes);
+    }
   };
 
   const toggleEditSignatory = (id) => {

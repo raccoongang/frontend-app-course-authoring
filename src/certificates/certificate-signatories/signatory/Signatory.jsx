@@ -12,7 +12,7 @@ import commonMessages from '../../messages';
 import messages from '../messages';
 
 const Signatory = ({
-  id,
+  index,
   name,
   title,
   organization,
@@ -24,7 +24,7 @@ const Signatory = ({
   return (
     <div className="bg-light-200 p-2.5 signatory" data-testid="signatory">
       <Stack className="justify-content-between mb-3" direction="horizontal">
-        <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${id + 1}`}</h3>
+        <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${index + 1}`}</h3>
         <Stack direction="horizontal" gap="2">
           <IconButtonWithTooltip
             src={EditOutlineIcon}
@@ -61,7 +61,7 @@ Signatory.propTypes = {
   title: PropTypes.string.isRequired,
   organization: PropTypes.string.isRequired,
   signatureImagePath: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
   handleEdit: PropTypes.func.isRequired,
 };
 

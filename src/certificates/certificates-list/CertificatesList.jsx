@@ -20,8 +20,8 @@ const CertificatesList = ({ courseId }) => {
 
   return (
     <>
-      {certificates.map((certificate, id) => (
-        <Formik initialValues={initialValues[id]} onSubmit={handleSubmit} key={certificate.id}>
+      {certificates.map((certificate, idx) => (
+        <Formik initialValues={initialValues[idx]} onSubmit={handleSubmit} key={certificate.id}>
           {({
             values, handleChange, handleBlur, resetForm, setFieldValue,
           }) => (

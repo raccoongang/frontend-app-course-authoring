@@ -58,21 +58,21 @@ const CertificateDetails = ({
     >
       <Stack>
         <Stack direction="horizontal" gap="1.5" className="certificate-details__info">
-          <p className="certificate-details__info__paragraph">
+          <p className="certificate-details__info-paragraph">
             <strong>{intl.formatMessage(messages.detailsCourseTitle)}:</strong> {detailsCourseTitle}
           </p>
-          <p className="certificate-details__info__paragraph--course-number">
+          <p className="certificate-details__info-paragraph--course-number">
             <strong>{intl.formatMessage(messages.detailsCourseNumber)}:</strong> {detailsCourseNumber}
           </p>
         </Stack>
         <Stack direction="horizontal" gap="1.5" className="certificate-details__info">
           {courseTitleOverride && (
-            <p className="certificate-details__info__paragraph">
+            <p className="certificate-details__info-paragraph">
               <strong>{intl.formatMessage(messages.detailsCourseTitleOverride)}:</strong> {courseTitleOverride}
             </p>
           )}
           {courseNumberOverride && (
-            <p className="certificate-details__info__paragraph text-right">
+            <p className="certificate-details__info-paragraph text-right">
               <strong>{intl.formatMessage(messages.detailsCourseNumberOverride)}:</strong> {courseNumberOverride}
             </p>
           )}
@@ -102,7 +102,6 @@ const CertificateDetails = ({
           handleDeleteCard();
         }}
       />
-
     </CertificateSection>
   );
 };

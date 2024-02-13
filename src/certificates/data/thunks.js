@@ -9,7 +9,7 @@ import {
   createCertificate,
   updateCertificate,
   deleteCertificate,
-  updateActivation,
+  updateActivationStatus,
 } from './api';
 import {
   fetchCertificatesSuccess,
@@ -98,7 +98,7 @@ export function deleteCourseCertificate(courseId, certificateId) {
   };
 }
 
-export function updateActivationCertificate(courseId, path, activationStatus) {
+export function updateCertificateActivationStatus(courseId, path, activationStatus) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
 
@@ -107,7 +107,7 @@ export function updateActivationCertificate(courseId, path, activationStatus) {
     ));
 
     try {
-      const certificateValues = await updateActivation(path, activationStatus);
+      const certificateValues = await updateActivationStatus(path, activationStatus);
       dispatch(updateCertificateSuccess(certificateValues));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       dispatch(fetchCertificates(courseId));

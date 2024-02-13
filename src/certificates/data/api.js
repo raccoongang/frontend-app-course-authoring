@@ -9,7 +9,7 @@ const getApiBaseUrl = () => getConfig().STUDIO_BASE_URL;
 export const getCertificatesApiUrl = (courseId) => `${getApiBaseUrl()}/api/contentstore/v1/certificates/${courseId}`;
 export const getCertificateApiUrl = (courseId) => `${getApiBaseUrl()}/certificates/${courseId}`;
 export const getUpdateCertificateApiUrl = (courseId, certificateId) => `${getCertificateApiUrl(courseId)}/${certificateId}`;
-export const getUpdateActivationCertificateApiUrl = (path) => `${getApiBaseUrl()}${path}`;
+export const getUpdateCertificateActivationStatusApiUrl = (path) => `${getApiBaseUrl()}${path}`;
 
 /**
  * Gets certificates for a course.
@@ -75,14 +75,14 @@ export async function deleteCertificate(courseId, certificateId) {
  * @param {object} activationStatus
  * @returns {Promise<Object>}
  */
-export async function updateActivation(path, activationStatus) {
+export async function updateActivationStatus(path, activationStatus) {
   const body = {
     is_active: activationStatus,
   };
 
   const { data } = await getAuthenticatedHttpClient()
     .post(
-      getUpdateActivationCertificateApiUrl(path),
+      getUpdateCertificateActivationStatusApiUrl(path),
       body,
     );
   return camelCaseObject(data);

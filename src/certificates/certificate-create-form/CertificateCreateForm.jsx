@@ -10,7 +10,7 @@ import useCertificateCreateForm from './hooks/useCertificateCreateForm';
 
 const CertificateCreateForm = ({ courseId }) => {
   const {
-    intl, courseTitle, handleCertificateSubmit, cardCreateCancel,
+    intl, courseTitle, handleCertificateSubmit, handleFormCancel,
   } = useCertificateCreateForm(courseId);
 
   return (
@@ -49,7 +49,7 @@ const CertificateCreateForm = ({ courseId }) => {
               </Button>
               <Button
                 variant="tertiary"
-                onClick={() => cardCreateCancel(resetForm)}
+                onClick={() => handleFormCancel(resetForm)}
               >
                 {intl.formatMessage(messages.cardCancel)}
               </Button>
