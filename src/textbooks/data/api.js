@@ -47,3 +47,16 @@ export async function editTextbook(courseId, textbook) {
 
   return camelCaseObject(data);
 }
+
+/**
+ * Edit textbook for course.
+ * @param {string} courseId
+ * @param {string} textbookId
+ * @returns {Promise<Object>}
+ */
+export async function deleteTextbook(courseId, textbookId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .delete(getEditTextbooksApiUrl(courseId, textbookId));
+
+  return camelCaseObject(data);
+}

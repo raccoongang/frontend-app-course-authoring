@@ -82,4 +82,17 @@ describe('<DeleteModal />', () => {
     fireEvent.click(cancelButton);
     expect(closeMock).toHaveBeenCalledTimes(1);
   });
+
+  it('render DeleteModal component with custom title and description correctly', () => {
+    const { getByText, queryByText, getByRole } = renderComponent({ title: 'Title', description: 'Description' });
+
+    expect(queryByText(messages.title.defaultMessage)).not.toBeInTheDocument();
+    expect(queryByText(messages.description.defaultMessage)).not.toBeInTheDocument();
+
+    expect(getByText('Title')).toBeInTheDocument();
+    expect(getByText('Description')).toBeInTheDocument();
+
+    expect(getByRole('button', { name: messages.cancelButton.defaultMessage })).toBeInTheDocument();
+    expect(getByRole('button', { name: messages.deleteButton.defaultMessage })).toBeInTheDocument();
+  });
 });
