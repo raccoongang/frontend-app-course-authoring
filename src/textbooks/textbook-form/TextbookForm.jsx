@@ -45,7 +45,7 @@ const TextbookForm = ({
   };
 
   return (
-    <div className="textbook-form">
+    <div className="textbook-form" data-testid="textbook-form">
       <Formik
         initialValues={initialFormValues}
         validationSchema={textbookFormValidationSchema(intl)}
@@ -145,7 +145,7 @@ const TextbookForm = ({
               )}
             />
             <ActionRow>
-              <Button variant="tertiary" onClick={closeTextbookForm}>
+              <Button variant="tertiary" onClick={closeTextbookForm} data-testid="cancel-button">
                 {intl.formatMessage(messages.cancelButton)}
               </Button>
               <Button onClick={handleSubmit} disabled={!isValid} type="submit">
