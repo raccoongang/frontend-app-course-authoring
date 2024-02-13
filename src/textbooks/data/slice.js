@@ -9,6 +9,7 @@ const slice = createSlice({
     savingStatus: '',
     loadingStatus: RequestStatus.IN_PROGRESS,
     textbooks: [],
+    currentTextbookId: '',
   },
   reducers: {
     fetchTextbooks: (state, { payload }) => {
@@ -23,6 +24,15 @@ const slice = createSlice({
     createTextbookSuccess: (state, { payload }) => {
       state.textbooks = [...state.textbooks, payload];
     },
+    editTextbookSuccess: (state, { payload }) => {
+      state.currentTextbookId = payload.id;
+      state.textbooks = state.textbooks.map((textbook) => {
+        if (textbook.id === payload.id) {
+          return payload;
+        }
+        return textbook;
+      });
+    },
   },
 });
 
@@ -31,6 +41,7 @@ export const {
   updateLoadingStatus,
   updateSavingStatus,
   createTextbookSuccess,
+  editTextbookSuccess,
 } = slice.actions;
 
 export const { reducer } = slice;
