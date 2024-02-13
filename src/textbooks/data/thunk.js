@@ -42,9 +42,9 @@ export function createTextbookQuery(courseId, textbook) {
       const data = await createTextbook(courseId, textbook);
       dispatch(createTextbookSuccess(data));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      dispatch(hideProcessingNotification());
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
       dispatch(hideProcessingNotification());
     }
   };
@@ -59,9 +59,9 @@ export function editTextbookQuery(courseId, textbook) {
       const data = await editTextbook(courseId, textbook);
       dispatch(editTextbookSuccess(data));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      dispatch(hideProcessingNotification());
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
       dispatch(hideProcessingNotification());
     }
   };
@@ -76,9 +76,9 @@ export function deleteTextbookQuery(courseId, textbookId) {
       await deleteTextbook(courseId, textbookId);
       dispatch(deleteTextbookSuccess(textbookId));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      dispatch(hideProcessingNotification());
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
       dispatch(hideProcessingNotification());
     }
   };

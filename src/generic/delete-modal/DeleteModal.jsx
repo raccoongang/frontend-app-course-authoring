@@ -18,9 +18,12 @@ const DeleteModal = ({
 }) => {
   const intl = useIntl();
 
+  const modalTitle = title || intl.formatMessage(messages.title, { category });
+  const modalDescription = description || intl.formatMessage(messages.description, { category });
+
   return (
     <AlertModal
-      title={title || intl.formatMessage(messages.title, { category })}
+      title={modalTitle}
       isOpen={isOpen}
       onClose={close}
       footerNode={(
@@ -40,7 +43,7 @@ const DeleteModal = ({
         </ActionRow>
       )}
     >
-      <p>{description || intl.formatMessage(messages.description, { category })}</p>
+      <p>{modalDescription}</p>
     </AlertModal>
   );
 };
