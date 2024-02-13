@@ -15,7 +15,6 @@ import initializeStore from '../../store';
 import { executeThunk } from '../../utils';
 import TextbookCard from './TextbooksCard';
 
-// eslint-disable-next-line no-unused-vars
 let axiosMock;
 let store;
 
@@ -70,36 +69,30 @@ describe('<TextbookCard />', () => {
     });
   });
 
-  it('render edit TextbookForm after clicking on edit button', async () => {
+  it('render edit TextbookForm after clicking on edit button', () => {
     const { getByTestId, queryByTestId } = renderComponent();
 
     const editButton = getByTestId('textbook-edit-button');
     userEvent.click(editButton);
 
-    await waitFor(() => {
-      expect(getByTestId('textbook-form')).toBeInTheDocument();
-      expect(queryByTestId('textbook-card')).not.toBeInTheDocument();
-    });
+    expect(getByTestId('textbook-form')).toBeInTheDocument();
+    expect(queryByTestId('textbook-card')).not.toBeInTheDocument();
   });
 
-  it('close edit TextbookForm after clicking on cancel button', async () => {
+  it('close edit TextbookForm after clicking on cancel button', () => {
     const { getByTestId, queryByTestId } = renderComponent();
 
     const editButton = getByTestId('textbook-edit-button');
     userEvent.click(editButton);
 
-    await waitFor(() => {
-      expect(getByTestId('textbook-form')).toBeInTheDocument();
-      expect(queryByTestId('textbook-card')).not.toBeInTheDocument();
-    });
+    expect(getByTestId('textbook-form')).toBeInTheDocument();
+    expect(queryByTestId('textbook-card')).not.toBeInTheDocument();
 
     const cancelButton = getByTestId('cancel-button');
     userEvent.click(cancelButton);
 
-    await waitFor(() => {
-      expect(queryByTestId('textbook-form')).not.toBeInTheDocument();
-      expect(getByTestId('textbook-card')).toBeInTheDocument();
-    });
+    expect(queryByTestId('textbook-form')).not.toBeInTheDocument();
+    expect(getByTestId('textbook-card')).toBeInTheDocument();
   });
 
   it('calls onSubmit when the "Save" button is clicked with a valid form', async () => {
@@ -125,11 +118,11 @@ describe('<TextbookCard />', () => {
       id: textbooksMock.textbooks[1].id,
     };
 
-    await userEvent.clear(tabTitleInput);
+    userEvent.clear(tabTitleInput);
     userEvent.type(tabTitleInput, newFormValues.tab_title);
-    await userEvent.clear(chapterInput);
+    userEvent.clear(chapterInput);
     userEvent.type(chapterInput, newFormValues.chapters[0].title);
-    await userEvent.clear(urlInput);
+    userEvent.clear(urlInput);
     userEvent.type(urlInput, newFormValues.chapters[0].url);
 
     userEvent.click(getByRole('button', { name: messages.saveButton.defaultMessage }));

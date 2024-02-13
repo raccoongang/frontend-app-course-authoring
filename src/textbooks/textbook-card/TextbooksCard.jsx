@@ -7,7 +7,8 @@ import {
   Card,
   Collapsible,
   Icon,
-  IconButtonWithTooltip, useToggle,
+  IconButtonWithTooltip,
+  useToggle,
 } from '@edx/paragon';
 import {
   EditOutline as EditIcon,
@@ -17,8 +18,8 @@ import {
 
 import { RequestStatus } from '../../data/constants';
 import { getCurrentTextbookId, getSavingStatus } from '../data/selectors';
-import { getTextbookFormInitialValues } from '../utils';
 import TextbookForm from '../textbook-form/TextbookForm';
+import { getTextbookFormInitialValues } from '../utils';
 import messages from './messages';
 
 const TextbookCard = ({
