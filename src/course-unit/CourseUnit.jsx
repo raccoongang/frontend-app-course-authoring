@@ -131,12 +131,13 @@ const CourseUnit = ({ courseId }) => {
               />
               <Stack gap={4} className="mb-4">
                 {courseVerticalChildren.children.map(({
-                  name, blockId: id, shouldScroll, userPartitionInfo,
+                  name, blockId: id, blockType: type, shouldScroll, userPartitionInfo,
                 }) => (
                   <CourseXBlock
                     id={id}
                     key={id}
                     title={name}
+                    type={type}
                     blockId={blockId}
                     shouldScroll={shouldScroll}
                     unitXBlockActions={unitXBlockActions}
