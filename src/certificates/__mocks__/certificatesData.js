@@ -1,6 +1,6 @@
 module.exports = {
   certificate_activation_handler_url: '/certificates/activation/course-v1:org+101+101/',
-  certificate_web_view_url: '///certificates/course/course-v1:org+101+101?preview=honor',
+  certificate_web_view_url: '//certificates/course/course-v1:org+101+101?preview=honor',
   certificates: [
     {
       course_title: 'Course title',

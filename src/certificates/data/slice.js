@@ -23,13 +23,14 @@ const slice = createSlice({
       Object.assign(state.certificatesData, payload);
     },
     createCertificateSuccess: (state, action) => {
+      state.certificatesData.certificates.push(action.payload);
+    },
+    updateCertificateSuccess: (state, action) => {
       const index = state.certificatesData.certificates.findIndex(c => c.id === action.payload.id);
 
-      state.certificatesData.certificates = index !== -1
-        ? state.certificatesData.certificates.map(
-          (certificate, idx) => (idx === index ? action.payload : certificate),
-        )
-        : [...state.certificatesData.certificates, action.payload];
+      if (index !== -1) {
+        state.certificatesData.certificates[index] = action.payload;
+      }
     },
     setMode: (state, action) => {
       state.componentMode = action.payload;
@@ -46,6 +47,7 @@ export const {
   updateLoadingStatus,
   fetchCertificatesSuccess,
   createCertificateSuccess,
+  updateCertificateSuccess,
   deleteCertificateSuccess,
 } = slice.actions;
 

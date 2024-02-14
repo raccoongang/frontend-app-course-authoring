@@ -4,11 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 
-import initializeStore from '../../../../store';
-import { MODE_STATES } from '../../../data/constants';
-import { signatoriesMock } from '../../../__mocks__';
-import messages from '../../messages';
-import Signatory from './Signatory';
+import initializeStore from '../../../store';
+import { signatoriesMock } from '../../__mocks__';
+import commonMessages from '../../messages';
+import messages from '../messages';
+import SignatoryForm from './SignatoryForm';
 
 let store;
 
@@ -17,17 +17,13 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
   useIntl: () => ({
     formatMessage: (message) => message.defaultMessage,
   }),
-}));
-
-jest.mock('@edx/frontend-platform/i18n', () => ({
-  ...jest.requireActual('@edx/frontend-platform/i18n'),
   getConfig: () => ({ STUDIO_BASE_URL: 'http://localhost' }),
 }));
 
 const renderSignatory = (props) => render(
   <Provider store={store}>
     <IntlProvider locale="en">
-      <Signatory {...props} />
+      <SignatoryForm {...props} />
     </IntlProvider>,
   </Provider>,
 );
@@ -38,11 +34,19 @@ const initialState = {
       certificates: [],
       hasCertificateModes: true,
     },
-    componentMode: MODE_STATES.create,
   },
 };
 
-const defaultProps = signatoriesMock[0];
+const defaultProps = {
+  ...signatoriesMock[0],
+  showDeleteButton: true,
+  isEdit: true,
+  handleChange: jest.fn(),
+  handleBlur: jest.fn(),
+  setFieldValue: jest.fn(),
+  handleDeleteSignatory: jest.fn(),
+  handleCancelUpdateSignatory: jest.fn(),
+};
 
 describe('Signatory Component', () => {
   beforeEach(() => {
@@ -57,25 +61,15 @@ describe('Signatory Component', () => {
     store = initializeStore(initialState);
   });
   it('renders in CREATE mode', () => {
-    const { queryByTestId, getByPlaceholderText } = renderSignatory(
-      { ...defaultProps, componentMode: MODE_STATES.create },
-    );
+    const { queryByTestId, getByPlaceholderText } = renderSignatory(defaultProps);
+
     expect(queryByTestId('signatory-view')).not.toBeInTheDocument();
     expect(getByPlaceholderText(messages.namePlaceholder.defaultMessage)).toBeInTheDocument();
   });
 
-  it('renders in VIEW mode', () => {
-    const { getByText, queryByText } = renderSignatory({ ...defaultProps, mode: MODE_STATES.view });
-    expect(getByText(defaultProps.name)).toBeInTheDocument();
-    expect(getByText(defaultProps.title)).toBeInTheDocument();
-    expect(queryByText(messages.namePlaceholder.defaultMessage)).not.toBeInTheDocument();
-  });
-
   it('handles input change', async () => {
     const handleChange = jest.fn();
-    const { getByPlaceholderText } = renderSignatory(
-      { ...defaultProps, componentMode: MODE_STATES.create, handleChange },
-    );
+    const { getByPlaceholderText } = renderSignatory({ ...defaultProps, handleChange });
     const input = getByPlaceholderText(messages.namePlaceholder.defaultMessage);
     const newInputValue = 'Jane Doe';
 
@@ -88,9 +82,7 @@ describe('Signatory Component', () => {
   });
 
   it('opens image upload modal on button click', () => {
-    const { getByRole, queryByRole } = renderSignatory(
-      { ...defaultProps, componentMode: MODE_STATES.create },
-    );
+    const { getByRole, queryByRole } = renderSignatory(defaultProps);
     const uploadButton = getByRole('button', { name: messages.uploadImageButton.defaultMessage });
 
     expect(queryByRole('presentation')).not.toBeInTheDocument();
@@ -101,14 +93,31 @@ describe('Signatory Component', () => {
   });
 
   it('shows confirm modal on delete icon click', async () => {
-    const { getByLabelText, getByText } = renderSignatory(
-      { ...defaultProps, componentMode: MODE_STATES.create, showDeleteButton: true },
-    );
-    const deleteIcon = getByLabelText(messages.deleteTooltip.defaultMessage);
+    const { getByLabelText, getByText } = renderSignatory(defaultProps);
+    const deleteIcon = getByLabelText(commonMessages.deleteTooltip.defaultMessage);
 
     userEvent.click(deleteIcon);
 
-    expect(getByText(messages.deleteSignatoryConfirmation.defaultMessage
-      .replace('{name}', defaultProps.name))).toBeInTheDocument();
+    expect(getByText(messages.deleteSignatoryConfirmationMessage.defaultMessage)).toBeInTheDocument();
+  });
+
+  it('cancels deletion of a signatory', () => {
+    const { getByRole } = renderSignatory(defaultProps);
+
+    const deleteIcon = getByRole('button', { name: commonMessages.deleteTooltip.defaultMessage });
+    userEvent.click(deleteIcon);
+
+    const cancelButton = getByRole('button', { name: commonMessages.cardCancel.defaultMessage });
+    userEvent.click(cancelButton);
+
+    expect(defaultProps.handleDeleteSignatory).not.toHaveBeenCalled();
+  });
+
+  it('renders without save button with isEdit=false', () => {
+    const { queryByRole } = renderSignatory({ ...defaultProps, isEdit: false });
+
+    const deleteIcon = queryByRole('button', { name: commonMessages.saveTooltip.defaultMessage });
+
+    expect(deleteIcon).not.toBeInTheDocument();
   });
 });

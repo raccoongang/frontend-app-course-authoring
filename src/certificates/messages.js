@@ -41,6 +41,26 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.without.modes.text',
     defaultMessage: 'This course does not use a mode that offers certificates.',
   },
+  cardCreate: {
+    id: 'course-authoring.certificates.create',
+    defaultMessage: 'Create',
+  },
+  cardCancel: {
+    id: 'course-authoring.certificates.cancel',
+    defaultMessage: 'Cancel',
+  },
+  deleteTooltip: {
+    id: 'course-authoring.certificates.signatories.delete.tooltip',
+    defaultMessage: 'Delete',
+  },
+  editTooltip: {
+    id: 'course-authoring.certificates.signatories.edit.tooltip',
+    defaultMessage: 'Edit',
+  },
+  saveTooltip: {
+    id: 'course-authoring.certificates.signatories.save.tooltip',
+    defaultMessage: 'Save',
+  },
 });
 
 export default messages;
