@@ -6,20 +6,24 @@ import Loading from '../generic/Loading';
 import useCertificates from './hooks/useCertificates';
 import CertificateWithoutModes from './certificate-without-modes/CertificateWithoutModes';
 import EmptyCertificatesWithModes from './empty-certificates-with-modes/EmptyCertificatesWithModes';
-import CertificatesCards from './certificates-cards/CertificatesCards';
-import CertificateCreate from './certificate-create/CertificateCreate';
+import CertificatesList from './certificates-list/CertificatesList';
+import CertificateCreateForm from './certificate-create-form/CertificateCreateForm';
+import CertificateEditForm from './certificate-edit-form/CertificateEditForm';
 import { MODE_STATES } from './data/constants';
 import MainLayout from './layout/MainLayout';
 
 const MODE_COMPONENTS = {
   [MODE_STATES.noModes]: CertificateWithoutModes,
   [MODE_STATES.noCertificates]: EmptyCertificatesWithModes,
-  [MODE_STATES.create]: CertificateCreate,
-  [MODE_STATES.view]: CertificatesCards,
+  [MODE_STATES.create]: CertificateCreateForm,
+  [MODE_STATES.view]: CertificatesList,
+  [MODE_STATES.editAll]: CertificateEditForm,
 };
 
 const Certificates = ({ courseId }) => {
-  const { componentMode, isLoading, loadingStatus } = useCertificates({ courseId });
+  const {
+    certificates, componentMode, isLoading, loadingStatus,
+  } = useCertificates({ courseId });
 
   if (isLoading) {
     return <Loading />;
@@ -36,7 +40,7 @@ const Certificates = ({ courseId }) => {
   const ModeComponent = MODE_COMPONENTS[componentMode] || MODE_COMPONENTS[MODE_STATES.noModes];
 
   return (
-    <MainLayout courseId={courseId} showHeaderButtons={componentMode === MODE_STATES.view}>
+    <MainLayout courseId={courseId} showHeaderButtons={certificates?.length > 0}>
       <ModeComponent courseId={courseId} />
     </MainLayout>
   );
