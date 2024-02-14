@@ -39,7 +39,9 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
             xl={[{ span: 9 }, { span: 3 }]}
           >
             <Layout.Element>
-              {children}
+              <article role="main">
+                {children}
+              </article>
             </Layout.Element>
             <Layout.Element>
               <CertificatesSidebar courseId={courseId} />

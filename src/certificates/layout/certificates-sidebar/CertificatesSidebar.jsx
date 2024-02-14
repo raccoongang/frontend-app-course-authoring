@@ -27,6 +27,7 @@ const CertificatesSidebar = ({ courseId }) => {
       <Button
         as={Hyperlink}
         target="_blank"
+        showLaunchIcon={false}
         size="sm"
         href={learnMoreCertificates}
         variant="outline-primary"
