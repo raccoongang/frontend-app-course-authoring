@@ -61,7 +61,7 @@ const CertificateDetails = ({
           <p className="certificate-details__info-paragraph">
             <strong>{intl.formatMessage(messages.detailsCourseTitle)}:</strong> {detailsCourseTitle}
           </p>
-          <p className="certificate-details__info-paragraph--course-number">
+          <p className="certificate-details__info-paragraph-course-number">
             <strong>{intl.formatMessage(messages.detailsCourseNumber)}:</strong> {detailsCourseNumber}
           </p>
         </Stack>
