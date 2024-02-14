@@ -4,14 +4,23 @@ import {
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
 import { NOTIFICATION_MESSAGES } from '../../constants';
-import { getCertificates, createCertificate, deleteCertificate } from './api';
+import {
+  getCertificates,
+  createCertificate,
+  updateCertificate,
+  deleteCertificate,
+  updateActiveStatus,
+} from './api';
 import {
   fetchCertificatesSuccess,
   updateLoadingStatus,
   updateSavingStatus,
   createCertificateSuccess,
+  updateCertificateSuccess,
   deleteCertificateSuccess,
+
 } from './slice';
+import { ACTIVATION_MESSAGES } from './constants';
 
 export function fetchCertificates(courseId) {
   return async (dispatch) => {
@@ -32,15 +41,34 @@ export function fetchCertificates(courseId) {
   };
 }
 
-export function createCourseCertificate(courseId, certificates) {
+export function createCourseCertificate(courseId, certificate) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
 
     try {
-      const certificatesValues = await createCertificate(courseId, certificates);
-      dispatch(createCertificateSuccess(certificatesValues));
+      const certificateValues = await createCertificate(courseId, certificate);
+      dispatch(createCertificateSuccess(certificateValues));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    } finally {
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function updateCourseCertificate(courseId, certificate) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
+
+    try {
+      await updateCertificate(courseId, certificate);
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(fetchCertificates(courseId));
       return true;
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
@@ -60,6 +88,29 @@ export function deleteCourseCertificate(courseId, certificateId) {
       const certificatesValues = await deleteCertificate(courseId, certificateId);
       dispatch(deleteCertificateSuccess(certificatesValues));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      return true;
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      return false;
+    } finally {
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function updateCertificateActiveStatus(courseId, path, activationStatus) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    dispatch(showProcessingNotification(
+      activationStatus ? ACTIVATION_MESSAGES.activating : ACTIVATION_MESSAGES.deactivating,
+    ));
+
+    try {
+      const certificateValues = await updateActiveStatus(path, activationStatus);
+      dispatch(updateCertificateSuccess(certificateValues));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(fetchCertificates(courseId));
       return true;
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));

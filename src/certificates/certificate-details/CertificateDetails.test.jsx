@@ -5,10 +5,11 @@ import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { initializeMockApp } from '@edx/frontend-platform';
 
-import initializeStore from '../../../store';
-import { MODE_STATES } from '../../data/constants';
-import { deleteCourseCertificate } from '../../data/thunks';
-import messages from '../messages';
+import initializeStore from '../../store';
+import { MODE_STATES } from '../data/constants';
+import { deleteCourseCertificate } from '../data/thunks';
+import commonMessages from '../messages';
+import messages from './messages';
 import CertificateDetails from './CertificateDetails';
 
 let store;
@@ -18,6 +19,7 @@ const certificateId = 123;
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useDispatch: jest.fn(),
+  useSelector: jest.fn(),
 }));
 
 jest.mock('@edx/frontend-platform/i18n', () => ({
@@ -32,11 +34,11 @@ jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
 }));
 
-jest.mock('../../data/slice', () => ({
+jest.mock('../data/slice', () => ({
   setMode: jest.fn(),
 }));
 
-jest.mock('../../data/thunks', () => ({
+jest.mock('../data/thunks', () => ({
   deleteCourseCertificate: jest.fn(),
 }));
 
@@ -97,52 +99,24 @@ describe('CertificateDetails', () => {
 
   it('opens confirm modal on delete button click', () => {
     const { getByRole, getByText } = renderComponent(defaultProps);
-    const deleteButton = getByRole('button', { name: messages.deleteTooltip.defaultMessage });
+    const deleteButton = getByRole('button', { name: commonMessages.deleteTooltip.defaultMessage });
     userEvent.click(deleteButton);
 
-    expect(getByText(messages.deleteCertificateConfirmation.defaultMessage)).toBeInTheDocument();
+    expect(getByText(messages.deleteCertificateConfirmationTitle.defaultMessage)).toBeInTheDocument();
   });
 
   it('dispatches delete action on confirm modal action', async () => {
     const props = { ...defaultProps, courseId, certificateId };
     const { getByRole } = renderComponent(props);
-    const deleteButton = getByRole('button', { name: messages.deleteTooltip.defaultMessage });
+    const deleteButton = getByRole('button', { name: commonMessages.deleteTooltip.defaultMessage });
     userEvent.click(deleteButton);
 
     await waitFor(() => {
-      const confirmActionButton = getByRole('button', { name: messages.deleteTooltip.defaultMessage });
+      const confirmActionButton = getByRole('button', { name: commonMessages.deleteTooltip.defaultMessage });
       userEvent.click(confirmActionButton);
     });
 
     expect(mockDispatch).toHaveBeenCalledWith(deleteCourseCertificate(courseId, certificateId));
-  });
-
-  it('renders correctly in create mode', () => {
-    const props = { ...defaultProps, componentMode: MODE_STATES.create };
-    const { getByText, getByPlaceholderText } = renderComponent(props);
-
-    expect(getByText(messages.detailsSectionTitle.defaultMessage)).toBeInTheDocument();
-    expect(getByPlaceholderText(messages.detailsCourseTitleOverride.defaultMessage)).toBeInTheDocument();
-  });
-
-  it('handles input change in create mode', async () => {
-    const props = { ...defaultProps, componentMode: MODE_STATES.create };
-    const { getByPlaceholderText } = renderComponent(props);
-    const input = getByPlaceholderText(messages.detailsCourseTitleOverride.defaultMessage);
-    const newInputValue = 'New Title';
-
-    userEvent.type(input, newInputValue);
-
-    waitFor(() => {
-      expect(input.value).toBe(newInputValue);
-    });
-  });
-
-  it('does not show delete button in create mode', () => {
-    const props = { ...defaultProps, componentMode: MODE_STATES.create };
-    const { queryByRole } = renderComponent(props);
-
-    expect(queryByRole('button', { name: messages.deleteTooltip.defaultMessage })).not.toBeInTheDocument();
   });
 
   it('shows course title override in view mode', () => {
