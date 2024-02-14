@@ -33,6 +33,9 @@ const slice = createSlice({
         return textbook;
       });
     },
+    deleteTextbookSuccess: (state, { payload }) => {
+      state.textbooks = state.textbooks.filter(({ id }) => id !== payload);
+    },
   },
 });
 
@@ -42,6 +45,7 @@ export const {
   updateSavingStatus,
   createTextbookSuccess,
   editTextbookSuccess,
+  deleteTextbookSuccess,
 } = slice.actions;
 
 export const { reducer } = slice;
