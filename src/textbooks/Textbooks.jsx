@@ -43,6 +43,7 @@ const Textbooks = ({ courseId }) => {
     handleTextbookFormSubmit,
     handleSavingStatusDispatch,
     handleTextbookEditFormSubmit,
+    handleTextbookDeleteSubmit,
   } = useTextbooks(courseId);
 
   const {
@@ -94,7 +95,8 @@ const Textbooks = ({ courseId }) => {
                         textbook={textbook}
                         courseId={courseId}
                         handleSavingStatusDispatch={handleSavingStatusDispatch}
-                        onSubmit={handleTextbookEditFormSubmit}
+                        onEditSubmit={handleTextbookEditFormSubmit}
+                        onDeleteSubmit={handleTextbookDeleteSubmit}
                       />
                     )) : (
                       !isTextbookFormOpen && <EmptyPlaceholder onCreateNewTextbook={openTextbookForm} />
