@@ -24,7 +24,7 @@ const GroupConfigurationSidebar = ({
       className="mt-4"
     >
       {sidebarData
-        .map(({ title, paragraphs, urlKey }, id) => (
+        .map(({ title, paragraphs, urlKey }, idx) => (
           <Fragment key={title}>
             <h4 className="help-sidebar-about-title">
               {title}
@@ -42,7 +42,7 @@ const GroupConfigurationSidebar = ({
             >
               {intl.formatMessage(messages.learnMoreBtn)}
             </Hyperlink>
-            {id !== sidebarData.length - 1 && <hr />}
+            {idx !== sidebarData.length - 1 && <hr />}
           </Fragment>
         ))}
     </HelpSidebar>

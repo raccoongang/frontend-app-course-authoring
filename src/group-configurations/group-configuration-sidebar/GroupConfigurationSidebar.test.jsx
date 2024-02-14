@@ -9,9 +9,9 @@ import messages from './messages';
 
 let store;
 const courseId = 'course-123';
-const enrollmentTrackTitle = messages.about_3_Title.defaultMessage;
+const enrollmentTrackTitle = messages.about_3_title.defaultMessage;
 const contentGroupTitle = messages.aboutTitle.defaultMessage;
-const experimentGroupTitle = messages.about_2_Title.defaultMessage;
+const experimentGroupTitle = messages.about_2_title.defaultMessage;
 
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
