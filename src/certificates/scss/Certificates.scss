@@ -5,6 +5,10 @@
     color: $black;
   }
 
+  .sub-header-actions {
+    margin-bottom: .5rem;
+  }
+
   .certificate-details {
     .certificate-details__info {
       color: $black;
@@ -12,11 +16,11 @@
       align-items: baseline;
     }
 
-    .certificate-details__info__paragraph {
+    .certificate-details__info-paragraph {
       flex: 1;
     }
 
-    .certificate-details__info__paragraph--course-number {
+    .certificate-details__info-paragraph-course-number {
       color: $gray-700;
       text-align: right;
     }
