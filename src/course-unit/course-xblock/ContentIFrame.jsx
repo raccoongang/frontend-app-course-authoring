@@ -38,7 +38,7 @@ const ContentIFrame = ({
   };
 
   return (
-    <div className="unit-iframe-wrapper">
+    <div className="unit-iframe__wrapper">
       {!hasLoaded && (
         showError ? (
           <AlertMessage variant="danger" description={intl.formatMessage(messages.iframeErrorText)} />

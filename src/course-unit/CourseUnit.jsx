@@ -144,7 +144,7 @@ const CourseUnit = ({ courseId }) => {
                 staticFileNotices={staticFileNotices}
                 courseId={courseId}
               />
-              <Stack gap={4} className="mb-4 course-unit-xblocks">
+              <Stack gap={4} className="mb-4 course-unit__xblocks">
                 <DraggableList
                   itemList={unitXBlocks}
                   setState={setUnitXBlocks}

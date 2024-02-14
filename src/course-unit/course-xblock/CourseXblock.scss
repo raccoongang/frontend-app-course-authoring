@@ -1,5 +1,5 @@
 .course-unit {
-  .course-unit-xblocks {
+  .course-unit__xblocks {
     .pgn__card-header {
       display: flex;
       justify-content: space-between;
@@ -18,7 +18,7 @@
     }
   }
 
-  .unit-iframe-wrapper .alert-danger {
+  .unit-iframe__wrapper .alert-danger {
     margin-bottom: 0;
   }
 }
