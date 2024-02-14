@@ -16,6 +16,7 @@ import {
   DeleteOutline as DeleteIcon,
 } from '@openedx/paragon/icons';
 
+import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import { RequestStatus } from '../../data/constants';
 import { getCurrentTextbookId, getSavingStatus } from '../data/selectors';
 import TextbookForm from '../textbook-form/TextbookForm';
@@ -26,12 +27,16 @@ const TextbookCard = ({
   textbook,
   courseId,
   handleSavingStatusDispatch,
-  onSubmit,
+  onEditSubmit,
+  onDeleteSubmit,
 }) => {
   const intl = useIntl();
+
   const savingStatus = useSelector(getSavingStatus);
   const currentTextbookId = useSelector(getCurrentTextbookId);
+
   const [isTextbookFormOpen, openTextbookForm, closeTextbookForm] = useToggle(false);
+  const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
 
   const { tabTitle, chapters, id } = textbook;
 
@@ -41,61 +46,72 @@ const TextbookCard = ({
     }
   }, [savingStatus, currentTextbookId]);
 
-  return isTextbookFormOpen ? (
-    <TextbookForm
-      closeTextbookForm={closeTextbookForm}
-      initialFormValues={getTextbookFormInitialValues(true, { tab_title: tabTitle, chapters, id })}
-      onSubmit={onSubmit}
-      onSavingStatus={handleSavingStatusDispatch}
-      courseId={courseId}
-    />
-  ) : (
-    (
-      <Card className="textbook-card" data-testid="textbook-card">
-        <Card.Header
-          title={tabTitle}
-          actions={(
-            <ActionRow>
-              <IconButtonWithTooltip
-                tooltipContent={intl.formatMessage(messages.buttonView)}
-                src={ViewIcon}
-                iconAs={Icon}
-                data-testid="textbook-view-button"
-                onClick={() => null}
-              />
-              <IconButtonWithTooltip
-                tooltipContent={intl.formatMessage(messages.buttonEdit)}
-                src={EditIcon}
-                iconAs={Icon}
-                data-testid="textbook-edit-button"
-                onClick={() => openTextbookForm()}
-              />
-              <IconButtonWithTooltip
-                tooltipContent={intl.formatMessage(messages.buttonDelete)}
-                src={DeleteIcon}
-                iconAs={Icon}
-                data-testid="textbook-delete-button"
-                onClick={() => null}
-              />
-            </ActionRow>
-          )}
+  return (
+    <>
+      {isTextbookFormOpen ? (
+        <TextbookForm
+          closeTextbookForm={closeTextbookForm}
+          initialFormValues={getTextbookFormInitialValues(true, { tab_title: tabTitle, chapters, id })}
+          onSubmit={onEditSubmit}
+          onSavingStatus={handleSavingStatusDispatch}
+          courseId={courseId}
         />
-        <div className="textbook-card__chapters">
-          <Collapsible
-            styling="basic"
-            data-testid="chapters-button"
-            title={intl.formatMessage(messages.chaptersTitle, { count: chapters.length })}
-          >
-            {chapters.map(({ title, url }) => (
-              <div className="textbook-card__chapter-item" key={title}>
-                <span className="small">{title}</span>
-                <span className="small text-gray-700">{url}</span>
-              </div>
-            ))}
-          </Collapsible>
-        </div>
-      </Card>
-    )
+      ) : (
+        (
+          <Card className="textbook-card" data-testid="textbook-card">
+            <Card.Header
+              title={tabTitle}
+              actions={(
+                <ActionRow>
+                  <IconButtonWithTooltip
+                    tooltipContent={intl.formatMessage(messages.buttonView)}
+                    src={ViewIcon}
+                    iconAs={Icon}
+                    data-testid="textbook-view-button"
+                    onClick={() => null}
+                  />
+                  <IconButtonWithTooltip
+                    tooltipContent={intl.formatMessage(messages.buttonEdit)}
+                    src={EditIcon}
+                    iconAs={Icon}
+                    data-testid="textbook-edit-button"
+                    onClick={() => openTextbookForm()}
+                  />
+                  <IconButtonWithTooltip
+                    tooltipContent={intl.formatMessage(messages.buttonDelete)}
+                    src={DeleteIcon}
+                    iconAs={Icon}
+                    data-testid="textbook-delete-button"
+                    onClick={() => openDeleteModal()}
+                  />
+                </ActionRow>
+              )}
+            />
+            <div className="textbook-card__chapters">
+              <Collapsible
+                styling="basic"
+                data-testid="chapters-button"
+                title={intl.formatMessage(messages.chaptersTitle, { count: chapters.length })}
+              >
+                {chapters.map(({ title, url }) => (
+                  <div className="textbook-card__chapter-item" key={title}>
+                    <span className="small">{title}</span>
+                    <span className="small text-gray-700">{url}</span>
+                  </div>
+                ))}
+              </Collapsible>
+            </div>
+          </Card>
+        )
+      )}
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        close={closeDeleteModal}
+        title={intl.formatMessage(messages.deleteModalTitle, { textbookTitle: textbook.tabTitle })}
+        description={intl.formatMessage(messages.deleteModalDescription)}
+        onDeleteSubmit={() => onDeleteSubmit(textbook.id)}
+      />
+    </>
   );
 };
 
@@ -110,7 +126,8 @@ TextbookCard.propTypes = {
   }).isRequired,
   courseId: PropTypes.string.isRequired,
   handleSavingStatusDispatch: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  onEditSubmit: PropTypes.func.isRequired,
+  onDeleteSubmit: PropTypes.func.isRequired,
 };
 
 export default TextbookCard;

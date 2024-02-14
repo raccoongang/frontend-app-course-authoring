@@ -8,9 +8,16 @@ import {
   fetchTextbooks,
   updateLoadingStatus,
   updateSavingStatus,
-  createTextbookSuccess, editTextbookSuccess,
+  createTextbookSuccess,
+  editTextbookSuccess,
+  deleteTextbookSuccess,
 } from './slice';
-import { getTextbooks, createTextbook, editTextbook } from './api';
+import {
+  getTextbooks,
+  createTextbook,
+  editTextbook,
+  deleteTextbook,
+} from './api';
 
 export function fetchTextbooksQuery(courseId) {
   return async (dispatch) => {
@@ -35,9 +42,9 @@ export function createTextbookQuery(courseId, textbook) {
       const data = await createTextbook(courseId, textbook);
       dispatch(createTextbookSuccess(data));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      dispatch(hideProcessingNotification());
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
       dispatch(hideProcessingNotification());
     }
   };
@@ -52,9 +59,26 @@ export function editTextbookQuery(courseId, textbook) {
       const data = await editTextbook(courseId, textbook);
       dispatch(editTextbookSuccess(data));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      dispatch(hideProcessingNotification());
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function deleteTextbookQuery(courseId, textbookId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.IN_PROGRESS }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.deleting));
+
+    try {
+      await deleteTextbook(courseId, textbookId);
+      dispatch(deleteTextbookSuccess(textbookId));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
       dispatch(hideProcessingNotification());
     }
   };
