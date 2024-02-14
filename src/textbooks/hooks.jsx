@@ -4,6 +4,7 @@ import { AppContext } from '@edx/frontend-platform/react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useToggle } from '@openedx/paragon';
 
+import { updateSavingStatus } from '../certificates/data/slice';
 import { RequestStatus } from '../data/constants';
 import {
   getTextbooksData,
@@ -14,8 +15,8 @@ import {
   createTextbookQuery,
   fetchTextbooksQuery,
   editTextbookQuery,
+  deleteTextbookQuery,
 } from './data/thunk';
-import { updateSavingStatus } from '../certificates/data/slice';
 import messages from './messages';
 
 const useTextbooks = (courseId) => {
@@ -52,6 +53,10 @@ const useTextbooks = (courseId) => {
     dispatch(editTextbookQuery(courseId, formValues));
   };
 
+  const handleTextbookDeleteSubmit = (textbookId) => {
+    dispatch(deleteTextbookQuery(courseId, textbookId));
+  };
+
   const handleSavingStatusDispatch = (status) => {
     dispatch(updateSavingStatus(status));
   };
@@ -78,6 +83,7 @@ const useTextbooks = (courseId) => {
     handleTextbookFormSubmit,
     handleSavingStatusDispatch,
     handleTextbookEditFormSubmit,
+    handleTextbookDeleteSubmit,
   };
 };
 
