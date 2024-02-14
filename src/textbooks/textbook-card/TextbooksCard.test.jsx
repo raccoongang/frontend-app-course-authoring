@@ -1,26 +1,28 @@
 import React from 'react';
 import { AppProvider } from '@edx/frontend-platform/react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { initializeMockApp } from '@edx/frontend-platform';
 
-import messages from '../textbook-form/messages';
 import { getEditTextbooksApiUrl } from '../data/api';
-import { editTextbookQuery } from '../data/thunk';
+import { deleteTextbookQuery, editTextbookQuery } from '../data/thunk';
 import { textbooksMock } from '../__mocks__';
 import initializeStore from '../../store';
 import { executeThunk } from '../../utils';
 import TextbookCard from './TextbooksCard';
+import messages from '../textbook-form/messages';
+import textbookCardMessages from './messages';
 
 let axiosMock;
 let store;
 
 const courseId = 'course-v1:org+101+101';
 const textbook = textbooksMock.textbooks[1];
-const onSubmitMock = jest.fn();
+const onEditSubmitMock = jest.fn();
+const onDeleteSubmitMock = jest.fn();
 const handleSavingStatusDispatchMock = jest.fn();
 
 const renderComponent = () => render(
@@ -29,7 +31,8 @@ const renderComponent = () => render(
       <TextbookCard
         textbook={textbook}
         courseId={courseId}
-        onSubmit={onSubmitMock}
+        onEditSubmit={onEditSubmitMock}
+        onDeleteSubmit={onDeleteSubmitMock}
         handleSavingStatusDispatch={handleSavingStatusDispatchMock}
       />
     </IntlProvider>
@@ -95,7 +98,7 @@ describe('<TextbookCard />', () => {
     expect(getByTestId('textbook-card')).toBeInTheDocument();
   });
 
-  it('calls onSubmit when the "Save" button is clicked with a valid form', async () => {
+  it('calls onEditSubmit when the "Save" button is clicked with a valid form', async () => {
     const { getByPlaceholderText, getByRole, getByTestId } = renderComponent();
 
     const editButton = getByTestId('textbook-edit-button');
@@ -128,8 +131,8 @@ describe('<TextbookCard />', () => {
     userEvent.click(getByRole('button', { name: messages.saveButton.defaultMessage }));
 
     await waitFor(() => {
-      expect(onSubmitMock).toHaveBeenCalledTimes(1);
-      expect(onSubmitMock).toHaveBeenCalledWith(
+      expect(onEditSubmitMock).toHaveBeenCalledTimes(1);
+      expect(onEditSubmitMock).toHaveBeenCalledWith(
         newFormValues,
         expect.objectContaining({ submitForm: expect.any(Function) }),
       );
@@ -140,5 +143,50 @@ describe('<TextbookCard />', () => {
       .reply(200);
 
     await executeThunk(editTextbookQuery(courseId, newFormValues), store.dispatch);
+  });
+
+  it('DeleteModal is open when delete button is clicked', async () => {
+    const { getByTestId, getByRole } = renderComponent();
+
+    const deleteButton = getByTestId('textbook-delete-button');
+    userEvent.click(deleteButton);
+
+    await waitFor(() => {
+      const deleteModal = getByRole('dialog');
+
+      const modalTitle = within(deleteModal)
+        .getByText(textbookCardMessages.deleteModalTitle.defaultMessage
+          .replace('{textbookTitle}', textbook.tabTitle));
+      const modalDescription = within(deleteModal)
+        .getByText(textbookCardMessages.deleteModalDescription.defaultMessage);
+
+      expect(modalTitle).toBeInTheDocument();
+      expect(modalDescription).toBeInTheDocument();
+    });
+  });
+
+  it('calls onDeleteSubmit when the DeleteModal is open', async () => {
+    const { getByTestId, getByRole } = renderComponent();
+
+    const deleteButton = getByTestId('textbook-delete-button');
+    userEvent.click(deleteButton);
+
+    await waitFor(() => {
+      const deleteModal = getByRole('dialog');
+
+      const modalSubmitButton = within(deleteModal)
+        .getByRole('button', { name: 'Delete' });
+
+      userEvent.click(modalSubmitButton);
+
+      const textbookId = textbooksMock.textbooks[1].id;
+
+      expect(onDeleteSubmitMock).toHaveBeenCalledTimes(1);
+      axiosMock
+        .onDelete(getEditTextbooksApiUrl(courseId, textbookId))
+        .reply(200);
+
+      executeThunk(deleteTextbookQuery(courseId, textbookId), store.dispatch);
+    });
   });
 });
