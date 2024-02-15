@@ -57,28 +57,33 @@ export const getNotificationMessage = (type, isVisible, isModalView) => {
  * @returns {Object} - The updated data structure with updated 'id' values.
  */
 export const updateXBlockBlockIdToId = (data) => {
-  if (!data?.children?.length) {
+  if (typeof data !== 'object' || data === null) {
     return data;
   }
 
-  const updatedData = { ...data };
+  if (Array.isArray(data)) {
+    return data.map(updateXBlockBlockIdToId);
+  }
 
-  updatedData.children.forEach((item, index) => {
-    if (item.blockId) {
-      updatedData.children[index] = { ...item, id: item.blockId };
-    }
+  const updatedData = {};
 
-    const { userPartitionInfo } = item;
-    if (userPartitionInfo?.selectablePartitions) {
-      updatedData.children[index].userPartitionInfo = {
-        ...userPartitionInfo,
-        selectablePartitions: userPartitionInfo.selectablePartitions.map(partition => ({
-          ...partition,
-          groups: partition.groups.map(group => (group.id ? { ...group, id: group.blockId } : group)),
-        })),
-      };
+  Object.keys(data).forEach(key => {
+    const value = data[key];
+
+    if (key === 'children' || key === 'selectablePartitions' || key === 'groups') {
+      updatedData[key] = updateXBlockBlockIdToId(value);
+    } else if (key === 'blockId') {
+      updatedData.id = value;
+    } else {
+      // Copy other properties unchanged
+      updatedData[key] = value;
     }
   });
+
+  // Special handling for objects with both 'id' and 'blockId' to ensure 'blockId' takes precedence
+  if ('blockId' in data) {
+    updatedData.id = data.blockId;
+  }
 
   return updatedData;
 };

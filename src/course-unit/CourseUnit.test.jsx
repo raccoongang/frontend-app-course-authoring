@@ -1291,7 +1291,7 @@ describe('<CourseUnit />', () => {
   });
 
   describe('Drag and drop', () => {
-    it('check xblock list is restored to original order when API call fails', async () => {
+    it('checks xblock list is restored to original order when API call fails', async () => {
       const { findAllByRole } = render(<RootWrapper />);
 
       const xBlocksDraggers = await findAllByRole('button', { name: 'Drag to reorder' });

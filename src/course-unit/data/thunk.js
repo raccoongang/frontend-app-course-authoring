@@ -279,15 +279,15 @@ export function copyToClipboard(usageKey) {
   };
 }
 
-export function setXBlockOrderListQuery(blockId, xBlockListIds, restoreCallback) {
+export function setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
 
     try {
-      await setXBlockOrderList(blockId, xBlockListIds).then(async (result) => {
+      await setXBlockOrderList(blockId, xblockListIds).then(async (result) => {
         if (result) {
-          dispatch(reorderXBlockList(xBlockListIds));
+          dispatch(reorderXBlockList(xblockListIds));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
           const courseUnit = await getCourseUnitData(blockId);
           dispatch(fetchCourseItemSuccess(courseUnit));

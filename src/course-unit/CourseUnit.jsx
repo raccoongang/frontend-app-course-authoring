@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -56,16 +56,16 @@ const CourseUnit = ({ courseId }) => {
     handleXBlockDragAndDrop,
   } = useCourseUnit({ courseId, blockId });
 
-  const initialXBlocksData = courseVerticalChildren.children ?? [];
+  const initialXBlocksData = useMemo(() => courseVerticalChildren.children ?? [], [courseVerticalChildren.children]);
   const [unitXBlocks, setUnitXBlocks] = useState(initialXBlocksData);
 
-  document.title = getPageHeadTitle('', unitTitle);
-
-  let initialUnitXBlocks = [...initialXBlocksData];
+  useEffect(() => {
+    document.title = getPageHeadTitle('', unitTitle);
+  }, [unitTitle]);
 
   useEffect(() => {
     setUnitXBlocks(courseVerticalChildren.children);
-  }, [JSON.stringify(courseVerticalChildren)]);
+  }, [courseVerticalChildren.children]);
 
   const {
     isShow: isShowProcessingNotification,
@@ -85,9 +85,8 @@ const CourseUnit = ({ courseId }) => {
   }
 
   const finalizeXBlockOrder = () => (newXBlocks) => {
-    initialUnitXBlocks = [...initialXBlocksData];
     handleXBlockDragAndDrop(newXBlocks.map(xBlock => xBlock.id), () => {
-      setUnitXBlocks(() => initialUnitXBlocks);
+      setUnitXBlocks(initialXBlocksData);
     });
   };
 

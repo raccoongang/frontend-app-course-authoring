@@ -101,8 +101,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     },
   };
 
-  const handleXBlockDragAndDrop = (xBlockListIds, restoreCallback) => {
-    dispatch(setXBlockOrderListQuery(blockId, xBlockListIds, restoreCallback));
+  const handleXBlockDragAndDrop = (xblockListIds, restoreCallback) => {
+    dispatch(setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback));
   };
 
   useEffect(() => {
