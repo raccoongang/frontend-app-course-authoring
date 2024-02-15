@@ -1,33 +1,40 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button, Dropdown, DropdownButton, Hyperlink,
 } from '@openedx/paragon';
-import { useIntl } from '@edx/frontend-platform/i18n';
 
-import {
-  getCourseModes, getCertificateActivationUrl, getCertificateWebViewUrl, getIsCertificateActive,
-} from '../../data/selectors';
 import messages from '../../messages';
+import useHeaderButtons from './hooks/useHeaderButtons';
 
 const HeaderButtons = () => {
   const intl = useIntl();
-  const courseModes = useSelector(getCourseModes);
-  const certificateWebViewUrl = useSelector(getCertificateWebViewUrl);
-  const certificateActivationHandlerUrl = useSelector(getCertificateActivationUrl);
-  const isCertificateActive = useSelector(getIsCertificateActive);
-
-  const [dropdowmItem, setDropdowmItem] = useState(courseModes[0]);
+  const {
+    previewUrl,
+    courseModes,
+    dropdowmItem,
+    isCertificateActive,
+    setDropdowmItem,
+    handleActivationStatus,
+  } = useHeaderButtons();
 
   return (
     <>
       <DropdownButton id="dropdown-basic-button" title={dropdowmItem} onSelect={(item) => setDropdowmItem(item)}>
         {courseModes.map((mode) => <Dropdown.Item key={mode} eventKey={mode}>{mode}</Dropdown.Item>)}
       </DropdownButton>
-      <Button variant="outline-primary" as={Hyperlink} href={certificateWebViewUrl}>
+      <Button
+        variant="outline-primary"
+        as={Hyperlink}
+        href={previewUrl}
+        target="_blank"
+        showLaunchIcon={false}
+      >
         {intl.formatMessage(messages.headingActionsPreview)}
       </Button>
-      <Button variant="outline-primary" as={Hyperlink} href={certificateActivationHandlerUrl}>
+      <Button
+        variant="outline-primary"
+        onClick={handleActivationStatus}
+      >
         {isCertificateActive
           ? intl.formatMessage(messages.headingActionsDeactivate)
           : intl.formatMessage(messages.headingActionsActivate)}
