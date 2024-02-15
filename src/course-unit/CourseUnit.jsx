@@ -54,6 +54,7 @@ const CourseUnit = ({ courseId }) => {
     handleConfigureSubmit,
     courseVerticalChildren,
     handleXBlockDragAndDrop,
+    canPasteComponent,
   } = useCourseUnit({ courseId, blockId });
 
   const initialXBlocksData = useMemo(() => courseVerticalChildren.children ?? [], [courseVerticalChildren.children]);
@@ -170,7 +171,7 @@ const CourseUnit = ({ courseId }) => {
                 blockId={blockId}
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
-              {showPasteXBlock && (
+              {showPasteXBlock && canPasteComponent && (
                 <PasteComponent
                   clipboardData={sharedClipboardData}
                   handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}

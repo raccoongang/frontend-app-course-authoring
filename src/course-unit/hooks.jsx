@@ -21,8 +21,8 @@ import {
   getLoadingStatus,
   getSavingStatus,
   getSequenceStatus,
-  getCourseUnitEnableCopyPaste,
   getStaticFileNotices,
+  getCanEdit,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
@@ -41,13 +41,14 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const sequenceStatus = useSelector(getSequenceStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const courseVerticalChildren = useSelector(getCourseVerticalChildren);
-  const enableCopyPasteUnits = useSelector(getCourseUnitEnableCopyPaste);
   const staticFileNotices = useSelector(getStaticFileNotices);
   const navigate = useNavigate();
   const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
   const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
+  const canEdit = useSelector(getCanEdit);
   const { currentlyVisibleToStudents } = courseUnit;
-  const { sharedClipboardData, showPasteXBlock, showPasteUnit } = useCopyToClipboard();
+  const { sharedClipboardData, showPasteXBlock, showPasteUnit } = useCopyToClipboard(canEdit);
+  const { canPasteComponent } = courseVerticalChildren;
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
@@ -135,7 +136,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
       || loadingStatus.courseSectionVerticalLoadingStatus === RequestStatus.IN_PROGRESS,
     isTitleEditFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
-    enableCopyPasteUnits,
     sharedClipboardData,
     showPasteXBlock,
     showPasteUnit,
@@ -148,5 +148,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     handleConfigureSubmit,
     courseVerticalChildren,
     handleXBlockDragAndDrop,
+    canPasteComponent,
   };
 };

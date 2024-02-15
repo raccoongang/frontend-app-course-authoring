@@ -9,6 +9,7 @@ const slice = createSlice({
     savingStatus: '',
     isQueryPending: false,
     isTitleEditFormOpen: false,
+    canEdit: true,
     loadingStatus: {
       fetchUnitLoadingStatus: RequestStatus.IN_PROGRESS,
       courseSectionVerticalLoadingStatus: RequestStatus.IN_PROGRESS,
