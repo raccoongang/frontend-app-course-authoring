@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { getClipboardData } from '../../data/selectors';
 import { CLIPBOARD_STATUS, NOT_XBLOCK_TYPES, STUDIO_CLIPBOARD_CHANNEL } from '../../constants';
 
-const useCopyToClipboard = (canEdit = true) => {
+const useCopyToClipboard = (canEdit) => {
   const [clipboardBroadcastChannel] = useState(() => new BroadcastChannel(STUDIO_CLIPBOARD_CHANNEL));
   const [showPasteUnit, setShowPasteUnit] = useState(false);
   const [showPasteXBlock, setShowPasteXBlock] = useState(false);

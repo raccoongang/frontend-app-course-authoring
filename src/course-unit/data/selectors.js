@@ -1,4 +1,5 @@
 export const getCourseUnitData = (state) => state.courseUnit.unit;
+export const getCanEdit = (state) => state.courseUnit.canEdit;
 export const getStaticFileNotices = (state) => state.courseUnit.staticFileNotices;
 export const getSavingStatus = (state) => state.courseUnit.savingStatus;
 export const getLoadingStatus = (state) => state.courseUnit.loadingStatus;
