@@ -13,7 +13,7 @@ import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
-import { getCourseId } from '../data/selectors';
+import { getCanEdit, getCourseId } from '../data/selectors';
 import { copyToClipboard } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import ContentIFrame from './ContentIFrame';
@@ -29,6 +29,7 @@ const CourseXBlock = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const courseId = useSelector(getCourseId);
+  const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
 
@@ -93,9 +94,11 @@ const CourseXBlock = ({
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                    {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
-                  </Dropdown.Item>
+                  {canEdit && (
+                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item onClick={openConfigureModal}>
                     {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                   </Dropdown.Item>
