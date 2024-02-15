@@ -11,13 +11,14 @@ import {
   fetchCourseVerticalChildrenData,
   deleteUnitItemQuery,
   duplicateUnitItemQuery,
+  setXBlockOrderListQuery,
   editCourseUnitVisibilityAndData,
 } from './data/thunk';
 import {
   getCourseSectionVertical,
   getCourseVerticalChildren,
   getCourseUnitData,
-  getLoadingStatus,
+  getIsLoading,
   getSavingStatus,
   getSequenceStatus,
   getStaticFileNotices,
@@ -36,7 +37,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const [hasInternetConnectionError, setInternetConnectionError] = useState(false);
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
-  const loadingStatus = useSelector(getLoadingStatus);
+  const isLoading = useSelector(getIsLoading);
   const sequenceStatus = useSelector(getSequenceStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const courseVerticalChildren = useSelector(getCourseVerticalChildren);
@@ -101,6 +102,10 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     },
   };
 
+  const handleXBlockDragAndDrop = (xblockListIds, restoreCallback) => {
+    dispatch(setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback));
+  };
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       dispatch(updateQueryPendingStatus(true));
@@ -127,8 +132,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     isErrorAlert,
     staticFileNotices,
     currentlyVisibleToStudents,
-    isLoading: loadingStatus.fetchUnitLoadingStatus === RequestStatus.IN_PROGRESS
-      || loadingStatus.courseSectionVerticalLoadingStatus === RequestStatus.IN_PROGRESS,
+    isLoading,
     isTitleEditFormOpen,
     isInternetConnectionAlertFailed: savingStatus === RequestStatus.FAILED,
     sharedClipboardData,
@@ -142,6 +146,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     handleCreateNewCourseXBlock,
     handleConfigureSubmit,
     courseVerticalChildren,
+    handleXBlockDragAndDrop,
     canPasteComponent,
   };
 };

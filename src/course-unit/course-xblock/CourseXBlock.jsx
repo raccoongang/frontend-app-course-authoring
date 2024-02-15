@@ -11,6 +11,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { getCanEdit, getCourseId } from 'CourseAuthoring/course-unit/data/selectors';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
+import SortableItem from '../../generic/drag-helper/SortableItem';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { copyToClipboard } from '../../generic/data/thunks';
@@ -71,16 +72,21 @@ const CourseXBlock = ({
 
   return (
     <div ref={courseXBlockElementRef} {...props}>
-      <Card className="mb-1">
+      <Card
+        as={SortableItem}
+        id={id}
+        draggable
+        category="xblock"
+        componentStyle={{ marginBottom: 0 }}
+      >
         <Card.Header
           title={title}
           subtitle={visibilityMessage}
           actions={(
-            <ActionRow>
+            <ActionRow className="mr-2">
               <IconButton
                 alt={intl.formatMessage(messages.blockAltButtonEdit)}
                 iconAs={EditIcon}
-                size="md"
                 onClick={handleEdit}
               />
               <Dropdown>
@@ -89,7 +95,6 @@ const CourseXBlock = ({
                   as={IconButton}
                   src={MoveVertIcon}
                   alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
-                  size="sm"
                   iconAs={Icon}
                 />
                 <Dropdown.Menu>
@@ -127,7 +132,6 @@ const CourseXBlock = ({
               />
             </ActionRow>
           )}
-          size="md"
         />
         <Card.Section>
           <XBlockMessages validationMessages={validationMessages} />
