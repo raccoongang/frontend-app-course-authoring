@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
+import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCourseId } from '../data/selectors';
@@ -67,7 +68,7 @@ const CourseXBlock = ({
 
   return (
     <div ref={courseXBlockElementRef} {...props}>
-      <Card className="mb-1">
+      <Card as={ConditionalSortableElement} id={id} draggable className="mb-1">
         <Card.Header
           title={title}
           actions={(
@@ -75,7 +76,6 @@ const CourseXBlock = ({
               <IconButton
                 alt={intl.formatMessage(messages.blockAltButtonEdit)}
                 iconAs={EditIcon}
-                size="md"
                 onClick={handleEdit}
               />
               <Dropdown>
@@ -84,7 +84,6 @@ const CourseXBlock = ({
                   as={IconButton}
                   src={MoveVertIcon}
                   alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
-                  size="sm"
                   iconAs={Icon}
                 />
                 <Dropdown.Menu>
@@ -120,7 +119,6 @@ const CourseXBlock = ({
               />
             </ActionRow>
           )}
-          size="md"
         />
         <Card.Section>
           <ContentIFrame id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
