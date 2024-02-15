@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@edx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import { getCourseUnitData } from '../../../data/selectors';
+import { getCanEdit, getCourseUnitData } from '../../../data/selectors';
 import { copyToClipboard } from '../../../data/thunk';
 import messages from '../../messages';
 
@@ -16,6 +16,7 @@ const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
     hasChanges,
     enableCopyPasteUnits,
   } = useSelector(getCourseUnitData);
+  const canEdit = useSelector(getCanEdit);
 
   return (
     <>
@@ -29,7 +30,7 @@ const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
           {intl.formatMessage(messages.actionButtonDiscardChangesTitle)}
         </Button>
       )}
-      {enableCopyPasteUnits && (
+      {enableCopyPasteUnits && canEdit && (
         <Button
           onClick={() => dispatch(copyToClipboard(id))}
           className="mt-2"

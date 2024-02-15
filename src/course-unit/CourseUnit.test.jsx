@@ -1288,6 +1288,26 @@ describe('<CourseUnit />', () => {
 
       expect(queryByTestId('has-error-files')).toBeNull();
     });
+
+    it('should hide the "Paste component" block if canPasteComponent is false', async () => {
+      const { queryByText, queryByRole } = render(<RootWrapper />);
+
+      axiosMock
+        .onGet(getCourseVerticalChildrenApiUrl(blockId))
+        .reply(200, {
+          ...courseVerticalChildrenMock,
+          canPasteComponent: false,
+        });
+
+      await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
+
+      expect(queryByRole('button', {
+        name: pasteComponentMessages.pasteComponentButtonText.defaultMessage,
+      })).not.toBeInTheDocument();
+      expect(queryByText(
+        pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage,
+      )).not.toBeInTheDocument();
+    });
   });
 
   describe('Drag and drop', () => {
