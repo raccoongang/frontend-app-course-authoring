@@ -54,6 +54,7 @@ import addComponentMessages from './add-component/messages';
 import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
 import messages from './messages';
 import { getContentTaxonomyTagsApiUrl, getContentTaxonomyTagsCountApiUrl } from '../content-tags-drawer/data/api';
+import { RequestStatus } from '../data/constants';
 
 let axiosMock;
 let store;
@@ -1440,6 +1441,58 @@ describe('<CourseUnit />', () => {
       expect(queryByText(
         pasteComponentMessages.pasteButtonWhatsInClipboardText.defaultMessage,
       )).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Drag and drop', () => {
+    it('checks xblock list is restored to original order when API call fails', async () => {
+      const { findAllByRole } = render(<RootWrapper />);
+
+      const xBlocksDraggers = await findAllByRole('button', { name: 'Drag to reorder' });
+      const draggableButton = xBlocksDraggers[1];
+
+      axiosMock
+        .onPut(getXBlockBaseApiUrl(blockId))
+        .reply(500, { dummy: 'value' });
+
+      const xBlock1 = store.getState().courseUnit.courseVerticalChildren.children[0].id;
+
+      fireEvent.keyDown(draggableButton, { key: 'ArrowUp' });
+
+      await waitFor(async () => {
+        fireEvent.keyDown(draggableButton, { code: 'Space' });
+
+        const saveStatus = store.getState().courseUnit.savingStatus;
+        expect(saveStatus).toEqual(RequestStatus.FAILED);
+      });
+
+      const xBlock1New = store.getState().courseUnit.courseVerticalChildren.children[0].id;
+      expect(xBlock1).toBe(xBlock1New);
+    });
+
+    it('check that new xblock list is saved when dragged', async () => {
+      const { findAllByRole } = render(<RootWrapper />);
+
+      const xBlocksDraggers = await findAllByRole('button', { name: 'Drag to reorder' });
+      const draggableButton = xBlocksDraggers[1];
+
+      axiosMock
+        .onPut(getXBlockBaseApiUrl(blockId))
+        .reply(200, { dummy: 'value' });
+
+      const xBlock1 = store.getState().courseUnit.courseVerticalChildren.children[0].id;
+
+      fireEvent.keyDown(draggableButton, { key: 'ArrowUp' });
+
+      await waitFor(async () => {
+        fireEvent.keyDown(draggableButton, { code: 'Space' });
+
+        const saveStatus = store.getState().courseUnit.savingStatus;
+        expect(saveStatus).toEqual(RequestStatus.SUCCESSFUL);
+      });
+
+      const xBlock2 = store.getState().courseUnit.courseVerticalChildren.children[1].id;
+      expect(xBlock1).toBe(xBlock2);
     });
   });
 });

@@ -12,6 +12,7 @@ import {
   deleteUnitItemQuery,
   duplicateUnitItemQuery,
   editCourseUnitVisibilityAndData,
+  setXBlockOrderListQuery,
 } from './data/thunk';
 import {
   getCourseSectionVertical,
@@ -101,6 +102,10 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     },
   };
 
+  const handleXBlockDragAndDrop = (xblockListIds, restoreCallback) => {
+    dispatch(setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback));
+  };
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       dispatch(updateQueryPendingStatus(true));
@@ -143,5 +148,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     handleConfigureSubmit,
     courseVerticalChildren,
     canPasteComponent,
+    handleXBlockDragAndDrop,
   };
 };
