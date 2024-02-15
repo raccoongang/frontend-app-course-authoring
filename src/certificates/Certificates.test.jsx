@@ -87,7 +87,7 @@ describe('Certificates', () => {
     const { getByText, queryByText, getByTestId } = renderComponent();
 
     expect(getByTestId('certificates-list')).toBeInTheDocument();
-    expect(getByText(certificatesDataMock.course_title)).toBeInTheDocument();
+    expect(getByText(certificatesDataMock.courseTitle)).toBeInTheDocument();
     expect(getByText(certificatesDataMock.certificates[0].signatories[0].name)).toBeInTheDocument();
     expect(queryByText(messages.noCertificatesText.defaultMessage)).not.toBeInTheDocument();
     expect(queryByText(messages.withoutModesText.defaultMessage)).not.toBeInTheDocument();
