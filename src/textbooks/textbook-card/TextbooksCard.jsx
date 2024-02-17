@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -15,6 +15,7 @@ import {
   RemoveRedEye as ViewIcon,
   DeleteOutline as DeleteIcon,
 } from '@edx/paragon/icons';
+import { AppContext } from '@edx/frontend-platform/react';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import { RequestStatus } from '../../data/constants';
@@ -29,8 +30,10 @@ const TextbookCard = ({
   handleSavingStatusDispatch,
   onEditSubmit,
   onDeleteSubmit,
+  textbookIndex,
 }) => {
   const intl = useIntl();
+  const { config } = useContext(AppContext);
 
   const savingStatus = useSelector(getSavingStatus);
   const currentTextbookId = useSelector(getCurrentTextbookId);
@@ -39,6 +42,10 @@ const TextbookCard = ({
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
 
   const { tabTitle, chapters, id } = textbook;
+
+  const onPreviewTextbookClick = () => {
+    window.location.href = `${config.LMS_BASE_URL}/courses/${courseId}/pdfbook/${textbookIndex}/`;
+  };
 
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL && currentTextbookId === id) {
@@ -68,7 +75,7 @@ const TextbookCard = ({
                     src={ViewIcon}
                     iconAs={Icon}
                     data-testid="textbook-view-button"
-                    onClick={() => null}
+                    onClick={() => onPreviewTextbookClick()}
                   />
                   <IconButtonWithTooltip
                     tooltipContent={intl.formatMessage(messages.buttonEdit)}
@@ -128,6 +135,7 @@ TextbookCard.propTypes = {
   handleSavingStatusDispatch: PropTypes.func.isRequired,
   onEditSubmit: PropTypes.func.isRequired,
   onDeleteSubmit: PropTypes.func.isRequired,
+  textbookIndex: PropTypes.string.isRequired,
 };
 
 export default TextbookCard;
