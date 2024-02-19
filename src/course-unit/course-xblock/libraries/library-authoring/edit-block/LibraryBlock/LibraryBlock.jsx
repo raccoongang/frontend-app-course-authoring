@@ -109,6 +109,8 @@ class LibraryBlock extends React.Component {
       return null;
     }
 
+    console.log('getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL', getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL);
+
     return (
       <div style={{
         height: `${this.state.iFrameHeight}px`,
@@ -123,7 +125,7 @@ class LibraryBlock extends React.Component {
           key={this.state.iframeKey}
           ref={this.iframeRef}
           title="block"
-          src="/xblock-bootstrap.html"
+          src={getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}
           data-testid="block-preview"
           style={{
             position: 'absolute',
