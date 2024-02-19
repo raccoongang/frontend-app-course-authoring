@@ -23,6 +23,7 @@ import ModalDropzone from '../../generic/modal-dropzone/ModalDropzone';
 import { useModel } from '../../generic/model-store';
 import textbookFormValidationSchema from './validations';
 import messages from './messages';
+import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 
 const TextbookForm = ({
   closeTextbookForm,
@@ -165,6 +166,7 @@ const TextbookForm = ({
               previewComponent={(
                 <Icon src={PdfIcon} className="modal-preview-icon" />
               )}
+              maxSize={UPLOAD_FILE_MAX_SIZE}
             />
             <PromptIfDirty dirty={dirty} />
           </>
