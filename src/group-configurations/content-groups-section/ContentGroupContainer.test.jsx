@@ -1,6 +1,6 @@
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import userEvent from '@testing-library/user-event';
-import { act, render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import { contentGroupsMock } from '../__mocks__';
 import messages from './messages';
@@ -80,7 +80,9 @@ describe('<ContentGroupContainer />', () => {
   });
 
   it('calls onCreate when the "Create" button is clicked with a valid form', async () => {
-    const { getByRole, getByPlaceholderText, queryByText } = renderComponent();
+    const {
+      getByRole, getByPlaceholderText, queryByText,
+    } = renderComponent();
     const newGroupNameText = 'New group name';
     const newGroupInput = getByPlaceholderText(
       messages.newGroupInputPlaceholder.defaultMessage,
@@ -90,11 +92,11 @@ describe('<ContentGroupContainer />', () => {
       name: messages.createButton.defaultMessage,
     });
     expect(createButton).toBeInTheDocument();
-    await act(async () => {
-      userEvent.click(createButton);
-    });
+    userEvent.click(createButton);
 
-    expect(onCreateClickMock).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(onCreateClickMock).toHaveBeenCalledTimes(1);
+    });
     expect(
       queryByText(messages.requiredError.defaultMessage),
     ).not.toBeInTheDocument();
@@ -111,13 +113,13 @@ describe('<ContentGroupContainer />', () => {
       name: messages.createButton.defaultMessage,
     });
     expect(createButton).toBeInTheDocument();
-    await act(async () => {
-      userEvent.click(createButton);
-    });
+    userEvent.click(createButton);
 
-    expect(
-      getByText(messages.requiredError.defaultMessage),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        getByText(messages.requiredError.defaultMessage),
+      ).toBeInTheDocument();
+    });
   });
 
   it('calls onEdit when the "Save" button is clicked with a valid form', async () => {
@@ -134,13 +136,13 @@ describe('<ContentGroupContainer />', () => {
       name: messages.saveButton.defaultMessage,
     });
     expect(saveButton).toBeInTheDocument();
-    await act(async () => {
-      userEvent.click(saveButton);
-    });
+    userEvent.click(saveButton);
 
-    expect(
-      queryByText(messages.requiredError.defaultMessage),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        queryByText(messages.requiredError.defaultMessage),
+      ).not.toBeInTheDocument();
+    });
     expect(onEditClickMock).toHaveBeenCalledTimes(1);
   });
 
@@ -159,13 +161,13 @@ describe('<ContentGroupContainer />', () => {
       name: messages.saveButton.defaultMessage,
     });
     expect(saveButton).toBeInTheDocument();
-    await act(async () => {
-      userEvent.click(saveButton);
-    });
+    userEvent.click(saveButton);
 
-    expect(
-      getByText(messages.invalidMessage.defaultMessage),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        getByText(messages.invalidMessage.defaultMessage),
+      ).toBeInTheDocument();
+    });
   });
   it('calls onDelete when the "Delete" button is clicked', async () => {
     const { getByRole } = renderComponent({
@@ -176,9 +178,7 @@ describe('<ContentGroupContainer />', () => {
       name: messages.deleteButton.defaultMessage,
     });
     expect(deleteButton).toBeInTheDocument();
-    await act(async () => {
-      userEvent.click(deleteButton);
-    });
+    userEvent.click(deleteButton);
 
     expect(onDeleteClickMock).toHaveBeenCalledTimes(1);
   });
@@ -189,9 +189,7 @@ describe('<ContentGroupContainer />', () => {
       name: messages.cancelButton.defaultMessage,
     });
     expect(cancelButton).toBeInTheDocument();
-    await act(async () => {
-      userEvent.click(cancelButton);
-    });
+    userEvent.click(cancelButton);
 
     expect(onCancelClickMock).toHaveBeenCalledTimes(1);
   });

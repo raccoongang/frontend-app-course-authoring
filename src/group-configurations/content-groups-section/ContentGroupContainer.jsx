@@ -132,9 +132,9 @@ ContentGroupContainer.defaultProps = {
   overrideValue: '',
   isEditMode: false,
   isUsedInLocation: false,
-  onCreateClick: () => ({}),
-  onDeleteClick: () => ({}),
-  onEditClick: () => ({}),
+  onCreateClick: null,
+  onDeleteClick: null,
+  onEditClick: null,
 };
 
 ContentGroupContainer.propTypes = {

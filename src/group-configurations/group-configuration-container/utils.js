@@ -1,4 +1,5 @@
 import { getConfig } from '@edx/frontend-platform';
+
 import messages from './messages';
 
 /**

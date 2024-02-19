@@ -13,31 +13,21 @@ import { updateSavingStatuses } from './data/slice';
 import {
   getGroupConfigurationsData,
   getLoadingStatus,
-  getSavingStatuses,
+  getSavingStatus,
 } from './data/selectors';
 
 const useGroupConfigurations = (courseId) => {
   const dispatch = useDispatch();
   const groupConfigurations = useSelector(getGroupConfigurationsData);
   const loadingStatus = useSelector(getLoadingStatus);
-  const {
-    createContentGroupStatus,
-    editContentGroupStatus,
-    deleteContentGroupStatus,
-  } = useSelector(getSavingStatuses);
+  const savingStatus = useSelector(getSavingStatus);
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
   } = useSelector(getProcessingNotification);
 
   const handleInternetConnectionFailed = () => {
-    dispatch(
-      updateSavingStatuses({
-        editContentGroupStatus: RequestStatus.FAILED,
-        createContentGroupStatus: RequestStatus.FAILED,
-        deleteContentGroupStatus: RequestStatus.FAILED,
-      }),
-    );
+    dispatch(updateSavingStatuses({ status: RequestStatus.FAILED }));
   };
 
   const groupConfigurationsActions = {
@@ -59,46 +49,21 @@ const useGroupConfigurations = (courseId) => {
       dispatch(deleteContentGroupQuery(courseId, parentGroupId, groupId));
     },
   };
-  const anyQueryIsSucceed = [
-    createContentGroupStatus,
-    editContentGroupStatus,
-    deleteContentGroupStatus,
-  ].includes(RequestStatus.SUCCESSFUL);
-  const anyQueryIsPending = [
-    createContentGroupStatus,
-    editContentGroupStatus,
-    deleteContentGroupStatus,
-  ].includes(RequestStatus.PENDING);
-  const anyQueryIsFailed = [
-    createContentGroupStatus,
-    editContentGroupStatus,
-    deleteContentGroupStatus,
-  ].includes(RequestStatus.FAILED);
 
   useEffect(() => {
-    if (anyQueryIsSucceed) {
+    if (savingStatus === RequestStatus.SUCCESSFUL) {
       dispatch(fetchGroupConfigurationsQuery(courseId));
-      dispatch(
-        updateSavingStatuses({
-          editContentGroupStatus: '',
-          createContentGroupStatus: '',
-          deleteContentGroupStatus: '',
-        }),
-      );
+      dispatch(updateSavingStatuses({ status: '' }));
     }
-  }, [
-    createContentGroupStatus,
-    editContentGroupStatus,
-    deleteContentGroupStatus,
-  ]);
+  }, [savingStatus]);
+
   useEffect(() => {
     dispatch(fetchGroupConfigurationsQuery(courseId));
   }, [courseId]);
 
   return {
-    anyQueryIsPending,
-    anyQueryIsFailed,
     isLoading: loadingStatus === RequestStatus.IN_PROGRESS,
+    savingStatus,
     groupConfigurationsActions,
     groupConfigurations,
     isShowProcessingNotification,

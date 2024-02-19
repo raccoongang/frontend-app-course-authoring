@@ -6,11 +6,7 @@ import { RequestStatus } from '../../data/constants';
 const slice = createSlice({
   name: 'groupConfigurations',
   initialState: {
-    savingStatuses: {
-      createContentGroupStatus: '',
-      editContentGroupStatus: '',
-      deleteContentGroupStatus: '',
-    },
+    savingStatus: '',
     loadingStatus: RequestStatus.IN_PROGRESS,
     groupConfigurations: {},
   },
@@ -22,7 +18,7 @@ const slice = createSlice({
       state.loadingStatus = payload.status;
     },
     updateSavingStatuses: (state, { payload }) => {
-      state.savingStatuses = { ...state.savingStatuses, ...payload };
+      state.savingStatus = payload.status;
     },
   },
 });
@@ -31,7 +27,6 @@ export const {
   fetchGroupConfigurations,
   updateLoadingStatus,
   updateSavingStatuses,
-  updateContentGroup,
 } = slice.actions;
 
 export const { reducer } = slice;

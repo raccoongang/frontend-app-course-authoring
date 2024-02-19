@@ -4,8 +4,10 @@ import { Button, useToggle } from '@edx/paragon';
 import { Add as AddIcon } from '@edx/paragon/icons';
 
 import GroupConfigurationContainer from '../group-configuration-container';
+import { availableGroupPropTypes } from '../constants';
 import ContentGroupContainer from './ContentGroupContainer';
 import EmptyPlaceholder from '../empty-placeholder';
+import { initialContentGroupObject } from './utils';
 import messages from './messages';
 
 const ContentGroupsSection = ({
@@ -17,21 +19,17 @@ const ContentGroupsSection = ({
   const { id: parentGroupId, groups, name } = availableGroup;
   const groupNames = groups?.map((group) => group.name);
 
-  const contentGroupObject = (groupName) => ({
-    name: groupName,
-    version: 1,
-    usage: [],
-  });
   const handleCreateNewGroup = (values) => {
     const updatedContentGroups = {
       ...availableGroup,
       groups: [
         ...availableGroup.groups,
-        contentGroupObject(values.newGroupName),
+        initialContentGroupObject(values.newGroupName),
       ],
     };
     groupConfigurationsActions.handleCreateContentGroup(updatedContentGroups, hideNewGroup);
   };
+
   const handleEditContentGroup = (id, { newGroupName }, callbackToClose) => {
     const updatedContentGroups = {
       ...availableGroup,
@@ -86,31 +84,7 @@ const ContentGroupsSection = ({
 };
 
 ContentGroupsSection.propTypes = {
-  availableGroup: PropTypes.shape({
-    active: PropTypes.bool,
-    description: PropTypes.string,
-    groups: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        usage: PropTypes.arrayOf(
-          PropTypes.shape({
-            label: PropTypes.string,
-            url: PropTypes.string,
-          }),
-        ),
-        version: PropTypes.number,
-      }),
-    ),
-    id: PropTypes.number,
-    name: PropTypes.string,
-    parameters: PropTypes.shape({
-      courseId: PropTypes.string,
-    }),
-    readOnly: PropTypes.bool,
-    scheme: PropTypes.string,
-    version: PropTypes.number,
-  }).isRequired,
+  availableGroup: PropTypes.shape(availableGroupPropTypes).isRequired,
   groupConfigurationsActions: PropTypes.shape({
     handleCreateContentGroup: PropTypes.func,
     handleDeleteContentGroup: PropTypes.func,

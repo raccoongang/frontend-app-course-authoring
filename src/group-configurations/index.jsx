@@ -4,6 +4,7 @@ import {
   Container, Layout, Stack, Row,
 } from '@edx/paragon';
 
+import { RequestStatus } from '../data/constants';
 import { LoadingSpinner } from '../generic/Loading';
 import { useModel } from '../generic/model-store';
 import SubHeader from '../generic/sub-header/SubHeader';
@@ -22,8 +23,7 @@ const GroupConfigurations = ({ courseId }) => {
   const courseDetails = useModel('courseDetails', courseId);
   const {
     isLoading,
-    anyQueryIsFailed,
-    anyQueryIsPending,
+    savingStatus,
     groupConfigurationsActions,
     processingNotificationTitle,
     isShowProcessingNotification,
@@ -99,8 +99,8 @@ const GroupConfigurations = ({ courseId }) => {
       </Layout>
       <div className="alert-toast">
         <InternetConnectionAlert
-          isFailed={anyQueryIsFailed}
-          isQueryPending={anyQueryIsPending}
+          isFailed={savingStatus === RequestStatus.FAILED}
+          isQueryPending={savingStatus === RequestStatus.PENDING}
           onInternetConnectionFailed={handleInternetConnectionFailed}
         />
         <ProcessingNotification

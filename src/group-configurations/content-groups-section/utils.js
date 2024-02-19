@@ -1,4 +1,9 @@
 const isAlreadyExistsGroup = (groupNames, group) => groupNames.some((name) => name === group);
 
-// eslint-disable-next-line import/prefer-default-export
-export { isAlreadyExistsGroup };
+const initialContentGroupObject = (groupName) => ({
+  name: groupName,
+  version: 1,
+  usage: [],
+});
+
+export { isAlreadyExistsGroup, initialContentGroupObject };

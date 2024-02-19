@@ -1,6 +1,6 @@
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import userEvent from '@testing-library/user-event';
-import { act, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import { contentGroupsMock } from '../__mocks__';
 import placeholderMessages from '../empty-placeholder/messages';
@@ -35,21 +35,17 @@ describe('<ContentGroupsSection />', () => {
 
   it('renders container with new group on create click if section is empty', async () => {
     const { getByRole, getByTestId } = renderComponent({ availableGroup: {} });
-    await act(async () => {
-      userEvent.click(
-        getByRole('button', { name: placeholderMessages.button.defaultMessage }),
-      );
-    });
+    userEvent.click(
+      getByRole('button', { name: placeholderMessages.button.defaultMessage }),
+    );
     expect(getByTestId('content-group-new')).toBeInTheDocument();
   });
 
   it('renders container with new group on create click if section has groups', async () => {
     const { getByRole, getByTestId } = renderComponent();
-    await act(async () => {
-      userEvent.click(
-        getByRole('button', { name: messages.addNewGroup.defaultMessage }),
-      );
-    });
+    userEvent.click(
+      getByRole('button', { name: messages.addNewGroup.defaultMessage }),
+    );
     expect(getByTestId('content-group-new')).toBeInTheDocument();
   });
 });

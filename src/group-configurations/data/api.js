@@ -6,11 +6,10 @@ const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
 
 export const getContentStoreApiUrl = (courseId) => `${getStudioBaseUrl()}/api/contentstore/v1/${API_PATH_PATTERN}/${courseId}`;
 export const getLegacyApiUrl = (courseId, parentGroupId, groupId) => {
-  const url = `${getStudioBaseUrl()}/${API_PATH_PATTERN}/${courseId}${
-    parentGroupId ? `/${parentGroupId}` : ''
-  }${groupId ? `/${groupId}` : ''}`;
-
-  return url;
+  const parentUrlPath = `${getStudioBaseUrl()}/${API_PATH_PATTERN}/${courseId}`;
+  const parentGroupPath = `${parentGroupId ? `/${parentGroupId}` : ''}`;
+  const groupPath = `${groupId ? `/${groupId}` : ''}`;
+  return `${parentUrlPath}${parentGroupPath}${groupPath}`;
 };
 
 /**

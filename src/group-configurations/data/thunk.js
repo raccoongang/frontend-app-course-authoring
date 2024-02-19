@@ -32,70 +32,52 @@ export function fetchGroupConfigurationsQuery(courseId) {
 
 export function createContentGroupQuery(courseId, group) {
   return async (dispatch) => {
-    dispatch(updateSavingStatuses({ createContentGroupStatus: RequestStatus.PENDING }));
+    dispatch(updateSavingStatuses({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
 
     try {
       await createContentGroup(courseId, group);
-      dispatch(hideProcessingNotification());
-      dispatch(
-        updateSavingStatuses({
-          createContentGroupStatus: RequestStatus.SUCCESSFUL,
-        }),
-      );
+      dispatch(updateSavingStatuses({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
-      dispatch(hideProcessingNotification());
-      dispatch(
-        updateSavingStatuses({ createContentGroupStatus: RequestStatus.FAILED }),
-      );
+      dispatch(updateSavingStatuses({ status: RequestStatus.FAILED }));
       return false;
+    } finally {
+      dispatch(hideProcessingNotification());
     }
   };
 }
 
 export function editContentGroupQuery(courseId, group) {
   return async (dispatch) => {
-    dispatch(updateSavingStatuses({ editContentGroupStatus: RequestStatus.PENDING }));
+    dispatch(updateSavingStatuses({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
 
     try {
       await editContentGroup(courseId, group);
-      dispatch(hideProcessingNotification());
-      dispatch(
-        updateSavingStatuses({
-          editContentGroupStatus: RequestStatus.SUCCESSFUL,
-        }),
-      );
+      dispatch(updateSavingStatuses({ status: RequestStatus.SUCCESSFUL }));
       return true;
     } catch (error) {
-      dispatch(hideProcessingNotification());
-      dispatch(
-        updateSavingStatuses({ editContentGroupStatus: RequestStatus.FAILED }),
-      );
+      dispatch(updateSavingStatuses({ status: RequestStatus.FAILED }));
       return false;
+    } finally {
+      dispatch(hideProcessingNotification());
     }
   };
 }
 
 export function deleteContentGroupQuery(courseId, parentGroupId, groupId) {
   return async (dispatch) => {
-    dispatch(updateSavingStatuses({ deleteContentGroupStatus: RequestStatus.PENDING }));
+    dispatch(updateSavingStatuses({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.deleting));
 
     try {
       await deleteContentGroup(courseId, parentGroupId, groupId);
-      dispatch(hideProcessingNotification());
-      dispatch(
-        updateSavingStatuses({
-          deleteContentGroupStatus: RequestStatus.SUCCESSFUL,
-        }),
-      );
+      dispatch(updateSavingStatuses({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
+      dispatch(updateSavingStatuses({ status: RequestStatus.FAILED }));
+    } finally {
       dispatch(hideProcessingNotification());
-      dispatch(
-        updateSavingStatuses({ deleteContentGroupStatus: RequestStatus.FAILED }),
-      );
     }
   };
 }

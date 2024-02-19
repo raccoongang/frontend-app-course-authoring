@@ -21,7 +21,7 @@ const UsageList = ({ className, itemList, isExperiment }) => {
           <Hyperlink
             className="small text-info-500"
             destination={formatUrlToUnitPage(url)}
-            key={url}
+            key={`${label} - ${url}`}
           >
             {label}
           </Hyperlink>
