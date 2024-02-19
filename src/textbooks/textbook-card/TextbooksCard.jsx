@@ -47,6 +47,11 @@ const TextbookCard = ({
     window.location.href = `${config.LMS_BASE_URL}/courses/${courseId}/pdfbook/${textbookIndex}/`;
   };
 
+  const handleDeleteButtonSubmit = (textbookId) => {
+    closeDeleteModal();
+    onDeleteSubmit(textbookId);
+  };
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL && currentTextbookId === id) {
       closeTextbookForm();
@@ -116,7 +121,7 @@ const TextbookCard = ({
         close={closeDeleteModal}
         title={intl.formatMessage(messages.deleteModalTitle, { textbookTitle: textbook.tabTitle })}
         description={intl.formatMessage(messages.deleteModalDescription)}
-        onDeleteSubmit={() => onDeleteSubmit(textbook.id)}
+        onDeleteSubmit={() => handleDeleteButtonSubmit(textbook.id)}
       />
     </>
   );
