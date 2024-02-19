@@ -20,6 +20,7 @@ import {
   handleCourseUnitVisibilityAndData,
   deleteUnitItem,
   duplicateUnitItem,
+  getXBlockEditIframeData,
   setXBlockOrderList,
 } from './api';
 import {
@@ -295,6 +296,24 @@ export function setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback)
       });
     } catch (error) {
       restoreCallback();
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function fetchXBlockModalQuery(xblockId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
+
+    try {
+      const modalData = await getXBlockEditIframeData(xblockId);
+      console.log('modalData', modalData);
+      // dispatch(deleteXBlock(xblockId));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
     } finally {
       dispatch(hideProcessingNotification());

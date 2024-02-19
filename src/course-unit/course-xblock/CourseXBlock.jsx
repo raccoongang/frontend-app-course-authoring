@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { getConfig } from '@edx/frontend-platform';
 import {
   ActionRow, Card, Dropdown, Icon, IconButton, useToggle,
 } from '@edx/paragon';
@@ -14,7 +15,7 @@ import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSor
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
-import { copyToClipboard } from '../data/thunk';
+import { copyToClipboard, fetchXBlockModalQuery } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import XBlockContent from './xblock-content/XBlockContent';
 import XBlockMessages from './xblock-messages/XBlockMessages';
@@ -26,6 +27,7 @@ const CourseXBlock = ({
   handleConfigureSubmit, validationMessages, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
+  const iframeElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
   const dispatch = useDispatch();
@@ -58,6 +60,9 @@ const CourseXBlock = ({
     case COMPONENT_ICON_TYPES.video:
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
+    case COMPONENT_ICON_TYPES.discussion:
+      dispatch(fetchXBlockModalQuery(id));
+      break;
     default:
     }
   };
@@ -75,6 +80,48 @@ const CourseXBlock = ({
 
   return (
     <div ref={courseXBlockElementRef} {...props}>
+      <div
+        className="TEST_IFRAME_WRAPPER d-none"
+        style={{
+          height: '400px',
+          boxSizing: 'content-box',
+          position: 'relative',
+          overflow: 'hidden',
+          minHeight: '200px',
+          margin: '24px',
+        }}
+      >
+        <iframe
+          key={1}
+          ref={iframeElementRef}
+          src={getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}
+          title="block"
+          frameBorder="0"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            minHeight: '200px',
+            border: '0 none',
+            backgroundColor: 'white',
+          }}
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          sandbox={[
+            'allow-forms',
+            'allow-modals',
+            'allow-popups',
+            'allow-popups-to-escape-sandbox',
+            'allow-presentation',
+            'allow-same-origin', // This is only secure IF the IFrame source
+            // is served from a completely different domain name
+            // e.g. labxchange-xblocks.net vs www.labxchange.org
+            'allow-scripts',
+            'allow-top-navigation-by-user-activation',
+          ].join(' ')}
+        />
+      </div>
       <Card as={ConditionalSortableElement} id={id} draggable className="mb-1">
         <Card.Header
           title={title}
