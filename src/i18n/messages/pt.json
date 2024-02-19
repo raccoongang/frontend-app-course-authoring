@@ -1194,5 +1194,17 @@
   "course-authoring.course-unit.paste-notification.has-errors.description": "The following required files could not be added to the course:",
   "course-authoring.course-unit.paste-notification.has-new-files.title": "New file(s) added to Files & Uploads.",
   "course-authoring.course-unit.paste-notification.has-new-files.description": "The following required files were imported to this course:",
-  "course-authoring.course-unit.paste-notification.has-new-files.button.text": "View files"
+  "course-authoring.course-unit.paste-notification.has-new-files.button.text": "View files",
+  "course-authoring.group-configurations.container.delete-modal.subtitle": "content group",
+  "course-authoring.group-configurations.container.delete-restriction": "Cannot delete when in use by a unit",
+  "course-authoring.group-configurations.content-groups.new-group.header": "Content group name *",
+  "course-authoring.group-configurations.content-groups.new-group.input.placeholder": "This is the name of the group",
+  "course-authoring.group-configurations.content-groups.new-group.invalid-message": "All groups must have a unique name.",
+  "course-authoring.group-configurations.content-groups.new-group.cancel": "Cancel",
+  "course-authoring.group-configurations.content-groups.edit-group.delete": "Delete",
+  "course-authoring.group-configurations.content-groups.new-group.create": "Create",
+  "course-authoring.group-configurations.content-groups.edit-group.save": "Save",
+  "course-authoring.group-configurations.content-groups.new-group.required-error": "Group name is required",
+  "": "Group name already exists",
+  "course-authoring.group-configurations.content-groups.edit-group.alert-group-in-usage": "This content group is used in one or more units."
 }

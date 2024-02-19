@@ -4,10 +4,13 @@ import {
   Container, Layout, Stack, Row,
 } from '@openedx/paragon';
 
+import { RequestStatus } from '../data/constants';
 import { LoadingSpinner } from '../generic/Loading';
 import { useModel } from '../generic/model-store';
 import SubHeader from '../generic/sub-header/SubHeader';
 import getPageHeadTitle from '../generic/utils';
+import ProcessingNotification from '../generic/processing-notification';
+import InternetConnectionAlert from '../generic/internet-connection-alert';
 import messages from './messages';
 import ContentGroupsSection from './content-groups-section';
 import ExperimentConfigurationsSection from './experiment-configurations-section';
@@ -20,12 +23,17 @@ const GroupConfigurations = ({ courseId }) => {
   const courseDetails = useModel('courseDetails', courseId);
   const {
     isLoading,
+    savingStatus,
+    groupConfigurationsActions,
+    processingNotificationTitle,
+    isShowProcessingNotification,
     groupConfigurations: {
       allGroupConfigurations,
       shouldShowEnrollmentTrack,
       shouldShowExperimentGroups,
       experimentGroupConfigurations,
     },
+    handleInternetConnectionFailed,
   } = useGroupConfigurations(courseId);
 
   document.title = getPageHeadTitle(
@@ -68,7 +76,10 @@ const GroupConfigurations = ({ courseId }) => {
               />
             )}
             {!!contentGroup && (
-              <ContentGroupsSection availableGroup={contentGroup} />
+              <ContentGroupsSection
+                availableGroup={contentGroup}
+                groupConfigurationsActions={groupConfigurationsActions}
+              />
             )}
             {shouldShowExperimentGroups && (
               <ExperimentConfigurationsSection
@@ -86,6 +97,17 @@ const GroupConfigurations = ({ courseId }) => {
           />
         </Layout.Element>
       </Layout>
+      <div className="alert-toast">
+        <InternetConnectionAlert
+          isFailed={savingStatus === RequestStatus.FAILED}
+          isQueryPending={savingStatus === RequestStatus.PENDING}
+          onInternetConnectionFailed={handleInternetConnectionFailed}
+        />
+        <ProcessingNotification
+          isShow={isShowProcessingNotification}
+          title={processingNotificationTitle}
+        />
+      </div>
     </Container>
   );
 };
