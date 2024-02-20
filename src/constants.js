@@ -67,3 +67,5 @@ export const CLIPBOARD_STATUS = {
 };
 
 export const STRUCTURAL_XBLOCK_TYPES = ['vertical', 'sequential', 'chapter', 'course'];
+
+export const UPLOAD_FILE_MAX_SIZE = 100 * 1024 * 1024; // 100mb
