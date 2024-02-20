@@ -2,11 +2,11 @@ import { shallow } from '@edx/react-unit-test-utils';
 import { render } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 
-import * as hooks from './hooks';
-import ContentIFrame from './ContentIFrame';
-import messages from './messages';
+import * as hooks from '../hooks';
+import messages from '../messages';
+import XBlockContent from './XBlockContent';
 
-jest.mock('./hooks', () => ({
+jest.mock('../hooks', () => ({
   useIFrameBehavior: jest.fn(),
 }));
 
@@ -30,12 +30,12 @@ const props = {
 
 const RootComponent = () => (
   <IntlProvider locale="en">
-    <ContentIFrame {...props} />
+    <XBlockContent {...props} />
   </IntlProvider>
 );
 
 let el;
-describe('ContentIFrame Component', () => {
+describe('<XBlockContent />', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

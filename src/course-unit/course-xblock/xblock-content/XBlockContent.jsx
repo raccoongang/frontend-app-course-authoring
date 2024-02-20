@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import { LoadingSpinner } from '../../generic/Loading';
-import AlertMessage from '../../generic/alert-message';
-import { IFRAME_FEATURE_POLICY } from './constants';
-import { useIFrameBehavior } from './hooks';
-import messages from './messages';
+import { LoadingSpinner } from '../../../generic/Loading';
+import AlertMessage from '../../../generic/alert-message';
+import { IFRAME_FEATURE_POLICY } from '../constants';
+import { useIFrameBehavior } from '../hooks';
+import messages from '../messages';
 
-const ContentIFrame = ({
+const XBlockContent = ({
   id,
   iframeUrl,
   elementId,
@@ -24,7 +24,7 @@ const ContentIFrame = ({
     elementId, id, iframeUrl, onLoaded,
   });
 
-  const contentIFrameProps = {
+  const iframeProps = {
     id: elementId,
     src: iframeUrl,
     allow: IFRAME_FEATURE_POLICY,
@@ -48,12 +48,12 @@ const ContentIFrame = ({
           </div>
         )
       )}
-      <iframe title={title} className="w-100" {...contentIFrameProps} />
+      <iframe title={title} className="w-100" {...iframeProps} />
     </div>
   );
 };
 
-ContentIFrame.propTypes = {
+XBlockContent.propTypes = {
   iframeUrl: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   elementId: PropTypes.string.isRequired,
@@ -61,8 +61,8 @@ ContentIFrame.propTypes = {
   title: PropTypes.node.isRequired,
 };
 
-ContentIFrame.defaultProps = {
+XBlockContent.defaultProps = {
   onLoaded: () => {},
 };
 
-export default ContentIFrame;
+export default XBlockContent;

@@ -310,4 +310,21 @@ describe('<CourseXBlock />', () => {
       expect(getByText(visibilityMessage)).toBeInTheDocument();
     });
   });
+
+  it('displays a visibility message if item has accessible restrictions', async () => {
+    const { getByText } = renderComponent(
+      {
+        userPartitionInfo: {
+          ...userPartitionInfoFormatted,
+          selectedGroupsLabel: 'Visibility group 1',
+        },
+      },
+    );
+
+    await waitFor(() => {
+      const visibilityMessage = messages.visibilityMessage.defaultMessage
+        .replace('{selectedGroupsLabel}', 'Visibility group 1');
+      expect(getByText(visibilityMessage)).toBeInTheDocument();
+    });
+  });
 });
