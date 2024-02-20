@@ -16,12 +16,14 @@ import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
 import { copyToClipboard } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
-import ContentIFrame from './ContentIFrame';
+import XBlockContent from './xblock-content/XBlockContent';
+import XBlockMessages from './xblock-messages/XBlockMessages';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
-  id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo, handleConfigureSubmit, ...props
+  id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
+  handleConfigureSubmit, validationMessages, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -32,6 +34,10 @@ const CourseXBlock = ({
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
+
+  const visibilityMessage = userPartitionInfo.selectedGroupsLabel
+    ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
+    : null;
 
   const currentItemData = {
     category: COURSE_BLOCK_NAMES.component.id,
@@ -72,6 +78,7 @@ const CourseXBlock = ({
       <Card as={ConditionalSortableElement} id={id} draggable className="mb-1">
         <Card.Header
           title={title}
+          subtitle={visibilityMessage}
           actions={(
             <ActionRow>
               <IconButton
@@ -124,7 +131,8 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          <ContentIFrame id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
+          <XBlockMessages validationMessages={validationMessages} />
+          <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
         </Card.Section>
       </Card>
     </div>
@@ -132,6 +140,7 @@ const CourseXBlock = ({
 };
 
 CourseXBlock.defaultProps = {
+  validationMessages: [],
   shouldScroll: false,
 };
 
@@ -140,6 +149,10 @@ CourseXBlock.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   shouldScroll: PropTypes.bool,
+  validationMessages: PropTypes.arrayOf(PropTypes.shape({
+    type: PropTypes.string,
+    text: PropTypes.string,
+  })),
   unitXBlockActions: PropTypes.shape({
     handleDelete: PropTypes.func,
     handleDuplicate: PropTypes.func,
