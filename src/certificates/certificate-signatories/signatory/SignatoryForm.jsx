@@ -72,8 +72,8 @@ const SignatoryForm = ({
   ];
 
   return (
-    <div className="bg-light-200 p-2.5 signatory" data-testid="signatory-form">
-      <Stack className="justify-content-between mb-3" direction="horizontal">
+    <div className="bg-light-200 p-2.5 signatory-form" data-testid="signatory-form">
+      <Stack className="justify-content-between mb-4" direction="horizontal">
         <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${index + 1}`}</h3>
         <Stack direction="horizontal" gap="2">
           {showDeleteButton && (
@@ -93,8 +93,8 @@ const SignatoryForm = ({
           <Form.Group className="m-0" key={labelText}>
             <FormLabel>{labelText}</FormLabel>
             <Form.Control {...rest} className="m-0" />
-            <Form.Control.Feedback className="x-small">
-              {feedback}
+            <Form.Control.Feedback>
+              <span className="x-small">{feedback}</span>
             </Form.Control.Feedback>
           </Form.Group>
         ))}
@@ -116,8 +116,8 @@ const SignatoryForm = ({
                 name={`signatories[${index}].signatureImagePath`}
                 placeholder={intl.formatMessage(messages.imagePlaceholder)}
               />
-              <Form.Control.Feedback className="x-small">
-                {intl.formatMessage(messages.imageDescription)}
+              <Form.Control.Feedback>
+                <span className="x-small">{intl.formatMessage(messages.imageDescription)}</span>
               </Form.Control.Feedback>
             </Stack>
             <Button onClick={open}>{intl.formatMessage(messages.uploadImageButton)}</Button>
@@ -145,6 +145,7 @@ const SignatoryForm = ({
         onChange={handleImageUpload}
         fileTypes={['png']}
         onSavingStatus={handleSavingStatusDispatch}
+        imageHelpText={intl.formatMessage(messages.imageDescription)}
         modalTitle={intl.formatMessage(messages.uploadImageButton)}
       />
       <ModalNotification
