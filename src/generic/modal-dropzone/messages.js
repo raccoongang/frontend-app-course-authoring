@@ -9,10 +9,6 @@ const messages = defineMessages({
     id: 'course-authoring.certificates.modal-dropzone.dropzone-alt',
     defaultMessage: 'Uploaded image for course certificate',
   },
-  uploadImageHelpText: {
-    id: 'course-authoring.certificates.modal-dropzone.help-text',
-    defaultMessage: 'Image must be in png format',
-  },
   uploadImageValidationText: {
     id: 'course-authoring.certificates.modal-dropzone.validation.text',
     defaultMessage: 'Only {types} files can be uploaded. Please select a file ending in {extensions} to upload.',
