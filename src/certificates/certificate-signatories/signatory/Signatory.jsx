@@ -23,35 +23,33 @@ const Signatory = ({
 
   return (
     <div className="bg-light-200 p-2.5 signatory" data-testid="signatory">
-      <Stack className="justify-content-between mb-3" direction="horizontal">
-        <h3 className="section-title">{`${intl.formatMessage(messages.signatoryTitle)} ${index + 1}`}</h3>
-        <Stack direction="horizontal" gap="2">
-          <IconButtonWithTooltip
-            src={EditOutlineIcon}
-            iconAs={Icon}
-            alt={intl.formatMessage(commonMessages.editTooltip)}
-            tooltipContent={<div>{intl.formatMessage(commonMessages.editTooltip)}</div>}
-            onClick={handleEdit}
-          />
-        </Stack>
-      </Stack>
-      <Stack direction="horizontal" gap="2" className="signatory__fields-container" data-testid="signatory-view">
+      <Stack className="signatory__header" gap={3}>
+        <h3 className="section-title m-0">{`${intl.formatMessage(messages.signatoryTitle)} ${index + 1}`}</h3>
         <Stack className="signatory__text-fields-stack">
           <p className="signatory__text"><b>{intl.formatMessage(messages.nameLabel)}</b> {name}</p>
           <p className="signatory__text"><b>{intl.formatMessage(messages.titleLabel)}</b> {title}</p>
           <p className="signatory__text"><b>{intl.formatMessage(messages.organizationLabel)}</b> {organization}</p>
         </Stack>
-        <div className="signatory__image-container">
-          {signatureImagePath && (
-            <Image
-              src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
-              fluid
-              alt={intl.formatMessage(messages.imageLabel)}
-              className="signatory__image"
-            />
-          )}
-        </div>
       </Stack>
+
+      <IconButtonWithTooltip
+        className="signatory__action-button"
+        src={EditOutlineIcon}
+        iconAs={Icon}
+        alt={intl.formatMessage(commonMessages.editTooltip)}
+        tooltipContent={<div>{intl.formatMessage(commonMessages.editTooltip)}</div>}
+        onClick={handleEdit}
+      />
+      <div className="signatory__image-container">
+        {signatureImagePath && (
+          <Image
+            src={`${getConfig().STUDIO_BASE_URL}${signatureImagePath}`}
+            fluid
+            alt={intl.formatMessage(messages.imageLabel)}
+            className="signatory__image"
+          />
+        )}
+      </div>
     </div>
   );
 };
