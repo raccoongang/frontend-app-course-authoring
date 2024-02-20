@@ -35,6 +35,7 @@ const {
   block_type: type,
   user_partition_info: userPartitionInfo,
 } = courseVerticalChildrenMock.children[0];
+const userPartitionInfoFormatted = camelCaseObject(userPartitionInfo);
 const unitXBlockActionsMock = {
   handleDelete: handleDeleteMock,
   handleDuplicate: handleDuplicateMock,
@@ -59,7 +60,7 @@ const renderComponent = (props) => render(
         type={type}
         blockId={blockId}
         unitXBlockActions={unitXBlockActionsMock}
-        userPartitionInfo={camelCaseObject(userPartitionInfo)}
+        userPartitionInfo={userPartitionInfoFormatted}
         shouldScroll={false}
         handleConfigureSubmit={handleConfigureSubmitMock}
         {...props}
@@ -211,8 +212,8 @@ describe('<CourseXBlock />', () => {
         findByTestId,
         getByRole,
       } = renderComponent();
-      const accessGroupName1 = userPartitionInfo.selectable_partitions[0].groups[0].name;
-      const accessGroupName2 = userPartitionInfo.selectable_partitions[0].groups[1].name;
+      const accessGroupName1 = userPartitionInfoFormatted.selectablePartitions[0].groups[0].name;
+      const accessGroupName2 = userPartitionInfoFormatted.selectablePartitions[0].groups[1].name;
 
       userEvent.click(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage));
       const accessBtn = getByText(messages.blockLabelButtonManageAccess.defaultMessage);
@@ -229,7 +230,7 @@ describe('<CourseXBlock />', () => {
       userEvent.selectOptions(restrictAccessSelect, '0');
 
       // eslint-disable-next-line array-callback-return
-      userPartitionInfo.selectable_partitions[0].groups.map((group) => {
+      userPartitionInfoFormatted.selectablePartitions[0].groups.map((group) => {
         expect(within(configureModal).getByRole('checkbox', { name: group.name })).not.toBeChecked();
         expect(within(configureModal).queryByText(group.name)).toBeInTheDocument();
       });
@@ -295,14 +296,13 @@ describe('<CourseXBlock />', () => {
     const { getByText } = renderComponent(
       {
         userPartitionInfo: {
-          ...camelCaseObject(userPartitionInfo),
+          ...userPartitionInfoFormatted,
           selectedGroupsLabel: 'Visibility group 1',
         },
       },
     );
 
     await waitFor(() => {
-      // userEvent.click(duplicateBtn);
       const visibilityMessage = messages.visibilityMessage.defaultMessage
         .replace('{selectedGroupsLabel}', 'Visibility group 1');
       expect(getByText(visibilityMessage)).toBeInTheDocument();

@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import XBlockMessages from './XBlockMessages';
+
 import messages from '../messages';
+import XBlockMessages from './XBlockMessages';
 
 const renderComponent = (props) => render(
   <IntlProvider locale="en">
@@ -13,7 +13,7 @@ const renderComponent = (props) => render(
   </IntlProvider>,
 );
 
-describe('XBlockMessages Component', () => {
+describe('<XBlockMessages />', () => {
   it('renders without errors', () => {
     renderComponent({ validationMessages: [] });
   });
@@ -26,6 +26,7 @@ describe('XBlockMessages Component', () => {
   it('renders a warning Alert when there are warning errors', () => {
     const validationMessages = [{ type: 'warning', text: 'This is a warning' }];
     const { getByText } = renderComponent({ validationMessages });
+
     expect(getByText('This is a warning')).toBeInTheDocument();
     expect(getByText(messages.validationSummary.defaultMessage)).toBeInTheDocument();
   });
@@ -33,6 +34,7 @@ describe('XBlockMessages Component', () => {
   it('renders a danger Alert when there are danger errors', () => {
     const validationMessages = [{ type: 'danger', text: 'This is a danger' }];
     const { getByText } = renderComponent({ validationMessages });
+
     expect(getByText('This is a danger')).toBeInTheDocument();
     expect(getByText(messages.validationSummary.defaultMessage)).toBeInTheDocument();
   });

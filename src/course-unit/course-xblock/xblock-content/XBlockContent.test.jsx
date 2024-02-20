@@ -35,7 +35,7 @@ const RootComponent = () => (
 );
 
 let el;
-describe('XBlockContent Component', () => {
+describe('<XBlockContent />', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

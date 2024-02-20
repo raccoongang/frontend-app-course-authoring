@@ -3,7 +3,7 @@ import { getMessagesBlockType } from './utils';
 
 describe('xblock-messages utils', () => {
   describe('getMessagesBlockType', () => {
-    test('returns "warning" when there are no error messages', () => {
+    it('returns "warning" when there are no error messages', () => {
       const messages = [
         { type: MESSAGE_ERROR_TYPES.warning, text: 'This is a warning' },
         { type: MESSAGE_ERROR_TYPES.warning, text: 'Another warning' },
@@ -13,7 +13,7 @@ describe('xblock-messages utils', () => {
       expect(result).toBe(MESSAGE_ERROR_TYPES.warning);
     });
 
-    test('returns "error" when there is at least one error message', () => {
+    it('returns "error" when there is at least one error message', () => {
       const messages = [
         { type: MESSAGE_ERROR_TYPES.warning, text: 'This is a warning' },
         { type: MESSAGE_ERROR_TYPES.error, text: 'This is an error' },
@@ -24,7 +24,7 @@ describe('xblock-messages utils', () => {
       expect(result).toBe(MESSAGE_ERROR_TYPES.error);
     });
 
-    test('returns "error" when there are only error messages', () => {
+    it('returns "error" when there are only error messages', () => {
       const messages = [
         { type: MESSAGE_ERROR_TYPES.error, text: 'This is an error' },
         { type: MESSAGE_ERROR_TYPES.error, text: 'Another error' },
@@ -34,7 +34,7 @@ describe('xblock-messages utils', () => {
       expect(result).toBe(MESSAGE_ERROR_TYPES.error);
     });
 
-    test('returns "warning" when there are no messages', () => {
+    it('returns "warning" when there are no messages', () => {
       const messages = [];
       const result = getMessagesBlockType(messages);
 

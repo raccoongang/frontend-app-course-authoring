@@ -10,6 +10,9 @@ import { getMessagesBlockType } from './utils';
 const XBlockMessages = ({ validationMessages }) => {
   const intl = useIntl();
   const type = getMessagesBlockType(validationMessages);
+  const { warning } = MESSAGE_ERROR_TYPES;
+  const alertVariant = type === warning ? 'warning' : 'danger';
+  const alertIcon = type === warning ? WarningIcon : InfoIcon;
 
   if (!validationMessages.length) {
     return null;
@@ -17,8 +20,8 @@ const XBlockMessages = ({ validationMessages }) => {
 
   return (
     <Alert
-      variant={type === MESSAGE_ERROR_TYPES.warning ? 'warning' : 'danger'}
-      icon={type === MESSAGE_ERROR_TYPES.warning ? WarningIcon : InfoIcon}
+      variant={alertVariant}
+      icon={alertIcon}
     >
       <Alert.Heading>
         {intl.formatMessage(messages.validationSummary)}
