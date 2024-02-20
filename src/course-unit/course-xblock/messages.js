@@ -54,6 +54,14 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.iframe.error.text',
     defaultMessage: 'Unit iframe failed to load. Server possibly returned 4xx or 5xx response.',
   },
+  visibilityMessage: {
+    id: 'course-authoring.course-unit.xblock.visibility.message',
+    defaultMessage: 'Access restricted to: {selectedGroupsLabel}',
+  },
+  validationSummary: {
+    id: 'course-authoring.course-unit.xblock.validation.summary',
+    defaultMessage: 'This component has validation issues.',
+  },
 });
 
 export default messages;

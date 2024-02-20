@@ -17,7 +17,8 @@ import { COURSE_BLOCK_NAMES } from '../../constants';
 import { copyToClipboard } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
-import ContentIFrame from './ContentIFrame';
+import XBlockContent from './xblock-content/XBlockContent';
+import XBlockMessages from './xblock-messages/XBlockMessages';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
 
@@ -131,7 +132,8 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          <ContentIFrame id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
+          <XBlockMessages validationMessages={validationMessages} />
+          <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
         </Card.Section>
       </Card>
     </div>

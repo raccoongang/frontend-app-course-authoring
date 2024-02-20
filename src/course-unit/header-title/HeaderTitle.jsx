@@ -50,7 +50,7 @@ const HeaderTitle = ({
 
   return (
     <>
-      <div className="d-flex align-items-center lead" data-testid="unit-header-title">
+      <div className="d-flex align-items-center lead">
         {isTitleEditFormOpen ? (
           <Form.Group className="m-0">
             <Form.Control
