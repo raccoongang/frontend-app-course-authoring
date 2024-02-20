@@ -27,6 +27,7 @@ const ModalDropzone = ({
   onCancel,
   onChange,
   onSavingStatus,
+  maxSize,
 }) => {
   const {
     intl,
@@ -94,6 +95,7 @@ const ModalDropzone = ({
                   inputComponent={inputComponent}
                   accept={accept}
                   validator={imageValidator}
+                  maxSize={maxSize}
                 />
               )}
             </Card.Body>
@@ -118,6 +120,7 @@ ModalDropzone.defaultProps = {
   imageHelpText: '',
   previewComponent: null,
   imageDropzoneText: '',
+  maxSize: Infinity,
 };
 
 ModalDropzone.propTypes = {
@@ -131,6 +134,7 @@ ModalDropzone.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSavingStatus: PropTypes.func.isRequired,
+  maxSize: PropTypes.number,
 };
 
 export default ModalDropzone;
