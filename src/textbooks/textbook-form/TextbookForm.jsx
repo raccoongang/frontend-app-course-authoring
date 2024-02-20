@@ -21,9 +21,9 @@ import FormikControl from '../../generic/FormikControl';
 import PromptIfDirty from '../../generic/PromptIfDirty';
 import ModalDropzone from '../../generic/modal-dropzone/ModalDropzone';
 import { useModel } from '../../generic/model-store';
+import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 import textbookFormValidationSchema from './validations';
 import messages from './messages';
-import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 
 const TextbookForm = ({
   closeTextbookForm,

@@ -1,8 +1,7 @@
-@import "./scss/variables";
 @import "./empty-placeholder/EmptyPlaceholder";
 @import "./textbook-card/TextbookCard";
 @import "./textbook-form/TextbookForm";
 
 .alert-toast {
-  z-index: $popover !important;
+  z-index: $zindex-tooltip !important;
 }
