@@ -43,13 +43,14 @@ const TextbookCard = ({
 
   const { tabTitle, chapters, id } = textbook;
 
+  const handleDeleteButtonSubmit = () => {
   const onPreviewTextbookClick = () => {
     window.location.href = `${config.LMS_BASE_URL}/courses/${courseId}/pdfbook/${textbookIndex}/`;
   };
 
   const handleDeleteButtonSubmit = (textbookId) => {
     closeDeleteModal();
-    onDeleteSubmit(textbookId);
+    onDeleteSubmit(id);
   };
 
   useEffect(() => {
@@ -121,7 +122,7 @@ const TextbookCard = ({
         close={closeDeleteModal}
         title={intl.formatMessage(messages.deleteModalTitle, { textbookTitle: textbook.tabTitle })}
         description={intl.formatMessage(messages.deleteModalDescription)}
-        onDeleteSubmit={() => handleDeleteButtonSubmit(textbook.id)}
+        onDeleteSubmit={handleDeleteButtonSubmit}
       />
     </>
   );
