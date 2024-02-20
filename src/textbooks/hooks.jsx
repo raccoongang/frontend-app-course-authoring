@@ -4,7 +4,7 @@ import { AppContext } from '@edx/frontend-platform/react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useToggle } from '@edx/paragon';
 
-import { updateSavingStatus } from '../certificates/data/slice';
+import { updateSavingStatus } from './data/slice';
 import { RequestStatus } from '../data/constants';
 import {
   getTextbooksData,
