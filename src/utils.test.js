@@ -1,6 +1,6 @@
 import { getConfig, getPath } from '@edx/frontend-platform';
 
-import { getFileSizeToClosestByte, createCorrectInternalRoute } from './utils';
+import { getFileSizeToClosestByte, createCorrectInternalRoute, deepSortObject } from './utils';
 
 jest.mock('@edx/frontend-platform', () => ({
   getConfig: jest.fn(),
@@ -75,6 +75,74 @@ describe('FilesAndUploads utils', () => {
       const result = createCorrectInternalRoute(checkPath);
 
       expect(result).toBe('/course-authoring/some/path');
+    });
+  });
+  describe('deepSortObject', () => {
+    it('should deep sort an object with nested properties', () => {
+      const unsortedObject = {
+        z: 1,
+        b: {
+          c: 3,
+          a: 2,
+        },
+        d: [4, 1, 3, 2],
+        e: 'hello',
+      };
+
+      const sortedObject = deepSortObject(unsortedObject);
+
+      const expectedSortedObject = {
+        b: {
+          a: 2,
+          c: 3,
+        },
+        d: [1, 2, 3, 4],
+        e: 'hello',
+        z: 1,
+      };
+
+      expect(sortedObject).toEqual(expectedSortedObject);
+    });
+    it('should handle arrays and other types correctly', () => {
+      const unsortedObject = {
+        z: 1,
+        b: {
+          c: 3,
+          a: 2,
+        },
+        d: [4, 1, 3, 2],
+        e: 'hello',
+        f: true,
+      };
+
+      const sortedObject = deepSortObject(unsortedObject);
+
+      const expectedSortedObject = {
+        b: {
+          a: 2,
+          c: 3,
+        },
+        d: [1, 2, 3, 4],
+        e: 'hello',
+        f: true,
+        z: 1,
+      };
+
+      expect(sortedObject).toEqual(expectedSortedObject);
+    });
+    it('should not modify the original object', () => {
+      const unsortedObject = {
+        z: 1,
+        b: {
+          c: 3,
+          a: 2,
+        },
+        d: [4, 1, 3, 2],
+        e: 'hello',
+      };
+      const sortedObject = deepSortObject(unsortedObject);
+
+      expect(sortedObject).not.toBe(unsortedObject);
     });
   });
 });
