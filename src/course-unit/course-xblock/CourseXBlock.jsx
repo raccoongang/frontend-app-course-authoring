@@ -37,7 +37,7 @@ const CourseXBlock = ({
     category: COURSE_BLOCK_NAMES.component.id,
     displayName: title,
     userPartitionInfo,
-    showCorrectness: 'never',
+    showCorrectness: 'always',
   };
 
   const onDeleteSubmit = () => {
