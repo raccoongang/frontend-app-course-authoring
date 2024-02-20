@@ -1024,6 +1024,7 @@ describe('<CourseUnit />', () => {
               name: 'Copy XBlock',
               block_id: '1234567890',
               block_type: 'drag-and-drop-v2',
+              user_partition_info: {},
             },
           ],
         });

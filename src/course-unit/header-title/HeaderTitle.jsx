@@ -25,9 +25,22 @@ const HeaderTitle = ({
   const [titleValue, setTitleValue] = useState(unitTitle);
   const currentItemData = useSelector(getCourseUnitData);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
+  const { selectedPartitionIndex, selectedGroupsLabel } = currentItemData.userPartitionInfo;
 
   const onConfigureSubmit = (...arg) => {
     handleConfigureSubmit(currentItemData.id, ...arg, closeConfigureModal);
+  };
+
+  const getVisibilityMessage = () => {
+    let message;
+
+    if (selectedPartitionIndex !== -1 && !Number.isNaN(selectedPartitionIndex) && selectedGroupsLabel) {
+      message = intl.formatMessage(messages.definedVisibilityMessage, { selectedGroupsLabel });
+    } else if (currentItemData.hasPartitionGroupComponents) {
+      message = intl.formatMessage(messages.commonVisibilityMessage);
+    }
+
+    return message ? (<p className="small mb-0">{message}</p>) : null;
   };
 
   useEffect(() => {
@@ -36,43 +49,46 @@ const HeaderTitle = ({
   }, [unitTitle]);
 
   return (
-    <div className="d-flex align-items-center lead">
-      {isTitleEditFormOpen ? (
-        <Form.Group className="m-0">
-          <Form.Control
-            ref={(e) => e && e.focus()}
-            value={titleValue}
-            name="displayName"
-            onChange={(e) => setTitleValue(e.target.value)}
-            aria-label={intl.formatMessage(messages.ariaLabelButtonEdit)}
-            onBlur={() => handleTitleEditSubmit(titleValue)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleTitleEditSubmit(titleValue);
-              }
-            }}
-          />
-        </Form.Group>
-      ) : unitTitle}
-      <IconButton
-        alt={intl.formatMessage(messages.altButtonEdit)}
-        className="ml-1 flex-shrink-0"
-        iconAs={EditIcon}
-        onClick={handleTitleEdit}
-      />
-      <IconButton
-        alt={intl.formatMessage(messages.altButtonSettings)}
-        className="flex-shrink-0"
-        iconAs={SettingsIcon}
-        onClick={openConfigureModal}
-      />
-      <ConfigureModal
-        isOpen={isConfigureModalOpen}
-        onClose={closeConfigureModal}
-        onConfigureSubmit={onConfigureSubmit}
-        currentItemData={currentItemData}
-      />
-    </div>
+    <>
+      <div className="d-flex align-items-center lead">
+        {isTitleEditFormOpen ? (
+          <Form.Group className="m-0">
+            <Form.Control
+              ref={(e) => e && e.focus()}
+              value={titleValue}
+              name="displayName"
+              onChange={(e) => setTitleValue(e.target.value)}
+              aria-label={intl.formatMessage(messages.ariaLabelButtonEdit)}
+              onBlur={() => handleTitleEditSubmit(titleValue)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleTitleEditSubmit(titleValue);
+                }
+              }}
+            />
+          </Form.Group>
+        ) : unitTitle}
+        <IconButton
+          alt={intl.formatMessage(messages.altButtonEdit)}
+          className="ml-1 flex-shrink-0"
+          iconAs={EditIcon}
+          onClick={handleTitleEdit}
+        />
+        <IconButton
+          alt={intl.formatMessage(messages.altButtonSettings)}
+          className="flex-shrink-0"
+          iconAs={SettingsIcon}
+          onClick={openConfigureModal}
+        />
+        <ConfigureModal
+          isOpen={isConfigureModalOpen}
+          onClose={closeConfigureModal}
+          onConfigureSubmit={onConfigureSubmit}
+          currentItemData={currentItemData}
+        />
+      </div>
+      {getVisibilityMessage()}
+    </>
   );
 };
 
