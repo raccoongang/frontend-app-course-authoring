@@ -7,3 +7,8 @@ export const MESSAGE_TYPES = {
 export const IFRAME_FEATURE_POLICY = (
   'microphone *; camera *; midi *; geolocation *; encrypted-media *, clipboard-write *'
 );
+
+export const MESSAGE_ERROR_TYPES = {
+  error: 'error',
+  warning: 'warning',
+};
