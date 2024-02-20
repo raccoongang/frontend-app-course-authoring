@@ -43,12 +43,11 @@ const TextbookCard = ({
 
   const { tabTitle, chapters, id } = textbook;
 
-  const handleDeleteButtonSubmit = () => {
   const onPreviewTextbookClick = () => {
     window.location.href = `${config.LMS_BASE_URL}/courses/${courseId}/pdfbook/${textbookIndex}/`;
   };
 
-  const handleDeleteButtonSubmit = (textbookId) => {
+  const handleDeleteButtonSubmit = () => {
     closeDeleteModal();
     onDeleteSubmit(id);
   };
