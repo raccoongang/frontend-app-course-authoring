@@ -89,7 +89,7 @@ const Textbooks = ({ courseId }) => {
               <article>
                 <section className="textbook-section">
                   <div className="pt-4">
-                    {textbooks.length ? textbooks.map((textbook) => (
+                    {textbooks.length ? textbooks.map((textbook, index) => (
                       <TextbookCard
                         key={textbook.id}
                         textbook={textbook}
@@ -97,6 +97,7 @@ const Textbooks = ({ courseId }) => {
                         handleSavingStatusDispatch={handleSavingStatusDispatch}
                         onEditSubmit={handleTextbookEditFormSubmit}
                         onDeleteSubmit={handleTextbookDeleteSubmit}
+                        textbookIndex={index}
                       />
                     )) : (
                       !isTextbookFormOpen && <EmptyPlaceholder onCreateNewTextbook={openTextbookForm} />
