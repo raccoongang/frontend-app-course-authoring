@@ -5,11 +5,11 @@ const CertificateSection = ({
   title, actions, children, ...rest
 }) => (
   <section {...rest}>
-    <Stack className="justify-content-between" direction="horizontal">
-      <h2 className="lead section-title">{title}</h2>
+    <Stack className="justify-content-between mb-2.5" direction="horizontal">
+      <h2 className="lead section-title mb-0">{title}</h2>
       {actions && actions}
     </Stack>
-    <hr />
+    <hr className="mt-0 mb-4" />
     <div>
       {children}
     </div>

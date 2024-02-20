@@ -75,8 +75,8 @@ const CertificateSignatories = ({
             <Button variant="outline-primary" onClick={handleAddSignatory} className="w-100 mt-4">
               {intl.formatMessage(messages.addSignatoryButton)}
             </Button>
-            <Form.Control.Feedback className="x-small">
-              {intl.formatMessage(messages.addSignatoryButtonDescription)}
+            <Form.Control.Feedback>
+              <span className="x-small">{intl.formatMessage(messages.addSignatoryButtonDescription)}</span>
             </Form.Control.Feedback>
           </>
         )}

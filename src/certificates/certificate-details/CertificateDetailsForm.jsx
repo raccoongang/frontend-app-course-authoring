@@ -34,8 +34,8 @@ const CertificateDetailsForm = ({
               onBlur={handleBlur}
               placeholder={intl.formatMessage(messages.detailsCourseTitleOverride)}
             />
-            <Form.Control.Feedback className="x-small">
-              {intl.formatMessage(messages.detailsCourseTitleOverrideDescription)}
+            <Form.Control.Feedback>
+              <span className="x-small">{intl.formatMessage(messages.detailsCourseTitleOverrideDescription)}</span>
             </Form.Control.Feedback>
           </Form.Group>
         </Stack>

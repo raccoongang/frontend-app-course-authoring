@@ -1047,7 +1047,6 @@
   "course-authoring.certificates.signatories.confirm-modal.message": "This action cannot be undone.",
   "course-authoring.certificates.modal-dropzone.text": "Drag and drop your image here or click to upload",
   "course-authoring.certificates.modal-dropzone.dropzone-alt": "Uploaded image for course certificate",
-  "course-authoring.certificates.modal-dropzone.help-text": "Image must be in png format",
   "course-authoring.certificates.modal-dropzone.validation.text": "Only {types} files can be uploaded. Please select a file ending in {extensions} to upload.",
   "course-authoring.certificates.modal-dropzone.image.button": "Upload signature image",
   "course-authoring.certificates.modal-dropzone.cancel.modal": "Cancel",
