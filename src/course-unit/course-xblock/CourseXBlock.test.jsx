@@ -196,8 +196,7 @@ describe('<CourseXBlock />', () => {
       expect(handleConfigureSubmitMock).not.toHaveBeenCalled();
     });
 
-    // ToDo: fix text due to changes generic/configure-modal/ConfigureModal.jsx
-    it.skip('handles submit restrict access data when save button is clicked', async () => {
+    it('handles submit restrict access data when save button is clicked', async () => {
       axiosMock
         .onPost(getXBlockBaseApiUrl(id), {
           publish: PUBLISH_TYPES.republish,
@@ -243,7 +242,9 @@ describe('<CourseXBlock />', () => {
       });
       expect(saveModalBtnText).toBeInTheDocument();
       userEvent.click(saveModalBtnText);
-      expect(handleConfigureSubmitMock).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(handleConfigureSubmitMock).toHaveBeenCalledTimes(1);
+      });
     });
   });
 
