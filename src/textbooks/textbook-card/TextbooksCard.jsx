@@ -75,21 +75,21 @@ const TextbookCard = ({
                     src={ViewIcon}
                     iconAs={Icon}
                     data-testid="textbook-view-button"
-                    onClick={() => onPreviewTextbookClick()}
+                    onClick={onPreviewTextbookClick}
                   />
                   <IconButtonWithTooltip
                     tooltipContent={intl.formatMessage(messages.buttonEdit)}
                     src={EditIcon}
                     iconAs={Icon}
                     data-testid="textbook-edit-button"
-                    onClick={() => openTextbookForm()}
+                    onClick={openTextbookForm}
                   />
                   <IconButtonWithTooltip
                     tooltipContent={intl.formatMessage(messages.buttonDelete)}
                     src={DeleteIcon}
                     iconAs={Icon}
                     data-testid="textbook-delete-button"
-                    onClick={() => openDeleteModal()}
+                    onClick={openDeleteModal}
                   />
                 </ActionRow>
               )}
