@@ -28,16 +28,33 @@
   }
 
   .signatory {
+    position: relative;
+    display: flex;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      height: 2.75rem;
+    }
+
+    .signatory__header {
+      justify-content: space-between;
+      flex: 1;
+      max-width: 18.75rem;
+    }
+
+    .signatory__action-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: .75rem;
+    }
+
     .signatory__fields-container {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       flex-wrap: wrap;
-    }
-
-    .signatory__text-fields-stack {
-      flex: 1;
-      max-width: 18.75rem;
     }
 
     .signatory__text {
@@ -46,26 +63,24 @@
       text-overflow: ellipsis;
     }
 
-    .signatory__image {
-      display: flex;
-      margin: .625rem auto;
-      max-width: 23.5rem;
-      width: 100%;
-    }
-
     .signatory__image-container {
       flex: 2;
       max-width: 18.75rem;
       margin: auto;
     }
 
-    @media (max-width: map-get($grid-breakpoints, "lg")) {
-      .signatory__fields-container {
-        flex-direction: column;
-        align-items: center;
-      }
+    .signatory__image {
+      margin: 0;
+    }
+  }
 
-      .signatory__text-fields-stack {
+  @media (max-width: map-get($grid-breakpoints, "xl")) {
+    .signatory {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .signatory__header {
         max-width: none;
       }
 
@@ -75,8 +90,16 @@
 
       .signatory__image-container {
         max-width: none;
+        margin-top: 1.25rem;
       }
     }
+  }
+
+  .signatory__image {
+    display: flex;
+    margin: .625rem auto;
+    max-width: 23.5rem;
+    width: 100%;
   }
 
   .certificates-card-form {

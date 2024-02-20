@@ -64,7 +64,7 @@ const ModalDropzone = ({
         className="mb-3"
       />
       <p>{imageDropzoneText || intl.formatMessage(messages.uploadImageDropzoneText)}</p>
-      <p className="x-small text-center mt-1.5">{imageHelpText || intl.formatMessage(messages.uploadImageHelpText)}</p>
+      <p className="x-small text-center mt-1.5">{imageHelpText}</p>
     </>
   );
 
