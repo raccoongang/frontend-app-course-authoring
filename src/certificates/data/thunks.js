@@ -18,7 +18,6 @@ import {
   createCertificateSuccess,
   updateCertificateSuccess,
   deleteCertificateSuccess,
-
 } from './slice';
 import { ACTIVATION_MESSAGES } from './constants';
 
@@ -66,9 +65,9 @@ export function updateCourseCertificate(courseId, certificate) {
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.saving));
 
     try {
-      await updateCertificate(courseId, certificate);
+      const certificatesValues = await updateCertificate(courseId, certificate);
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-      dispatch(fetchCertificates(courseId));
+      dispatch(updateCertificateSuccess(certificatesValues));
       return true;
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
@@ -107,8 +106,7 @@ export function updateCertificateActiveStatus(courseId, path, activationStatus) 
     ));
 
     try {
-      const certificateValues = await updateActiveStatus(path, activationStatus);
-      dispatch(updateCertificateSuccess(certificateValues));
+      await updateActiveStatus(path, activationStatus);
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
       dispatch(fetchCertificates(courseId));
       return true;
