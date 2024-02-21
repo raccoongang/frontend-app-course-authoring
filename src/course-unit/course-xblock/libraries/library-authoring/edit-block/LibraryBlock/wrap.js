@@ -11,7 +11,6 @@
  * not in our app webpack bundle.
  */
 function blockFrameJS() {
-  console.log('========================================= blockFrameJS =========================================');
   const CHILDREN_KEY = '_jsrt_xb_children'; // JavaScript RunTime XBlock children
   const USAGE_ID_KEY = '_jsrt_xb_usage_id';
   const HANDLER_URL = '_jsrt_xb_handler_url';
@@ -59,6 +58,7 @@ function blockFrameJS() {
      */
     handlerUrl: (block, handlerName, suffix, query) => {
       let url = block[HANDLER_URL].replace('handler_name', handlerName);
+
       if (suffix) {
         url += `${suffix}/`;
       }
@@ -213,7 +213,9 @@ function blockFrameJS() {
  *                   Only required for legacy XBlocks that don't declare their
  *                   JS and CSS dependencies properly.
  */
-export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
+export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl) {
+  const resources = data.map(([id, obj]) => ({ id, ...obj }));
+
   /* Separate resources by kind. */
   const urlResources = resources.filter((r) => r.kind === 'url');
   const textResources = resources.filter((r) => r.kind === 'text');
@@ -221,13 +223,13 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
   /* Extract CSS resources. */
   const cssUrls = urlResources.filter((r) => r.mimetype === 'text/css').map((r) => r.data);
   const sheets = textResources.filter((r) => r.mimetype === 'text/css').map((r) => r.data);
-  let cssTags = cssUrls.map((url) => `<link rel="stylesheet" href="${url}">`).join('\n');
+  let cssTags = cssUrls.map((url) => `<link rel="stylesheet" href="${studioBaseUrl}${url}">`).join('\n');
   cssTags += sheets.map((sheet) => `<style>${sheet}</style>`).join('\n');
-
+  console.log('data', data);
   /* Extract JS resources. */
   const jsUrls = urlResources.filter((r) => r.mimetype === 'application/javascript').map((r) => r.data);
   const scripts = textResources.filter((r) => r.mimetype === 'application/javascript').map((r) => r.data);
-  let jsTags = jsUrls.map((url) => `<script src="${url}"></script>`).join('\n');
+  let jsTags = jsUrls.map((url) => `<script src="${studioBaseUrl}${url}"></script>`).join('\n');
   jsTags += scripts.map((script) => `<script>${script}</script>`).join('\n');
 
   // Most older XModules/XBlocks have a ton of undeclared dependencies on various JavaScript in the global scope.
@@ -239,13 +241,14 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
   let legacyIncludes = '';
   if (
     html.indexOf('xblock-v1-student_view') !== -1
+    || html.indexOf('xblock-studio_view') !== -1
     || html.indexOf('xblock-v1-public_view') !== -1
     || html.indexOf('xblock-v1-studio_view') !== -1
     || html.indexOf('xblock-v1-author_view') !== -1
   ) {
     legacyIncludes += `
       <!-- gettext & XBlock JS i18n code -->
-      <script type="text/javascript" src="${lmsBaseUrl}/static/js/i18n/en/djangojs.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/i18n/en/djangojs.js"></script>
       <!-- Most XBlocks require jQuery: -->
       <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
       <!-- The Video XBlock requires "ajaxWithPrefix" -->
@@ -257,21 +260,21 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
       <!-- The Video XBlock requires "Slider" from jQuery-UI: -->
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
       <!-- The video XBlock depends on Underscore.JS -->
-      <script type="text/javascript" src="${lmsBaseUrl}/static/common/js/vendor/underscore.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/underscore.js"></script>
       <!-- The video XBlock depends on jquery-cookie -->
-      <script type="text/javascript" src="${lmsBaseUrl}/static/js/vendor/jquery.cookie.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/vendor/jquery.cookie.js"></script>
       <!--The Video XBlock has an undeclared dependency on 'Logger' -->
       <script>
           window.Logger = { log: function() { } };
       </script>
       <!-- Builtin XBlock types depend on RequireJS -->
-      <script type="text/javascript" src="${lmsBaseUrl}/static/common/js/vendor/require.js"></script>
-      <script type="text/javascript" src="${lmsBaseUrl}/static/js/RequireJS-namespace-undefine.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/require.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/RequireJS-namespace-undefine.js"></script>
       <script>
           // The minimal RequireJS configuration required for common LMS building XBlock types to work:
           (function (require, define) {
               require.config({
-                  baseUrl: "${lmsBaseUrl}/static/",
+                  baseUrl: "${studioBaseUrl}/static/studio/",
                   paths: {
                       accessibility: 'js/src/accessibility_tools',
                       draggabilly: 'js/vendor/draggabilly',
@@ -287,7 +290,7 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
           }).call(this, require || RequireJS.require, define || RequireJS.define);
       </script>
       <!-- edX HTML Utils requires GlobalLoader -->
-      <script type="text/javascript" src="${lmsBaseUrl}/static/edx-ui-toolkit/js/utils/global-loader.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/edx-ui-toolkit/js/utils/global-loader.js"></script>
       <script>
       // The video XBlock has an undeclared dependency on edX HTML Utils
       RequireJS.require(['HtmlUtils'], function (HtmlUtils) {
@@ -305,7 +308,7 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
           files (defined in webpack.common.config.js) to get that entry point and all
           of its dependencies.
       -->
-      <script type="text/javascript" src="${lmsBaseUrl}/static/bundles/commons.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/commons.js"></script>
       <!-- The video XBlock (and perhaps others?) expect this global: -->
       <script>
       window.onTouchBasedDevice = function() { return navigator.userAgent.match(/iPhone|iPod|iPad|Android/i); };
@@ -314,9 +317,11 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
       <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <!-- Capa Problem Editing requires CodeMirror -->
-      <link rel="stylesheet" href="${lmsBaseUrl}/static/js/vendor/CodeMirror/codemirror.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/CodeMirror/codemirror.css">
       <!-- Built-in XBlocks (and some plugins) depends on LMS CSS -->
-      <link rel="stylesheet" href="${lmsBaseUrl}/static/css/lms-course.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/studio-main-v1.css">
+
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/normalize.css">
       <!-- Configure and load MathJax -->
       <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -363,7 +368,7 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
     `;
   }
-  // console.log('=============================== wrapBlockHtmlForIFrame =====================================');
+  console.log('=============================== wrapBlockHtmlForIFrame =====================================', html);
   const result = `
     <!DOCTYPE html>
     <html>
@@ -377,7 +382,7 @@ export default function wrapBlockHtmlForIFrame(html, resources, lmsBaseUrl) {
     <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
-    <body style="min-height: auto; background-color: white">
+    <body style="min-height: auto; background-color: white" class="course container view-container">
       ${html}
       ${jsTags}
       <script>

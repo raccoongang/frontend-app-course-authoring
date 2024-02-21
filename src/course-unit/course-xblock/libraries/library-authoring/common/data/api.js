@@ -4,12 +4,12 @@ import { XBLOCK_VIEW_SYSTEM } from './constants';
 
 // eslint-disable-next-line import/prefer-default-export
 export const getXBlockHandlerUrl = async (blockId, viewSystem, handlerName) => {
-  console.log("================== HEllo ====================");
   const client = getAuthenticatedHttpClient();
   const baseUrl = viewSystem === XBLOCK_VIEW_SYSTEM.Studio ? getConfig().STUDIO_BASE_URL : getConfig().LMS_BASE_URL;
   const response = await client.get(`${baseUrl}/api/xblock/v2/xblocks/${blockId}/handler_url/${handlerName}/`);
-
-  return response.data.handler_url;
+  console.log('response.data.handler_url', response.data.handler_url);
+  // return response.data.handler_url;
+  return `${baseUrl}/xblock/${blockId}/handler/${handlerName}`;
 };
 
 export const getOrganizations = async () => {

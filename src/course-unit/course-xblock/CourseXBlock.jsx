@@ -4,7 +4,7 @@ import { getConfig } from '@edx/frontend-platform';
 import {
   ActionRow, Card, Dropdown, Icon, IconButton, useToggle,
 } from '@edx/paragon';
-import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@edx/paragon/icons';
+import { EditOutline as EditIcon, MoreVert as MoveVertIcon, InfoOutline as InfoOutlineIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -53,6 +53,8 @@ const CourseXBlock = ({
     closeDeleteModal();
   };
 
+  console.log('type', type);
+
   const handleEdit = () => {
     switch (type) {
     case COMPONENT_ICON_TYPES.html:
@@ -61,6 +63,11 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     case COMPONENT_ICON_TYPES.discussion:
+    case COMPONENT_ICON_TYPES.dragAndDrop:
+    case COMPONENT_ICON_TYPES.openassessment:
+    case COMPONENT_ICON_TYPES.advanced:
+    case COMPONENT_ICON_TYPES.library:
+    case 'annotatable':
       dispatch(fetchXBlockModalQuery(id));
       break;
     default:

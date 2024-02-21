@@ -40,7 +40,7 @@ import {
   deleteXBlock,
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
-  reorderXBlockList,
+  reorderXBlockList, xblockModalData,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -311,6 +311,7 @@ export function fetchXBlockModalQuery(xblockId) {
     try {
       const modalData = await getXBlockEditIframeData(xblockId);
       console.log('modalData', modalData);
+      dispatch(xblockModalData(modalData));
       // dispatch(deleteXBlock(xblockId));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {

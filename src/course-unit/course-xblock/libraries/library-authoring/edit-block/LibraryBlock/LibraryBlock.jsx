@@ -23,7 +23,7 @@ class LibraryBlock extends React.Component {
     this.iframeRef = React.createRef();
     this.state = {
       html: null,
-      iFrameHeight: 400,
+      iFrameHeight: 0,
       iframeKey: 0,
     };
   }
@@ -86,11 +86,11 @@ class LibraryBlock extends React.Component {
 
   processView() {
     const { view } = this.props;
-    if (view.value) {
+    if (view.html) {
       const html = wrapBlockHtmlForIFrame(
-        view.value.content,
-        view.value.resources,
-        getConfig().LMS_BASE_URL,
+        view.html,
+        view.resources,
+        getConfig().STUDIO_BASE_URL,
       );
 
       // Load the XBlock HTML into the IFrame:
@@ -108,8 +108,6 @@ class LibraryBlock extends React.Component {
     if (this.state.html === null) {
       return null;
     }
-
-    console.log('getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL', getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL);
 
     return (
       <div style={{

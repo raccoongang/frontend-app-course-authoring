@@ -38,7 +38,7 @@
        * Replace the entire current document with a new document that has the specified HTML.
        */
       function replaceAllHtml(newHtml) {
-        if(navigator.userAgent.indexOf('MSIE') !==-1 || navigator.appVersion.indexOf('Trident/') > -1) {
+        if(navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > -1) {
           // Can't use document.open/close on IE11, it replaces this with an empty page.
           // Thank god for StackOverflow and this crazy-ass hack that somehow works.
           // https://stackoverflow.com/a/18262905
