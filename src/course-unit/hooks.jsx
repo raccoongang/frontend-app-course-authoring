@@ -16,8 +16,7 @@ import {
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
-import { getUnitViewLivePath, getUnitPreviewPath } from './utils';
-import { updateSavingStatus, changeEditTitleFormOpen, updateQueryPendingStatu } from './data/slice';
+import { changeEditTitleFormOpen } from './data/slice';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -25,7 +24,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
 
   const [isErrorAlert, toggleErrorAlert] = useState(false);
   const [hasInternetConnectionError, setInternetConnectionError] = useState(false);
-  const { config } = useContext(AppContext);
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);

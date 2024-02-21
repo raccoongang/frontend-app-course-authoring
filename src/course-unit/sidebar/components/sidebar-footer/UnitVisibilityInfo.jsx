@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Form } from '@edx/paragon';
+import { Form } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../../../data/selectors';

@@ -2,7 +2,7 @@ import {
   CheckCircle as CheckCircleIcon,
   CheckCircleOutline as CheckCircleOutlineIcon,
   InfoOutline as InfoOutlineIcon,
-} from '@edx/paragon/icons';
+} from '@openedx/paragon/icons';
 
 import { COLORS, UNIT_VISIBILITY_STATES } from '../constants';
 import messages from './messages';

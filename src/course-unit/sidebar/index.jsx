@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { Card } from '@edx/paragon';
+import { Card } from '@openedx/paragon';
 
 import { getCourseUnitData } from '../data/selectors';
 import { SidebarBody, SidebarFooter, SidebarHeader } from './components';

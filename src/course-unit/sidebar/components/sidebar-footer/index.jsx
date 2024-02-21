@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, Stack } from '@edx/paragon';
+import { Card, Stack } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../../messages';
