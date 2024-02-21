@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Button, Dropdown } from '@edx/paragon';
+import { Dropdown, Button } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Plus as PlusIcon } from '@edx/paragon/icons/';
 

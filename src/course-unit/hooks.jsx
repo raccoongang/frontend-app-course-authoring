@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppContext } from '@edx/frontend-platform/react';
 import { useNavigate } from 'react-router-dom';
 
 import { RequestStatus } from '../data/constants';
@@ -12,12 +11,13 @@ import {
   fetchCourseSectionVerticalData,
 } from './data/thunk';
 import {
+  getCourseSectionVertical,
   getCourseUnitData,
   getLoadingStatus,
   getSavingStatus,
 } from './data/selectors';
-import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 import { getUnitViewLivePath, getUnitPreviewPath } from './utils';
+import { updateSavingStatus, changeEditTitleFormOpen, updateQueryPendingStatu } from './data/slice';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -29,6 +29,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
   const loadingStatus = useSelector(getLoadingStatus);
+  const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const navigate = useNavigate();
   const isEditTitleFormOpen = useSelector(state => state.courseUnit.isEditTitleFormOpen);
   const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
@@ -38,12 +39,10 @@ export const useCourseUnit = ({ courseId, blockId }) => {
 
   const headerNavigationsActions = {
     handleViewLive: () => {
-      window.open(config.LMS_BASE_URL + getUnitViewLivePath(courseId, blockId), '_blank');
+      window.open(publishedPreviewLink, '_blank');
     },
     handlePreview: () => {
-      const subsectionId = courseUnit.ancestorInfo?.ancestors[0]?.id.split('@').pop();
-      const sectionId = courseUnit.ancestorInfo?.ancestors[1]?.id.split('@').pop();
-      window.open(config.PREVIEW_BASE_URL + getUnitPreviewPath(courseId, sectionId, subsectionId, blockId), '_blank');
+      window.open(draftPreviewLink, '_blank');
     },
   };
 

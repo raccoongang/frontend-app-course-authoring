@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Layout, Stack } from '@edx/paragon';
+import { Container, Layout, Stack } from '@openedx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { ErrorAlert } from '@edx/frontend-lib-content-components';
 
@@ -69,9 +69,7 @@ const CourseUnit = ({ courseId }) => {
               />
             )}
             breadcrumbs={(
-              <Breadcrumbs
-                courseId={courseId}
-              />
+              <Breadcrumbs />
             )}
             headerActions={(
               <HeaderNavigations
