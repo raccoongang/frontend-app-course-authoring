@@ -2,12 +2,16 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { Card } from '@openedx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../data/selectors';
 import { SidebarBody, SidebarFooter, SidebarHeader } from './components';
 import useCourseUnitData from './hooks';
+import messages from './messages';
+import TagsSidebarBody from './components/TagsSidebarBody';
 
-const Sidebar = ({ isDisplayUnitLocation }) => {
+const Sidebar = ({ variant }) => {
+  const intl = useIntl();
   const {
     title,
     locationId,
@@ -15,6 +19,41 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
     visibilityState,
     visibleToStaffOnly,
   } = useCourseUnitData(useSelector(getCourseUnitData));
+
+  let sidebarTitle;
+  let sidebarBody;
+  let hideFooter = false;
+  let hideIcon = false;
+  switch (variant) {
+  case 'publish':
+    sidebarTitle = title;
+    sidebarBody = (
+      <SidebarBody
+        releaseLabel={releaseLabel}
+      />
+    );
+    break;
+  case 'location':
+    sidebarTitle = intl.formatMessage(messages.sidebarHeaderUnitLocationTitle);
+    sidebarBody = (
+      <SidebarBody
+        locationId={locationId}
+        releaseLabel={releaseLabel}
+        isDisplayUnitLocation
+      />
+    );
+    break;
+  case 'tags':
+    sidebarTitle = intl.formatMessage(messages.tagsSidebarTitle);
+    sidebarBody = (
+      <TagsSidebarBody />
+    );
+    hideFooter = true;
+    hideIcon = true;
+    break;
+  default:
+    break;
+  }
 
   return (
     <Card
@@ -24,29 +63,24 @@ const Sidebar = ({ isDisplayUnitLocation }) => {
       data-testid="course-unit-sidebar"
     >
       <SidebarHeader
-        title={title}
+        title={sidebarTitle}
         visibilityState={visibilityState}
-        isDisplayUnitLocation={isDisplayUnitLocation}
+        hideIcon={hideIcon}
       />
-      <SidebarBody
-        locationId={locationId}
-        releaseLabel={releaseLabel}
-        isDisplayUnitLocation={isDisplayUnitLocation}
-      />
-      <SidebarFooter
-        locationId={locationId}
-        isDisplayUnitLocation={isDisplayUnitLocation}
-      />
+      { sidebarBody }
+      { !hideFooter
+        && (
+          <SidebarFooter
+            locationId={locationId}
+            isDisplayUnitLocation={variant === 'location'}
+          />
+        )}
     </Card>
   );
 };
 
 Sidebar.propTypes = {
-  isDisplayUnitLocation: PropTypes.bool,
-};
-
-Sidebar.defaultProps = {
-  isDisplayUnitLocation: false,
+  variant: PropTypes.string.isRequired,
 };
 
 export default Sidebar;
