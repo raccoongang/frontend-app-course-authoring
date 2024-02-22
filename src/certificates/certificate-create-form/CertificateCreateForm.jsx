@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Card, Stack, Button } from '@openedx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { Formik, Form, FieldArray } from 'formik';
 
 import CertificateDetailsForm from '../certificate-details/CertificateDetailsForm';
@@ -9,8 +10,9 @@ import messages from '../messages';
 import useCertificateCreateForm from './hooks/useCertificateCreateForm';
 
 const CertificateCreateForm = ({ courseId }) => {
+  const intl = useIntl();
   const {
-    intl, courseTitle, handleCertificateSubmit, handleFormCancel,
+    courseTitle, handleCertificateSubmit, handleFormCancel,
   } = useCertificateCreateForm(courseId);
 
   return (
