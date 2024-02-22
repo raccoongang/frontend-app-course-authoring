@@ -27,6 +27,7 @@ const UnitTab = ({
 
   const handleSelect = (e) => {
     setFieldValue('selectedPartitionIndex', parseInt(e.target.value, 10));
+    setFieldValue('selectedGroups', []);
   };
 
   return (
