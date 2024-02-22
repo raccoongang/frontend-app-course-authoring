@@ -24,6 +24,7 @@ const Sidebar = ({ variant }) => {
   let sidebarBody;
   let hideFooter = false;
   let hideIcon = false;
+  let className = '';
   switch (variant) {
   case 'publish':
     sidebarTitle = title;
@@ -50,6 +51,7 @@ const Sidebar = ({ variant }) => {
     );
     hideFooter = true;
     hideIcon = true;
+    className = 'tags-sidebar';
     break;
   default:
     break;
@@ -57,7 +59,7 @@ const Sidebar = ({ variant }) => {
 
   return (
     <Card
-      className={classNames('course-unit-sidebar', {
+      className={classNames('course-unit-sidebar', className, {
         'is-stuff-only': visibleToStaffOnly,
       })}
       data-testid="course-unit-sidebar"
