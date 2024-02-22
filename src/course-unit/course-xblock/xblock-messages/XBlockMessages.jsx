@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { Alert } from '@edx/paragon';
+import { Alert } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Info as InfoIcon, WarningFilled as WarningIcon } from '@edx/paragon/icons';
+import { Info as InfoIcon, WarningFilled as WarningIcon } from '@openedx/paragon/icons';
 
 import messages from '../messages';
 import { MESSAGE_ERROR_TYPES } from '../constants';
