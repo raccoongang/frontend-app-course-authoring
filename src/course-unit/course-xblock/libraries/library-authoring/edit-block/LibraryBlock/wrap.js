@@ -213,7 +213,7 @@ function blockFrameJS() {
  *                   Only required for legacy XBlocks that don't declare their
  *                   JS and CSS dependencies properly.
  */
-export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl) {
+export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displayName) {
   const resources = data.map(([id, obj]) => ({ id, ...obj }));
 
   /* Separate resources by kind. */
@@ -225,7 +225,6 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl) {
   const sheets = textResources.filter((r) => r.mimetype === 'text/css').map((r) => r.data);
   let cssTags = cssUrls.map((url) => `<link rel="stylesheet" href="${studioBaseUrl}${url}">`).join('\n');
   cssTags += sheets.map((sheet) => `<style>${sheet}</style>`).join('\n');
-  console.log('data', data);
   /* Extract JS resources. */
   const jsUrls = urlResources.filter((r) => r.mimetype === 'application/javascript').map((r) => r.data);
   const scripts = textResources.filter((r) => r.mimetype === 'application/javascript').map((r) => r.data);
@@ -368,7 +367,52 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl) {
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
     `;
   }
-  console.log('=============================== wrapBlockHtmlForIFrame =====================================', html);
+  const hasCustomButtons = html.includes('editor-with-buttons');
+  const hasCustomTabs = html.includes('editor-with-tabs');
+  const hasPlugins = html.includes('wrapper-comp-plugins');
+
+  const getDataEditor = html.includes('wrapper-comp-editor');
+
+  const editingModalHeader = `          
+    <div class="modal-header">
+        <h2 id="modal-window-title" class="title modal-window-title">
+            <span class="modal-button-title">
+                Editing: ${displayName}
+            </span> 
+            <button data-tooltip="Edit Title" class="btn-default action-edit title-edit-button">
+                <span class="icon fa fa-pencil" aria-hidden="true"></span>
+                <span class="sr"> Edit Title</span>
+            </button>
+        </h2>
+        <ul class="editor-modes action-list action-modes">        
+            <li class="action-item" data-mode="editor">
+                <a href="#" class="editor-button is-set">Editor</a>
+            </li>
+            <li class="action-item" data-mode="settings">
+                <a href="#" class="settings-button">Settings</a>
+            </li>
+        </ul>  
+    </div>`;
+
+  const defaultModalTitle = `
+    <div class="modal-header">
+        <h2 id="modal-window-title" class="title modal-window-title">Editing: ${displayName}</h2>
+        <ul class="editor-modes action-list action-modes"></ul>
+    </div>`;
+
+  const getActionBar = `
+    <div class="modal-actions" style="display: block;">
+        <h3 class="sr">Actions</h3>
+        <ul>
+            <li class="action-item">
+                <a href="#" class="button action-primary action-save">Save</a>
+            </li>
+            <li class="action-item">
+                <a href="#" class="button  action-cancel">Cancel</a>
+            </li>
+        </ul>
+    </div>`;
+
   const result = `
     <!DOCTYPE html>
     <html>
@@ -383,7 +427,18 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl) {
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
     <body style="min-height: auto; background-color: white" class="course container view-container">
-      ${html}
+    <div class="wrapper wrapper-modal-window wrapper-modal-window-edit-xblock">
+        <div class="modal-window-overlay"></div>
+        <div class="modal-window modal-editor confirm modal-lg modal-type-discussion" tabindex="-1" aria-labelledby="modal-window-title">
+            <div class="edit-xblock-modal">
+              ${!hasCustomTabs && getDataEditor ? editingModalHeader : defaultModalTitle}
+              <div class="modal-content">
+                  ${html}      
+              </div>
+              ${!hasCustomButtons ? getActionBar : ''}
+            </div>
+        </div>
+    </div>
       ${jsTags}
       <script>
         window.addEventListener('load', (${blockFrameJS.toString()}));

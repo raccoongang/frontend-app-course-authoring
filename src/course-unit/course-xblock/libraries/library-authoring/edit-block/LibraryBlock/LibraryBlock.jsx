@@ -91,6 +91,7 @@ class LibraryBlock extends React.Component {
         view.html,
         view.resources,
         getConfig().STUDIO_BASE_URL,
+        this.props.displayName,
       );
 
       // Load the XBlock HTML into the IFrame:
@@ -111,7 +112,7 @@ class LibraryBlock extends React.Component {
 
     return (
       <div style={{
-        height: `${this.state.iFrameHeight}px`,
+        height: `500px`,
         boxSizing: 'content-box',
         position: 'relative',
         overflow: 'hidden',
@@ -133,7 +134,7 @@ class LibraryBlock extends React.Component {
             height: '100%',
             minHeight: '200px',
             border: '0 none',
-            backgroundColor: 'white',
+            // backgroundColor: 'white',
           }}
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
