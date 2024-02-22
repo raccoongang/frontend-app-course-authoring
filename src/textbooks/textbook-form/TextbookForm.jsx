@@ -21,7 +21,6 @@ import FormikControl from '../../generic/FormikControl';
 import PromptIfDirty from '../../generic/PromptIfDirty';
 import ModalDropzone from '../../generic/modal-dropzone/ModalDropzone';
 import { useModel } from '../../generic/model-store';
-import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 import textbookFormValidationSchema from './validations';
 import messages from './messages';
 
@@ -166,7 +165,6 @@ const TextbookForm = ({
               previewComponent={(
                 <Icon src={PdfIcon} className="modal-preview-icon" />
               )}
-              maxSize={UPLOAD_FILE_MAX_SIZE}
             />
             <PromptIfDirty dirty={dirty} />
           </>

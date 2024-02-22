@@ -15,6 +15,7 @@ import { FileUpload as FileUploadIcon } from '@edx/paragon/icons';
 
 import useModalDropzone from './useModalDropzone';
 import messages from './messages';
+import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 
 const ModalDropzone = ({
   fileTypes,
@@ -27,7 +28,7 @@ const ModalDropzone = ({
   onCancel,
   onChange,
   onSavingStatus,
-  maxSize,
+  maxSize = UPLOAD_FILE_MAX_SIZE,
 }) => {
   const {
     intl,
@@ -42,6 +43,11 @@ const ModalDropzone = ({
   } = useModalDropzone({
     onChange, onCancel, onClose, fileTypes, onSavingStatus,
   });
+
+  const invalidSizeMore = intl.formatMessage(
+    messages.uploadImageDropzoneInvalidSizeMore,
+    { maxSize: maxSize / (1000 * 1000) },
+  );
 
   const inputComponent = previewUrl ? (
     <div>
@@ -94,6 +100,7 @@ const ModalDropzone = ({
                   onProcessUpload={handleSelectFile}
                   inputComponent={inputComponent}
                   accept={accept}
+                  errorMessages={{ invalidSizeMore }}
                   validator={imageValidator}
                   maxSize={maxSize}
                 />
@@ -120,7 +127,7 @@ ModalDropzone.defaultProps = {
   imageHelpText: '',
   previewComponent: null,
   imageDropzoneText: '',
-  maxSize: Infinity,
+  maxSize: UPLOAD_FILE_MAX_SIZE,
 };
 
 ModalDropzone.propTypes = {
