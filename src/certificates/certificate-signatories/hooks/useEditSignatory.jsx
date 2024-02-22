@@ -1,5 +1,5 @@
 const useEditSignatory = ({
-  arrayHelpers, editModes, setEditModes, resetForm,
+  arrayHelpers, editModes, setEditModes, setFieldValue, initialSignatoriesValues,
 }) => {
   const handleDeleteSignatory = (id) => {
     arrayHelpers.remove(id);
@@ -19,8 +19,12 @@ const useEditSignatory = ({
   };
 
   const handleCancelUpdateSignatory = (id) => {
+    const signatoryInitialValues = initialSignatoriesValues[id];
+    Object.keys(signatoryInitialValues).forEach(fieldKey => {
+      const fieldName = `signatories[${id}].${fieldKey}`;
+      setFieldValue(fieldName, signatoryInitialValues[fieldKey]);
+    });
     toggleEditSignatory(id);
-    resetForm();
   };
 
   return { toggleEditSignatory, handleDeleteSignatory, handleCancelUpdateSignatory };
