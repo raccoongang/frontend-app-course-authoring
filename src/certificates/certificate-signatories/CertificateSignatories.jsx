@@ -10,7 +10,15 @@ import useCreateSignatory from './hooks/useCreateSignatory';
 import messages from './messages';
 
 const CertificateSignatories = ({
-  signatories, handleChange, handleBlur, arrayHelpers, setFieldValue, isForm, resetForm, editModes, setEditModes,
+  isForm,
+  editModes,
+  signatories,
+  arrayHelpers,
+  initialSignatoriesValues,
+  setFieldValue,
+  setEditModes,
+  handleBlur,
+  handleChange,
 }) => {
   const intl = useIntl();
 
@@ -19,7 +27,7 @@ const CertificateSignatories = ({
     handleDeleteSignatory,
     handleCancelUpdateSignatory,
   } = useEditSignatory({
-    arrayHelpers, editModes, setEditModes, resetForm,
+    arrayHelpers, editModes, setEditModes, setFieldValue, initialSignatoriesValues,
   });
 
   const { handleAddSignatory } = useCreateSignatory({ arrayHelpers });
@@ -90,18 +98,23 @@ CertificateSignatories.defaultProps = {
   handleBlur: null,
   setFieldValue: null,
   arrayHelpers: null,
-  resetForm: null,
   isForm: false,
   editModes: {},
   setEditModes: null,
+  initialSignatoriesValues: null,
 };
 
 CertificateSignatories.propTypes = {
   isForm: PropTypes.bool,
   editModes: PropTypes.objectOf(PropTypes.bool),
+  initialSignatoriesValues: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    organization: PropTypes.string.isRequired,
+    signatureImagePath: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  })),
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
-  resetForm: PropTypes.func,
   setFieldValue: PropTypes.func,
   setEditModes: PropTypes.func,
   arrayHelpers: PropTypes.shape({}),

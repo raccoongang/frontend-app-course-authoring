@@ -1,4 +1,3 @@
-import { useIntl } from '@edx/frontend-platform/i18n';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToggle } from '@edx/paragon';
 
@@ -9,7 +8,6 @@ import { updateCourseCertificate, deleteCourseCertificate } from '../../data/thu
 import { defaultCertificate } from '../../constants';
 
 const useCertificateEditForm = (courseId) => {
-  const intl = useIntl();
   const dispatch = useDispatch();
   const [isConfirmOpen, confirmOpen, confirmClose] = useToggle(false);
   const courseTitle = useSelector(getCourseTitle);
@@ -36,7 +34,6 @@ const useCertificateEditForm = (courseId) => {
   }));
 
   return {
-    intl,
     confirmOpen,
     courseTitle,
     certificates,
