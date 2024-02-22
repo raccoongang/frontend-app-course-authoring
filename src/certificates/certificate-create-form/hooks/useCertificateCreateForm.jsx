@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { MODE_STATES } from '../../data/constants';
 import { getCourseTitle } from '../../data/selectors';
@@ -7,7 +6,6 @@ import { setMode } from '../../data/slice';
 import { createCourseCertificate } from '../../data/thunks';
 
 const useCertificateCreateForm = (courseId) => {
-  const intl = useIntl();
   const dispatch = useDispatch();
   const courseTitle = useSelector(getCourseTitle);
 
@@ -21,7 +19,7 @@ const useCertificateCreateForm = (courseId) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   return {
-    intl, courseTitle, handleCertificateSubmit, handleFormCancel,
+    courseTitle, handleCertificateSubmit, handleFormCancel,
   };
 };
 
