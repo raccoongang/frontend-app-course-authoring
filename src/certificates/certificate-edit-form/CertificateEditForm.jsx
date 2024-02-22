@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Card, Stack, Button } from '@edx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { Formik, Form, FieldArray } from 'formik';
 
 import ModalNotification from '../../generic/modal-notification';
@@ -10,8 +11,8 @@ import messages from '../certificate-details/messages';
 import useCertificateEditForm from './hooks/useCertificateEditForm';
 
 const CertificateEditForm = ({ courseId }) => {
+  const intl = useIntl();
   const {
-    intl,
     confirmOpen,
     courseTitle,
     certificates,
