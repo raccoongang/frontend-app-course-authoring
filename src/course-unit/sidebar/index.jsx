@@ -8,7 +8,7 @@ import { getCourseUnitData } from '../data/selectors';
 import { SidebarBody, SidebarFooter, SidebarHeader } from './components';
 import useCourseUnitData from './hooks';
 import messages from './messages';
-import TagsSidebarBody from './components/TagsSidebarBody';
+import { TagsSidebarBody } from '../../content-tags-drawer/tags-sidebar';
 
 const Sidebar = ({ variant }) => {
   const intl = useIntl();
