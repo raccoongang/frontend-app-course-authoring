@@ -127,7 +127,7 @@ class LibraryBlock extends React.Component {
           src={getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}
           data-testid="block-preview"
           style={{
-            position: 'absolute',
+            position: 'fixed',
             left: 0,
             top: 0,
             width: '100%',
@@ -135,6 +135,9 @@ class LibraryBlock extends React.Component {
             minHeight: '200px',
             border: '0 none',
             // backgroundColor: 'white',
+            zIndex: 999999999,
+            overflow: 'hidden',
+            boxSizing: 'content-box',
           }}
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"

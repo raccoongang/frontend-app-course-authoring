@@ -426,10 +426,10 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displa
     <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
-    <body style="min-height: auto; background-color: white" class="course container view-container">
+    <body style="min-height: auto; background-color: #0000006b; overflow: hidden;" class="course container view-container">
     <div class="wrapper wrapper-modal-window wrapper-modal-window-edit-xblock">
         <div class="modal-window-overlay"></div>
-        <div class="modal-window modal-editor confirm modal-lg modal-type-discussion" tabindex="-1" aria-labelledby="modal-window-title">
+        <div class="modal-window modal-editor confirm modal-lg modal-type-discussion" tabindex="-1" aria-labelledby="modal-window-title" style="top: 238.5px; left: 17px;">
             <div class="edit-xblock-modal">
               ${!hasCustomTabs && getDataEditor ? editingModalHeader : defaultModalTitle}
               <div class="modal-content">

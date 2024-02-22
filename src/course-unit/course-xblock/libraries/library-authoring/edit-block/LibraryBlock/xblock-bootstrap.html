@@ -25,6 +25,7 @@
         messageData.replyKey = messageReplyKey;
         if (callback !== undefined) {
           const handleResponse = function (event) {
+            console.log('event.data.replyKey', event.data.replyKey);
             if (event.source === window.parent && event.data.replyKey === messageReplyKey) {
               callback(event.data);
               window.removeEventListener('message', handleResponse);
