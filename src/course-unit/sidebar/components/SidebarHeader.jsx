@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Icon, Stack } from '@openedx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../../data/selectors';
 import { getIconVariant } from '../utils';
+import messages from '../messages';
 
-const SidebarHeader = ({ title, visibilityState, hideIcon }) => {
+const SidebarHeader = ({ title, visibilityState, isDisplayUnitLocation }) => {
+  const intl = useIntl();
   const { hasChanges, published } = useSelector(getCourseUnitData);
   const { iconSrc, colorVariant } = getIconVariant(visibilityState, published, hasChanges);
 
   return (
     <Stack className="course-unit-sidebar-header" direction="horizontal">
-      {!hideIcon && (
+      {!isDisplayUnitLocation && (
         <Icon
           className="course-unit-sidebar-header-icon"
           svgAttrs={{ color: colorVariant }}
@@ -19,7 +22,7 @@ const SidebarHeader = ({ title, visibilityState, hideIcon }) => {
         />
       )}
       <h3 className="course-unit-sidebar-header-title m-0">
-        {title}
+        {isDisplayUnitLocation ? intl.formatMessage(messages.sidebarHeaderUnitLocationTitle) : title}
       </h3>
     </Stack>
   );
@@ -28,11 +31,11 @@ const SidebarHeader = ({ title, visibilityState, hideIcon }) => {
 SidebarHeader.propTypes = {
   title: PropTypes.string.isRequired,
   visibilityState: PropTypes.string.isRequired,
-  hideIcon: PropTypes.bool,
+  isDisplayUnitLocation: PropTypes.bool,
 };
 
 SidebarHeader.defaultProps = {
-  hideIcon: false,
+  isDisplayUnitLocation: false,
 };
 
 export default SidebarHeader;

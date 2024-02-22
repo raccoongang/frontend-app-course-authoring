@@ -105,14 +105,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.status.scheduled.title',
     defaultMessage: 'SCHEDULED',
   },
-  tagsSidebarTitle: {
-    id: 'course-authoring.course-unit.sidebar.tags.title',
-    defaultMessage: 'Unit Tags',
-  },
-  tagsSidebarManageButtonLabel: {
-    id: 'course-authoring.course-unit.sidebar.tags.button.manage',
-    defaultMessage: 'Manage tags',
-  },
 });
 
 export default messages;

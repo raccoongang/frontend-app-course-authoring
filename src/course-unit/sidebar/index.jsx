@@ -2,16 +2,14 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { Card } from '@openedx/paragon';
-import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { getCourseUnitData } from '../data/selectors';
 import { SidebarBody, SidebarFooter, SidebarHeader } from './components';
 import useCourseUnitData from './hooks';
-import messages from './messages';
 import { TagsSidebarBody } from '../../content-tags-drawer/tags-sidebar';
+import TagsSidebarHeader from '../../content-tags-drawer/tags-sidebar/TagsSidebarHeader';
 
 const Sidebar = ({ variant }) => {
-  const intl = useIntl();
   const {
     title,
     locationId,
@@ -20,14 +18,18 @@ const Sidebar = ({ variant }) => {
     visibleToStaffOnly,
   } = useCourseUnitData(useSelector(getCourseUnitData));
 
-  let sidebarTitle;
+  let sidebarHeader;
   let sidebarBody;
   let hideFooter = false;
-  let hideIcon = false;
   let className = '';
   switch (variant) {
   case 'publish':
-    sidebarTitle = title;
+    sidebarHeader = (
+      <SidebarHeader
+        title={title}
+        visibilityState={visibilityState}
+      />
+    );
     sidebarBody = (
       <SidebarBody
         releaseLabel={releaseLabel}
@@ -35,7 +37,13 @@ const Sidebar = ({ variant }) => {
     );
     break;
   case 'location':
-    sidebarTitle = intl.formatMessage(messages.sidebarHeaderUnitLocationTitle);
+    sidebarHeader = (
+      <SidebarHeader
+        title={title}
+        visibilityState={visibilityState}
+        isDisplayUnitLocation
+      />
+    );
     sidebarBody = (
       <SidebarBody
         locationId={locationId}
@@ -45,12 +53,13 @@ const Sidebar = ({ variant }) => {
     );
     break;
   case 'tags':
-    sidebarTitle = intl.formatMessage(messages.tagsSidebarTitle);
+    sidebarHeader = (
+      <TagsSidebarHeader />
+    );
     sidebarBody = (
       <TagsSidebarBody />
     );
     hideFooter = true;
-    hideIcon = true;
     className = 'tags-sidebar';
     break;
   default:
@@ -64,11 +73,7 @@ const Sidebar = ({ variant }) => {
       })}
       data-testid="course-unit-sidebar"
     >
-      <SidebarHeader
-        title={sidebarTitle}
-        visibilityState={visibilityState}
-        hideIcon={hideIcon}
-      />
+      { sidebarHeader }
       { sidebarBody }
       { !hideFooter
         && (
