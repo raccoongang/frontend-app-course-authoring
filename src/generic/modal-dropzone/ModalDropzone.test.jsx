@@ -131,4 +131,27 @@ describe('<ModalDropzone />', () => {
 
     await expect(uploadAssets(courseId, fileData, () => {})).rejects.toThrow('Network Error');
   });
+
+  it('displays an error message when the file size exceeds the limit', async () => {
+    const maxSizeInBytes = 20 * 1000 * 1000;
+
+    const { getByText, getByRole } = render(<RootWrapper {...props} maxSize={maxSizeInBytes} />);
+    const dropzoneInput = getByRole('presentation', { hidden: true });
+
+    const file = new File(
+      [new ArrayBuffer(maxSizeInBytes + 1)],
+      'test-file.png',
+      { type: 'image/png' },
+    );
+
+    userEvent.upload(dropzoneInput.firstChild, file);
+
+    await waitFor(() => {
+      // Assert that the error message is displayed
+      const maxSizeInMB = maxSizeInBytes / (1000 * 1000);
+      const expectedErrorMessage = messages.uploadImageDropzoneInvalidSizeMore
+        .defaultMessage.replace('{maxSize}', maxSizeInMB);
+      expect(getByText(expectedErrorMessage)).toBeInTheDocument();
+    });
+  });
 });

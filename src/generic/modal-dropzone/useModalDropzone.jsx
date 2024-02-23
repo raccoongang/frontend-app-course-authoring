@@ -99,12 +99,13 @@ const useModalDropzone = ({
         onChange(url);
         onSavingStatus({ status: RequestStatus.SUCCESSFUL });
         onClose();
-        setDisabledUploadBtn(true);
-        setUploadProgress(0);
-        setPreviewUrl(null);
       }
     } catch (error) {
       onSavingStatus({ status: RequestStatus.FAILED });
+    } finally {
+      setDisabledUploadBtn(true);
+      setUploadProgress(0);
+      setPreviewUrl(null);
     }
   };
 
