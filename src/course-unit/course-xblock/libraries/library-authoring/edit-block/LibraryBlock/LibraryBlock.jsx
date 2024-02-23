@@ -63,6 +63,7 @@ class LibraryBlock extends React.Component {
     const { method, replyKey, ...args } = event.data;
     const frame = this.iframeRef.current.contentWindow;
     const sendReply = async (data) => {
+      console.log('data', data);
       frame.postMessage({ ...data, replyKey }, '*');
     };
 
@@ -126,6 +127,7 @@ class LibraryBlock extends React.Component {
           title="block"
           src={getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}
           data-testid="block-preview"
+          id="modal-iframe"
           style={{
             position: 'fixed',
             left: 0,

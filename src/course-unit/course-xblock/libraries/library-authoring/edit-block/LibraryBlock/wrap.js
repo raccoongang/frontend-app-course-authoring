@@ -179,6 +179,14 @@ function blockFrameJS() {
   // Find the root XBlock node.
   // The newer/pure/Blockstore runtime uses '.xblock-v1' while the LMS runtime uses '.xblock'.
   const rootNode = document.querySelector('.xblock, .xblock-v1'); // will always return the first matching element
+  const cancelButton = rootNode.querySelector('.cancel-button');
+
+  cancelButton.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    postMessageToParent({ method: 'remove' });
+  });
+
   initializeXBlockAndChildren(rootNode, () => {
     // When done, tell the parent window the size of this block:
     postMessageToParent({
@@ -365,6 +373,12 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displa
            It can't be run through static.url because MathJax uses crazy url introspection to do lazy loading of
            MathJax extension libraries -->
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
+      
+      <script>
+        var iframe = document.getElementById('yourIframeId');
+        var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+        console.log(iframeDocument);
+      </script>
     `;
   }
   const hasCustomButtons = html.includes('editor-with-buttons');

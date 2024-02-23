@@ -17,7 +17,6 @@ const AddComponent = ({ blockId, handleCreateNewCourseXBlock }) => {
   const [isOpenHtml, openHtml, closeHtml] = useToggle(false);
   const [isOpenOpenAssessment, openOpenAssessment, closeOpenAssessment] = useToggle(false);
   const { componentTemplates } = useSelector(getCourseSectionVertical);
-  console.log('componentTemplates', componentTemplates);
 
   const handleCreateNewXBlock = (type, moduleName) => {
     switch (type) {

@@ -94,7 +94,6 @@ const CourseUnit = ({ courseId }) => {
     });
   };
 
-  console.log('unitXBlocks', unitXBlocks);
   return (
     <>
       <Container size="xl" className="course-unit px-4">

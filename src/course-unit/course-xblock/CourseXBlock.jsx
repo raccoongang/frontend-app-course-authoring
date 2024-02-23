@@ -47,6 +47,18 @@ const CourseXBlock = ({
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
 
+  useEffect(() => {
+    window.addEventListener('message', async (event) => {
+      console.log('DATA', event.data);
+      const { method, replyKey, ...args } = event.data;
+
+      if (method === 'remove') {
+        console.log('CLOSE');
+        close();
+      }
+    });
+  }, []);
+
   const currentItemData = {
     category: COURSE_BLOCK_NAMES.component.id,
     displayName: title,
@@ -58,8 +70,6 @@ const CourseXBlock = ({
     unitXBlockActions.handleDelete(id);
     closeDeleteModal();
   };
-
-  console.log('type', type);
 
   const handleEdit = () => {
     open();
@@ -87,7 +97,7 @@ const CourseXBlock = ({
 
   return (
     <>
-      {Object.keys(xblockModalData).length ? (
+      {Object.keys(xblockModalData).length && isOpen ? (
         <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockModalData} displayName={title} />
       ) : null}
       <div ref={courseXBlockElementRef} {...props}>

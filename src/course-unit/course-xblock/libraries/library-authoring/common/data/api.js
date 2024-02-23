@@ -7,7 +7,7 @@ export const getXBlockHandlerUrl = async (blockId, viewSystem, handlerName) => {
   const client = getAuthenticatedHttpClient();
   const baseUrl = viewSystem === XBLOCK_VIEW_SYSTEM.Studio ? getConfig().STUDIO_BASE_URL : getConfig().LMS_BASE_URL;
   const response = await client.get(`${baseUrl}/api/xblock/v2/xblocks/${blockId}/handler_url/${handlerName}/`);
-  console.log('response.data.handler_url', response.data.handler_url);
+
   // return response.data.handler_url;
   return `${baseUrl}/xblock/${blockId}/handler/${handlerName}`;
 };
