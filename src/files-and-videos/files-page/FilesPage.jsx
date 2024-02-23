@@ -195,7 +195,7 @@ const FilesPage = ({
               handleErrorReset,
               handleFileOrder,
               tableColumns,
-              UPLOAD_FILE_MAX_SIZE,
+              maxFileSize: UPLOAD_FILE_MAX_SIZE,
               thumbnailPreview,
               infoModalSidebar,
               files: assets,
