@@ -98,9 +98,6 @@ const useModalDropzone = ({
       if (url) {
         onChange(url);
         onSavingStatus({ status: RequestStatus.SUCCESSFUL });
-        setDisabledUploadBtn(true);
-        setUploadProgress(0);
-        setPreviewUrl(null);
 
         setTimeout(() => {
           onClose();
@@ -108,6 +105,10 @@ const useModalDropzone = ({
       }
     } catch (error) {
       onSavingStatus({ status: RequestStatus.FAILED });
+    } finally {
+      setDisabledUploadBtn(true);
+      setUploadProgress(0);
+      setPreviewUrl(null);
     }
   };
 

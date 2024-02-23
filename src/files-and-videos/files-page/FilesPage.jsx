@@ -32,6 +32,7 @@ import { getFileSizeToClosestByte } from '../../utils';
 import FileThumbnail from './FileThumbnail';
 import FileInfoModalSidebar from './FileInfoModalSidebar';
 import FileValidationModal from './FileValidationModal';
+import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 
 const FilesPage = ({
   courseId,
@@ -90,7 +91,6 @@ const FilesPage = ({
     usageErrorMessages: errorMessages.usageMetrics,
     fileType: 'file',
   };
-  const maxFileSize = 20 * 1048576;
 
   const activeColumn = {
     id: 'activeStatus',
@@ -205,7 +205,7 @@ const FilesPage = ({
                 handleErrorReset,
                 handleFileOrder,
                 tableColumns,
-                maxFileSize,
+                maxFileSize: UPLOAD_FILE_MAX_SIZE,
                 thumbnailPreview,
                 infoModalSidebar,
                 files: assets,
