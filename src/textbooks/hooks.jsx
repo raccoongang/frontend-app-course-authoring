@@ -58,7 +58,9 @@ const useTextbooks = (courseId) => {
   };
 
   const handleSavingStatusDispatch = (status) => {
-    dispatch(updateSavingStatus(status));
+    if (status.status !== RequestStatus.SUCCESSFUL) {
+      dispatch(updateSavingStatus(status));
+    }
   };
 
   useEffect(() => {
