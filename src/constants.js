@@ -57,4 +57,4 @@ export const COURSE_BLOCK_NAMES = /** @type {const} */ ({
   component: { id: 'component', name: 'Component' },
 });
 
-export const UPLOAD_FILE_MAX_SIZE = 100 * 1024 * 1024; // 100mb
+export const UPLOAD_FILE_MAX_SIZE = 20 * 1000 * 1000; // 20mb
