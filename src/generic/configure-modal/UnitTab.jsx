@@ -6,6 +6,7 @@ import {
 } from '@edx/frontend-platform/i18n';
 import { Field } from 'formik';
 
+import classNames from 'classnames';
 import messages from './messages';
 
 const UnitTab = ({
@@ -19,6 +20,7 @@ const UnitTab = ({
   const {
     isVisibleToStaffOnly,
     selectedPartitionIndex,
+    selectedGroups,
   } = values;
 
   const handleChange = (e) => {
@@ -29,6 +31,10 @@ const UnitTab = ({
     setFieldValue('selectedPartitionIndex', parseInt(e.target.value, 10));
     setFieldValue('selectedGroups', []);
   };
+
+  console.log({ values });
+  console.log({ selectedGroups });
+  console.log('userPartitionInfo ===>', userPartitionInfo.selectablePartitions[selectedPartitionIndex]);
 
   return (
     <>
@@ -95,9 +101,19 @@ const UnitTab = ({
                     value={`${group.id}`}
                     name="selectedGroups"
                   />
-                  <Form.Label isInline>
-                    {group.name}
-                  </Form.Label>
+                  <div>
+                    <Form.Label
+                      className={classNames({ 'text-danger': group.deleted && selectedGroups.includes(group.id.toString()) })}
+                      isInline
+                    >
+                      {group.name}
+                    </Form.Label>
+                    {group.deleted && (
+                      <Form.Control.Feedback type="invalid" hasIcon={false}>
+                        This group no longer exists. Choose another group or remove the access restriction.
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
                 </Form.Group>
               ))}
             </div>
