@@ -24,7 +24,8 @@ const GroupConfigurations = ({ courseId }) => {
   const {
     isLoading,
     savingStatus,
-    groupConfigurationsActions,
+    contentGroupActions,
+    experimentConfigurationActions,
     processingNotificationTitle,
     isShowProcessingNotification,
     groupConfigurations: {
@@ -78,12 +79,13 @@ const GroupConfigurations = ({ courseId }) => {
             {!!contentGroup && (
               <ContentGroupsSection
                 availableGroup={contentGroup}
-                groupConfigurationsActions={groupConfigurationsActions}
+                contentGroupActions={contentGroupActions}
               />
             )}
             {shouldShowExperimentGroups && (
               <ExperimentConfigurationsSection
                 availableGroups={experimentGroupConfigurations}
+                experimentConfigurationActions={experimentConfigurationActions}
               />
             )}
           </Stack>

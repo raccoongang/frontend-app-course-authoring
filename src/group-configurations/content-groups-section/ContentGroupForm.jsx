@@ -17,7 +17,7 @@ import PromptIfDirty from '../../generic/PromptIfDirty';
 import { isAlreadyExistsGroup } from './utils';
 import messages from './messages';
 
-const ContentGroupContainer = ({
+const ContentGroupForm = ({
   isEditMode,
   groupNames,
   isUsedInLocation,
@@ -41,7 +41,7 @@ const ContentGroupContainer = ({
   const onSubmitForm = isEditMode ? onEditClick : onCreateClick;
 
   return (
-    <div className="configuration-card" data-testid="content-group-new">
+    <div className="configuration-card" data-testid="content-group-form">
       <div className="configuration-card-header">
         <h3>{formatMessage(messages.newGroupHeader)}</h3>
       </div>
@@ -127,7 +127,7 @@ const ContentGroupContainer = ({
   );
 };
 
-ContentGroupContainer.defaultProps = {
+ContentGroupForm.defaultProps = {
   groupNames: [],
   overrideValue: '',
   isEditMode: false,
@@ -137,7 +137,7 @@ ContentGroupContainer.defaultProps = {
   onEditClick: null,
 };
 
-ContentGroupContainer.propTypes = {
+ContentGroupForm.propTypes = {
   groupNames: PropTypes.arrayOf(PropTypes.string),
   isEditMode: PropTypes.bool,
   isUsedInLocation: PropTypes.bool,
@@ -148,4 +148,4 @@ ContentGroupContainer.propTypes = {
   onEditClick: PropTypes.func,
 };
 
-export default ContentGroupContainer;
+export default ContentGroupForm;

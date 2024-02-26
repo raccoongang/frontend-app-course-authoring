@@ -8,7 +8,7 @@ import {
   ArrowRight as ArrowRightIcon,
 } from '@edx/paragon/icons';
 
-import { getCombinedBadgeList } from './utils';
+import { getCombinedBadgeList } from '../utils';
 import messages from './messages';
 
 const TitleButton = ({
