@@ -67,20 +67,13 @@ const SequenceNavigationTabs = ({
             {intl.formatMessage(messages.newUnitBtnText)}
           </Button>
           {showPasteUnit && (
-            <Dropdown>
-              <Dropdown.Toggle
-                id="sequence-navigation-paste-unit"
-                as={Button}
-                variant="outline-primary"
-                className="d-block"
-                data-testid="dropdown-paste-unit"
-              />
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={handlePasteNewSequenceUnit}>
-                  {intl.formatMessage(messages.pasteAsNewUnitLink)}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <Button
+              variant="outline-primary"
+              iconBefore={PlusIcon}
+              onClick={handlePasteNewSequenceUnit}
+            >
+              {intl.formatMessage(messages.pasteAsNewUnitLink)}
+            </Button>
           )}
         </div>
       </div>
