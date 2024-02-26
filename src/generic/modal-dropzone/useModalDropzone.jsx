@@ -101,7 +101,7 @@ const useModalDropzone = ({
 
         setTimeout(() => {
           onClose();
-        }, 1000);
+        }, 0);
       }
     } catch (error) {
       onSavingStatus({ status: RequestStatus.FAILED });
