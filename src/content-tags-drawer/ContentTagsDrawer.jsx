@@ -27,7 +27,7 @@ const ContentTagsDrawer = ({ id, onClose }) => {
   let contentId = id;
 
   if (contentId === undefined) {
-    contentId = /** @type {{contentId: string}} */(params.contentId);
+    contentId = params.contentId;
   }
 
   const org = extractOrgFromContentId(contentId);
