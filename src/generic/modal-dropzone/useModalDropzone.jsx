@@ -98,10 +98,7 @@ const useModalDropzone = ({
       if (url) {
         onChange(url);
         onSavingStatus({ status: RequestStatus.SUCCESSFUL });
-
-        setTimeout(() => {
-          onClose();
-        }, 0);
+        onClose();
       }
     } catch (error) {
       onSavingStatus({ status: RequestStatus.FAILED });
