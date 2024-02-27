@@ -76,9 +76,10 @@ export function fetchCourseSectionVerticalData(courseId, sequenceId) {
         modelType: 'units',
         models: courseSectionVerticalData.units,
       }));
+      dispatch(fetchStaticFileNoticesSuccess(JSON.parse(localStorage.getItem('staticFileNotices'))));
+      localStorage.removeItem('staticFileNotices');
       dispatch(updateClipboardData(courseSectionVerticalData.userClipboard));
       dispatch(fetchSequenceSuccess({ sequenceId }));
-      dispatch(fetchStaticFileNoticesSuccess([]));
       return true;
     } catch (error) {
       dispatch(updateLoadingCourseSectionVerticalDataStatus({ status: RequestStatus.FAILED }));
@@ -166,7 +167,7 @@ export function createNewCourseXBlock(body, callback, blockId) {
             dispatch(fetchCourseSectionVerticalDataSuccess(courseSectionVerticalData));
           }
           if (body.stagedContent) {
-            dispatch(fetchStaticFileNoticesSuccess(formattedResult.staticFileNotices));
+            localStorage.setItem('staticFileNotices', JSON.stringify(formattedResult.staticFileNotices));
           }
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
