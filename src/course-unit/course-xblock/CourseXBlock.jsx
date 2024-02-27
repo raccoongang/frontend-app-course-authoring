@@ -58,6 +58,9 @@ const CourseXBlock = ({
     case COMPONENT_ICON_TYPES.video:
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
+    case COMPONENT_ICON_TYPES.library:
+      navigate(`/course/${courseId}/editor/library_content/${id}`);
+      break;
     default:
     }
   };
