@@ -11,6 +11,7 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 import configureModalMessages from '../../generic/configure-modal/messages';
 import deleteModalMessages from '../../generic/delete-modal/messages';
+import renderErrorAlertMessages from '../../generic/render-error-alert/messages';
 import initializeStore from '../../store';
 import { getCourseSectionVerticalApiUrl, getXBlockBaseApiUrl } from '../data/api';
 import { fetchCourseSectionVerticalData } from '../data/thunk';
@@ -307,6 +308,36 @@ describe('<CourseXBlock />', () => {
       const visibilityMessage = messages.visibilityMessage.defaultMessage
         .replace('{selectedGroupsLabel}', 'Visibility group 1');
       expect(getByText(visibilityMessage)).toBeInTheDocument();
+    });
+  });
+
+  it('displays a render error message if item has error', async () => {
+    const renderErrorMessage = 'Some error message';
+    const { getByText, getByLabelText, queryByTestId } = renderComponent(
+      {
+        renderError: renderErrorMessage,
+      },
+    );
+
+    await waitFor(() => {
+      const errorAlertTitle = renderErrorAlertMessages.alertRenderErrorTitle.defaultMessage;
+      const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;
+      const errorAlertMessage = renderErrorAlertMessages.alertRenderErrorMessage.defaultMessage
+        .replace('{message}', renderErrorMessage);
+      const contentIframe = queryByTestId('content-iframe-test-id');
+
+      // check displaying of the error alert
+      expect(getByText(errorAlertTitle)).toBeInTheDocument();
+      expect(getByText(errorAlertDescription)).toBeInTheDocument();
+      expect(getByText(errorAlertMessage)).toBeInTheDocument();
+
+      // check availability of the item title and controls
+      expect(getByText(name)).toBeInTheDocument();
+      expect(getByLabelText(messages.blockAltButtonEdit.defaultMessage)).toBeInTheDocument();
+      expect(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage)).toBeInTheDocument();
+
+      // check if is the content of the element not being displayed
+      expect(contentIframe).not.toBeInTheDocument();
     });
   });
 });

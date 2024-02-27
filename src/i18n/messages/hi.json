@@ -1236,5 +1236,8 @@
   "course-authoring.group-configurations.container.contains-group": "Contains 1 group",
   "course-authoring.group-configurations.container.not-in-use": "Not in use",
   "course-authoring.group-configurations.container.used-in-locations": "Used in {len} locations",
-  "course-authoring.group-configurations.container.used-in-location": "Used in 1 location"
+  "course-authoring.group-configurations.container.used-in-location": "Used in 1 location",
+  "course-authoring.course-unit.general.alert.render-error.message": "Error: {message}",
+  "course-authoring.course-unit.general.alert.render-error.title": "We're having trouble rendering your component",
+  "course-authoring.course-unit.general.alert.render-error.description": "Students will not be able to access this component. Re-edit your component to fix the error."
 }

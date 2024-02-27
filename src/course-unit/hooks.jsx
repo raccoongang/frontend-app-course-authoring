@@ -52,6 +52,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
 
   const unitTitle = courseUnit.metadata?.displayName || '';
   const sequenceId = courseUnit.ancestorInfo?.ancestors[0].id;
+  const unitRenderError = courseUnit.renderError || '';
 
   const headerNavigationsActions = {
     handleViewLive: () => {
@@ -149,5 +150,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     courseVerticalChildren,
     handleXBlockDragAndDrop,
     canPasteComponent,
+    unitRenderError,
   };
 };
