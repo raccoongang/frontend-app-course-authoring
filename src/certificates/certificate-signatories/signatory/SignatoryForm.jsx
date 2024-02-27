@@ -120,7 +120,16 @@ const SignatoryForm = ({
                 <span className="x-small">{intl.formatMessage(messages.imageDescription)}</span>
               </Form.Control.Feedback>
             </Stack>
-            <Button onClick={open}>{intl.formatMessage(messages.uploadImageButton)}</Button>
+            <Button onClick={open}>
+              {intl.formatMessage(
+                messages.uploadImageButton,
+                {
+                  uploadText: signatureImagePath
+                    ? intl.formatMessage(messages.uploadModalReplace)
+                    : intl.formatMessage(messages.uploadModal),
+                },
+              )}
+            </Button>
           </Stack>
         </Form.Group>
       </Stack>
