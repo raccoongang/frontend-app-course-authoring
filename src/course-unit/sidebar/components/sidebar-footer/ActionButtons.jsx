@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { Divider } from '../../../../generic/divider';
 import { getCanEdit, getCourseUnitData } from '../../../data/selectors';
 import { copyToClipboard } from '../../../data/thunk';
 import messages from '../../messages';
@@ -26,19 +27,26 @@ const ActionButtons = ({ openDiscardModal, handlePublishing }) => {
         </Button>
       )}
       {(published && hasChanges) && (
-        <Button size="sm" variant="link" onClick={openDiscardModal} className="mt-2">
+        <Button
+          size="sm"
+          variant="link"
+          onClick={openDiscardModal}
+          className="course-unit-sidebar-footer__discard-changes__btn mt-2"
+        >
           {intl.formatMessage(messages.actionButtonDiscardChangesTitle)}
         </Button>
       )}
       {enableCopyPasteUnits && canEdit && (
-        <Button
-          onClick={() => dispatch(copyToClipboard(id))}
-          className="mt-2"
-          variant="outline-primary"
-          size="sm"
-        >
-          {intl.formatMessage(messages.actionButtonCopyUnitTitle)}
-        </Button>
+        <>
+          <Divider className="course-unit-sidebar-footer__divider" />
+          <Button
+            onClick={() => dispatch(copyToClipboard(id))}
+            variant="outline-primary"
+            size="sm"
+          >
+            {intl.formatMessage(messages.actionButtonCopyUnitTitle)}
+          </Button>
+        </>
       )}
     </>
   );
