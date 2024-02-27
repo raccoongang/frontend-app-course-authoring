@@ -71,11 +71,15 @@ const messages = defineMessages({
   },
   uploadImageButton: {
     id: 'course-authoring.certificates.signatories.upload.image.button',
-    defaultMessage: 'Upload signature image',
+    defaultMessage: '{uploadText} signature image',
   },
   uploadModal: {
     id: 'course-authoring.certificates.signatories.upload.modal',
     defaultMessage: 'Upload',
+  },
+  uploadModalReplace: {
+    id: 'course-authoring.certificates.signatories.upload.modal.replace',
+    defaultMessage: 'Replace',
   },
   deleteSignatoryConfirmation: {
     id: 'course-authoring.certificates.signatories.confirm-modal',
