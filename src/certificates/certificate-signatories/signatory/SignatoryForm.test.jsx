@@ -12,14 +12,6 @@ import SignatoryForm from './SignatoryForm';
 
 let store;
 
-jest.mock('@edx/frontend-platform/i18n', () => ({
-  ...jest.requireActual('@edx/frontend-platform/i18n'),
-  useIntl: () => ({
-    formatMessage: (message) => message.defaultMessage,
-  }),
-  getConfig: () => ({ STUDIO_BASE_URL: 'http://localhost' }),
-}));
-
 const renderSignatory = (props) => render(
   <Provider store={store}>
     <IntlProvider locale="en">
@@ -83,11 +75,14 @@ describe('Signatory Component', () => {
 
   it('opens image upload modal on button click', () => {
     const { getByRole, queryByRole } = renderSignatory(defaultProps);
-    const uploadButton = getByRole('button', { name: messages.uploadImageButton.defaultMessage });
+    const replaceButton = getByRole(
+      'button',
+      { name: messages.uploadImageButton.defaultMessage.replace('{uploadText}', messages.uploadModalReplace.defaultMessage) },
+    );
 
     expect(queryByRole('presentation')).not.toBeInTheDocument();
 
-    userEvent.click(uploadButton);
+    userEvent.click(replaceButton);
 
     expect(getByRole('presentation')).toBeInTheDocument();
   });
@@ -119,5 +114,48 @@ describe('Signatory Component', () => {
     const deleteIcon = queryByRole('button', { name: commonMessages.saveTooltip.defaultMessage });
 
     expect(deleteIcon).not.toBeInTheDocument();
+  });
+
+  it('renders button with Replace text if there is a signatureImagePath', () => {
+    const newProps = {
+      ...defaultProps,
+      isEdit: false,
+    };
+
+    const { getByRole, queryByRole } = renderSignatory(newProps);
+
+    const replaceButton = getByRole(
+      'button',
+      { name: messages.uploadImageButton.defaultMessage.replace('{uploadText}', messages.uploadModalReplace.defaultMessage) },
+    );
+    const uploadButton = queryByRole(
+      'button',
+      { name: messages.uploadImageButton.defaultMessage.replace('{uploadText}', messages.uploadModal.defaultMessage) },
+    );
+
+    expect(replaceButton).toBeInTheDocument();
+    expect(uploadButton).not.toBeInTheDocument();
+  });
+
+  it('renders button with Upload text if there is no signatureImagePath', () => {
+    const newProps = {
+      ...defaultProps,
+      signatureImagePath: '',
+      isEdit: false,
+    };
+
+    const { getByRole, queryByRole } = renderSignatory(newProps);
+
+    const uploadButton = getByRole(
+      'button',
+      { name: messages.uploadImageButton.defaultMessage.replace('{uploadText}', messages.uploadModal.defaultMessage) },
+    );
+    const replaceButton = queryByRole(
+      'button',
+      { name: messages.uploadImageButton.defaultMessage.replace('{uploadText}', messages.uploadModalReplace.defaultMessage) },
+    );
+
+    expect(uploadButton).toBeInTheDocument();
+    expect(replaceButton).not.toBeInTheDocument();
   });
 });
