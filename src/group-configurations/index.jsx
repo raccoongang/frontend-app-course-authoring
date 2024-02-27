@@ -56,49 +56,51 @@ const GroupConfigurations = ({ courseId }) => {
   const contentGroup = allGroupConfigurations?.[shouldShowEnrollmentTrack ? 1 : 0];
 
   return (
-    <Container size="xl" className="group-configurations px-4">
-      <div className="mt-5" />
-      <SubHeader
-        title={formatMessage(messages.headingTitle)}
-        subtitle={formatMessage(messages.headingSubtitle)}
-      />
-      <Layout
-        lg={[{ span: 9 }, { span: 3 }]}
-        md={[{ span: 9 }, { span: 3 }]}
-        sm={[{ span: 9 }, { span: 3 }]}
-        xs={[{ span: 9 }, { span: 3 }]}
-        xl={[{ span: 9 }, { span: 3 }]}
-      >
-        <Layout.Element>
-          <Stack gap={3} data-testid="group-configurations-main-content-wrapper">
-            {!!enrollmentTrackGroup && (
-              <EnrollmentTrackGroupsSection
-                availableGroup={enrollmentTrackGroup}
-              />
-            )}
-            {!!contentGroup && (
-              <ContentGroupsSection
-                availableGroup={contentGroup}
-                contentGroupActions={contentGroupActions}
-              />
-            )}
-            {shouldShowExperimentGroups && (
-              <ExperimentConfigurationsSection
-                availableGroups={experimentGroupConfigurations}
-                experimentConfigurationActions={experimentConfigurationActions}
-              />
-            )}
-          </Stack>
-        </Layout.Element>
-        <Layout.Element>
-          <GroupConfigurationSidebar
-            courseId={courseId}
-            shouldShowExperimentGroups={shouldShowExperimentGroups}
-            shouldShowContentGroup={!!contentGroup}
-            shouldShowEnrollmentTrackGroup={!!enrollmentTrackGroup}
-          />
-        </Layout.Element>
-      </Layout>
+    <>
+      <Container size="xl" className="group-configurations px-4">
+        <div className="mt-5" />
+        <SubHeader
+          title={formatMessage(messages.headingTitle)}
+          subtitle={formatMessage(messages.headingSubtitle)}
+        />
+        <Layout
+          lg={[{ span: 9 }, { span: 3 }]}
+          md={[{ span: 9 }, { span: 3 }]}
+          sm={[{ span: 9 }, { span: 3 }]}
+          xs={[{ span: 9 }, { span: 3 }]}
+          xl={[{ span: 9 }, { span: 3 }]}
+        >
+          <Layout.Element>
+            <Stack gap={3} data-testid="group-configurations-main-content-wrapper">
+              {!!enrollmentTrackGroup && (
+                <EnrollmentTrackGroupsSection
+                  availableGroup={enrollmentTrackGroup}
+                />
+              )}
+              {!!contentGroup && (
+                <ContentGroupsSection
+                  availableGroup={contentGroup}
+                  contentGroupActions={contentGroupActions}
+                />
+              )}
+              {shouldShowExperimentGroups && (
+                <ExperimentConfigurationsSection
+                  availableGroups={experimentGroupConfigurations}
+                  experimentConfigurationActions={experimentConfigurationActions}
+                />
+              )}
+            </Stack>
+          </Layout.Element>
+          <Layout.Element>
+            <GroupConfigurationSidebar
+              courseId={courseId}
+              shouldShowExperimentGroups={shouldShowExperimentGroups}
+              shouldShowContentGroup={!!contentGroup}
+              shouldShowEnrollmentTrackGroup={!!enrollmentTrackGroup}
+            />
+          </Layout.Element>
+        </Layout>
+      </Container>
       <div className="alert-toast">
         <InternetConnectionAlert
           isFailed={savingStatus === RequestStatus.FAILED}
@@ -110,7 +112,7 @@ const GroupConfigurations = ({ courseId }) => {
           title={processingNotificationTitle}
         />
       </div>
-    </Container>
+    </>
   );
 };
 
