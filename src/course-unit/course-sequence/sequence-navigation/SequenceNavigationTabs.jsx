@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Dropdown } from '@openedx/paragon';
-import { Plus as PlusIcon } from '@openedx/paragon/icons';
+import { Button } from '@openedx/paragon';
+import { Plus as PlusIcon, ContentPasteGo as ContentPasteGoIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate } from 'react-router-dom';
 
@@ -59,7 +59,7 @@ const SequenceNavigationTabs = ({
             />
           ))}
           <Button
-            className="sequence-navigation-tabs-new-unit-btn"
+            className="sequence-navigation-tabs-action-btn"
             variant="outline-primary"
             iconBefore={PlusIcon}
             onClick={handleAddNewSequenceUnit}
@@ -67,20 +67,14 @@ const SequenceNavigationTabs = ({
             {intl.formatMessage(messages.newUnitBtnText)}
           </Button>
           {showPasteUnit && (
-            <Dropdown>
-              <Dropdown.Toggle
-                id="sequence-navigation-paste-unit"
-                as={Button}
-                variant="outline-primary"
-                className="d-block"
-                data-testid="dropdown-paste-unit"
-              />
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={handlePasteNewSequenceUnit}>
-                  {intl.formatMessage(messages.pasteAsNewUnitLink)}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <Button
+              className="sequence-navigation-tabs-action-btn"
+              variant="outline-primary"
+              iconBefore={ContentPasteGoIcon}
+              onClick={handlePasteNewSequenceUnit}
+            >
+              {intl.formatMessage(messages.pasteAsNewUnitLink)}
+            </Button>
           )}
         </div>
       </div>
