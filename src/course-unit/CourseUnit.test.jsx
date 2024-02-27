@@ -1165,7 +1165,7 @@ describe('<CourseUnit />', () => {
 
     it('should copy a unit, paste it as a new unit, and update the course section vertical data', async () => {
       const {
-        getAllByTestId, getByTestId, getByRole, getByText,
+        getAllByTestId, getByRole,
       } = render(<RootWrapper />);
 
       axiosMock
@@ -1189,9 +1189,7 @@ describe('<CourseUnit />', () => {
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(copyToClipboard(blockId), store.dispatch);
 
-      userEvent.click(getByTestId('dropdown-paste-unit'));
-
-      userEvent.click(getByText(courseSequenceMessages.pasteAsNewUnitLink.defaultMessage));
+      userEvent.click(getByRole('button', { name: courseSequenceMessages.pasteAsNewUnitLink.defaultMessage }));
 
       let units = null;
       const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
@@ -1228,7 +1226,7 @@ describe('<CourseUnit />', () => {
 
     it('displays a notification about new files after pasting a component', async () => {
       const {
-        queryByTestId, getByTestId, getByRole, getByText,
+        queryByTestId, getByTestId, getByRole,
       } = render(<RootWrapper />);
 
       axiosMock
@@ -1252,9 +1250,7 @@ describe('<CourseUnit />', () => {
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(copyToClipboard(blockId), store.dispatch);
 
-      userEvent.click(getByTestId('dropdown-paste-unit'));
-
-      userEvent.click(getByText(courseSequenceMessages.pasteAsNewUnitLink.defaultMessage));
+      userEvent.click(getByRole('button', { name: courseSequenceMessages.pasteAsNewUnitLink.defaultMessage }));
 
       const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
       const updatedAncestorsChild = updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0];
@@ -1293,7 +1289,7 @@ describe('<CourseUnit />', () => {
 
     it('displays a notification about conflicting errors after pasting a component', async () => {
       const {
-        queryByTestId, getByTestId, getByRole, getByText,
+        queryByTestId, getByTestId, getByRole,
       } = render(<RootWrapper />);
 
       axiosMock
@@ -1317,9 +1313,7 @@ describe('<CourseUnit />', () => {
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(copyToClipboard(blockId), store.dispatch);
 
-      userEvent.click(getByTestId('dropdown-paste-unit'));
-
-      userEvent.click(getByText(courseSequenceMessages.pasteAsNewUnitLink.defaultMessage));
+      userEvent.click(getByRole('button', { name: courseSequenceMessages.pasteAsNewUnitLink.defaultMessage }));
 
       const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
       const updatedAncestorsChild = updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0];
@@ -1358,7 +1352,7 @@ describe('<CourseUnit />', () => {
 
     it('displays a notification about error files after pasting a component', async () => {
       const {
-        queryByTestId, getByTestId, getByRole, getByText,
+        queryByTestId, getByTestId, getByRole,
       } = render(<RootWrapper />);
 
       axiosMock
@@ -1382,9 +1376,7 @@ describe('<CourseUnit />', () => {
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(copyToClipboard(blockId), store.dispatch);
 
-      userEvent.click(getByTestId('dropdown-paste-unit'));
-
-      userEvent.click(getByText(courseSequenceMessages.pasteAsNewUnitLink.defaultMessage));
+      userEvent.click(getByRole('button', { name: courseSequenceMessages.pasteAsNewUnitLink.defaultMessage }));
 
       const updatedCourseSectionVerticalData = cloneDeep(courseSectionVerticalMock);
       const updatedAncestorsChild = updatedCourseSectionVerticalData.xblock_info.ancestor_info.ancestors[0];
