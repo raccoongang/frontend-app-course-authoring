@@ -5,6 +5,7 @@ import {
   FormattedMessage, injectIntl, useIntl,
 } from '@edx/frontend-platform/i18n';
 import { Field } from 'formik';
+import classNames from 'classnames';
 
 import messages from './messages';
 
@@ -19,6 +20,7 @@ const UnitTab = ({
   const {
     isVisibleToStaffOnly,
     selectedPartitionIndex,
+    selectedGroups,
   } = values;
 
   const handleChange = (e) => {
@@ -28,6 +30,12 @@ const UnitTab = ({
   const handleSelect = (e) => {
     setFieldValue('selectedPartitionIndex', parseInt(e.target.value, 10));
     setFieldValue('selectedGroups', []);
+  };
+
+  const checkIsDeletedGroup = (group) => {
+    const isGroupSelected = selectedGroups.includes(group.id.toString());
+
+    return group.deleted && isGroupSelected;
   };
 
   return (
@@ -95,9 +103,19 @@ const UnitTab = ({
                     value={`${group.id}`}
                     name="selectedGroups"
                   />
-                  <Form.Label isInline>
-                    {group.name}
-                  </Form.Label>
+                  <div>
+                    <Form.Label
+                      className={classNames({ 'text-danger': checkIsDeletedGroup(group) })}
+                      isInline
+                    >
+                      {group.name}
+                    </Form.Label>
+                    {group.deleted && (
+                      <Form.Control.Feedback type="invalid" hasIcon={false}>
+                        {intl.formatMessage(messages.unitSelectDeletedGroupErrorMessage)}
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
                 </Form.Group>
               ))}
             </div>
@@ -121,6 +139,9 @@ UnitTab.propTypes = {
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
+    selectedGroups: PropTypes.oneOfType([
+      PropTypes.string,
+    ]),
   }).isRequired,
   setFieldValue: PropTypes.func.isRequired,
   showWarning: PropTypes.bool.isRequired,
