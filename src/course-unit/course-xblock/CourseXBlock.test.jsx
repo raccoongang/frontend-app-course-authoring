@@ -11,7 +11,6 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
 import configureModalMessages from '../../generic/configure-modal/messages';
 import deleteModalMessages from '../../generic/delete-modal/messages';
-import renderErrorAlertMessages from '../../generic/render-error-alert/messages';
 import initializeStore from '../../store';
 import { getCourseSectionVerticalApiUrl, getXBlockBaseApiUrl } from '../data/api';
 import { fetchCourseSectionVerticalData } from '../data/thunk';
@@ -19,6 +18,7 @@ import { executeThunk } from '../../utils';
 import { getCourseId } from '../data/selectors';
 import { COMPONENT_ICON_TYPES, PUBLISH_TYPES } from '../constants';
 import { courseSectionVerticalMock, courseVerticalChildrenMock } from '../__mocks__';
+import renderErrorAlertMessages from './render-error-alert/messages';
 import CourseXBlock from './CourseXBlock';
 import messages from './messages';
 

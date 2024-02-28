@@ -8,7 +8,6 @@ import { DraggableList, ErrorAlert } from '@edx/frontend-lib-content-components'
 import { Warning as WarningIcon } from '@edx/paragon/icons';
 
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
-import RenderErrorAlert from '../generic/render-error-alert';
 import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
@@ -56,7 +55,6 @@ const CourseUnit = ({ courseId }) => {
     courseVerticalChildren,
     handleXBlockDragAndDrop,
     canPasteComponent,
-    unitRenderError,
   } = useCourseUnit({ courseId, blockId });
 
   const initialXBlocksData = useMemo(() => courseVerticalChildren.children ?? [], [courseVerticalChildren.children]);
@@ -120,15 +118,13 @@ const CourseUnit = ({ courseId }) => {
               />
             )}
           />
-          {unitRenderError ? <RenderErrorAlert errorMessage={unitRenderError} /> : (
-            <Sequence
-              courseId={courseId}
-              sequenceId={sequenceId}
-              unitId={blockId}
-              handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
-              showPasteUnit={showPasteUnit}
-            />
-          )}
+          <Sequence
+            courseId={courseId}
+            sequenceId={sequenceId}
+            unitId={blockId}
+            handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+            showPasteUnit={showPasteUnit}
+          />
           <Layout
             lg={[{ span: 8 }, { span: 4 }]}
             md={[{ span: 8 }, { span: 4 }]}
@@ -148,44 +144,40 @@ const CourseUnit = ({ courseId }) => {
                 staticFileNotices={staticFileNotices}
                 courseId={courseId}
               />
-              {unitRenderError ? <RenderErrorAlert errorMessage={unitRenderError} /> : (
-                <>
-                  <Stack gap={4} className="mb-4 course-unit__xblocks">
-                    <DraggableList
-                      itemList={unitXBlocks}
-                      setState={setUnitXBlocks}
-                      updateOrder={finalizeXBlockOrder}
-                    >
-                      {unitXBlocks.map(({
-                        name, id, blockType: type, renderError, shouldScroll, userPartitionInfo, validationMessages,
-                      }) => (
-                        <CourseXBlock
-                          id={id}
-                          key={id}
-                          title={name}
-                          type={type}
-                          renderError={renderError}
-                          validationMessages={validationMessages}
-                          shouldScroll={shouldScroll}
-                          unitXBlockActions={unitXBlockActions}
-                          handleConfigureSubmit={handleConfigureSubmit}
-                          data-testid="course-xblock"
-                          userPartitionInfo={userPartitionInfo}
-                        />
-                      ))}
-                    </DraggableList>
-                  </Stack>
-                  <AddComponent
-                    blockId={blockId}
-                    handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
-                  />
-                  {showPasteXBlock && canPasteComponent && (
-                    <PasteComponent
-                      clipboardData={sharedClipboardData}
-                      handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+              <Stack gap={4} className="mb-4 course-unit__xblocks">
+                <DraggableList
+                  itemList={unitXBlocks}
+                  setState={setUnitXBlocks}
+                  updateOrder={finalizeXBlockOrder}
+                >
+                  {unitXBlocks.map(({
+                    name, id, blockType: type, renderError, shouldScroll, userPartitionInfo, validationMessages,
+                  }) => (
+                    <CourseXBlock
+                      id={id}
+                      key={id}
+                      title={name}
+                      type={type}
+                      renderError={renderError}
+                      validationMessages={validationMessages}
+                      shouldScroll={shouldScroll}
+                      unitXBlockActions={unitXBlockActions}
+                      handleConfigureSubmit={handleConfigureSubmit}
+                      data-testid="course-xblock"
+                      userPartitionInfo={userPartitionInfo}
                     />
-                  )}
-                </>
+                  ))}
+                </DraggableList>
+              </Stack>
+              <AddComponent
+                blockId={blockId}
+                handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+              />
+              {showPasteXBlock && canPasteComponent && (
+                <PasteComponent
+                  clipboardData={sharedClipboardData}
+                  handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+                />
               )}
             </Layout.Element>
             <Layout.Element>

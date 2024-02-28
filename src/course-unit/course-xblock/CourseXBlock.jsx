@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
-import RenderErrorAlert from '../../generic/render-error-alert';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
@@ -19,6 +18,7 @@ import { copyToClipboard } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import XBlockContent from './xblock-content/XBlockContent';
 import XBlockMessages from './xblock-messages/XBlockMessages';
+import RenderErrorAlert from './render-error-alert';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
 

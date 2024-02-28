@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Info as InfoIcon } from '@edx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import AlertMessage from '../alert-message';
+import AlertMessage from '../../../generic/alert-message';
 import messages from './messages';
 
 const RenderErrorAlert = ({
@@ -12,8 +12,9 @@ const RenderErrorAlert = ({
 
   return (
     <AlertMessage
-      variant={variant}
       icon={icon}
+      className="m-0"
+      variant={variant}
       title={title || intl.formatMessage(messages.alertRenderErrorTitle)}
       description={description || (
         <>

@@ -45,7 +45,6 @@ import headerTitleMessages from './header-title/messages';
 import courseSequenceMessages from './course-sequence/messages';
 import addComponentMessages from './add-component/messages';
 import sidebarMessages from './sidebar/messages';
-import renderErrorAlertMessages from '../generic/render-error-alert/messages';
 import { extractCourseUnitId } from './sidebar/utils';
 import courseXBlockMessages from './course-xblock/messages';
 import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
@@ -1370,55 +1369,6 @@ describe('<CourseUnit />', () => {
 
       const xBlock2 = store.getState().courseUnit.courseVerticalChildren.children[1].id;
       expect(xBlock1).toBe(xBlock2);
-    });
-  });
-
-  it('displays a render error message if unit has error', async () => {
-    const unitRenderErrorText = 'Cannot resolve bundle XXXXXXX';
-    axiosMock
-      .onGet(getCourseUnitApiUrl(courseId))
-      .reply(200, {
-        ...courseUnitIndexMock,
-        render_error: unitRenderErrorText,
-      });
-    await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
-    const {
-      getByText,
-      getByRole,
-      queryByRole,
-      queryAllByText,
-      queryAllByTestId,
-    } = render(<RootWrapper />);
-
-    await waitFor(() => {
-      // check displaying of two error alerts
-      const errorAlertTitle = renderErrorAlertMessages.alertRenderErrorTitle.defaultMessage;
-      const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;
-      const errorAlertMessage = renderErrorAlertMessages.alertRenderErrorMessage.defaultMessage
-        .replace('{message}', unitRenderErrorText);
-
-      expect(queryAllByText(errorAlertTitle)).toHaveLength(2);
-      expect(queryAllByText(errorAlertDescription)).toHaveLength(2);
-      expect(queryAllByText(errorAlertMessage)).toHaveLength(2);
-
-      // check availability of the unit title, breadcrumbs, controls and sidebar
-      const currentSectionName = courseUnitIndexMock.ancestor_info.ancestors[1].display_name;
-      const currentSubSectionName = courseUnitIndexMock.ancestor_info.ancestors[1].display_name;
-
-      expect(getByText(unitDisplayName)).toBeInTheDocument();
-      expect(getByRole('button', { name: headerTitleMessages.altButtonEdit.defaultMessage })).toBeInTheDocument();
-      expect(getByRole('button', { name: headerTitleMessages.altButtonSettings.defaultMessage })).toBeInTheDocument();
-      expect(getByRole('button', { name: headerNavigationsMessages.viewLiveButton.defaultMessage })).toBeInTheDocument();
-      expect(getByRole('button', { name: headerNavigationsMessages.previewButton.defaultMessage })).toBeInTheDocument();
-      expect(getByRole('button', { name: currentSectionName })).toBeInTheDocument();
-      expect(getByRole('button', { name: currentSubSectionName })).toBeInTheDocument();
-
-      // check if is the sequence block and items not being displayed
-      const contentItem = queryAllByTestId('course-xblock');
-      const addNewUnitBtn = queryByRole('button', { name: courseSequenceMessages.newUnitBtnText.defaultMessage });
-
-      expect(contentItem).toHaveLength(0);
-      expect(addNewUnitBtn).not.toBeInTheDocument();
     });
   });
 });
