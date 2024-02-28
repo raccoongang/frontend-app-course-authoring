@@ -83,22 +83,6 @@ describe('<ConfigureModal /> for Section', () => {
     expect(getByText('Section visibility')).toBeInTheDocument();
     expect(getByText(messages.hideFromLearners.defaultMessage)).toBeInTheDocument();
   });
-
-  it('disables the Save button and enables it if there is a change', () => {
-    const { getByRole, getByPlaceholderText, getByTestId } = renderComponent();
-
-    const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
-    expect(saveButton).toBeDisabled();
-
-    const input = getByPlaceholderText('MM/DD/YYYY');
-    userEvent.type(input, '12/15/2023');
-
-    const visibilityTab = getByRole('tab', { name: messages.visibilityTabTitle.defaultMessage });
-    userEvent.click(visibilityTab);
-    const checkbox = getByTestId('visibility-checkbox');
-    userEvent.click(checkbox);
-    expect(saveButton).not.toBeDisabled();
-  });
 });
 
 const renderSubsectionComponent = () => render(
@@ -176,17 +160,6 @@ describe('<ConfigureModal /> for Subsection', () => {
     expect(getByText(messages.timed.defaultMessage)).toBeInTheDocument();
     expect(getByText(messages.timedDescription.defaultMessage)).toBeInTheDocument();
   });
-
-  it('disables the Save button and enables it if there is a change', () => {
-    const { getByRole, getByTestId } = renderSubsectionComponent();
-
-    const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
-    expect(saveButton).toBeDisabled();
-
-    const input = getByTestId('grader-type-select');
-    userEvent.selectOptions(input, 'Exam');
-    expect(saveButton).not.toBeDisabled();
-  });
 });
 
 const renderUnitComponent = (props) => render(
@@ -243,34 +216,6 @@ describe('<ConfigureModal /> for Unit', () => {
 
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage })).toBeInTheDocument();
     expect(getByRole('button', { name: messages.saveButton.defaultMessage })).toBeInTheDocument();
-  });
-
-  it('disables the Save button and enables it if there is a change', () => {
-    const newCurrentItemData = {
-      ...currentUnitMock,
-      userPartitionInfo: {
-        ...currentUnitMock.userPartitionInfo,
-        selectedPartitionIndex: 0,
-      },
-    };
-    const { getByRole, getByTestId } = renderUnitComponent({
-      currentItemData: newCurrentItemData,
-    });
-
-    const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
-    expect(saveButton).toBeDisabled();
-
-    const input = getByTestId('group-type-select');
-    // unrestrict access
-    userEvent.selectOptions(input, '-1');
-    expect(saveButton).not.toBeDisabled();
-
-    userEvent.selectOptions(input, '0');
-    expect(saveButton).toBeDisabled();
-
-    const checkbox = getByTestId('unit-visibility-checkbox');
-    userEvent.click(checkbox);
-    expect(saveButton).not.toBeDisabled();
   });
 });
 
@@ -329,33 +274,5 @@ describe('<ConfigureModal /> for XBlock', () => {
 
     expect(getByRole('button', { name: messages.cancelButton.defaultMessage })).toBeInTheDocument();
     expect(getByRole('button', { name: messages.saveButton.defaultMessage })).toBeInTheDocument();
-  });
-
-  it('disables the Save button and enables it if there is a change', () => {
-    const newCurrentItemData = {
-      ...currentUnitMock,
-      userPartitionInfo: {
-        ...currentUnitMock.userPartitionInfo,
-        selectedPartitionIndex: 0,
-      },
-    };
-    const { getByRole, getByTestId } = renderXBlockComponent({
-      currentItemData: newCurrentItemData,
-    });
-
-    const saveButton = getByRole('button', { name: messages.saveButton.defaultMessage });
-    expect(saveButton).toBeDisabled();
-
-    const input = getByTestId('group-type-select');
-    // unrestrict access
-    userEvent.selectOptions(input, '-1');
-    expect(saveButton).not.toBeDisabled();
-
-    userEvent.selectOptions(input, '0');
-    expect(saveButton).toBeDisabled();
-
-    const checkbox = getByTestId('unit-visibility-checkbox');
-    userEvent.click(checkbox);
-    expect(saveButton).not.toBeDisabled();
   });
 });

@@ -2,7 +2,6 @@ import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
-import _ from 'lodash';
 import { snakeCase } from 'lodash/string';
 import moment from 'moment';
 import { getConfig, getPath } from '@edx/frontend-platform';
@@ -299,25 +298,3 @@ export const objectToQueryString = (obj) => (
     (key) => `${key }=${ obj[key]}`,
   ).join('&')
 );
-
-/**
- * Recursively deep sorts the properties of an object.
- * @param {Object|Array|*} obj - The object to deep sort.
- * @returns {Object|Array|*} - The deep sorted object.
- */
-export function deepSortObject(obj) {
-  if (!_.isObject(obj)) {
-    return obj;
-  }
-
-  if (Array.isArray(obj)) {
-    return _.map(obj, deepSortObject).sort();
-  }
-
-  return _.chain(obj)
-    .toPairs() // Convert object to key-value pairs array
-    .sortBy(0) // Sort by keys
-    .fromPairs() // Convert back to object
-    .mapValues(deepSortObject) // Recursively sort property values
-    .value();
-}
