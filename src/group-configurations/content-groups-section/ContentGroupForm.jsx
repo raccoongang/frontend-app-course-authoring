@@ -32,6 +32,7 @@ const ContentGroupForm = ({
   const validationSchema = Yup.object().shape({
     newGroupName: Yup.string()
       .required(formatMessage(messages.requiredError))
+      .trim()
       .test(
         'unique-name-restriction',
         formatMessage(messages.invalidMessage),
@@ -60,7 +61,7 @@ const ContentGroupForm = ({
           return (
             <>
               <Form.Group
-                className="mt-3 mb-4 content-group-new__input"
+                className="mt-3 mb-4 configuration-form-group"
                 isInvalid={isInvalid}
               >
                 <Form.Control
@@ -70,7 +71,7 @@ const ContentGroupForm = ({
                   placeholder={formatMessage(messages.newGroupInputPlaceholder)}
                 />
                 {isInvalid && (
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type="invalid" hasIcon={false}>
                     {errors.newGroupName}
                   </Form.Control.Feedback>
                 )}

@@ -1,5 +1,5 @@
 import {
-  allGroupNameAreUnique,
+  allGroupNamesAreUnique,
   getNextGroupName,
   getGroupPercentage,
 } from './utils';
@@ -129,15 +129,15 @@ describe('utils module', () => {
     });
   });
 
-  describe('allGroupNameAreUnique', () => {
+  describe('allGroupNamesAreUnique', () => {
     it('returns true if all group names are unique', () => {
       const groups = [{ name: 'A' }, { name: 'B' }, { name: 'C' }];
-      expect(allGroupNameAreUnique(groups)).toBe(true);
+      expect(allGroupNamesAreUnique(groups)).toBe(true);
     });
 
     it('returns false if any group names are not unique', () => {
       const groups = [{ name: 'A' }, { name: 'B' }, { name: 'A' }];
-      expect(allGroupNameAreUnique(groups)).toBe(false);
+      expect(allGroupNamesAreUnique(groups)).toBe(false);
     });
   });
 });

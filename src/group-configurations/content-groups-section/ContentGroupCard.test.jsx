@@ -52,7 +52,7 @@ describe('<ContentGroupCard />', () => {
     const {
       getByText, queryByTestId, getByTestId, queryByText,
     } = renderComponent();
-    const cardTitle = getByTestId('configuration-card-header__button');
+    const cardTitle = getByTestId('configuration-card-header-button');
     userEvent.click(cardTitle);
     expect(queryByTestId('content-group-card-content')).toBeInTheDocument();
     expect(
@@ -93,7 +93,7 @@ describe('<ContentGroupCard />', () => {
       queryByText(commonMessages.accessTo.defaultMessage),
     ).not.toBeInTheDocument();
 
-    const cardTitle = getByTestId('configuration-card-header__button');
+    const cardTitle = getByTestId('configuration-card-header-button');
     userEvent.click(cardTitle);
     expect(getByTestId('configuration-card-usage-empty')).toBeInTheDocument();
   });

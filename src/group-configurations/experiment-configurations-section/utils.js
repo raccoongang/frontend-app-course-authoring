@@ -10,13 +10,14 @@ import { ALPHABET_LETTERS } from './constants';
  */
 const getNextGroupName = (groups, groupFieldName = 'name') => {
   const existingGroupNames = groups.map((group) => group.name);
+  const lettersCount = ALPHABET_LETTERS.length;
 
   let nextIndex = existingGroupNames.length + 1;
 
   let groupName = '';
   while (nextIndex > 0) {
-    groupName = ALPHABET_LETTERS[(nextIndex - 1) % 26] + groupName;
-    nextIndex = Math.floor((nextIndex - 1) / 26);
+    groupName = ALPHABET_LETTERS[(nextIndex - 1) % lettersCount] + groupName;
+    nextIndex = Math.floor((nextIndex - 1) / lettersCount);
   }
 
   let counter = 0;
@@ -26,8 +27,8 @@ const getNextGroupName = (groups, groupFieldName = 'name') => {
     let newIndex = existingGroupNames.length + 1 + counter;
     groupName = '';
     while (newIndex > 0) {
-      groupName = ALPHABET_LETTERS[(newIndex - 1) % 26] + groupName;
-      newIndex = Math.floor((newIndex - 1) / 26);
+      groupName = ALPHABET_LETTERS[(newIndex - 1) % lettersCount] + groupName;
+      newIndex = Math.floor((newIndex - 1) / lettersCount);
     }
     newName = groupName;
   }
@@ -39,14 +40,14 @@ const getNextGroupName = (groups, groupFieldName = 'name') => {
  * @param {number} totalGroups - Total number of groups.
  * @returns {string} The percentage of groups, each group has the same value.
  */
-const getGroupPercentage = (totalGroups) => `${totalGroups === 0 ? 0 : Math.floor(100 / totalGroups)}%`;
+const getGroupPercentage = (totalGroups) => (totalGroups === 0 ? '0%' : `${Math.floor(100 / totalGroups)}%`);
 
 /**
  * Checks if all group names in the array are unique.
  * @param {Array} groups - An array of group objects.
  * @returns {boolean} True if all group names are unique, otherwise false.
  */
-const allGroupNameAreUnique = (groups) => {
+const allGroupNamesAreUnique = (groups) => {
   const names = groups.map((group) => group.name);
   return new Set(names).size === names.length;
 };
@@ -64,7 +65,7 @@ const getFormGroupErrors = (errors) => {
 };
 
 export {
-  allGroupNameAreUnique,
+  allGroupNamesAreUnique,
   getNextGroupName,
   getGroupPercentage,
   getFormGroupErrors,

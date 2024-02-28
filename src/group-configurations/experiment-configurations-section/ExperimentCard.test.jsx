@@ -48,7 +48,7 @@ describe('<ExperimentCard />', () => {
 
   it('expands/collapses the container experiment configuration on title click', () => {
     const { queryByTestId, getByTestId } = renderComponent();
-    const cardTitle = getByTestId('configuration-card-header__button');
+    const cardTitle = getByTestId('configuration-card-header-button');
     userEvent.click(cardTitle);
     expect(queryByTestId('configuration-card-content')).toBeInTheDocument();
 
@@ -103,7 +103,7 @@ describe('<ExperimentCard />', () => {
       queryByText(commonMessages.accessTo.defaultMessage),
     ).not.toBeInTheDocument();
 
-    const cardTitle = getByTestId('configuration-card-header__button');
+    const cardTitle = getByTestId('configuration-card-header-button');
     userEvent.click(cardTitle);
     expect(
       getByTestId('experiment-configuration-card-usage-empty'),
@@ -126,7 +126,7 @@ describe('<ExperimentCard />', () => {
       configuration: experimentConfigurationUpdated,
     });
 
-    const cardTitle = getByTestId('configuration-card-header__button');
+    const cardTitle = getByTestId('configuration-card-header-button');
     userEvent.click(cardTitle);
 
     expect(

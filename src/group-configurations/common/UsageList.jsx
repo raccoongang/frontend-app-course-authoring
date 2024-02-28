@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Hyperlink, Stack, Icon } from '@edx/paragon';
-import { Warning as WarningIcon } from '@edx/paragon/icons';
+import { Warning as WarningIcon, Error as ErrorIcon } from '@edx/paragon/icons';
 
+import { MESSAGE_VALIDATION_TYPES } from '../constants';
 import { formatUrlToUnitPage } from '../utils';
 import messages from './messages';
 
@@ -12,11 +13,9 @@ const UsageList = ({ className, itemList, isExperiment }) => {
     ? messages.experimentAccessTo
     : messages.accessTo;
 
-  const renderValidationMessage = ({ text, type }) => (
+  const renderValidationMessage = ({ text }) => (
     <span className="d-inline-flex">
-      {type === 'warning' && (
-        <Icon src={WarningIcon} size="sm" className="mr-2" />
-      )}
+      <Icon src={MESSAGE_VALIDATION_TYPES.error ? ErrorIcon : WarningIcon} size="sm" className="mr-2" />
       <span className="small text-gray-700">{text}</span>
     </span>
   );
@@ -45,7 +44,7 @@ const UsageList = ({ className, itemList, isExperiment }) => {
 };
 
 UsageList.defaultProps = {
-  className: '',
+  className: undefined,
   isExperiment: false,
 };
 

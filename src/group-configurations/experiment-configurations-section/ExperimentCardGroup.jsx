@@ -10,8 +10,8 @@ const ExperimentCardGroup = ({ groups }) => {
     <Stack className="mb-3">
       {groups.map((item) => (
         <div
-          className="configuration-card-content__experiment-stack"
-          data-testid="configuration-card-content__experiment-stack"
+          className="configuration-card-content-experiment-stack"
+          data-testid="configuration-card-content-experiment-stack"
           key={item.id}
         >
           <Truncate lines={1}>{item.name}</Truncate>

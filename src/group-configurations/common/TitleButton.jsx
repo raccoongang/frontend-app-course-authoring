@@ -21,8 +21,8 @@ const TitleButton = ({
     <Button
       iconBefore={isExpanded ? ArrowDownIcon : ArrowRightIcon}
       variant="tertiary"
-      className="configuration-card-header__button"
-      data-testid="configuration-card-header__button"
+      className="configuration-card-header-button"
+      data-testid="configuration-card-header-button"
       onClick={onTitleClick}
     >
       <div className="configuration-card-header__title">

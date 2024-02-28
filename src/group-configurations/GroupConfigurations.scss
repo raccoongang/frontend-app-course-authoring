@@ -26,7 +26,7 @@
     align-content: center;
     justify-content: space-between;
 
-    .configuration-card-header__button {
+    .configuration-card-header-button {
       display: flex;
       align-items: flex-start;
       padding: 0;
@@ -86,7 +86,7 @@
   .configuration-card-content {
     margin: 0 map-get($spacers, 2) 0 map-get($spacers, 4);
 
-    .configuration-card-content__experiment-stack {
+    .configuration-card-content-experiment-stack {
       display: flex;
       justify-content: space-between;
       padding: map-get($spacers, 2\.5) 0;
@@ -100,15 +100,11 @@
     }
   }
 
-  .content-group-new__input .pgn__form-text-invalid .pgn__icon {
-    display: none;
-  }
-
   .pgn__form-control-decorator-group {
     margin-inline-end: 0;
   }
 
-  .form-group-configuration {
+  .configuration-form-group {
     .pgn__form-label {
       font: normal $font-weight-bold .875rem/1.25rem $font-family-base;
       color: $gray-700;

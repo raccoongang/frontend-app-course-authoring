@@ -25,7 +25,7 @@ const ExperimentFormGroups = ({
   const { arrayErrors, stringError } = getFormGroupErrors(errors);
 
   return (
-    <Form.Group className="form-group-configuration">
+    <Form.Group className="configuration-form-group">
       <Form.Label className="font-weight-bold">
         {formatMessage(messages.experimentConfigurationGroups)}*
       </Form.Label>
@@ -46,7 +46,7 @@ const ExperimentFormGroups = ({
             <Form.Group
               key={idx}
               isInvalid={isInvalid}
-              className="form-group-configuration"
+              className="configuration-form-group"
             >
               <Stack className="align-content-between" direction="horizontal">
                 <Form.Control

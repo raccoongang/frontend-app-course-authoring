@@ -71,7 +71,7 @@ export async function deleteContentGroup(courseId, parentGroupId, groupId) {
 }
 
 /**
- * Create new experiment configuration for course.
+ * Create a new experiment configuration for the course.
  * @param {string} courseId
  * @param {object} configuration
  * @returns {Promise<Object>}
@@ -86,7 +86,7 @@ export async function createExperimentConfiguration(courseId, configuration) {
 }
 
 /**
- * Edit experiment configuration for course.
+ * Edit the experiment configuration for the course.
  * @param {string} courseId
  * @param {object} configuration
  * @returns {Promise<Object>}
@@ -101,7 +101,7 @@ export async function editExperimentConfiguration(courseId, configuration) {
 }
 
 /**
- * Delete exists experimental configuration from the course.
+ * Delete existing experimental configuration from the course.
  * @param {string} courseId
  * @param {number} configurationId
  * @returns {Promise<Object>}

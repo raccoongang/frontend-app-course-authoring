@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { FieldArray, Formik } from 'formik';
-import * as Yup from 'yup';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Alert,
@@ -13,9 +12,9 @@ import {
 import { WarningFilled as WarningFilledIcon } from '@edx/paragon/icons';
 
 import PromptIfDirty from '../../generic/PromptIfDirty';
-import { allGroupNameAreUnique } from './utils';
 import ExperimentFormGroups from './ExperimentFormGroups';
 import messages from './messages';
+import { experimentFormValidationSchema } from './validation';
 
 const ExperimentForm = ({
   isEditMode,
@@ -27,45 +26,6 @@ const ExperimentForm = ({
   onEditClick,
 }) => {
   const { formatMessage } = useIntl();
-
-  const validationSchema = Yup.object().shape({
-    id: Yup.number(),
-    name: Yup.string().required(
-      formatMessage(messages.experimentConfigurationNameRequired),
-    ),
-    description: Yup.string(),
-    groups: Yup.array()
-      .of(
-        Yup.object().shape({
-          id: Yup.number(),
-          name: Yup.string().required(
-            formatMessage(messages.experimentConfigurationGroupsNameRequired),
-          ),
-          version: Yup.number(),
-          usage: Yup.array().nullable(true),
-        }),
-      )
-      .required()
-      .min(1, formatMessage(messages.experimentConfigurationGroupsRequired))
-      .test(
-        'unique-group-name-restriction',
-        formatMessage(messages.experimentConfigurationGroupsNameUnique),
-        (values) => allGroupNameAreUnique(values),
-      ),
-    scheme: Yup.string(),
-    version: Yup.number(),
-    parameters: Yup.object(),
-    usage: Yup.array()
-      .of(
-        Yup.object().shape({
-          label: Yup.string(),
-          url: Yup.string(),
-        }),
-      )
-      .nullable(true),
-    active: Yup.bool(),
-  });
-
   const onSubmitForm = isEditMode ? onEditClick : onCreateClick;
 
   return (
@@ -85,7 +45,7 @@ const ExperimentForm = ({
       </div>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={experimentFormValidationSchema(formatMessage)}
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={onSubmitForm}
@@ -94,7 +54,10 @@ const ExperimentForm = ({
           values, errors, dirty, handleChange, handleSubmit,
         }) => (
           <>
-            <Form.Group className="mt-3 form-group-configuration" isInvalid={!!errors.name}>
+            <Form.Group
+              className="mt-3 configuration-form-group"
+              isInvalid={!!errors.name}
+            >
               <Form.Control
                 value={values.name}
                 name="name"
@@ -103,23 +66,17 @@ const ExperimentForm = ({
                   messages.experimentConfigurationNamePlaceholder,
                 )}
               />
-              <Form.Control.Feedback
-                hasIcon={false}
-                type="default"
-              >
+              <Form.Control.Feedback hasIcon={false} type="default">
                 {formatMessage(messages.experimentConfigurationNameFeedback)}
               </Form.Control.Feedback>
               {errors.name && (
-                <Form.Control.Feedback
-                  hasIcon={false}
-                  type="invalid"
-                >
+                <Form.Control.Feedback hasIcon={false} type="invalid">
                   {errors.name}
                 </Form.Control.Feedback>
               )}
             </Form.Group>
 
-            <Form.Group className="form-group-configuration">
+            <Form.Group className="configuration-form-group">
               <Form.Label>
                 {formatMessage(messages.experimentConfigurationDescription)}
               </Form.Label>
@@ -131,10 +88,7 @@ const ExperimentForm = ({
                   messages.experimentConfigurationDescriptionPlaceholder,
                 )}
               />
-              <Form.Control.Feedback
-                hasIcon={false}
-                type="default"
-              >
+              <Form.Control.Feedback hasIcon={false} type="default">
                 {formatMessage(
                   messages.experimentConfigurationDescriptionFeedback,
                 )}
