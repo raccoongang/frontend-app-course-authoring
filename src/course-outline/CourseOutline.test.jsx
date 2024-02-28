@@ -669,7 +669,6 @@ describe('<CourseOutline />', () => {
     await act(async () => fireEvent.click(configureBtn));
     let releaseDateStack = await findByTestId('release-date-stack');
     let releaseDatePicker = await within(releaseDateStack).findByPlaceholderText('MM/DD/YYYY');
-
     expect(releaseDatePicker).toHaveValue('08/10/2023');
 
     await act(async () => fireEvent.change(releaseDatePicker, { target: { value: newReleaseDate } }));
