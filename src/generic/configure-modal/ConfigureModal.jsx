@@ -2,7 +2,6 @@
 import React from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   ModalDialog,
@@ -16,7 +15,6 @@ import { Formik } from 'formik';
 
 import { VisibilityTypes } from '../../data/constants';
 import { COURSE_BLOCK_NAMES } from '../../constants';
-import { deepSortObject } from '../../utils';
 import messages from './messages';
 import BasicTab from './BasicTab';
 import VisibilityTab from './VisibilityTab';
@@ -83,7 +81,6 @@ const ConfigureModal = ({
   const initialValues = {
     releaseDate: sectionStartDate,
     isVisibleToStaffOnly: visibilityState === VisibilityTypes.STAFF_ONLY,
-    saveButtonDisabled: true,
     graderType: format == null ? 'notgraded' : format,
     dueDate: due == null ? '' : due,
     isTimeLimited,
@@ -277,7 +274,7 @@ const ConfigureModal = ({
           validateOnChange
         >
           {({
-            values, handleSubmit, isValid, setFieldValue,
+            values, handleSubmit, setFieldValue,
           }) => (
             <>
               <ModalDialog.Body className="configure-modal__body">
@@ -293,7 +290,6 @@ const ConfigureModal = ({
                   <Button
                     data-testid="configure-save-button"
                     onClick={handleSubmit}
-                    disabled={!(!isEqual(deepSortObject(initialValues), deepSortObject(values)) && isValid)}
                   >
                     {intl.formatMessage(messages.saveButton)}
                   </Button>

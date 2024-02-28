@@ -69,6 +69,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-outline.configure-modal.unit-tab.unit-select-group-type',
     defaultMessage: 'Select a group type',
   },
+  unitSelectDeletedGroupErrorMessage: {
+    id: 'course-authoring.course-outline.configure-modal.unit-tab.unit-select-group-deleted-error-message',
+    defaultMessage: 'This group no longer exists. Choose another group or remove the access restriction.',
+  },
   unitAllLearnersAndStaff: {
     id: 'course-authoring.course-outline.configure-modal.unit-tab.unit-all-learners-staff',
     defaultMessage: 'All Learners and Staff',
