@@ -18,6 +18,7 @@ import { executeThunk } from '../../utils';
 import { getCourseId } from '../data/selectors';
 import { COMPONENT_ICON_TYPES, PUBLISH_TYPES } from '../constants';
 import { courseSectionVerticalMock, courseVerticalChildrenMock } from '../__mocks__';
+import renderErrorAlertMessages from './render-error-alert/messages';
 import CourseXBlock from './CourseXBlock';
 import messages from './messages';
 
@@ -308,5 +309,28 @@ describe('<CourseXBlock />', () => {
         .replace('{selectedGroupsLabel}', 'Visibility group 1');
       expect(getByText(visibilityMessage)).toBeInTheDocument();
     });
+  });
+
+  it('displays a render error message if item has error', () => {
+    const renderErrorMessage = 'Some error message';
+    const { getByText, getByLabelText, queryByTestId } = renderComponent(
+      {
+        renderError: renderErrorMessage,
+      },
+    );
+
+    const errorAlertTitle = renderErrorAlertMessages.alertRenderErrorTitle.defaultMessage;
+    const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;
+    const errorAlertMessage = renderErrorAlertMessages.alertRenderErrorMessage.defaultMessage
+      .replace('{message}', renderErrorMessage);
+    const contentIframe = queryByTestId('content-iframe-test-id');
+
+    expect(getByText(errorAlertTitle)).toBeInTheDocument();
+    expect(getByText(errorAlertDescription)).toBeInTheDocument();
+    expect(getByText(errorAlertMessage)).toBeInTheDocument();
+    expect(getByText(name)).toBeInTheDocument();
+    expect(getByLabelText(messages.blockAltButtonEdit.defaultMessage)).toBeInTheDocument();
+    expect(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage)).toBeInTheDocument();
+    expect(contentIframe).not.toBeInTheDocument();
   });
 });

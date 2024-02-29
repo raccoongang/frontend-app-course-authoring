@@ -18,12 +18,13 @@ import { copyToClipboard } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
 import XBlockContent from './xblock-content/XBlockContent';
 import XBlockMessages from './xblock-messages/XBlockMessages';
+import RenderErrorAlert from './render-error-alert';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, ...props
+  handleConfigureSubmit, validationMessages, renderError, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -131,8 +132,12 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          <XBlockMessages validationMessages={validationMessages} />
-          <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
+          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
+            <>
+              <XBlockMessages validationMessages={validationMessages} />
+              <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
+            </>
+          )}
         </Card.Section>
       </Card>
     </div>
@@ -142,12 +147,14 @@ const CourseXBlock = ({
 CourseXBlock.defaultProps = {
   validationMessages: [],
   shouldScroll: false,
+  renderError: undefined,
 };
 
 CourseXBlock.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  renderError: PropTypes.string,
   shouldScroll: PropTypes.bool,
   validationMessages: PropTypes.arrayOf(PropTypes.shape({
     type: PropTypes.string,
