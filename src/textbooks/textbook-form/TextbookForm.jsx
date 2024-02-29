@@ -21,6 +21,7 @@ import FormikControl from '../../generic/FormikControl';
 import PromptIfDirty from '../../generic/PromptIfDirty';
 import ModalDropzone from '../../generic/modal-dropzone/ModalDropzone';
 import { useModel } from '../../generic/model-store';
+import { UPLOAD_FILE_MAX_SIZE } from '../../constants';
 import textbookFormValidationSchema from './validations';
 import messages from './messages';
 
@@ -162,6 +163,10 @@ const TextbookForm = ({
               imageDropzoneText={intl.formatMessage(messages.uploadModalDropzoneText)}
               imageHelpText={intl.formatMessage(messages.uploadModalHelperText)}
               onSavingStatus={onSavingStatus}
+              invalidFileSizeMore={intl.formatMessage(
+                messages.uploadModalFileInvalidSizeText,
+                { maxSize: UPLOAD_FILE_MAX_SIZE / (1000 * 1000) },
+              )}
               previewComponent={(
                 <Icon src={PdfIcon} className="modal-preview-icon" />
               )}
