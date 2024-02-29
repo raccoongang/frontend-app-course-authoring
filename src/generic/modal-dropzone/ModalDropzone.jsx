@@ -23,6 +23,7 @@ const ModalDropzone = ({
   imageHelpText,
   previewComponent,
   imageDropzoneText,
+  invalidFileSizeMore,
   isOpen,
   onClose,
   onCancel,
@@ -44,7 +45,7 @@ const ModalDropzone = ({
     onChange, onCancel, onClose, fileTypes, onSavingStatus,
   });
 
-  const invalidSizeMore = intl.formatMessage(
+  const invalidSizeMore = invalidFileSizeMore || intl.formatMessage(
     messages.uploadImageDropzoneInvalidSizeMore,
     { maxSize: maxSize / (1000 * 1000) },
   );
@@ -128,6 +129,7 @@ ModalDropzone.defaultProps = {
   previewComponent: null,
   imageDropzoneText: '',
   maxSize: UPLOAD_FILE_MAX_SIZE,
+  invalidFileSizeMore: '',
 };
 
 ModalDropzone.propTypes = {
@@ -142,6 +144,7 @@ ModalDropzone.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSavingStatus: PropTypes.func.isRequired,
   maxSize: PropTypes.number,
+  invalidFileSizeMore: PropTypes.string,
 };
 
 export default ModalDropzone;
