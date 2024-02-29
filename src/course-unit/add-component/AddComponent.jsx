@@ -70,6 +70,10 @@ const AddComponent = ({ blockId, handleCreateNewCourseXBlock }) => {
           const { type, displayName } = component;
           let modalParams;
 
+          if (!component.templates.length) {
+            return null;
+          }
+
           switch (type) {
           case COMPONENT_ICON_TYPES.advanced:
             modalParams = {

@@ -80,6 +80,42 @@ describe('<AddComponent />', () => {
     expect(queryByRole('heading', { name: messages.title.defaultMessage })).not.toBeInTheDocument();
   });
 
+  it('doesn\'t render AddComponent component item when there aren\'t templates', async () => {
+    const componentTemplates = courseSectionVerticalMock.component_templates;
+    axiosMock
+      .onGet(getCourseSectionVerticalApiUrl(blockId))
+      .reply(200, {
+        ...courseSectionVerticalMock,
+        component_templates: [
+          ...courseSectionVerticalMock.component_templates.map((component) => {
+            if (component.type === 'discussion') {
+              return {
+                ...component,
+                templates: [],
+              };
+            }
+
+            return component;
+          }),
+        ],
+      });
+    await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
+
+    const { queryByRole, getByRole } = renderComponent();
+
+    Object.keys(componentTemplates).map((component) => {
+      if (componentTemplates[component].type === 'discussion') {
+        return expect(queryByRole('button', {
+          name: new RegExp(`${messages.buttonText.defaultMessage} ${componentTemplates[component].display_name}`, 'i'),
+        })).not.toBeInTheDocument();
+      }
+
+      return expect(getByRole('button', {
+        name: new RegExp(`${messages.buttonText.defaultMessage} ${componentTemplates[component].display_name}`, 'i'),
+      })).toBeInTheDocument();
+    });
+  });
+
   it('does\'t call handleCreateNewCourseXblock with custom component create button is clicked', async () => {
     axiosMock
       .onGet(getCourseSectionVerticalApiUrl(blockId))
@@ -88,7 +124,7 @@ describe('<AddComponent />', () => {
         component_templates: [
           {
             type: 'custom',
-            templates: [],
+            templates: [{ display_name: 'Custom' }],
             display_name: 'Custom',
             support_legend: {},
           },
@@ -340,6 +376,100 @@ describe('<AddComponent />', () => {
       parentLocator: '123',
       category: 'openassessment',
       boilerplate: 'peer-assessment',
+    });
+  });
+
+  describe('component support label', () => {
+    it('doesn\'t display component support label if component support legend is disabled', async () => {
+      const supportLevels = ['fs', 'ps'];
+      axiosMock
+        .onGet(getCourseSectionVerticalApiUrl(blockId))
+        .reply(200, {
+          ...courseSectionVerticalMock,
+          component_templates: [
+            ...courseSectionVerticalMock.component_templates.map((component) => {
+              if (component.type === 'advanced') {
+                return {
+                  ...component,
+                  support_legend: { show_legend: false },
+                  templates: [
+                    ...component.templates.map((template, i) => ({
+                      ...template,
+                      support_level: supportLevels[i] || true,
+                    })),
+                  ],
+                };
+              }
+
+              return component;
+            }),
+          ],
+        });
+      await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
+
+      const { getByRole } = renderComponent();
+      const advancedButton = getByRole('button', {
+        name: new RegExp(`${messages.buttonText.defaultMessage} Advanced`, 'i'),
+      });
+
+      userEvent.click(advancedButton);
+      const modalContainer = getByRole('dialog');
+      const fullySupportLabel = within(modalContainer)
+        .queryByText(messages.modalComponentSupportLabelFullySupported.defaultMessage);
+      const provisionallySupportLabel = within(modalContainer)
+        .queryByText(messages.modalComponentSupportLabelProvisionallySupported.defaultMessage);
+
+      expect(fullySupportLabel).not.toBeInTheDocument();
+      expect(provisionallySupportLabel).not.toBeInTheDocument();
+    });
+
+    it('displays component support label and tooltip in component modal', async () => {
+      const supportLevels = ['fs', 'ps'];
+      axiosMock
+        .onGet(getCourseSectionVerticalApiUrl(blockId))
+        .reply(200, {
+          ...courseSectionVerticalMock,
+          component_templates: [
+            ...courseSectionVerticalMock.component_templates.map((component) => {
+              if (component.type === 'advanced') {
+                return {
+                  ...component,
+                  support_legend: { show_legend: true },
+                  templates: [
+                    ...component.templates.map((template, i) => ({
+                      ...template,
+                      support_level: supportLevels[i] || true,
+                    })),
+                  ],
+                };
+              }
+
+              return component;
+            }),
+          ],
+        });
+      await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
+
+      const { getByRole, getByText } = renderComponent();
+      const advancedButton = getByRole('button', {
+        name: new RegExp(`${messages.buttonText.defaultMessage} Advanced`, 'i'),
+      });
+
+      userEvent.click(advancedButton);
+      const modalContainer = getByRole('dialog');
+      const fullySupportLabel = within(modalContainer)
+        .getByText(messages.modalComponentSupportLabelFullySupported.defaultMessage);
+      const provisionallySupportLabel = within(modalContainer)
+        .getByText(messages.modalComponentSupportLabelProvisionallySupported.defaultMessage);
+
+      expect(fullySupportLabel).toBeInTheDocument();
+      expect(provisionallySupportLabel).toBeInTheDocument();
+
+      userEvent.hover(fullySupportLabel);
+      expect(getByText(messages.modalComponentSupportTooltipFullySupported.defaultMessage)).toBeInTheDocument();
+
+      userEvent.hover(provisionallySupportLabel);
+      expect(getByText(messages.modalComponentSupportTooltipProvisionallySupported.defaultMessage)).toBeInTheDocument();
     });
   });
 });

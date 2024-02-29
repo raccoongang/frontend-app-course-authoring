@@ -12,7 +12,9 @@ import {
   TextFields as TextFieldsIcon,
   VideoCamera as VideoCameraIcon,
 } from '@openedx/paragon/icons';
+
 import messages from './sidebar/messages';
+import addComponentMessages from './add-component/messages';
 
 export const UNIT_ICON_TYPES = ['video', 'other', 'vertical', 'problem', 'lock'];
 
@@ -84,3 +86,18 @@ export const PUBLISH_TYPES = {
   discardChanges: 'discard_changes',
   makePublic: 'make_public',
 };
+
+export const getXBlockSupportMessages = (intl) => ({
+  fs: { // Fully supported
+    label: intl.formatMessage(addComponentMessages.modalComponentSupportLabelFullySupported),
+    tooltip: intl.formatMessage(addComponentMessages.modalComponentSupportTooltipFullySupported),
+  },
+  ps: { // Provisionally supported
+    label: intl.formatMessage(addComponentMessages.modalComponentSupportLabelProvisionallySupported),
+    tooltip: intl.formatMessage(addComponentMessages.modalComponentSupportTooltipProvisionallySupported),
+  },
+  us: { // Not supported
+    label: intl.formatMessage(addComponentMessages.modalComponentSupportLabelNotSupported),
+    tooltip: intl.formatMessage(addComponentMessages.modalComponentSupportTooltipNotSupported),
+  },
+});
