@@ -982,7 +982,7 @@
   "course-authoring.course-unit.heading.button.edit.alt": "Edit",
   "course-authoring.course-unit.heading.button.edit.aria-label": "Edit field",
   "course-authoring.course-unit.heading.button.settings.alt": "Settings",
-  "course-authoring.course-unit.general.alert.error.description": "Unable to {actionName} {type}. Please try again.",
+  "course-authoring.course-unit.xblock.alert.error.description": "Unable to {actionName} {type}. Please try again.",
   "course-authoring.course-unit.prev-btn-text": "Previous",
   "course-authoring.course-unit.next-btn-text": "Next",
   "course-authoring.course-unit.new-unit-btn-text": "New unit",
@@ -1094,7 +1094,7 @@
   "course-authoring.course-unit.xblock.button.manageAccess.label": "Manage access",
   "course-authoring.course-unit.xblock.button.delete.label": "Delete",
   "course-authoring.course-unit.xblock.button.actions.alt": "Actions",
-  "course-authoring.course-unit.general.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience.",
+  "course-authoring.course-unit.xblock.alert.unpublished-version.description": "Note: The last published version of this unit is live. By publishing changes you will change the student experience.",
   "course-authoring.course-unit.modal.discard-unit-changes.title": "Discard changes",
   "course-authoring.course-unit.modal.discard-unit-changes.btn.action.text": "Discard changes",
   "course-authoring.course-unit.modal.discard-unit-changes.btn.cancel.text": "Cancel",
@@ -1236,5 +1236,8 @@
   "course-authoring.group-configurations.container.contains-group": "Contains 1 group",
   "course-authoring.group-configurations.container.not-in-use": "Not in use",
   "course-authoring.group-configurations.container.used-in-locations": "Used in {len} locations",
-  "course-authoring.group-configurations.container.used-in-location": "Used in 1 location"
+  "course-authoring.group-configurations.container.used-in-location": "Used in 1 location",
+  "course-authoring.course-unit.xblock.alert.render-error.message": "Error: {message}",
+  "course-authoring.course-unit.xblock.alert.render-error.title": "We're having trouble rendering your component",
+  "course-authoring.course-unit.xblock.alert.render-error.description": "Students will not be able to access this component. Re-edit your component to fix the error."
 }
