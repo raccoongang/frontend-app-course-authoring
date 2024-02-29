@@ -311,7 +311,7 @@ describe('<CourseXBlock />', () => {
     });
   });
 
-  it('displays a render error message if item has error', async () => {
+  it('displays a render error message if item has error', () => {
     const renderErrorMessage = 'Some error message';
     const { getByText, getByLabelText, queryByTestId } = renderComponent(
       {
@@ -319,25 +319,18 @@ describe('<CourseXBlock />', () => {
       },
     );
 
-    await waitFor(() => {
-      const errorAlertTitle = renderErrorAlertMessages.alertRenderErrorTitle.defaultMessage;
-      const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;
-      const errorAlertMessage = renderErrorAlertMessages.alertRenderErrorMessage.defaultMessage
-        .replace('{message}', renderErrorMessage);
-      const contentIframe = queryByTestId('content-iframe-test-id');
+    const errorAlertTitle = renderErrorAlertMessages.alertRenderErrorTitle.defaultMessage;
+    const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;
+    const errorAlertMessage = renderErrorAlertMessages.alertRenderErrorMessage.defaultMessage
+      .replace('{message}', renderErrorMessage);
+    const contentIframe = queryByTestId('content-iframe-test-id');
 
-      // check displaying of the error alert
-      expect(getByText(errorAlertTitle)).toBeInTheDocument();
-      expect(getByText(errorAlertDescription)).toBeInTheDocument();
-      expect(getByText(errorAlertMessage)).toBeInTheDocument();
-
-      // check availability of the item title and controls
-      expect(getByText(name)).toBeInTheDocument();
-      expect(getByLabelText(messages.blockAltButtonEdit.defaultMessage)).toBeInTheDocument();
-      expect(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage)).toBeInTheDocument();
-
-      // check if is the content of the element not being displayed
-      expect(contentIframe).not.toBeInTheDocument();
-    });
+    expect(getByText(errorAlertTitle)).toBeInTheDocument();
+    expect(getByText(errorAlertDescription)).toBeInTheDocument();
+    expect(getByText(errorAlertMessage)).toBeInTheDocument();
+    expect(getByText(name)).toBeInTheDocument();
+    expect(getByLabelText(messages.blockAltButtonEdit.defaultMessage)).toBeInTheDocument();
+    expect(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage)).toBeInTheDocument();
+    expect(contentIframe).not.toBeInTheDocument();
   });
 });

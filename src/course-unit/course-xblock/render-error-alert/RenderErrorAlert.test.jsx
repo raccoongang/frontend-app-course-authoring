@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { CheckCircle as CheckCircleIcon } from '@edx/paragon/icons';
 import { IntlProvider } from '@edx/frontend-platform/i18n';

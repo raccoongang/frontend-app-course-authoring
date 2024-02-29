@@ -147,7 +147,7 @@ const CourseXBlock = ({
 CourseXBlock.defaultProps = {
   validationMessages: [],
   shouldScroll: false,
-  renderError: '',
+  renderError: undefined,
 };
 
 CourseXBlock.propTypes = {

@@ -30,8 +30,8 @@ const RenderErrorAlert = ({
 RenderErrorAlert.defaultProps = {
   icon: InfoIcon,
   variant: 'danger',
-  title: '',
-  description: '',
+  title: undefined,
+  description: undefined,
 };
 
 RenderErrorAlert.propTypes = {
