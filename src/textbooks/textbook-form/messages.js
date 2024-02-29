@@ -93,6 +93,10 @@ const messages = defineMessages({
     id: 'course-authoring.textbooks.form.upload-modal.help-text',
     defaultMessage: 'File must be in PDF format',
   },
+  uploadModalFileInvalidSizeText: {
+    id: 'course-authoring.textbooks.form.upload-modal.file-size-invalid-text',
+    defaultMessage: 'File size must be less than {maxSize}MB.',
+  },
 });
 
 export default messages;
