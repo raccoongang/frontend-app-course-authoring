@@ -157,13 +157,14 @@ const CourseUnit = ({ courseId }) => {
                   updateOrder={finalizeXBlockOrder}
                 >
                   {unitXBlocks.map(({
-                    name, id, blockType: type, shouldScroll, userPartitionInfo, validationMessages,
+                    name, id, blockType: type, renderError, shouldScroll, userPartitionInfo, validationMessages,
                   }) => (
                     <CourseXBlock
                       id={id}
                       key={id}
                       title={name}
                       type={type}
+                      renderError={renderError}
                       validationMessages={validationMessages}
                       shouldScroll={shouldScroll}
                       unitXBlockActions={unitXBlockActions}
