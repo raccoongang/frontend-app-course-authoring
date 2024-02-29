@@ -10,11 +10,11 @@ import {
 import { Add as AddIcon } from '@openedx/paragon/icons';
 import { useSelector } from 'react-redux';
 
+import { SavingErrorNotification } from '../generic/saving-error-notification';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import { useModel } from '../generic/model-store';
 import { LoadingSpinner } from '../generic/Loading';
 import SubHeader from '../generic/sub-header/SubHeader';
-import InternetConnectionAlert from '../generic/internet-connection-alert';
 import ProcessingNotification from '../generic/processing-notification';
 import getPageHeadTitle from '../generic/utils';
 import EmptyPlaceholder from './empty-placeholder/EmptyPlaceholder';
@@ -35,11 +35,11 @@ const Textbooks = ({ courseId }) => {
     textbooks,
     isLoading,
     breadcrumbs,
+    errorMessage,
+    savingStatus,
     isTextbookFormOpen,
     openTextbookForm,
     closeTextbookForm,
-    isInternetConnectionAlertFailed,
-    isQueryPending,
     handleTextbookFormSubmit,
     handleSavingStatusDispatch,
     handleTextbookEditFormSubmit,
@@ -126,9 +126,9 @@ const Textbooks = ({ courseId }) => {
         title={processingNotificationTitle}
       />
       <div className="alert-toast">
-        <InternetConnectionAlert
-          isFailed={isInternetConnectionAlertFailed}
-          isQueryPending={isQueryPending}
+        <SavingErrorNotification
+          savingStatus={savingStatus}
+          errorMessage={errorMessage}
         />
       </div>
     </>

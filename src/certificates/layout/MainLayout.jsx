@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Container, Layout } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { SavingErrorNotification } from '../../generic/saving-error-notification';
 import ProcessingNotification from '../../generic/processing-notification';
 import InternetConnectionAlert from '../../generic/internet-connection-alert';
 import SubHeader from '../../generic/sub-header/SubHeader';
@@ -14,6 +15,8 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
   const intl = useIntl();
 
   const {
+    errorMessage,
+    savingStatus,
     isQueryPending,
     isQueryFailed,
     isShowProcessingNotification,
@@ -53,6 +56,10 @@ const MainLayout = ({ courseId, showHeaderButtons, children }) => {
         <ProcessingNotification
           isShow={isShowProcessingNotification}
           title={processingNotificationTitle}
+        />
+        <SavingErrorNotification
+          savingStatus={savingStatus}
+          errorMessage={errorMessage}
         />
         <InternetConnectionAlert
           isFailed={isQueryFailed}

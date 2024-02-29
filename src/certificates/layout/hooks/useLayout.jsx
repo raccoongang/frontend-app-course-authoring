@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 
 import { RequestStatus } from '../../../data/constants';
 import { getProcessingNotification } from '../../../generic/processing-notification/data/selectors';
-import { getSavingStatus, getSavingImageStatus } from '../../data/selectors';
+import { getSavingStatus, getSavingImageStatus, getErrorMessage } from '../../data/selectors';
 
 const useLayout = () => {
   const savingStatus = useSelector(getSavingStatus);
   const savingImageStatus = useSelector(getSavingImageStatus);
+  const errorMessage = useSelector(getErrorMessage);
+
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
@@ -23,6 +25,8 @@ const useLayout = () => {
   }, [savingStatus]);
 
   return {
+    errorMessage,
+    savingStatus,
     isQueryPending,
     isQueryFailed,
     isShowProcessingNotification,
