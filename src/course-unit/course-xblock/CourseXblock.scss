@@ -30,3 +30,25 @@
     margin-bottom: 0;
   }
 }
+
+.pgn__sheet-component {
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOutToRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  animation: slideInFromRight 0.5s ease-out forwards;
+}

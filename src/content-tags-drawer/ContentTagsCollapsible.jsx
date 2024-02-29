@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useIntl, FormattedMessage } from '@edx/frontend-platform/i18n';
 import { debounce } from 'lodash';
+import { getOpenCollapsibles, openCollapsible, closeCollapsible } from './utils';
 import messages from './messages';
 import './ContentTagsCollapsible.scss';
 
@@ -99,8 +100,9 @@ import useContentTagsCollapsibleHelper from './ContentTagsCollapsibleHelper';
  * @param {Object} props - The component props.
  * @param {string} props.contentId - Id of the content object
  * @param {TaxonomyData & {contentTags: ContentTagData[]}} props.taxonomyAndTagsData - Taxonomy metadata & applied tags
+ * @param {boolean} props.readOnly - Is a component in a read-only state
  */
-const ContentTagsCollapsible = ({ contentId, taxonomyAndTagsData }) => {
+const ContentTagsCollapsible = ({ contentId, taxonomyAndTagsData, readOnly }) => {
   const intl = useIntl();
   const { id, name, canTagObject } = taxonomyAndTagsData;
 
@@ -109,9 +111,20 @@ const ContentTagsCollapsible = ({ contentId, taxonomyAndTagsData }) => {
   } = useContentTagsCollapsibleHelper(contentId, taxonomyAndTagsData);
 
   const [isOpen, open, close] = useToggle(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isCollapsibleOpen, _, __, toggleCollapsible] = useToggle(getOpenCollapsibles().includes(name));
   const [addTagsButtonRef, setAddTagsButtonRef] = React.useState(null);
 
   const [searchTerm, setSearchTerm] = React.useState('');
+
+  // Update localStorage based on the collapsibles open state
+  React.useEffect(() => {
+    if (isCollapsibleOpen) {
+      openCollapsible(name);
+    } else {
+      closeCollapsible(name);
+    }
+  }, [isCollapsibleOpen, name]);
 
   const handleSelectableBoxChange = React.useCallback((e) => {
     tagChangeHandler(e.target.value, e.target.checked);
@@ -139,14 +152,20 @@ const ContentTagsCollapsible = ({ contentId, taxonomyAndTagsData }) => {
 
   return (
     <div className="d-flex">
-      <Collapsible title={name} styling="card-lg" className="taxonomy-tags-collapsible">
+      <Collapsible
+        title={name}
+        styling="card-lg"
+        className="taxonomy-tags-collapsible"
+        open={isCollapsibleOpen}
+        onToggle={toggleCollapsible}
+      >
         <div key={id}>
-          <ContentTagsTree tagsTree={tagsTree} removeTagHandler={tagChangeHandler} />
+          <ContentTagsTree tagsTree={tagsTree} removeTagHandler={tagChangeHandler} readOnly={readOnly} />
         </div>
 
         <div className="d-flex taxonomy-tags-selector-menu">
 
-          {canTagObject && (
+          {!readOnly && canTagObject && (
             <Button
               ref={setAddTagsButtonRef}
               variant="outline-primary"
@@ -218,6 +237,11 @@ ContentTagsCollapsible.propTypes = {
     })),
     canTagObject: PropTypes.bool.isRequired,
   }).isRequired,
+  readOnly: PropTypes.bool,
+};
+
+ContentTagsCollapsible.defaultProps = {
+  readOnly: false,
 };
 
 export default ContentTagsCollapsible;

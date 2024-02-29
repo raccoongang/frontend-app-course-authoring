@@ -1,5 +1,6 @@
 // @ts-check
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Container,
   CloseButton,
@@ -9,37 +10,29 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useParams } from 'react-router-dom';
 import messages from './messages';
 import ContentTagsCollapsible from './ContentTagsCollapsible';
-import { extractOrgFromContentId } from './utils';
-import {
-  useContentTaxonomyTagsData,
-  useContentData,
-} from './data/apiHooks';
-import { useTaxonomyListDataResponse, useIsTaxonomyListDataLoaded } from '../taxonomy/data/apiHooks';
+import { useContentData } from './data/apiHooks';
+import useContentTagsDrawer from './hooks/useContentTagsDrawer';
 import Loading from '../generic/Loading';
 
 /** @typedef {import("../taxonomy/data/types.mjs").TaxonomyData} TaxonomyData */
 /** @typedef {import("./data/types.mjs").Tag} ContentTagData */
 
-const ContentTagsDrawer = () => {
+const ContentTagsDrawer = ({ blockId, onCloseTagsDrawer }) => {
   const intl = useIntl();
   const { contentId } = /** @type {{contentId: string}} */(useParams());
 
-  const org = extractOrgFromContentId(contentId);
+  const { data: contentData, isSuccess: isContentDataLoaded } = useContentData(contentId || blockId);
 
-  const useTaxonomyListData = () => {
-    const taxonomyListData = useTaxonomyListDataResponse(org);
-    const isTaxonomyListLoaded = useIsTaxonomyListDataLoaded(org);
-    return { taxonomyListData, isTaxonomyListLoaded };
-  };
-
-  const { data: contentData, isSuccess: isContentDataLoaded } = useContentData(contentId);
   const {
-    data: contentTaxonomyTagsData,
-    isSuccess: isContentTaxonomyTagsLoaded,
-  } = useContentTaxonomyTagsData(contentId);
-  const { taxonomyListData, isTaxonomyListLoaded } = useTaxonomyListData();
+    taxonomies,
+    isTaxonomyListLoaded,
+    isContentTaxonomyTagsLoaded,
+  } = useContentTagsDrawer(contentId || blockId);
 
   const closeContentTagsDrawer = () => {
+    if (onCloseTagsDrawer) {
+      onCloseTagsDrawer();
+    }
     // "*" allows communication with any origin
     window.parent.postMessage('closeManageTagsDrawer', '*');
   };
@@ -58,29 +51,6 @@ const ContentTagsDrawer = () => {
       document.removeEventListener('keydown', handleEsc);
     };
   }, []);
-
-  const taxonomies = useMemo(() => {
-    if (taxonomyListData && contentTaxonomyTagsData) {
-      // Initialize list of content tags in taxonomies to populate
-      const taxonomiesList = taxonomyListData.results.map((taxonomy) => ({
-        ...taxonomy,
-        contentTags: /** @type {ContentTagData[]} */([]),
-      }));
-
-      const contentTaxonomies = contentTaxonomyTagsData.taxonomies;
-
-      // eslint-disable-next-line array-callback-return
-      contentTaxonomies.map((contentTaxonomyTags) => {
-        const contentTaxonomy = taxonomiesList.find((taxonomy) => taxonomy.id === contentTaxonomyTags.taxonomyId);
-        if (contentTaxonomy) {
-          contentTaxonomy.contentTags = contentTaxonomyTags.tags;
-        }
-      });
-
-      return taxonomiesList;
-    }
-    return [];
-  }, [taxonomyListData, contentTaxonomyTagsData]);
 
   return (
 
@@ -105,7 +75,7 @@ const ContentTagsDrawer = () => {
         { isTaxonomyListLoaded && isContentTaxonomyTagsLoaded
           ? taxonomies.map((data) => (
             <div key={`taxonomy-tags-collapsible-${data.id}`}>
-              <ContentTagsCollapsible contentId={contentId} taxonomyAndTagsData={data} />
+              <ContentTagsCollapsible contentId={contentId || blockId} taxonomyAndTagsData={data} />
               <hr />
             </div>
           ))
@@ -114,6 +84,16 @@ const ContentTagsDrawer = () => {
       </Container>
     </div>
   );
+};
+
+ContentTagsDrawer.propTypes = {
+  blockId: PropTypes.string,
+  onCloseTagsDrawer: PropTypes.func,
+};
+
+ContentTagsDrawer.defaultProps = {
+  blockId: '',
+  onCloseTagsDrawer: null,
 };
 
 export default ContentTagsDrawer;

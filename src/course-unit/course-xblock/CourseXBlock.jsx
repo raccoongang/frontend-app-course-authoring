@@ -1,17 +1,19 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ActionRow, Card, Dropdown, Icon, IconButton, useToggle,
+  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, Sheet,
 } from '@openedx/paragon';
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getConfig } from '@edx/frontend-platform';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import { scrollToElement } from '../../course-outline/utils';
+import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
 import { copyToClipboard } from '../data/thunk';
@@ -24,11 +26,12 @@ import messages from './messages';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, ...props
+  handleConfigureSubmit, validationMessages, renderError, blockId, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
+  const [isManageTagsOpen, openManageTagsModal, closeManageTagsModal] = useToggle(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const courseId = useSelector(getCourseId);
@@ -99,6 +102,11 @@ const CourseXBlock = ({
                   <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
                     {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                   </Dropdown.Item>
+                  {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES && (
+                    <Dropdown.Item onClick={openManageTagsModal}>
+                      {intl.formatMessage(messages.blockLabelButtonManageTags)}
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
@@ -128,6 +136,15 @@ const CourseXBlock = ({
                 onConfigureSubmit={onConfigureSubmit}
                 currentItemData={currentItemData}
               />
+              <Sheet
+                position="right"
+                show={isManageTagsOpen}
+                blocking={false}
+                variant="light"
+                onClose={closeManageTagsModal}
+              >
+                <ContentTagsDrawer blockId={blockId} onCloseTagsDrawer={closeManageTagsModal} />
+              </Sheet>
             </ActionRow>
           )}
         />
@@ -156,6 +173,7 @@ CourseXBlock.propTypes = {
   type: PropTypes.string.isRequired,
   renderError: PropTypes.string,
   shouldScroll: PropTypes.bool,
+  blockId: PropTypes.string.isRequired,
   validationMessages: PropTypes.arrayOf(PropTypes.shape({
     type: PropTypes.string,
     text: PropTypes.string,

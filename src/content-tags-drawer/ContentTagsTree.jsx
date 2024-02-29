@@ -41,8 +41,9 @@ import TagBubble from './TagBubble';
  *   tagSelectableBoxValue: string,
  *   checked: boolean
  * ) => void} props.removeTagHandler - Function that is called when removing tags from the tree.
+ *  * @param {boolean} props.readOnly - Is a component in a read-only state
  */
-const ContentTagsTree = ({ tagsTree, removeTagHandler }) => {
+const ContentTagsTree = ({ tagsTree, removeTagHandler, readOnly }) => {
   const renderTagsTree = (tag, level, lineage) => Object.keys(tag).map((key) => {
     const updatedLineage = [...lineage, encodeURIComponent(key)];
     if (tag[key] !== undefined) {
@@ -55,7 +56,7 @@ const ContentTagsTree = ({ tagsTree, removeTagHandler }) => {
             level={level}
             lineage={updatedLineage}
             removeTagHandler={removeTagHandler}
-            canRemove={tag[key].canDeleteObjecttag}
+            canRemove={tag[key].canDeleteObjecttag && !readOnly}
           />
           { renderTagsTree(tag[key].children, level + 1, updatedLineage) }
         </div>
@@ -76,6 +77,11 @@ ContentTagsTree.propTypes = {
     }).isRequired,
   ).isRequired,
   removeTagHandler: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
+};
+
+ContentTagsTree.defaultProps = {
+  readOnly: false,
 };
 
 export default ContentTagsTree;

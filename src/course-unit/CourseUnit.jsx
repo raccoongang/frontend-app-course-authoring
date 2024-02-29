@@ -23,6 +23,7 @@ import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import HeaderNavigations from './header-navigations/HeaderNavigations';
 import Sequence from './course-sequence';
 import Sidebar from './sidebar';
+import SidebarTags from './sidebar-tags';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
 import { PasteNotificationAlert, PasteComponent } from './clipboard';
@@ -161,6 +162,7 @@ const CourseUnit = ({ courseId }) => {
                       title={name}
                       type={type}
                       renderError={renderError}
+                      blockId={blockId}
                       validationMessages={validationMessages}
                       shouldScroll={shouldScroll}
                       unitXBlockActions={unitXBlockActions}
@@ -186,6 +188,7 @@ const CourseUnit = ({ courseId }) => {
               <Stack gap={3}>
                 <Sidebar blockId={blockId} data-testid="course-unit-sidebar" />
                 <Sidebar isDisplayUnitLocation data-testid="course-unit-location-sidebar" />
+                <SidebarTags blockId={blockId} data-testid="course-unit-tags-sidebar" />
               </Stack>
             </Layout.Element>
           </Layout>
