@@ -11,10 +11,14 @@ const slice = createSlice({
     componentMode: MODE_STATES.noModes,
     loadingStatus: RequestStatus.PENDING,
     savingStatus: '',
+    savingImageStatus: '',
   },
   reducers: {
     updateSavingStatus: (state, { payload }) => {
       state.savingStatus = payload.status;
+    },
+    updateSavingImageStatus: (state, { payload }) => {
+      state.savingImageStatus = payload.status;
     },
     updateLoadingStatus: (state, { payload }) => {
       state.loadingStatus = payload.status;
@@ -45,6 +49,7 @@ export const {
   setMode,
   updateSavingStatus,
   updateLoadingStatus,
+  updateSavingImageStatus,
   fetchCertificatesSuccess,
   createCertificateSuccess,
   updateCertificateSuccess,
