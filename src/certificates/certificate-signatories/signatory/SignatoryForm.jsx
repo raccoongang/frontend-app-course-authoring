@@ -9,7 +9,7 @@ import { getConfig } from '@edx/frontend-platform';
 
 import ModalDropzone from '../../../generic/modal-dropzone/ModalDropzone';
 import ModalNotification from '../../../generic/modal-notification';
-import { updateSavingStatus } from '../../data/slice';
+import { updateSavingImageStatus } from '../../data/slice';
 import commonMessages from '../../messages';
 import messages from '../messages';
 
@@ -37,7 +37,7 @@ const SignatoryForm = ({
   };
 
   const handleSavingStatusDispatch = (status) => {
-    dispatch(updateSavingStatus(status));
+    dispatch(updateSavingImageStatus(status));
   };
 
   const formData = [
@@ -70,6 +70,15 @@ const SignatoryForm = ({
       onBlur: handleBlur,
     },
   ];
+
+  const uploadReplaceText = intl.formatMessage(
+    messages.uploadImageButton,
+    {
+      uploadText: signatureImagePath
+        ? intl.formatMessage(messages.uploadModalReplace)
+        : intl.formatMessage(messages.uploadModal),
+    },
+  );
 
   return (
     <div className="bg-light-200 p-2.5 signatory-form" data-testid="signatory-form">
@@ -120,16 +129,7 @@ const SignatoryForm = ({
                 <span className="x-small">{intl.formatMessage(messages.imageDescription)}</span>
               </Form.Control.Feedback>
             </Stack>
-            <Button onClick={open}>
-              {intl.formatMessage(
-                messages.uploadImageButton,
-                {
-                  uploadText: signatureImagePath
-                    ? intl.formatMessage(messages.uploadModalReplace)
-                    : intl.formatMessage(messages.uploadModal),
-                },
-              )}
-            </Button>
+            <Button onClick={open}>{uploadReplaceText}</Button>
           </Stack>
         </Form.Group>
       </Stack>
@@ -155,7 +155,7 @@ const SignatoryForm = ({
         fileTypes={['png']}
         onSavingStatus={handleSavingStatusDispatch}
         imageHelpText={intl.formatMessage(messages.imageDescription)}
-        modalTitle={intl.formatMessage(messages.uploadImageButton)}
+        modalTitle={uploadReplaceText}
       />
       <ModalNotification
         isOpen={isConfirmOpen}
