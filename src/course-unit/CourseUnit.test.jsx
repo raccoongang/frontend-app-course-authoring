@@ -97,7 +97,7 @@ describe('<CourseUnit />', () => {
         roles: [],
       },
     });
-
+    global.localStorage.clear();
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     axiosMock
@@ -1159,6 +1159,7 @@ describe('<CourseUnit />', () => {
           ...updatedCourseSectionVerticalData,
         });
 
+      global.localStorage.setItem('staticFileNotices', JSON.stringify(clipboardMockResponse.staticFileNotices));
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(createNewCourseXBlock(camelCaseObject(postXBlockBody), null, blockId), store.dispatch);
       const newFilesAlert = getByTestId('has-new-files-alert');
@@ -1222,6 +1223,7 @@ describe('<CourseUnit />', () => {
           ...updatedCourseSectionVerticalData,
         });
 
+      global.localStorage.setItem('staticFileNotices', JSON.stringify(clipboardMockResponse.staticFileNotices));
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(createNewCourseXBlock(camelCaseObject(postXBlockBody), null, blockId), store.dispatch);
       const conflictingErrorsAlert = getByTestId('has-conflicting-errors-alert');
@@ -1285,6 +1287,7 @@ describe('<CourseUnit />', () => {
           ...updatedCourseSectionVerticalData,
         });
 
+      global.localStorage.setItem('staticFileNotices', JSON.stringify(clipboardMockResponse.staticFileNotices));
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(createNewCourseXBlock(camelCaseObject(postXBlockBody), null, blockId), store.dispatch);
       const errorFilesAlert = getByTestId('has-error-files-alert');

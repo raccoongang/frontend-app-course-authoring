@@ -140,10 +140,12 @@ const CourseUnit = ({ courseId }) => {
                   icon={WarningIcon}
                 />
               )}
-              <PasteNotificationAlert
-                staticFileNotices={staticFileNotices}
-                courseId={courseId}
-              />
+              {staticFileNotices && (
+                <PasteNotificationAlert
+                  staticFileNotices={staticFileNotices}
+                  courseId={courseId}
+                />
+              )}
               <Stack gap={4} className="mb-4 course-unit__xblocks">
                 <DraggableList
                   itemList={unitXBlocks}
