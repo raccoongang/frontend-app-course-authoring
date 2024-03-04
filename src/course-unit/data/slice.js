@@ -20,6 +20,7 @@ const slice = createSlice({
     courseSectionVertical: {},
     courseVerticalChildren: {},
     staticFileNotices: {},
+    xblockModalData: {},
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -111,6 +112,9 @@ const slice = createSlice({
       // This avoids the need to copy the array beforehand
       state.courseVerticalChildren.children.sort((a, b) => (indexMap.get(a.id) || 0) - (indexMap.get(b.id) || 0));
     },
+    xblockModalData: (state, { payload }) => {
+      state.xblockModalData = payload;
+    },
   },
 });
 
@@ -133,6 +137,7 @@ export const {
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
+  xblockModalData,
 } = slice.actions;
 
 export const {

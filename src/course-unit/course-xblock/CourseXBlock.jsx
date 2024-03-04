@@ -8,19 +8,23 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { LibraryBlock } from 'CourseAuthoring/course-unit/course-xblock/library-authoring/edit-block/LibraryBlock';
+import { getXBlockHandlerUrl, XBLOCK_VIEW_SYSTEM } from 'CourseAuthoring/course-unit/course-xblock/library-authoring';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
-import { copyToClipboard } from '../../generic/data/thunks';
+import { copyToClipboard, fetchXBlockModalQuery } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockContent from './xblock-content/XBlockContent';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { getIFrameUrl } from './urls';
 import messages from './messages';
+
+const getHandlerUrl = async (blockId) => getXBlockHandlerUrl(blockId, XBLOCK_VIEW_SYSTEM.Studio, 'handler_name');
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -35,10 +39,15 @@ const CourseXBlock = ({
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
+  const xblockModalData = useSelector(state => state.courseUnit.xblockModalData);
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
+
+  useEffect(() => {
+    dispatch(fetchXBlockModalQuery(id));
+  }, []);
 
   const currentItemData = {
     category: COURSE_BLOCK_NAMES.component.id,
@@ -60,6 +69,7 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
+      fetchXBlockModalQuery(id);
     }
   };
 
@@ -73,79 +83,84 @@ const CourseXBlock = ({
       scrollToElement(courseXBlockElementRef.current);
     }
   }, []);
-
+  // console.log({ xblockModalData });
   return (
-    <div ref={courseXBlockElementRef} {...props}>
-      <Card
-        as={ConditionalSortableElement}
-        id={id}
-        draggable
-        componentStyle={{ marginBottom: 0 }}
-      >
-        <Card.Header
-          title={title}
-          subtitle={visibilityMessage}
-          actions={(
-            <ActionRow className="mr-2">
-              <IconButton
-                alt={intl.formatMessage(messages.blockAltButtonEdit)}
-                iconAs={EditIcon}
-                onClick={handleEdit}
-              />
-              <Dropdown>
-                <Dropdown.Toggle
-                  id={id}
-                  as={IconButton}
-                  src={MoveVertIcon}
-                  alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
-                  iconAs={Icon}
+    <>
+      {Object.keys(xblockModalData).length ? (
+        <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockModalData} />
+      ) : null}
+      <div ref={courseXBlockElementRef} {...props}>
+        <Card
+          as={ConditionalSortableElement}
+          id={id}
+          draggable
+          componentStyle={{ marginBottom: 0 }}
+        >
+          <Card.Header
+            title={title}
+            subtitle={visibilityMessage}
+            actions={(
+              <ActionRow className="mr-2">
+                <IconButton
+                  alt={intl.formatMessage(messages.blockAltButtonEdit)}
+                  iconAs={EditIcon}
+                  onClick={handleEdit}
                 />
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
-                    {intl.formatMessage(messages.blockLabelButtonDuplicate)}
-                  </Dropdown.Item>
-                  <Dropdown.Item>
-                    {intl.formatMessage(messages.blockLabelButtonMove)}
-                  </Dropdown.Item>
-                  {canEdit && (
-                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                <Dropdown>
+                  <Dropdown.Toggle
+                    id={id}
+                    as={IconButton}
+                    src={MoveVertIcon}
+                    alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
+                    iconAs={Icon}
+                  />
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
+                      {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                     </Dropdown.Item>
-                  )}
-                  <Dropdown.Item onClick={openConfigureModal}>
-                    {intl.formatMessage(messages.blockLabelButtonManageAccess)}
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={openDeleteModal}>
-                    {intl.formatMessage(messages.blockLabelButtonDelete)}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <DeleteModal
-                category="component"
-                isOpen={isDeleteModalOpen}
-                close={closeDeleteModal}
-                onDeleteSubmit={onDeleteSubmit}
-              />
-              <ConfigureModal
-                isXBlockComponent
-                isOpen={isConfigureModalOpen}
-                onClose={closeConfigureModal}
-                onConfigureSubmit={onConfigureSubmit}
-                currentItemData={currentItemData}
-              />
-            </ActionRow>
-          )}
-        />
-        <Card.Section>
-          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
-            <>
-              <XBlockMessages validationMessages={validationMessages} />
-              <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
-            </>
-          )}
-        </Card.Section>
-      </Card>
-    </div>
+                    <Dropdown.Item>
+                      {intl.formatMessage(messages.blockLabelButtonMove)}
+                    </Dropdown.Item>
+                    {canEdit && (
+                      <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                        {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                      </Dropdown.Item>
+                    )}
+                    <Dropdown.Item onClick={openConfigureModal}>
+                      {intl.formatMessage(messages.blockLabelButtonManageAccess)}
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={openDeleteModal}>
+                      {intl.formatMessage(messages.blockLabelButtonDelete)}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <DeleteModal
+                  category="component"
+                  isOpen={isDeleteModalOpen}
+                  close={closeDeleteModal}
+                  onDeleteSubmit={onDeleteSubmit}
+                />
+                <ConfigureModal
+                  isXBlockComponent
+                  isOpen={isConfigureModalOpen}
+                  onClose={closeConfigureModal}
+                  onConfigureSubmit={onConfigureSubmit}
+                  currentItemData={currentItemData}
+                />
+              </ActionRow>
+            )}
+          />
+          <Card.Section>
+            {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
+              <>
+                <XBlockMessages validationMessages={validationMessages} />
+                <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
+              </>
+            )}
+          </Card.Section>
+        </Card>
+      </div>
+    </>
   );
 };
 
