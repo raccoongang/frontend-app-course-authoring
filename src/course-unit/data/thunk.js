@@ -310,7 +310,7 @@ export function fetchXBlockModalQuery(xblockId) {
 
     try {
       const modalData = await getXBlockEditIframeData(xblockId);
-      console.log('modalData', modalData);
+      // console.log('modalData', modalData);
       dispatch(xblockModalData(modalData));
       // dispatch(deleteXBlock(xblockId));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));

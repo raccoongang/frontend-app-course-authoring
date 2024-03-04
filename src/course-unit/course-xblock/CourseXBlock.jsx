@@ -41,7 +41,6 @@ const CourseXBlock = ({
   const intl = useIntl();
   const iframeUrl = getIFrameUrl({ blockId: id });
   const xblockModalData = useSelector(state => state.courseUnit.xblockModalData);
-  const [isOpen, open, close] = useToggle(false);
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
@@ -49,14 +48,10 @@ const CourseXBlock = ({
 
   useEffect(() => {
     window.addEventListener('message', async (event) => {
-      console.log('DATA', event.data);
+      // console.log('DATA', event.data);
       const { method, replyKey, ...args } = event.data;
-
-      if (method === 'remove') {
-        console.log('CLOSE');
-        close();
-      }
     });
+    dispatch(fetchXBlockModalQuery(id));
   }, []);
 
   const currentItemData = {
@@ -72,7 +67,6 @@ const CourseXBlock = ({
   };
 
   const handleEdit = () => {
-    open();
     switch (type) {
     case COMPONENT_ICON_TYPES.html:
     case COMPONENT_ICON_TYPES.problem:
@@ -80,7 +74,7 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
-      dispatch(fetchXBlockModalQuery(id));
+      break;
     }
   };
 
@@ -97,7 +91,7 @@ const CourseXBlock = ({
 
   return (
     <>
-      {Object.keys(xblockModalData).length && isOpen ? (
+      {Object.keys(xblockModalData).length ? (
         <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockModalData} displayName={title} />
       ) : null}
       <div ref={courseXBlockElementRef} {...props}>

@@ -63,7 +63,6 @@ class LibraryBlock extends React.Component {
     const { method, replyKey, ...args } = event.data;
     const frame = this.iframeRef.current.contentWindow;
     const sendReply = async (data) => {
-      console.log('data', data);
       frame.postMessage({ ...data, replyKey }, '*');
     };
 
@@ -92,7 +91,6 @@ class LibraryBlock extends React.Component {
         view.html,
         view.resources,
         getConfig().STUDIO_BASE_URL,
-        this.props.displayName,
       );
 
       // Load the XBlock HTML into the IFrame:
@@ -113,7 +111,7 @@ class LibraryBlock extends React.Component {
 
     return (
       <div style={{
-        height: `500px`,
+        height: '500px',
         boxSizing: 'content-box',
         position: 'relative',
         overflow: 'hidden',
@@ -129,17 +127,15 @@ class LibraryBlock extends React.Component {
           data-testid="block-preview"
           id="modal-iframe"
           style={{
-            position: 'fixed',
+            position: 'absolute',
             left: 0,
             top: 0,
             width: '100%',
             height: '100%',
             minHeight: '200px',
-            border: '0 none',
+            // border: '0 none',
             // backgroundColor: 'white',
-            zIndex: 999999999,
-            overflow: 'hidden',
-            boxSizing: 'content-box',
+            // boxSizing: 'content-box',
           }}
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"

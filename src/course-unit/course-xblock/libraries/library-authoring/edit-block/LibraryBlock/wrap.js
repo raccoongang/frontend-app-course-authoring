@@ -221,7 +221,7 @@ function blockFrameJS() {
  *                   Only required for legacy XBlocks that don't declare their
  *                   JS and CSS dependencies properly.
  */
-export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displayName) {
+export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl) {
   const resources = data.map(([id, obj]) => ({ id, ...obj }));
 
   /* Separate resources by kind. */
@@ -247,7 +247,7 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displa
   // Otherwise, if the XBlock uses 'student_view', 'author_view', or 'studio_view', include known required globals:
   let legacyIncludes = '';
   if (
-    html.indexOf('xblock-v1-student_view') !== -1
+    html.indexOf('wrapper-xblock-message') !== -1
     || html.indexOf('xblock-studio_view') !== -1
     || html.indexOf('xblock-v1-public_view') !== -1
     || html.indexOf('xblock-v1-studio_view') !== -1
@@ -377,55 +377,9 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displa
       <script>
         var iframe = document.getElementById('yourIframeId');
         var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        console.log(iframeDocument);
       </script>
     `;
   }
-  const hasCustomButtons = html.includes('editor-with-buttons');
-  const hasCustomTabs = html.includes('editor-with-tabs');
-  const hasPlugins = html.includes('wrapper-comp-plugins');
-
-  const getDataEditor = html.includes('wrapper-comp-editor');
-
-  const editingModalHeader = `          
-    <div class="modal-header">
-        <h2 id="modal-window-title" class="title modal-window-title">
-            <span class="modal-button-title">
-                Editing: ${displayName}
-            </span> 
-            <button data-tooltip="Edit Title" class="btn-default action-edit title-edit-button">
-                <span class="icon fa fa-pencil" aria-hidden="true"></span>
-                <span class="sr"> Edit Title</span>
-            </button>
-        </h2>
-        <ul class="editor-modes action-list action-modes">        
-            <li class="action-item" data-mode="editor">
-                <a href="#" class="editor-button is-set">Editor</a>
-            </li>
-            <li class="action-item" data-mode="settings">
-                <a href="#" class="settings-button">Settings</a>
-            </li>
-        </ul>  
-    </div>`;
-
-  const defaultModalTitle = `
-    <div class="modal-header">
-        <h2 id="modal-window-title" class="title modal-window-title">Editing: ${displayName}</h2>
-        <ul class="editor-modes action-list action-modes"></ul>
-    </div>`;
-
-  const getActionBar = `
-    <div class="modal-actions" style="display: block;">
-        <h3 class="sr">Actions</h3>
-        <ul>
-            <li class="action-item">
-                <a href="#" class="button action-primary action-save">Save</a>
-            </li>
-            <li class="action-item">
-                <a href="#" class="button  action-cancel">Cancel</a>
-            </li>
-        </ul>
-    </div>`;
 
   const result = `
     <!DOCTYPE html>
@@ -440,19 +394,18 @@ export default function wrapBlockHtmlForIFrame(html, data, studioBaseUrl, displa
     <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
-    <body style="min-height: auto; background-color: #0000006b; overflow: hidden;" class="course container view-container">
-    <div class="wrapper wrapper-modal-window wrapper-modal-window-edit-xblock">
-        <div class="modal-window-overlay"></div>
-        <div class="modal-window modal-editor confirm modal-lg modal-type-discussion" tabindex="-1" aria-labelledby="modal-window-title" style="top: 238.5px; left: 17px;">
-            <div class="edit-xblock-modal">
-              ${!hasCustomTabs && getDataEditor ? editingModalHeader : defaultModalTitle}
-              <div class="modal-content">
-                  ${html}      
-              </div>
-              ${!hasCustomButtons ? getActionBar : ''}
+    <body style="min-height: auto; overflow: hidden;" class="wrapper-xblock level-page studio-xblock-wrapper">
+        <article class="xblock-render">
+            <div class="xblock xblock-author_view xblock-author_view-vertical xblock-initialized">
+                <div class="reorderable-container ui-sortable">
+                    <div class="studio-xblock-wrapper is-draggable">
+                        <section class="wrapper-xblock is-collapsible level-element">
+                            ${html}         
+                        </section>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </article> 
       ${jsTags}
       <script>
         window.addEventListener('load', (${blockFrameJS.toString()}));
