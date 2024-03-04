@@ -18,7 +18,7 @@ import {
   getCourseSectionVertical,
   getCourseVerticalChildren,
   getCourseUnitData,
-  getLoadingStatus,
+  getIsLoading,
   getSavingStatus,
   getSequenceStatus,
   getStaticFileNotices,
@@ -37,7 +37,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const [hasInternetConnectionError, setInternetConnectionError] = useState(false);
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
-  const isLoading = useSelector(getLoadingStatus);
+  const isLoading = useSelector(getIsLoading);
   const sequenceStatus = useSelector(getSequenceStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
   const courseVerticalChildren = useSelector(getCourseVerticalChildren);
