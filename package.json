@@ -88,7 +88,8 @@
     "regenerator-runtime": "0.13.7",
     "universal-cookie": "^4.0.4",
     "uuid": "^3.4.0",
-    "yup": "0.31.1"
+    "yup": "0.31.1",
+    "querystring": "0.2.1"
   },
   "devDependencies": {
     "@edx/browserslist-config": "1.2.0",
