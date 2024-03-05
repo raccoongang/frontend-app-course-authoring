@@ -191,6 +191,6 @@ export async function setXBlockOrderList(blockId, children) {
 export async function getXBlockEditIframeData(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getXBlockContainerPreview(itemId));
-  // console.log({ data });
+  console.log({ data });
   return camelCaseObject(data);
 }

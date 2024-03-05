@@ -90,7 +90,7 @@ class LibraryBlock extends React.Component {
       const html = wrapBlockHtmlForIFrame(
         view.html,
         view.resources,
-        getConfig().LMS_BASE_URL,
+        getConfig().STUDIO_BASE_URL,
       );
 
       // Load the XBlock HTML into the IFrame:
