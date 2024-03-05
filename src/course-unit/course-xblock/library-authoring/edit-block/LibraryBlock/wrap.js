@@ -247,6 +247,8 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     || html.indexOf('xblock-v1-author_view') !== -1
   ) {
     legacyIncludes += `
+      <script type="text/javascript" src="https://www.youtube.com/s/player/31eb286a/www-widgetapi.vflset/www-widgetapi.js"></script>
+      <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
       <!-- gettext & XBlock JS i18n code -->
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/i18n/en/djangojs.js"></script>
       <!-- Most XBlocks require jQuery: -->
@@ -289,6 +291,12 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
               define('underscore', [], function() { return window._; });
           }).call(this, require || RequireJS.require, define || RequireJS.define);
       </script>
+      <script type="text/javascript">
+  var course_location_analytics = "course\u002Dv1:edx+123123123123123123123+2023";
+  var analytics = {
+    "track": function() {}
+  };
+</script>
       <!-- edX HTML Utils requires GlobalLoader -->
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/edx-ui-toolkit/js/utils/global-loader.js"></script>
       <!-- CMS -->
@@ -308,6 +316,27 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/SequenceBlockDisplay.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/vendor/url.min.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/vendor/URI.min.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG&delayStartupUntil=configured"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/jquery.immediateDescendents.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/xblock/core.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/xblock/runtime.v1.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/js/vendor/virtual-dom-1.3.0.min.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/js/drag_and_drop.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/js/translations/en/text.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/utility.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/logger.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/jquery.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/jquery-migrate.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/underscore.string.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/backbone.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/edx-ui-toolkit/js/utils/string-utils.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/edx-ui-toolkit/js/utils/html-utils.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/cms/js/require-config.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/js/factories/context_course.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/js/sock.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/js/factories/container.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/debug_toolbar/js/toolbar.js"></script>
+      <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
       <script>
       // The video XBlock has an undeclared dependency on edX HTML Utils
       RequireJS.require(['HtmlUtils'], function (HtmlUtils) {
@@ -341,6 +370,22 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/studio-main-v1.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/normalize.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/font-awesome.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/ui-lightness/jquery-ui-1.8.22.custom.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/jquery.qtip.min.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/markitup/skins/simple/style.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/markitup/sets/wiki/style.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/tinymce-studio-content-fonts.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/tinymce/js/tinymce/skins/ui/studio-tmce5/content.min.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/tinymce-studio-content.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/tinymce/js/tinymce/skins/ui/studio-tmce5/skin.min.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/timepicker/jquery.timepicker.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/common/css/vendor/common.min.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/common/css/vendor/editImageModal.min.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/SequenceBlockDisplay.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/css/drag_and_drop.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/print.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <!-- Configure and load MathJax -->
       <script type="text/x-mathjax-config">
         MathJax.Hub.Config({

@@ -92,7 +92,6 @@ export const BlockPreviewBase = ({
   setShowDeleteModal, showEditorModal, setShowEditorModal, library, editView, isLtiUrlGenerating,
   ...props
 }) => {
-  console.log('view', view);
   return (
     <Card className="w-auto my-3">
       <Card.Header
