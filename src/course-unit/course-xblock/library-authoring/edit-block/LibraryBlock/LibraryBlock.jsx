@@ -65,7 +65,7 @@ class LibraryBlock extends React.Component {
     const sendReply = async (data) => {
       frame.postMessage({ ...data, replyKey }, '*');
     };
-    console.log({ method });
+
     if (method === 'bootstrap') {
       sendReply({ initialHtml: this.state.html });
     } else if (method === 'get_handler_url') {
@@ -103,14 +103,12 @@ class LibraryBlock extends React.Component {
   }
 
   render() {
-    // console.log('STATE ===>', this.state);
-    // console.log('PROPS ===>', this.props);
     /* Only draw the iframe if the HTML has already been set.  This is because xblock-bootstrap.html will only request
      * HTML once, upon being rendered. */
     if (this.state.html === null) {
       return null;
     }
-    console.log('SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL', getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL);
+
     return (
       <div style={{
         height: `${this.state.iFrameHeight}px`,
