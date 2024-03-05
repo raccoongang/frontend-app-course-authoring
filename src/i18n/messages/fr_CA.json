@@ -1239,9 +1239,5 @@
   "course-authoring.group-configurations.container.used-in-location": "Used in 1 location",
   "course-authoring.course-unit.xblock.alert.render-error.message": "Error: {message}",
   "course-authoring.course-unit.xblock.alert.render-error.title": "We're having trouble rendering your component",
-  "course-authoring.course-unit.xblock.alert.render-error.description": "Students will not be able to access this component. Re-edit your component to fix the error.",
-  "course-authoring.generic.saving-error-notification.title": "Studio's having trouble saving your work",
-  "course-authoring.generic.saving-error-notification.description": "This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.",
-  "course-authoring.generic.saving-error-notification.title.aria.labelled-by": "saving-error-notification-title",
-  "course-authoring.generic.saving-error-notification.aria.described-by": "saving-error-notification-description"
+  "course-authoring.course-unit.xblock.alert.render-error.description": "Students will not be able to access this component. Re-edit your component to fix the error."
 }

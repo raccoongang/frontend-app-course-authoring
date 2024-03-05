@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Warning as WarningIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -56,7 +56,7 @@ const SavingErrorNotification = ({
 };
 
 SavingErrorNotification.defaultProps = {
-  errorMessage: '',
+  errorMessage: undefined,
 };
 
 SavingErrorNotification.propTypes = {
