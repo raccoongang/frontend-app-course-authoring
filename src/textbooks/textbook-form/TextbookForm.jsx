@@ -39,6 +39,12 @@ const TextbookForm = ({
 
   const [currentTextbookIndex, setCurrentTextbookIndex] = useState(0);
   const [isUploadModalOpen, openUploadModal, closeUploadModal] = useToggle(false);
+  const [selectedFile, setSelectedFile] = useState('');
+
+  const onCloseUploadModal = () => {
+    closeUploadModal();
+    setSelectedFile('');
+  };
 
   const onUploadButtonClick = (index) => {
     setCurrentTextbookIndex(index);
@@ -155,8 +161,8 @@ const TextbookForm = ({
             </ActionRow>
             <ModalDropzone
               isOpen={isUploadModalOpen}
-              onClose={closeUploadModal}
-              onCancel={closeUploadModal}
+              onClose={onCloseUploadModal}
+              onCancel={onCloseUploadModal}
               onChange={(value) => setFieldValue(`chapters[${currentTextbookIndex}].url`, value)}
               fileTypes={['pdf']}
               modalTitle={intl.formatMessage(messages.uploadModalTitle, { courseName: courseTitle })}
@@ -167,8 +173,12 @@ const TextbookForm = ({
                 messages.uploadModalFileInvalidSizeText,
                 { maxSize: UPLOAD_FILE_MAX_SIZE / (1000 * 1000) },
               )}
+              onSelectFile={setSelectedFile}
               previewComponent={(
-                <Icon src={PdfIcon} className="modal-preview-icon" />
+                <div className="modal-preview">
+                  <Icon src={PdfIcon} className="modal-preview-icon" />
+                  <span className="modal-preview-text">{selectedFile}</span>
+                </div>
               )}
             />
             <PromptIfDirty dirty={dirty} />
