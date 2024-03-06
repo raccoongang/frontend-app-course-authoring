@@ -10,7 +10,7 @@ import {
 import { Add as AddIcon } from '@openedx/paragon/icons';
 import { useSelector } from 'react-redux';
 
-import { SavingErrorNotification } from '../generic/saving-error-notification';
+import { SavingErrorAlert } from '../generic/saving-error-alert';
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import { useModel } from '../generic/model-store';
 import { LoadingSpinner } from '../generic/Loading';
@@ -126,7 +126,7 @@ const Textbooks = ({ courseId }) => {
         title={processingNotificationTitle}
       />
       <div className="alert-toast">
-        <SavingErrorNotification
+        <SavingErrorAlert
           savingStatus={savingStatus}
           errorMessage={errorMessage}
         />

@@ -7,7 +7,7 @@ import { RequestStatus } from '../../data/constants';
 import AlertMessage from '../alert-message';
 import messages from './messages';
 
-const SavingErrorNotification = ({
+const SavingErrorAlert = ({
   savingStatus,
   errorMessage,
 }) => {
@@ -55,13 +55,13 @@ const SavingErrorNotification = ({
   );
 };
 
-SavingErrorNotification.defaultProps = {
+SavingErrorAlert.defaultProps = {
   errorMessage: undefined,
 };
 
-SavingErrorNotification.propTypes = {
+SavingErrorAlert.propTypes = {
   savingStatus: PropTypes.string.isRequired,
   errorMessage: PropTypes.string,
 };
 
-export default SavingErrorNotification;
+export default SavingErrorAlert;

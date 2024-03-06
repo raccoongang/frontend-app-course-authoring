@@ -9,7 +9,7 @@ import { useModel } from '../generic/model-store';
 import SubHeader from '../generic/sub-header/SubHeader';
 import getPageHeadTitle from '../generic/utils';
 import ProcessingNotification from '../generic/processing-notification';
-import { SavingErrorNotification } from '../generic/saving-error-notification';
+import { SavingErrorAlert } from '../generic/saving-error-alert';
 import messages from './messages';
 import ContentGroupsSection from './content-groups-section';
 import ExperimentConfigurationsSection from './experiment-configurations-section';
@@ -104,7 +104,7 @@ const GroupConfigurations = ({ courseId }) => {
         </Layout>
       </Container>
       <div className="alert-toast">
-        <SavingErrorNotification
+        <SavingErrorAlert
           savingStatus={savingStatus}
           errorMessage={errorMessage}
         />

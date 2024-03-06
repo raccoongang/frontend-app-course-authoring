@@ -3,7 +3,7 @@ import {
   hideProcessingNotification,
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
-import { handleResponseErrors } from '../../generic/saving-error-notification';
+import { handleResponseErrors } from '../../generic/saving-error-alert';
 import { NOTIFICATION_MESSAGES } from '../../constants';
 import {
   getCertificates,

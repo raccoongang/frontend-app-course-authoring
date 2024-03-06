@@ -13,7 +13,7 @@ import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import AlertMessage from '../generic/alert-message';
 import ProcessingNotification from '../generic/processing-notification';
-import { SavingErrorNotification } from '../generic/saving-error-notification';
+import { SavingErrorAlert } from '../generic/saving-error-alert';
 import ConnectionErrorAlert from '../generic/ConnectionErrorAlert';
 import Loading from '../generic/Loading';
 import AddComponent from './add-component/AddComponent';
@@ -190,7 +190,7 @@ const CourseUnit = ({ courseId }) => {
           isShow={isShowProcessingNotification}
           title={processingNotificationTitle}
         />
-        <SavingErrorNotification
+        <SavingErrorAlert
           savingStatus={savingStatus}
           errorMessage={errorMessage}
         />
