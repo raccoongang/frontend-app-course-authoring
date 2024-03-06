@@ -5,6 +5,7 @@ import {
   hideProcessingNotification,
   showProcessingNotification,
 } from '../../generic/processing-notification/data/slice';
+import { handleResponseErrors } from '../../generic/saving-error-alert';
 import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
 import { updateModel, updateModels } from '../../generic/model-store';
@@ -117,7 +118,7 @@ export function editCourseItemQuery(itemId, displayName, sequenceId) {
       });
     } catch (error) {
       dispatch(hideProcessingNotification());
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     }
   };
 }
@@ -142,7 +143,7 @@ export function editCourseUnitVisibilityAndData(itemId, type, isVisible, groupAc
       });
     } catch (error) {
       dispatch(hideProcessingNotification());
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     }
   };
 }
@@ -185,7 +186,7 @@ export function createNewCourseXBlock(body, callback, blockId) {
     } catch (error) {
       dispatch(hideProcessingNotification());
       dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.FAILED }));
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     }
   };
 }
@@ -220,7 +221,7 @@ export function deleteUnitItemQuery(itemId, xblockId) {
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(hideProcessingNotification());
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     }
   };
 }
@@ -243,7 +244,7 @@ export function duplicateUnitItemQuery(itemId, xblockId) {
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(hideProcessingNotification());
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     }
   };
 }
@@ -272,8 +273,8 @@ export function copyToClipboard(usageKey) {
         throw new Error(`Unexpected clipboard status "${clipboardData.content?.status}" in successful API response.`);
       }
     } catch (error) {
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
       logError('Error copying to clipboard:', error);
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     } finally {
       dispatch(hideProcessingNotification());
     }
@@ -296,7 +297,7 @@ export function setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback)
       });
     } catch (error) {
       restoreCallback();
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+      handleResponseErrors(error, dispatch, updateSavingStatus);
     } finally {
       dispatch(hideProcessingNotification());
     }
