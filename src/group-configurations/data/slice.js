@@ -7,6 +7,7 @@ const slice = createSlice({
   name: 'groupConfigurations',
   initialState: {
     savingStatus: '',
+    errorMessage: '',
     loadingStatus: RequestStatus.IN_PROGRESS,
     groupConfigurations: {},
   },
@@ -35,7 +36,9 @@ const slice = createSlice({
       state.loadingStatus = payload.status;
     },
     updateSavingStatuses: (state, { payload }) => {
-      state.savingStatus = payload.status;
+      const { status, errorMessage } = payload;
+      state.savingStatus = status;
+      state.errorMessage = errorMessage;
     },
     updateExperimentConfigurationSuccess: (state, { payload }) => {
       const { configuration } = payload;
