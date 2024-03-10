@@ -40,7 +40,8 @@ import {
   deleteXBlock,
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
-  reorderXBlockList, xblockModalData,
+  reorderXBlockList,
+  fetchXBlockHtmlAndResources,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -304,14 +305,14 @@ export function setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback)
   };
 }
 
-export function fetchXBlockModalQuery(xblockId) {
+export function fetchXBlockHtmlAndResourcesQuery(xblockId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
 
     try {
-      const modalData = await getXBlockEditIframeData(xblockId);
-      dispatch(xblockModalData(modalData));
+      const xblockIframeData = await getXBlockEditIframeData(xblockId);
+      dispatch(fetchXBlockHtmlAndResources({ xblockId, ...xblockIframeData }));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
