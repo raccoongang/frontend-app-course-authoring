@@ -6,7 +6,7 @@ import wrapBlockHtmlForIFrame from './wrap';
 import { fetchable } from '../../common';
 import { blockViewShape } from '../data/shapes';
 
-ensureConfig(['LMS_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'library block component');
+ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'library block component');
 
 /**
  * React component that displays an XBlock in a sandboxed IFrame.
@@ -23,7 +23,7 @@ class LibraryBlock extends React.Component {
     this.iframeRef = React.createRef();
     this.state = {
       html: null,
-      iFrameHeight: 400,
+      iFrameHeight: 140,
       iframeKey: 0,
     };
   }
@@ -85,12 +85,13 @@ class LibraryBlock extends React.Component {
   };
 
   processView() {
-    const { view } = this.props;
+    const { view, type } = this.props;
     if (view.html) {
       const html = wrapBlockHtmlForIFrame(
         view.html,
         view.resources,
         getConfig().STUDIO_BASE_URL,
+        type,
       );
 
       // Load the XBlock HTML into the IFrame:
@@ -115,7 +116,7 @@ class LibraryBlock extends React.Component {
         boxSizing: 'content-box',
         position: 'relative',
         overflow: 'hidden',
-        minHeight: '200px',
+        minHeight: '140px',
         margin: '24px',
       }}
       >
@@ -131,7 +132,7 @@ class LibraryBlock extends React.Component {
             top: 0,
             width: '100%',
             height: '100%',
-            minHeight: '200px',
+            minHeight: '140px',
             border: '0 none',
             backgroundColor: 'white',
           }}

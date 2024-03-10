@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   ActionRow, Card, Dropdown, Icon, IconButton, useToggle,
@@ -7,6 +7,7 @@ import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@openedx/para
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { find } from 'lodash';
 
 import { LibraryBlock } from 'CourseAuthoring/course-unit/course-xblock/library-authoring/edit-block/LibraryBlock';
 import { getXBlockHandlerUrl, XBLOCK_VIEW_SYSTEM } from 'CourseAuthoring/course-unit/course-xblock/library-authoring';
@@ -16,12 +17,9 @@ import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSor
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
-import { copyToClipboard, fetchXBlockModalQuery } from '../data/thunk';
+import { copyToClipboard, fetchXBlockHtmlAndResourcesQuery } from '../data/thunk';
 import { COMPONENT_ICON_TYPES } from '../constants';
-import XBlockContent from './xblock-content/XBlockContent';
-import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
-import { getIFrameUrl } from './urls';
 import messages from './messages';
 
 const getHandlerUrl = async (blockId) => getXBlockHandlerUrl(blockId, XBLOCK_VIEW_SYSTEM.Studio, 'handler_name');
@@ -38,15 +36,16 @@ const CourseXBlock = ({
   const courseId = useSelector(getCourseId);
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
-  const iframeUrl = getIFrameUrl({ blockId: id });
-  const xblockModalData = useSelector(state => state.courseUnit.xblockModalData);
+  // const iframeUrl = getIFrameUrl({ blockId: id });
+  const xblockHtmlAndResources = useSelector(state => state.courseUnit.xblockHtmlAndResources);
+  const xblockInstanceHtmlAndResources = find(xblockHtmlAndResources, { xblockId: id });
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
-  console.log('type', type);
+
   useEffect(() => {
-    dispatch(fetchXBlockModalQuery(id));
+    dispatch(fetchXBlockHtmlAndResourcesQuery(id));
   }, []);
 
   const currentItemData = {
@@ -82,7 +81,7 @@ const CourseXBlock = ({
       scrollToElement(courseXBlockElementRef.current);
     }
   }, []);
-  // console.log({ xblockModalData });
+
   return (
     <div ref={courseXBlockElementRef} {...props}>
       <Card as={ConditionalSortableElement} id={id} draggable className="mb-1">
@@ -141,8 +140,8 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
-            <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockModalData} />
+          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : xblockInstanceHtmlAndResources && (
+            <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockInstanceHtmlAndResources} type={type} />
           )}
         </Card.Section>
       </Card>
