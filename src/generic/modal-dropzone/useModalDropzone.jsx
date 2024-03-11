@@ -7,7 +7,7 @@ import { uploadAssets } from './data/api';
 import messages from './messages';
 
 const useModalDropzone = ({
-  onChange, onCancel, onClose, fileTypes, onSavingStatus,
+  onChange, onCancel, onClose, fileTypes, onSavingStatus, onSelectFile,
 }) => {
   const { courseId } = useParams();
   const intl = useIntl();
@@ -70,6 +70,10 @@ const useModalDropzone = ({
       };
       reader.readAsDataURL(file);
       setSelectedFile(fileData);
+
+      if (onSelectFile) {
+        onSelectFile(file.path);
+      }
     }
   };
 
@@ -95,6 +99,7 @@ const useModalDropzone = ({
     try {
       const response = await uploadAssets(courseId, selectedFile, onUploadProgress);
       const url = response?.asset?.url;
+
       if (url) {
         onChange(url);
         onSavingStatus({ status: RequestStatus.SUCCESSFUL });
