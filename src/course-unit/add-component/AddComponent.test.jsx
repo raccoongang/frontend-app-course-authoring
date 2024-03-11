@@ -14,7 +14,7 @@ import { executeThunk } from '../../utils';
 import { fetchCourseSectionVerticalData } from '../data/thunk';
 import { getCourseSectionVerticalApiUrl } from '../data/api';
 import { courseSectionVerticalMock } from '../__mocks__';
-import { COMPONENT_ICON_TYPES } from '../constants';
+import { COMPONENT_TYPES } from '../constants';
 import AddComponent from './AddComponent';
 import messages from './messages';
 
@@ -88,7 +88,7 @@ describe('<AddComponent />', () => {
         ...courseSectionVerticalMock,
         component_templates: [
           ...courseSectionVerticalMock.component_templates.map((component) => {
-            if (component.type === 'discussion') {
+            if (component.type === COMPONENT_TYPES.discussion) {
               return {
                 ...component,
                 templates: [],
@@ -104,7 +104,7 @@ describe('<AddComponent />', () => {
     const { queryByRole, getByRole } = renderComponent();
 
     Object.keys(componentTemplates).map((component) => {
-      if (componentTemplates[component].type === 'discussion') {
+      if (componentTemplates[component].type === COMPONENT_TYPES.discussion) {
         return expect(queryByRole('button', {
           name: new RegExp(`${messages.buttonText.defaultMessage} ${componentTemplates[component].display_name}`, 'i'),
         })).not.toBeInTheDocument();
@@ -153,7 +153,7 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
-      type: 'discussion',
+      type: COMPONENT_TYPES.discussion,
     });
   });
 
@@ -168,7 +168,7 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
-      type: 'drag-and-drop-v2',
+      type: COMPONENT_TYPES.dragAndDrop,
     });
   });
 
@@ -183,7 +183,7 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
-      type: 'problem',
+      type: COMPONENT_TYPES.problem,
     }, expect.any(Function));
   });
 
@@ -198,7 +198,7 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
-      type: 'video',
+      type: COMPONENT_TYPES.video,
     }, expect.any(Function));
   });
 
@@ -214,7 +214,7 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
       category: 'library_content',
-      type: 'library',
+      type: COMPONENT_TYPES.library,
     });
   });
 
@@ -249,7 +249,7 @@ describe('<AddComponent />', () => {
     await waitFor(() => {
       expect(getByText(/Add advanced component/i)).toBeInTheDocument();
       componentTemplates.forEach((componentTemplate) => {
-        if (componentTemplate.type === COMPONENT_ICON_TYPES.advanced) {
+        if (componentTemplate.type === COMPONENT_TYPES.advanced) {
           componentTemplate.templates.forEach((template) => {
             expect(within(modalContainer).getByRole('radio', { name: template.display_name })).toBeInTheDocument();
           });
@@ -270,7 +270,7 @@ describe('<AddComponent />', () => {
     await waitFor(() => {
       expect(getByText(/Add text component/i)).toBeInTheDocument();
       componentTemplates.forEach((componentTemplate) => {
-        if (componentTemplate.type === COMPONENT_ICON_TYPES.html) {
+        if (componentTemplate.type === COMPONENT_TYPES.html) {
           componentTemplate.templates.forEach((template) => {
             expect(within(modalContainer).getByRole('radio', { name: template.display_name })).toBeInTheDocument();
           });
@@ -292,7 +292,7 @@ describe('<AddComponent />', () => {
     await waitFor(() => {
       expect(getByText(/Add open response component/i)).toBeInTheDocument();
       componentTemplates.forEach((componentTemplate) => {
-        if (componentTemplate.type === COMPONENT_ICON_TYPES.openassessment) {
+        if (componentTemplate.type === COMPONENT_TYPES.openassessment) {
           componentTemplate.templates.forEach((template) => {
             expect(within(modalContainer).getByRole('radio', { name: template.display_name })).toBeInTheDocument();
           });
@@ -348,8 +348,8 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
-      type: 'html',
-      boilerplate: 'html',
+      type: COMPONENT_TYPES.html,
+      boilerplate: COMPONENT_TYPES.html,
     }, expect.any(Function));
   });
 
@@ -374,7 +374,7 @@ describe('<AddComponent />', () => {
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalled();
     expect(handleCreateNewCourseXBlockMock).toHaveBeenCalledWith({
       parentLocator: '123',
-      category: 'openassessment',
+      category: COMPONENT_TYPES.openassessment,
       boilerplate: 'peer-assessment',
     });
   });
@@ -388,7 +388,7 @@ describe('<AddComponent />', () => {
           ...courseSectionVerticalMock,
           component_templates: [
             ...courseSectionVerticalMock.component_templates.map((component) => {
-              if (component.type === 'advanced') {
+              if (component.type === COMPONENT_TYPES.advanced) {
                 return {
                   ...component,
                   support_legend: { show_legend: false },
@@ -431,7 +431,7 @@ describe('<AddComponent />', () => {
           ...courseSectionVerticalMock,
           component_templates: [
             ...courseSectionVerticalMock.component_templates.map((component) => {
-              if (component.type === 'advanced') {
+              if (component.type === COMPONENT_TYPES.advanced) {
                 return {
                   ...component,
                   support_legend: { show_legend: true },

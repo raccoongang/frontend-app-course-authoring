@@ -34,7 +34,7 @@ export const CLIPBOARD_STATUS = {
   error: 'error',
 };
 
-export const COMPONENT_ICON_TYPES = {
+export const COMPONENT_TYPES = {
   advanced: 'advanced',
   discussion: 'discussion',
   library: 'library',
@@ -54,14 +54,14 @@ export const TYPE_ICONS_MAP = {
 };
 
 export const COMPONENT_TYPE_ICON_MAP = {
-  [COMPONENT_ICON_TYPES.advanced]: ScienceIcon,
-  [COMPONENT_ICON_TYPES.discussion]: QuestionAnswerOutlineIcon,
-  [COMPONENT_ICON_TYPES.library]: LibraryIcon,
-  [COMPONENT_ICON_TYPES.html]: TextFieldsIcon,
-  [COMPONENT_ICON_TYPES.openassessment]: EditNoteIcon,
-  [COMPONENT_ICON_TYPES.problem]: HelpOutlineIcon,
-  [COMPONENT_ICON_TYPES.video]: VideoCameraIcon,
-  [COMPONENT_ICON_TYPES.dragAndDrop]: BackHandIcon,
+  [COMPONENT_TYPES.advanced]: ScienceIcon,
+  [COMPONENT_TYPES.discussion]: QuestionAnswerOutlineIcon,
+  [COMPONENT_TYPES.library]: LibraryIcon,
+  [COMPONENT_TYPES.html]: TextFieldsIcon,
+  [COMPONENT_TYPES.openassessment]: EditNoteIcon,
+  [COMPONENT_TYPES.problem]: HelpOutlineIcon,
+  [COMPONENT_TYPES.video]: VideoCameraIcon,
+  [COMPONENT_TYPES.dragAndDrop]: BackHandIcon,
 };
 
 export const getUnitReleaseStatus = (intl) => ({
