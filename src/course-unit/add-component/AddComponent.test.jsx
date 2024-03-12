@@ -66,7 +66,7 @@ describe('<AddComponent />', () => {
     ));
   });
 
-  it('doesn\'t render AddComponent component when there aren\'t componentTemplates', async () => {
+  it('AddComponent component doesn\'t render when there aren\'t componentTemplates', async () => {
     axiosMock
       .onGet(getCourseSectionVerticalApiUrl(blockId))
       .reply(200, {
@@ -80,7 +80,7 @@ describe('<AddComponent />', () => {
     expect(queryByRole('heading', { name: messages.title.defaultMessage })).not.toBeInTheDocument();
   });
 
-  it('doesn\'t render AddComponent component item when there aren\'t templates', async () => {
+  it('AddComponent component item doesn\'t render when there aren\'t templates', async () => {
     const componentTemplates = courseSectionVerticalMock.component_templates;
     axiosMock
       .onGet(getCourseSectionVerticalApiUrl(blockId))
@@ -116,7 +116,7 @@ describe('<AddComponent />', () => {
     });
   });
 
-  it('does\'t call handleCreateNewCourseXblock with custom component create button is clicked', async () => {
+  it('handleCreateNewCourseXblock does\'t call with custom component create button is clicked', async () => {
     axiosMock
       .onGet(getCourseSectionVerticalApiUrl(blockId))
       .reply(200, {
@@ -380,7 +380,7 @@ describe('<AddComponent />', () => {
   });
 
   describe('component support label', () => {
-    it('doesn\'t display component support label if component support legend is disabled', async () => {
+    it('component support label is hidden if component support legend is disabled', async () => {
       const supportLevels = ['fs', 'ps'];
       axiosMock
         .onGet(getCourseSectionVerticalApiUrl(blockId))
