@@ -63,9 +63,10 @@ class LibraryBlock extends React.Component {
     const { method, replyKey, ...args } = event.data;
     const frame = this.iframeRef.current.contentWindow;
     const sendReply = async (data) => {
+      // console.log('=== DATA ===', data);
       frame.postMessage({ ...data, replyKey }, '*');
     };
-
+    // console.log('method ===>', method);
     if (method === 'bootstrap') {
       sendReply({ initialHtml: this.state.html });
     } else if (method === 'get_handler_url') {
@@ -109,10 +110,10 @@ class LibraryBlock extends React.Component {
     if (this.state.html === null) {
       return null;
     }
-
+    // console.log('document.cookie ======>', document.cookie);
     return (
       <div style={{
-        height: `${this.state.iFrameHeight}px`,
+        height: `400px`,
         boxSizing: 'content-box',
         position: 'relative',
         overflow: 'hidden',
@@ -124,7 +125,7 @@ class LibraryBlock extends React.Component {
           key={this.state.iframeKey}
           ref={this.iframeRef}
           title="block"
-          src={getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}
+          src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
           data-testid="block-preview"
           style={{
             position: 'absolute',
@@ -137,7 +138,8 @@ class LibraryBlock extends React.Component {
             backgroundColor: 'white',
           }}
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
+          referrerPolicy="origin"
           sandbox={[
             'allow-forms',
             'allow-modals',
