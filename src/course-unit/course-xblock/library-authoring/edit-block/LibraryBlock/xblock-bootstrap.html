@@ -21,6 +21,7 @@
       const uniqueKeyPrefix = "k" + +Date.now() + "-" + Math.floor(Math.random() * 1e10) + "-";
       var messageCount = 0;
       function postMessageToParent(messageData, callback) {
+        // console.log('=== postMessageToParent ===', messageData);
         const messageReplyKey = uniqueKeyPrefix + (messageCount++);
         messageData.replyKey = messageReplyKey;
         if (callback !== undefined) {
