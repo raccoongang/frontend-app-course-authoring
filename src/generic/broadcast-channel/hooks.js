@@ -1,7 +1,6 @@
 import {
   useCallback, useEffect, useMemo, useRef,
 } from 'react';
-import { BroadcastChannel } from 'broadcast-channel';
 
 const channelInstances = {};
 
@@ -22,7 +21,7 @@ export const useBroadcastChannel = (channelName, onMessageReceived) => {
       // Native BroadcastChannel passes event to onmessage callback and to
       // access data we need to use `event.data`, but npm BroadcastChannel
       // directly passes data as seen below
-      channel.onmessage = (data) => onMessageReceived(data);
+      channel.onmessage = (event) => onMessageReceived(event.data);
     }
     return () => {
       if (isSubscribed.current || process.env.NODE_ENV !== 'development') {
