@@ -1,9 +1,9 @@
-import { COMPONENT_ICON_TYPES } from 'CourseAuthoring/course-unit/constants';
-
 /* eslint-disable no-param-reassign */
 /**
  * Code to wrap an XBlock so that we can embed it in an IFrame
  */
+
+import { COMPONENT_ICON_TYPES } from 'CourseAuthoring/course-unit/constants';
 
 /**
  * The JavaScript code which runs inside our IFrame and is responsible
@@ -26,6 +26,7 @@ function blockFrameJS() {
    * @param callback The callback to call when the parent window replies
    */
   function postMessageToParent(messageData, callback) {
+    // console.log('=== wrap - postMessageToParent ===', messageData);
     messageCount += 1;
     const messageReplyKey = uniqueKeyPrefix + messageCount;
     messageData.replyKey = messageReplyKey;
@@ -335,6 +336,8 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/css/drag_and_drop.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/print.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG&delayStartupUntil=configured"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/jquery.immediateDescendents.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/xblock/core.js"></script>
@@ -355,7 +358,26 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/js/sock.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/js/factories/container.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/debug_toolbar/js/toolbar.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/vendor/url.min.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/vendor/URI.min.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/models/xblock_info.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/views/xblock.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/views/utils/xblock_utils.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/components/utils/view_utils.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/utils/module.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/views/baseview.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/components/views/feedback_notification.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/components/views/feedback_prompt.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/utils/handle_iframe_binding.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/utils/templates.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/components/views/feedback.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/vendor/requirejs/text.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/split_test/public/js/split_test_author_view.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/WordCloudBlockDisplay.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/library_content/public/js/library_content_edit.js"></script>
+      <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/HtmlBlockDisplay.js"></script>
       <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
+      <script type="text/javascript" src="https://studio.edx.org/c4x/edX/DemoX/asset/jquery.loupeAndLightbox.js"></script>
       <!-- Configure and load MathJax -->
       <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -402,11 +424,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
     `;
   }
-  const searchString = '/preview/xblock/';
-  const replacementString = 'http://localhost:18010/preview/xblock/';
-  const modifiedHtml = html;
-  // const modifiedHtml = html.replace(searchString, replacementString);
-
+  // console.log('document.cookie ======>', document.cookie);
   let result = '';
 
   if (
@@ -446,6 +464,33 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     </body>
     </html>
   `;
+  } else if (COMPONENT_ICON_TYPES.advanced) {
+    result = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <!-- Open links in a new tab, not this iframe -->
+      <base target="_blank">
+      <meta charset="UTF-8">
+      ${legacyIncludes}
+      ${cssTags}
+    </head>
+    <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
+    images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
+    onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
+    <body style="min-height: auto; background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper">
+      <section class="wrapper-xblock is-collapsible level-element">
+          <article class="xblock-render">
+                ${html}
+          </article>
+      </section>
+      ${jsTags}
+      <script>
+        window.addEventListener('load', (${blockFrameJS.toString()}));
+      </script>
+    </body>
+    </html>
+  `;
   } else {
     result = `
     <!DOCTYPE html>
@@ -461,7 +506,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
     <body style="min-height: auto; background-color: white">
-      ${modifiedHtml}
+      ${html}
       ${jsTags}
       <script>
         window.addEventListener('load', (${blockFrameJS.toString()}));
