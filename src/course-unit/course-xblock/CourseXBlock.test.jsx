@@ -16,7 +16,7 @@ import { getCourseSectionVerticalApiUrl, getXBlockBaseApiUrl } from '../data/api
 import { fetchCourseSectionVerticalData } from '../data/thunk';
 import { executeThunk } from '../../utils';
 import { getCourseId } from '../data/selectors';
-import { COMPONENT_ICON_TYPES, PUBLISH_TYPES } from '../constants';
+import { COMPONENT_TYPES, PUBLISH_TYPES } from '../constants';
 import { courseSectionVerticalMock, courseVerticalChildrenMock } from '../__mocks__';
 import renderErrorAlertMessages from './render-error-alert/messages';
 import CourseXBlock from './CourseXBlock';
@@ -253,7 +253,7 @@ describe('<CourseXBlock />', () => {
   describe('edit', () => {
     it('navigates to editor page on edit HTML xblock', () => {
       const { getByText, getByRole } = renderComponent({
-        type: COMPONENT_ICON_TYPES.html,
+        type: COMPONENT_TYPES.html,
       });
 
       const editButton = getByRole('button', { name: messages.blockAltButtonEdit.defaultMessage });
@@ -267,7 +267,7 @@ describe('<CourseXBlock />', () => {
 
     it('navigates to editor page on edit Video xblock', () => {
       const { getByText, getByRole } = renderComponent({
-        type: COMPONENT_ICON_TYPES.video,
+        type: COMPONENT_TYPES.video,
       });
 
       const editButton = getByRole('button', { name: messages.blockAltButtonEdit.defaultMessage });
@@ -281,7 +281,7 @@ describe('<CourseXBlock />', () => {
 
     it('navigates to editor page on edit Problem xblock', () => {
       const { getByText, getByRole } = renderComponent({
-        type: COMPONENT_ICON_TYPES.problem,
+        type: COMPONENT_TYPES.problem,
       });
 
       const editButton = getByRole('button', { name: messages.blockAltButtonEdit.defaultMessage });
