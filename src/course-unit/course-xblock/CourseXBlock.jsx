@@ -15,7 +15,7 @@ import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
 import { copyToClipboard } from '../data/thunk';
-import { COMPONENT_ICON_TYPES } from '../constants';
+import { COMPONENT_TYPES } from '../constants';
 import XBlockContent from './xblock-content/XBlockContent';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
@@ -54,9 +54,9 @@ const CourseXBlock = ({
 
   const handleEdit = () => {
     switch (type) {
-    case COMPONENT_ICON_TYPES.html:
-    case COMPONENT_ICON_TYPES.problem:
-    case COMPONENT_ICON_TYPES.video:
+    case COMPONENT_TYPES.html:
+    case COMPONENT_TYPES.problem:
+    case COMPONENT_TYPES.video:
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
