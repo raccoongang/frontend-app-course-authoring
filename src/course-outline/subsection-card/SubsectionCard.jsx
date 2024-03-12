@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 import { Add as IconAdd } from '@openedx/paragon/icons';
 import classNames from 'classnames';
 
+import { getInitialUserClipboard } from 'CourseAuthoring/course-outline/data/selectors';
 import { setCurrentItem, setCurrentSection, setCurrentSubsection } from '../data/slice';
 import { RequestStatus } from '../../data/constants';
 import { COURSE_BLOCK_NAMES } from '../constants';
@@ -14,9 +15,10 @@ import CardHeader from '../card-header/CardHeader';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import TitleButton from '../card-header/TitleButton';
 import XBlockStatus from '../xblock-status/XBlockStatus';
-import PasteButton from '../paste-button/PasteButton';
+// import PasteButton from '../paste-button/PasteButton';
 import { getItemStatus, getItemStatusBorder, scrollToElement } from '../utils';
 import messages from './messages';
+import PasteButton from '../../generic/paste-button';
 
 const SubsectionCard = ({
   section,
@@ -44,6 +46,7 @@ const SubsectionCard = ({
   const isScrolledToElement = locatorId === subsection.id;
   const [isFormOpen, openForm, closeForm] = useToggle(false);
   const namePrefix = 'subsection';
+  const initialUserClipboard = useSelector(getInitialUserClipboard);
 
   const {
     id,
@@ -196,6 +199,7 @@ const SubsectionCard = ({
                 {enableCopyPasteUnits && (
                   <PasteButton
                     text={intl.formatMessage(messages.pasteButton)}
+                    clipboardData={initialUserClipboard}
                     blockType={COURSE_BLOCK_NAMES.vertical.id}
                     onClick={handlePasteButtonClick}
                   />

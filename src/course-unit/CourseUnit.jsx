@@ -12,6 +12,7 @@ import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import AlertMessage from '../generic/alert-message';
+import PasteButton from '../generic/paste-button';
 import ProcessingNotification from '../generic/processing-notification';
 import { SavingErrorAlert } from '../generic/saving-error-alert';
 import ConnectionErrorAlert from '../generic/ConnectionErrorAlert';
@@ -25,7 +26,7 @@ import Sequence from './course-sequence';
 import Sidebar from './sidebar';
 import { useCourseUnit } from './hooks';
 import messages from './messages';
-import { PasteNotificationAlert, PasteComponent } from './clipboard';
+import { PasteNotificationAlert } from './clipboard';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -170,9 +171,10 @@ const CourseUnit = ({ courseId }) => {
                 handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
               />
               {showPasteXBlock && canPasteComponent && (
-                <PasteComponent
+                <PasteButton
                   clipboardData={sharedClipboardData}
-                  handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+                  onClick={handleCreateNewCourseXBlock}
+                  text={intl.formatMessage(messages.pasteComponentButtonText)}
                 />
               )}
             </Layout.Element>

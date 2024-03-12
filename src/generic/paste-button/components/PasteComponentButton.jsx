@@ -1,17 +1,13 @@
 import PropsTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@openedx/paragon';
 import { ContentCopy as ContentCopyIcon } from '@openedx/paragon/icons';
 
-import messages from '../messages';
-
-const PasteComponentButton = ({ handleCreateNewCourseXBlock }) => {
-  const intl = useIntl();
+const PasteComponentButton = ({ onClick, text }) => {
   const { blockId } = useParams();
 
   const handlePasteXBlockComponent = () => {
-    handleCreateNewCourseXBlock({ stagedContent: 'clipboard', parentLocator: blockId }, null, blockId);
+    onClick({ stagedContent: 'clipboard', parentLocator: blockId }, null, blockId);
   };
 
   return (
@@ -21,13 +17,14 @@ const PasteComponentButton = ({ handleCreateNewCourseXBlock }) => {
       block
       onClick={handlePasteXBlockComponent}
     >
-      {intl.formatMessage(messages.pasteComponentButtonText)}
+      {text}
     </Button>
   );
 };
 
 PasteComponentButton.propTypes = {
-  handleCreateNewCourseXBlock: PropsTypes.func.isRequired,
+  onClick: PropsTypes.func.isRequired,
+  text: PropsTypes.string.isRequired,
 };
 
 export default PasteComponentButton;
