@@ -1,5 +1,5 @@
 import { RequestStatus } from '../../data/constants';
-import { NOTIFICATION_MESSAGES } from '../../constants';
+import { CLIPBOARD_STATUS, NOTIFICATION_MESSAGES } from '../../constants';
 import { COURSE_BLOCK_NAMES } from '../constants';
 import {
   hideProcessingNotification,
@@ -581,7 +581,7 @@ export function setUnitOrderListQuery(sectionId, subsectionId, unitListIds, rest
   };
 }
 
-export function setClipboardContent(usageKey, broadcastClipboard) {
+export function setClipboardContent(usageKey) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.copying));
@@ -589,9 +589,8 @@ export function setClipboardContent(usageKey, broadcastClipboard) {
     try {
       await copyBlockToClipboard(usageKey).then(async (result) => {
         const status = result?.content?.status;
-        if (status === 'ready') {
+        if (status === CLIPBOARD_STATUS.ready) {
           dispatch(updateClipboardContent(result));
-          broadcastClipboard(result);
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(hideProcessingNotification());
         } else {

@@ -12,7 +12,7 @@ import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import AlertMessage from '../generic/alert-message';
-import PasteButton from '../generic/paste-button';
+import { PasteButton } from '../generic/clipboard';
 import ProcessingNotification from '../generic/processing-notification';
 import { SavingErrorAlert } from '../generic/saving-error-alert';
 import ConnectionErrorAlert from '../generic/ConnectionErrorAlert';

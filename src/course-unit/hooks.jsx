@@ -24,10 +24,11 @@ import {
   getSequenceStatus,
   getStaticFileNotices,
   getCanEdit,
+  getClipboardData,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
-import { useCopyToClipboard } from './clipboard';
+import { useCopyToClipboard } from '../generic/clipboard';
 import { PUBLISH_TYPES } from './constants';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -46,7 +47,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
   const canEdit = useSelector(getCanEdit);
   const { currentlyVisibleToStudents } = courseUnit;
-  const { sharedClipboardData, showPasteXBlock, showPasteUnit } = useCopyToClipboard(canEdit);
+  const clipboardData = useSelector(getClipboardData);
+  const { sharedClipboardData, showPasteXBlock, showPasteUnit } = useCopyToClipboard(clipboardData, canEdit);
   const { canPasteComponent } = courseVerticalChildren;
 
   const unitTitle = courseUnit.metadata?.displayName || '';

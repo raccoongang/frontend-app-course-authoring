@@ -8,9 +8,10 @@ import userEvent from '@testing-library/user-event';
 
 import initializeStore from '../../../../store';
 import { executeThunk } from '../../../../utils';
+import { clipboardUnit } from '../../../../__mocks__';
 import { getClipboardUrl, getCourseUnitApiUrl } from '../../../data/api';
 import { copyToClipboard, fetchCourseUnitQuery } from '../../../data/thunk';
-import { clipboardUnit, courseUnitIndexMock } from '../../../__mocks__';
+import { courseUnitIndexMock } from '../../../__mocks__';
 import messages from '../../messages';
 import ActionButtons from './ActionButtons';
 

@@ -1,3 +1,3 @@
 export { default as WhatsInClipboard } from './WhatsInClipboard';
-export { default as PasteComponentButton } from './PasteComponentButton';
+export { default as PasteButtonComponent } from './PasteButtonComponent';
 export { default as PopoverContent } from './PopoverContent';

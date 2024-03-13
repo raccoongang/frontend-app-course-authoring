@@ -6,12 +6,10 @@ import { getConfig } from '@edx/frontend-platform';
 
 import { RequestStatus } from '../data/constants';
 import { COURSE_BLOCK_NAMES } from './constants';
-import { useBroadcastChannel } from '../generic/broadcast-channel/hooks';
 import {
   setCurrentItem,
   setCurrentSection,
   updateSavingStatus,
-  updateClipboardContent,
 } from './data/slice';
 import {
   getLoadingStatus,
@@ -91,12 +89,9 @@ const useCourseOutline = ({ courseId }) => {
   const [isPublishModalOpen, openPublishModal, closePublishModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
-  const clipboardBroadcastChannel = useBroadcastChannel('studio_clipboard_channel', (message) => {
-    dispatch(updateClipboardContent(message));
-  });
 
   const handleCopyToClipboardClick = (usageKey) => {
-    dispatch(setClipboardContent(usageKey, clipboardBroadcastChannel.postMessage));
+    dispatch(setClipboardContent(usageKey));
   };
 
   const handlePasteClipboardClick = (parentLocator, sectionId) => {
