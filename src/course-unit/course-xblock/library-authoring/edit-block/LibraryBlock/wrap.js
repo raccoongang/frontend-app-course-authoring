@@ -347,7 +347,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/js/translations/en/text.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/utility.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/logger.js"></script>
-      <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/jquery.js"></script>
+
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/jquery-migrate.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/underscore.string.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/backbone.js"></script>
@@ -422,6 +422,26 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
            It can't be run through static.url because MathJax uses crazy url introspection to do lazy loading of
            MathJax extension libraries -->
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
+      <script>
+        console.log('TRYING TO MODIFY SOMETHING', $.postWithPrefix)
+        const originalPost = $.postWithPrefix;
+        $.ajaxSetup({
+            xhrFields: {
+                withCredentials: true
+            }
+        });
+        $.postWithPrefix = function(url, data, success, dataType) {
+            // Check if the URL is relative (doesn't start with 'http://' or 'https://')
+            console.log('CHECK', url)
+            if (!/^https?:\\/\\//i.test(url)) {
+                // If the URL is relative, prepend it with your desired host
+                url = "${studioBaseUrl}" + url;
+            }
+        
+            // Call the original $.ajax function with modified options
+            return originalPost.call(this, url, data, success, dataType);
+        };
+      </script>
     `;
   }
   // console.log('document.cookie ======>', document.cookie);
