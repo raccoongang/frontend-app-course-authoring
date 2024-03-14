@@ -42,7 +42,7 @@ const useCertificates = ({ courseId }) => {
   document.title = getPageHeadTitle(courseTitle, intl.formatMessage(messages.headingTitleTabText));
 
   return {
-    componentMode, isLoading, loadingStatus, certificates,
+    componentMode, isLoading, loadingStatus, certificates, hasCertificateModes,
   };
 };
 

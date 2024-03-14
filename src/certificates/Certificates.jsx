@@ -22,7 +22,7 @@ const MODE_COMPONENTS = {
 
 const Certificates = ({ courseId }) => {
   const {
-    certificates, componentMode, isLoading, loadingStatus,
+    certificates, componentMode, isLoading, loadingStatus, hasCertificateModes,
   } = useCertificates({ courseId });
 
   if (isLoading) {
@@ -40,7 +40,7 @@ const Certificates = ({ courseId }) => {
   const ModeComponent = MODE_COMPONENTS[componentMode] || MODE_COMPONENTS[MODE_STATES.noModes];
 
   return (
-    <MainLayout courseId={courseId} showHeaderButtons={certificates?.length > 0}>
+    <MainLayout courseId={courseId} showHeaderButtons={hasCertificateModes && certificates?.length > 0}>
       <ModeComponent courseId={courseId} />
     </MainLayout>
   );
