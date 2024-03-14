@@ -191,7 +191,9 @@ function blockFrameJS() {
 
   let lastHeight = -1;
   function checkFrameHeight() {
-    const newHeight = document.documentElement.scrollHeight;
+    const visibleIframeContent = document.querySelector('.xblock-render');
+    const newHeight = visibleIframeContent.scrollHeight;
+
     if (newHeight !== lastHeight) {
       postMessageToParent({ method: 'update_frame_height', height: newHeight });
       lastHeight = newHeight;
@@ -223,13 +225,13 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   /* Extract CSS resources. */
   const cssUrls = urlResources.filter((r) => r.mimetype === 'text/css').map((r) => r.data);
   const sheets = textResources.filter((r) => r.mimetype === 'text/css').map((r) => r.data);
-  let cssTags = cssUrls.map((url) => `<link rel="stylesheet" href="${studioBaseUrl}${url}">`).join('\n');
+  let cssTags = cssUrls.map((url) => `<link rel="stylesheet" href="${type === 'openassessment' ? url : studioBaseUrl + url}">`).join('\n');
   cssTags += sheets.map((sheet) => `<style>${sheet}</style>`).join('\n');
 
   /* Extract JS resources. */
   const jsUrls = urlResources.filter((r) => r.mimetype === 'application/javascript').map((r) => r.data);
   const scripts = textResources.filter((r) => r.mimetype === 'application/javascript').map((r) => r.data);
-  let jsTags = jsUrls.map((url) => `<script src="${studioBaseUrl}${url}"></script>`).join('\n');
+  let jsTags = jsUrls.map((url) => `<script src="${type === 'openassessment' ? url : studioBaseUrl + url}"></script>`).join('\n');
   jsTags += scripts.map((script) => `<script>${script}</script>`).join('\n');
 
   // Most older XModules/XBlocks have a ton of undeclared dependencies on various JavaScript in the global scope.
@@ -320,7 +322,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/CodeMirror/codemirror.css">
       <!-- Built-in XBlocks (and some plugins) depends on LMS CSS -->
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/studio-main-v1.css">
-           <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/font-awesome.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/font-awesome.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/ui-lightness/jquery-ui-1.8.22.custom.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/jquery.qtip.min.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/markitup/skins/simple/style.css">
@@ -338,7 +340,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
-            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG&delayStartupUntil=configured"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG&delayStartupUntil=configured"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/jquery.immediateDescendents.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/xblock/core.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/xblock/runtime.v1.js"></script>
@@ -444,8 +446,9 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       </script>
     `;
   }
-  // console.log('document.cookie ======>', document.cookie);
+
   let result = '';
+  const modifiedHtml = html.replace(/href="javascript:void\(0\)"/g, 'href="javascript:void(0)" onclick="event.preventDefault()"');
 
   if (
     type === COMPONENT_ICON_TYPES.discussion
@@ -465,13 +468,13 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
-    <body style="min-height: auto; background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper" style="min-height: auto; background-color: white">
+    <body style=" background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper" style=" background-color: white">
         <article class="xblock-render">
             <div class="xblock xblock-author_view xblock-author_view-vertical xblock-initialized">
                 <div class="reorderable-container ui-sortable">
                     <div class="studio-xblock-wrapper is-draggable">
                         <section class="wrapper-xblock is-collapsible level-element">
-                            ${html}         
+                            ${modifiedHtml}         
                         </section>
                     </div>
                 </div>
@@ -501,7 +504,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     <body style="min-height: auto; background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper">
       <section class="wrapper-xblock is-collapsible level-element">
           <article class="xblock-render">
-                ${html}
+            ${modifiedHtml}
           </article>
       </section>
       ${jsTags}
@@ -525,8 +528,8 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
     images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
     onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
-    <body style="min-height: auto; background-color: white">
-      ${html}
+    <body style=" background-color: white">
+      ${modifiedHtml}
       ${jsTags}
       <script>
         window.addEventListener('load', (${blockFrameJS.toString()}));
