@@ -66,7 +66,7 @@ class LibraryBlock extends React.Component {
       // console.log('=== DATA ===', data);
       frame.postMessage({ ...data, replyKey }, '*');
     };
-    // console.log('method ===>', method);
+    console.log('args ===>', args);
     if (method === 'bootstrap') {
       sendReply({ initialHtml: this.state.html });
     } else if (method === 'get_handler_url') {
@@ -110,14 +110,14 @@ class LibraryBlock extends React.Component {
     if (this.state.html === null) {
       return null;
     }
-    // console.log('document.cookie ======>', document.cookie);
+    // console.log('this.state.iFrameHeight ======>', this.state.iFrameHeight);
     return (
       <div style={{
-        height: `400px`,
+        height: `${this.state.iFrameHeight}px`,
         boxSizing: 'content-box',
         position: 'relative',
         overflow: 'hidden',
-        minHeight: '140px',
+        minHeight: '200px',
         margin: '24px',
       }}
       >
@@ -133,7 +133,7 @@ class LibraryBlock extends React.Component {
             top: 0,
             width: '100%',
             height: '100%',
-            minHeight: '140px',
+            minHeight: '200px',
             border: '0 none',
             backgroundColor: 'white',
           }}

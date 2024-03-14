@@ -140,8 +140,8 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : xblockInstanceHtmlAndResources && (
-            <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockInstanceHtmlAndResources} type={type} />
+          {renderError ? <RenderErrorAlert errorMessage={renderError}/> : xblockInstanceHtmlAndResources && (
+            <LibraryBlock getHandlerUrl={getHandlerUrl} view={xblockInstanceHtmlAndResources} type={type}/>
           )}
         </Card.Section>
       </Card>
