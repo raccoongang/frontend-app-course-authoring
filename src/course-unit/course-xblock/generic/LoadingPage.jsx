@@ -1,4 +1,3 @@
-import React from 'react';
 import { Col } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
