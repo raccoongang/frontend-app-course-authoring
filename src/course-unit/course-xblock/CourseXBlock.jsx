@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
 
-import { LibraryBlock } from 'CourseAuthoring/course-unit/course-xblock/library-authoring/edit-block/LibraryBlock';
-import { getXBlockHandlerUrl, XBLOCK_VIEW_SYSTEM } from 'CourseAuthoring/course-unit/course-xblock/library-authoring';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
@@ -20,6 +18,8 @@ import { getCanEdit, getCourseId } from '../data/selectors';
 import { copyToClipboard, fetchXBlockHtmlAndResourcesQuery } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import RenderErrorAlert from './render-error-alert';
+import { getXBlockHandlerUrl, XBLOCK_VIEW_SYSTEM } from './library-authoring';
+import { LibraryBlock } from './library-authoring/edit-block/LibraryBlock';
 import messages from './messages';
 
 const getHandlerUrl = async (blockId) => getXBlockHandlerUrl(blockId, XBLOCK_VIEW_SYSTEM.Studio, 'handler_name');
@@ -36,7 +36,6 @@ const CourseXBlock = ({
   const courseId = useSelector(getCourseId);
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
-  // const iframeUrl = getIFrameUrl({ blockId: id });
   const xblockHtmlAndResources = useSelector(state => state.courseUnit.xblockHtmlAndResources);
   const xblockInstanceHtmlAndResources = find(xblockHtmlAndResources, { xblockId: id });
 
