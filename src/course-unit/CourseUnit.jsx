@@ -129,7 +129,7 @@ const CourseUnit = ({ courseId }) => {
             <Layout.Element>
               {currentlyVisibleToStudents && (
                 <AlertMessage
-                  className="course-unit__alert-unpublished-changes"
+                  className="course-unit__alert"
                   title={intl.formatMessage(messages.alertUnpublishedVersion)}
                   variant="warning"
                   icon={WarningIcon}
