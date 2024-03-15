@@ -316,8 +316,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       window.onTouchBasedDevice = function() { return navigator.userAgent.match(/iPhone|iPod|iPad|Android/i); };
       </script>
       <!-- At least one XBlock (drag and drop v2) expects Font Awesome -->
-      <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <!-- Capa Problem Editing requires CodeMirror -->
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/js/vendor/CodeMirror/codemirror.css">
       <!-- Built-in XBlocks (and some plugins) depends on LMS CSS -->
@@ -340,6 +339,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
+      <!-- Scripts -->
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG&delayStartupUntil=configured"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/jquery.immediateDescendents.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/xblock/core.js"></script>
@@ -349,7 +349,6 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <script type="text/javascript" src="${studioBaseUrl}/xblock/resource/drag-and-drop-v2/public/js/translations/en/text.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/utility.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/js/src/logger.js"></script>
-
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/jquery-migrate.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/underscore.string.js"></script>
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/common/js/vendor/backbone.js"></script>
@@ -434,7 +433,6 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
         });
         $.postWithPrefix = function(url, data, success, dataType) {
             // Check if the URL is relative (doesn't start with 'http://' or 'https://')
-            console.log('CHECK', url)
             if (!/^https?:\\/\\//i.test(url)) {
                 // If the URL is relative, prepend it with your desired host
                 url = "${studioBaseUrl}" + url;
