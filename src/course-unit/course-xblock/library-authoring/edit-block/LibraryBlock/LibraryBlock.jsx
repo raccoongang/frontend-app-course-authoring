@@ -66,7 +66,7 @@ class LibraryBlock extends React.Component {
       // console.log('=== DATA ===', data);
       frame.postMessage({ ...data, replyKey }, '*');
     };
-    console.log('args ===>', args);
+
     if (method === 'bootstrap') {
       sendReply({ initialHtml: this.state.html });
     } else if (method === 'get_handler_url') {
