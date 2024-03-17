@@ -424,22 +424,39 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
            MathJax extension libraries -->
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
       <script>
-        console.log('TRYING TO MODIFY SOMETHING', $.postWithPrefix)
+       /**
+        * AJAX requests, especially those made via $.postWithPrefix, must follow certain settings, 
+        * such as including credentials (x-csrf token, cookie, etc.) and ensuring consistent URL formatting.
+        */
+
         const originalPost = $.postWithPrefix;
+
         $.ajaxSetup({
-            xhrFields: {
-                withCredentials: true
-            }
+            xhrFields: { withCredentials: true }
         });
+
         $.postWithPrefix = function(url, data, success, dataType) {
             // Check if the URL is relative (doesn't start with 'http://' or 'https://')
             if (!/^https?:\\/\\//i.test(url)) {
-                // If the URL is relative, prepend it with your desired host
                 url = "${studioBaseUrl}" + url;
             }
-        
-            // Call the original $.ajax function with modified options
+
             return originalPost.call(this, url, data, success, dataType);
+        };
+        
+       /**
+        * Due to the use of edx-platform scripts in MFE, it is necessary to provide additional protection 
+        * against random "undefined" that may appear in URLs before sending AJAX requests.
+        */
+        
+        const originalAjax = $.ajax;
+        
+        $.ajax = function(options) {
+          if (options.url && options.url.includes('undefined')) {
+              options.url = options.url.replace('undefined', '');
+          }
+
+          return originalAjax.call(this, options);
         };
       </script>
     `;
