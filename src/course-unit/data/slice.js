@@ -19,7 +19,6 @@ const slice = createSlice({
     unit: {},
     courseSectionVertical: {},
     courseVerticalChildren: {},
-    clipboardData: null,
     staticFileNotices: {},
   },
   reducers: {
@@ -101,9 +100,6 @@ const slice = createSlice({
         }),
       };
     },
-    updateClipboardData: (state, { payload }) => {
-      state.clipboardData = payload;
-    },
     fetchStaticFileNoticesSuccess: (state, { payload }) => {
       state.staticFileNotices = payload;
     },
@@ -135,7 +131,6 @@ export const {
   updateCourseVerticalChildrenLoadingStatus,
   deleteXBlock,
   duplicateXBlock,
-  updateClipboardData,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
 } = slice.actions;

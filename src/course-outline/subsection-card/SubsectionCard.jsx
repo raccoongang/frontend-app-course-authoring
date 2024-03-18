@@ -1,18 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 import { Add as IconAdd } from '@openedx/paragon/icons';
 import classNames from 'classnames';
 
-import { getInitialUserClipboard } from '../data/selectors';
 import { setCurrentItem, setCurrentSection, setCurrentSubsection } from '../data/slice';
 import { RequestStatus } from '../../data/constants';
 import CardHeader from '../card-header/CardHeader';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
-import { useCopyToClipboard, PasteButton } from '../../generic/clipboard';
+import { useCopyToClipboard, PasteComponent } from '../../generic/clipboard';
 import TitleButton from '../card-header/TitleButton';
 import XBlockStatus from '../xblock-status/XBlockStatus';
 import { getItemStatus, getItemStatusBorder, scrollToElement } from '../utils';
@@ -44,8 +43,7 @@ const SubsectionCard = ({
   const isScrolledToElement = locatorId === subsection.id;
   const [isFormOpen, openForm, closeForm] = useToggle(false);
   const namePrefix = 'subsection';
-  const initialUserClipboard = useSelector(getInitialUserClipboard);
-  const { sharedClipboardData, showPasteUnit } = useCopyToClipboard(initialUserClipboard);
+  const { sharedClipboardData, showPasteUnit } = useCopyToClipboard();
 
   const {
     id,
@@ -196,7 +194,7 @@ const SubsectionCard = ({
                   {intl.formatMessage(messages.newUnitButton)}
                 </Button>
                 {enableCopyPasteUnits && showPasteUnit && (
-                  <PasteButton
+                  <PasteComponent
                     className="mt-4"
                     text={intl.formatMessage(messages.pasteButton)}
                     clipboardData={sharedClipboardData}

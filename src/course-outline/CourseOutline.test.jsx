@@ -17,7 +17,6 @@ import {
   getCourseBlockApiUrl,
   getCourseItemApiUrl,
   getXBlockBaseApiUrl,
-  getClipboardUrl,
 } from './data/api';
 import { RequestStatus } from '../data/constants';
 import {
@@ -40,12 +39,13 @@ import { executeThunk } from '../utils';
 import { COURSE_BLOCK_NAMES, VIDEO_SHARING_OPTIONS } from './constants';
 import CourseOutline from './CourseOutline';
 
+import pasteButtonMessages from '../generic/clipboard/paste-component/messages';
 import configureModalMessages from '../generic/configure-modal/messages';
+import { getClipboardUrl } from '../generic/data/api';
 import headerMessages from './header-navigations/messages';
 import cardHeaderMessages from './card-header/messages';
 import enableHighlightsModalMessages from './enable-highlights-modal/messages';
 import statusBarMessages from './status-bar/messages';
-import pasteButtonMessages from '../generic/clipboard/paste-button/messages';
 import subsectionMessages from './subsection-card/messages';
 import pageAlertMessages from './page-alerts/messages';
 import messages from './messages';
@@ -1840,7 +1840,7 @@ describe('<CourseOutline />', () => {
     await act(async () => fireEvent.click(copyButton));
 
     // check that initialUserClipboard state is updated
-    expect(store.getState().courseOutline.initialUserClipboard).toEqual(clipboardUnit);
+    expect(store.getState().generic.clipboardData).toEqual(clipboardUnit);
 
     [subsectionElement] = await within(sectionElement).findAllByTestId('subsection-card');
     // find clipboard content label
@@ -1851,9 +1851,8 @@ describe('<CourseOutline />', () => {
 
     // find clipboard content popover link
     const popoverContent = queryByTestId('popover-content');
-    const apiBaseUrl = getConfig().STUDIO_BASE_URL;
     expect(popoverContent.tagName).toBe('A');
-    expect(popoverContent).toHaveAttribute('href', apiBaseUrl + unit.studioUrl);
+    expect(popoverContent).toHaveAttribute('href', `${getConfig().STUDIO_BASE_URL}${unit.studioUrl}`);
 
     // check paste button functionality
     // mock api call

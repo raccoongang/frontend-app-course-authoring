@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Button } from '@openedx/paragon';
 import { ContentCopy as ContentCopyIcon } from '@openedx/paragon/icons';
 
-const PasteButtonComponent = ({ onClick, text, className }) => {
+const PasteButton = ({ onClick, text, className }) => {
   const { blockId } = useParams();
 
   const handlePasteXBlockComponent = () => {
@@ -23,14 +23,14 @@ const PasteButtonComponent = ({ onClick, text, className }) => {
   );
 };
 
-PasteButtonComponent.propTypes = {
+PasteButton.propTypes = {
   onClick: PropsTypes.func.isRequired,
   text: PropsTypes.string.isRequired,
   className: PropsTypes.string,
 };
 
-PasteButtonComponent.defaultProps = {
+PasteButton.defaultProps = {
   className: undefined,
 };
 
-export default PasteButtonComponent;
+export default PasteButton;

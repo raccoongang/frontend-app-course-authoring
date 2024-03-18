@@ -9,7 +9,7 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.alert.unpublished-version.description',
     defaultMessage: 'Note: The last published version of this unit is live. By publishing changes you will change the student experience.',
   },
-  pasteComponentButtonText: {
+  pasteButtonText: {
     id: 'course-authoring.course-unit.paste-component.btn.text',
     defaultMessage: 'Paste component',
   },

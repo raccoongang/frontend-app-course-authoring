@@ -1,5 +1,6 @@
 import { RequestStatus } from '../../data/constants';
-import { CLIPBOARD_STATUS, NOTIFICATION_MESSAGES } from '../../constants';
+import { updateClipboardData } from '../../generic/data/slice';
+import { NOTIFICATION_MESSAGES } from '../../constants';
 import { COURSE_BLOCK_NAMES } from '../constants';
 import {
   hideProcessingNotification,
@@ -28,7 +29,6 @@ import {
   setSectionOrderList,
   setVideoSharingOption,
   setCourseItemOrderList,
-  copyBlockToClipboard,
   pasteBlock,
   dismissNotification,
 } from './api';
@@ -52,7 +52,6 @@ import {
   reorderSectionList,
   reorderSubsectionList,
   reorderUnitList,
-  updateClipboardContent,
 } from './slice';
 
 export function fetchCourseOutlineIndexQuery(courseId) {
@@ -71,6 +70,7 @@ export function fetchCourseOutlineIndexQuery(courseId) {
         },
       } = outlineIndex;
       dispatch(fetchOutlineIndexSuccess(outlineIndex));
+      dispatch(updateClipboardData(outlineIndex.initialUserClipboard));
       dispatch(updateStatusBar({
         courseReleaseDate,
         highlightsEnabledForMessaging,
@@ -575,29 +575,6 @@ export function setUnitOrderListQuery(sectionId, subsectionId, unitListIds, rest
       });
     } catch (error) {
       restoreCallback();
-      dispatch(hideProcessingNotification());
-      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
-    }
-  };
-}
-
-export function setClipboardContent(usageKey) {
-  return async (dispatch) => {
-    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.copying));
-
-    try {
-      await copyBlockToClipboard(usageKey).then(async (result) => {
-        const status = result?.content?.status;
-        if (status === CLIPBOARD_STATUS.ready) {
-          dispatch(updateClipboardContent(result));
-          dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
-          dispatch(hideProcessingNotification());
-        } else {
-          throw new Error(`Unexpected clipboard status "${status}" in successful API response.`);
-        }
-      });
-    } catch (error) {
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
     }

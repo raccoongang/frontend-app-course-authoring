@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Warning as WarningIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { RequestStatus } from '../../data/constants';
+import { getSavingStatus } from '../data/selectors';
 import AlertMessage from '../alert-message';
 import messages from './messages';
 
@@ -14,7 +16,8 @@ const SavingErrorAlert = ({
   const intl = useIntl();
   const [showAlert, setShowAlert] = useState(false);
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
-  const isQueryFailed = savingStatus === RequestStatus.FAILED;
+  const genericSavingStatus = useSelector(getSavingStatus);
+  const isQueryFailed = savingStatus === RequestStatus.FAILED || genericSavingStatus === RequestStatus.FAILED;
 
   useEffect(() => {
     const handleOnlineStatus = () => setIsOnline(window.navigator.onLine);

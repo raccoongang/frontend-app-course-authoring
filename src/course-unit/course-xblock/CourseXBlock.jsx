@@ -14,7 +14,7 @@ import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSor
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import { getCanEdit, getCourseId } from '../data/selectors';
-import { copyToClipboard } from '../data/thunk';
+import { copyToClipboard } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockContent from './xblock-content/XBlockContent';
 import XBlockMessages from './xblock-messages/XBlockMessages';

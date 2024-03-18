@@ -9,14 +9,16 @@ import userEvent from '@testing-library/user-event';
 import initializeStore from '../../../../store';
 import { executeThunk } from '../../../../utils';
 import { clipboardUnit } from '../../../../__mocks__';
-import { getClipboardUrl, getCourseUnitApiUrl } from '../../../data/api';
-import { copyToClipboard, fetchCourseUnitQuery } from '../../../data/thunk';
+import { getCourseUnitApiUrl } from '../../../data/api';
+import { getClipboardUrl } from '../../../../generic/data/api';
+import { fetchCourseUnitQuery } from '../../../data/thunk';
+import { copyToClipboard } from '../../../../generic/data/thunks';
 import { courseUnitIndexMock } from '../../../__mocks__';
 import messages from '../../messages';
 import ActionButtons from './ActionButtons';
 
-jest.mock('../../../data/thunk', () => ({
-  ...jest.requireActual('../../../data/thunk'),
+jest.mock('../../../../generic/data/thunks', () => ({
+  ...jest.requireActual('../../../../generic/data/thunks'),
   copyToClipboard: jest.fn().mockImplementation(() => () => {}),
 }));
 
