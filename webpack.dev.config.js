@@ -20,10 +20,16 @@ const config = createConfig('webpack-dev', {
  */
 config.plugins.push(
   new CopyPlugin({
-    patterns: [{
-      context: path.resolve(__dirname, 'src/course-unit/course-xblock/library-authoring/edit-block/LibraryBlock'),
-      from: 'xblock-bootstrap.html',
-    }],
+    patterns: [
+      {
+        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-iframe/iframe-wrapper'),
+        from: 'xblock-bootstrap.html',
+      },
+      {
+        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-iframe'),
+        from: 'XBlockIframe.css',
+      },
+    ],
   }),
 );
 

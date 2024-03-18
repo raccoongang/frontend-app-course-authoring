@@ -1,0 +1,141 @@
+import { useRef, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { ensureConfig, getConfig } from '@edx/frontend-platform';
+
+import { COMPONENT_ICON_TYPES } from '../../constants';
+import { blockViewShape, fetchable } from '../constants';
+import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
+
+ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
+
+/**
+ * React component that displays an XBlock in a sandboxed IFrame.
+ *
+ * The IFrame is resized responsively so that it fits the content height.
+ *
+ * We use an IFrame so that the XBlock code, including user-authored HTML,
+ * cannot access things like the user's cookies, nor can it make GET/POST
+ * requests as the user. However, it is allowed to call any XBlock handlers.
+ */
+const XBlockIframe = ({
+  view, type, getHandlerUrl, onBlockNotification,
+}) => {
+  const iframeRef = useRef(null);
+  const [html, setHtml] = useState(null);
+  const [iFrameHeight, setIFrameHeight] = useState(140);
+  const [iframeKey, setIframeKey] = useState(0);
+
+  useEffect(() => {
+    const processView = () => {
+      if (view.html) {
+        const newHtml = wrapBlockHtmlForIFrame(
+          view.html,
+          view.resources,
+          getConfig().STUDIO_BASE_URL,
+          type,
+        );
+
+        // Load the XBlock HTML into the IFrame:
+        // iframe will only re-render in React when its property changes (key here)
+        setHtml(newHtml);
+        setIframeKey(prevKey => prevKey + 1);
+      }
+    };
+
+    // Process the XBlock view:
+    processView();
+  }, [view, type]);
+
+  useEffect(() => {
+    // Handle any messages we receive from the XBlock Runtime code in the IFrame.
+    // See wrap.ts to see the code that sends these messages.
+    const receivedWindowMessage = async (event) => {
+      if (iframeRef.current === null || event.source !== iframeRef.current.contentWindow) {
+        return;
+      } // This is some other random message.
+
+      const { method, replyKey, ...args } = event.data;
+      const frame = iframeRef.current.contentWindow;
+
+      const sendReply = async (data) => {
+        frame.postMessage({ ...data, replyKey }, '*');
+      };
+
+      if (method === 'bootstrap') {
+        await sendReply({ initialHtml: html });
+      } else if (method === 'get_handler_url') {
+        const handlerUrl = await getHandlerUrl(args.usageId);
+        await sendReply({ handlerUrl });
+      } else if (method === 'update_frame_height') {
+        setIFrameHeight(args.height);
+      } else if (method?.indexOf('xblock:') === 0) {
+        if (onBlockNotification) {
+          // This is a notification from the XBlock's frontend via 'runtime.notify(event, args)'
+          onBlockNotification({
+            eventType: method.substr(7), // Remove the 'xblock:' prefix that we added in wrap.ts
+            ...args,
+          });
+        }
+      }
+    };
+
+    // Prepare to receive messages from the IFrame.
+    // Messages are the only way that the code in the IFrame can communicate
+    // with the surrounding UI.
+    window.addEventListener('message', receivedWindowMessage);
+
+    return () => {
+      window.removeEventListener('message', receivedWindowMessage);
+    };
+  }, [html, getHandlerUrl, onBlockNotification]);
+
+  /* Only draw the iframe if the HTML has already been set. This is because xblock-bootstrap.html will only request
+   * HTML once, upon being rendered. */
+  if (html === null) {
+    return null;
+  }
+
+  return (
+    <div
+      style={{ height: `${iFrameHeight}px` }}
+      className="xblock-iframe-wrapper"
+    >
+      <iframe
+        key={iframeKey}
+        ref={iframeRef}
+        title="block"
+        src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
+        data-testid="block-preview"
+        className="xblock-iframe"
+        // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
+        referrerPolicy="origin"
+        sandbox={[
+          'allow-forms',
+          'allow-modals',
+          'allow-popups',
+          'allow-popups-to-escape-sandbox',
+          'allow-presentation',
+          'allow-same-origin', // This is only secure IF the IFrame source
+          // is served from a completely different domain name
+          // e.g. labxchange-xblocks.net vs www.labxchange.org
+          'allow-scripts',
+          'allow-top-navigation-by-user-activation',
+        ].join(' ')}
+      />
+    </div>
+  );
+};
+
+XBlockIframe.propTypes = {
+  getHandlerUrl: PropTypes.func.isRequired,
+  onBlockNotification: PropTypes.func,
+  view: fetchable(blockViewShape).isRequired,
+  type: PropTypes.oneOfType(Object.values(COMPONENT_ICON_TYPES)).isRequired,
+};
+
+XBlockIframe.defaultProps = {
+  onBlockNotification: null,
+};
+
+export default XBlockIframe;
