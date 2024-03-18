@@ -87,6 +87,7 @@ const ExperimentForm = ({
                 placeholder={formatMessage(
                   messages.experimentConfigurationDescriptionPlaceholder,
                 )}
+                as="textarea"
               />
               <Form.Control.Feedback hasIcon={false} type="default">
                 {formatMessage(
