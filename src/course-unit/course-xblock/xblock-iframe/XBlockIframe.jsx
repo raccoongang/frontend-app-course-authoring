@@ -2,8 +2,9 @@ import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
+import { LoadingSpinner } from 'CourseAuthoring/generic/Loading';
 import { COMPONENT_ICON_TYPES } from '../../constants';
-import { blockViewShape, fetchable } from '../constants';
+import { blockViewShape, fetchable, IFRAME_FEATURE_POLICY } from '../constants';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
@@ -22,8 +23,9 @@ const XBlockIframe = ({
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
-  const [iFrameHeight, setIFrameHeight] = useState(140);
+  const [iFrameHeight, setIFrameHeight] = useState(0);
   const [iframeKey, setIframeKey] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const processView = () => {
@@ -48,13 +50,14 @@ const XBlockIframe = ({
 
   useEffect(() => {
     // Handle any messages we receive from the XBlock Runtime code in the IFrame.
-    // See wrap.ts to see the code that sends these messages.
+    // See iframe-wrapper.js to see the code that sends these messages.
     const receivedWindowMessage = async (event) => {
       if (iframeRef.current === null || event.source !== iframeRef.current.contentWindow) {
         return;
       } // This is some other random message.
 
       const { method, replyKey, ...args } = event.data;
+
       const frame = iframeRef.current.contentWindow;
 
       const sendReply = async (data) => {
@@ -96,33 +99,43 @@ const XBlockIframe = ({
   }
 
   return (
-    <div
-      style={{ height: `${iFrameHeight}px` }}
-      className="xblock-iframe-wrapper"
-    >
-      <iframe
-        key={iframeKey}
-        ref={iframeRef}
-        title="block"
-        src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-        data-testid="block-preview"
-        className="xblock-iframe"
-        // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
-        referrerPolicy="origin"
-        sandbox={[
-          'allow-forms',
-          'allow-modals',
-          'allow-popups',
-          'allow-popups-to-escape-sandbox',
-          'allow-presentation',
-          'allow-same-origin', // This is only secure IF the IFrame source
-          // is served from a completely different domain name
-          // e.g. labxchange-xblocks.net vs www.labxchange.org
-          'allow-scripts',
-          'allow-top-navigation-by-user-activation',
-        ].join(' ')}
-      />
+    <div>
+      {isLoading && (
+        <div className="d-flex justify-content-center align-items-center flex-column">
+          <LoadingSpinner />
+        </div>
+      )}
+      <div
+        style={{ height: `${iFrameHeight}px` }}
+        className="xblock-iframe-wrapper"
+      >
+        <iframe
+          key={iframeKey}
+          ref={iframeRef}
+          title="block"
+          src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
+          data-testid="block-preview"
+          className="xblock-iframe"
+          // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
+          allow={IFRAME_FEATURE_POLICY}
+          referrerPolicy="origin"
+          frameBorder={0}
+          scrolling="no"
+          onLoad={() => setIsLoading(!isLoading)}
+          sandbox={[
+            'allow-forms',
+            'allow-modals',
+            'allow-popups',
+            'allow-popups-to-escape-sandbox',
+            'allow-presentation',
+            'allow-same-origin', // This is only secure IF the IFrame source
+            // is served from a completely different domain name
+            // e.g. labxchange-xblocks.net vs www.labxchange.org
+            'allow-scripts',
+            'allow-top-navigation-by-user-activation',
+          ].join(' ')}
+        />
+      </div>
     </div>
   );
 };
