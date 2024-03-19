@@ -35,12 +35,6 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   let jsTags = generateResourceTags(jsUrls, studioBaseUrl, type);
   jsTags += scripts.map(script => `<script>${script}</script>`).join('\n');
 
-  // Older XModules/XBlocks have a ton of undeclared dependencies on various JavaScript in the global scope.
-  // ALL XBlocks should be re-written to fully provide their own JS dependencies.
-  // We use 'learn_view' and 'edit_view' to declare a new, global-free, iframe JS environment for those new XBlocks
-  // that want full control over their JavaScript environment.
-  //
-  // Otherwise, if the XBlock uses 'student_view', 'author_view', or 'studio_view', include known required globals:
   let legacyIncludes = '';
   if (html.indexOf('wrapper-xblock-message') !== -1) {
     legacyIncludes += `
@@ -133,7 +127,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
           of its dependencies.
       -->
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/commons.js"></script>
-      <!-- The video XBlock (and perhaps others?) expect this global: -->
+      <!-- The video XBlock expect this global: -->
       <script>
         window.onTouchBasedDevice = function() { return navigator.userAgent.match(/iPhone|iPod|iPad|Android/i); };
       </script>
@@ -221,47 +215,41 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
            MathJax extension libraries -->
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
       <script>
-       /**
-        * AJAX requests, especially those made via $.postWithPrefix, must follow certain settings, 
-        * such as including credentials (x-csrf token, cookie, etc.) and ensuring consistent URL formatting.
-        */
-
-        const originalPost = $.postWithPrefix;
-
         $.ajaxSetup({
           xhrFields: { withCredentials: true }
         });
-
-        $.postWithPrefix = function(url, data, success, dataType) {
-          // Check if the URL is relative (doesn't start with 'http://' or 'https://')
-          if (!/^https?:\\/\\//i.test(url)) {
-            url = "${studioBaseUrl}" + url;
-          }
-
-          return originalPost.call(this, url, data, success, dataType);
-        };
-        
-       /**
-        * Due to the use of edx-platform scripts in MFE, it is necessary to provide additional protection 
-        * against random "undefined" that may appear in URLs before sending AJAX requests.
-        */
         
         const originalAjax = $.ajax;
         
         $.ajax = function(options) {
-          if (options.url && options.url.includes('undefined')) {
-            options.url = options.url.replace('undefined', '');
-          }
+           // Due to the use of edx-platform scripts in MFE, it is necessary to provide additional protection
+           // against random "undefined" that may appear in URLs before sending AJAX requests.
+           if (options.url && options.url.includes('undefined')) {
+             options.url = options.url.replace('undefined', '');
+           }
 
-          return originalAjax.call(this, options);
+           // AJAX requests, must follow certain settings, such as including credentials (x-csrf token, cookie, etc.)
+           // and ensuring consistent URL formatting.
+           if (!/^https?:\\/\\//i.test(options.url)) {
+             options.url = "${studioBaseUrl}" + options.url;
+           }
+
+           return originalAjax.call(this, options);
         };
       </script>
     `;
   }
 
   let result = '';
+  let modifiedHtml = '';
 
-  const modifiedHtml = modifyVoidHrefToPreventDefault(html);
+  modifiedHtml = modifyVoidHrefToPreventDefault(html);
+  // Due to the use of edx-platform scripts in MFE, it is necessary to ensure that the paths for static files
+  // and important data-attributes are correct.
+  modifiedHtml = modifiedHtml.replace('url(&#39;/assets', `url('${studioBaseUrl}/assets`);
+  modifiedHtml = modifiedHtml.replace('src="/assets', `src="${studioBaseUrl}/assets`);
+  modifiedHtml = modifiedHtml.replace('src=&#34;/static/studio', `src=&#34;${studioBaseUrl}/static/studio`);
+  modifiedHtml = modifiedHtml.replace('data-target="/preview/xblock', `data-target="${studioBaseUrl}/preview/xblock`);
 
   if (
     type === COMPONENT_ICON_TYPES.discussion
@@ -277,7 +265,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       ${legacyIncludes}
       ${cssTags}
     </head>
-    <body style=" background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper" style=" background-color: white">
+    <body style="background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper" style=" background-color: white">
         <article class="xblock-render">
             <div class="xblock xblock-author_view xblock-author_view-vertical xblock-initialized">
                 <div class="reorderable-container ui-sortable">
@@ -329,7 +317,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       ${legacyIncludes}
       ${cssTags}
     </head>
-    <body style=" background-color: white">
+    <body style="background-color: white">
       ${modifiedHtml}
       ${jsTags}
       <script>

@@ -134,10 +134,35 @@ export function xblockIFrameConnector() {
     }
   }
 
+  /**
+   * Finds the value of the first 'data-usage' or 'data-usage-id' attribute within the given element
+   * and its descendants.
+   */
+  function findFirstDataAttributeValue(element) {
+    // eslint-disable-next-line consistent-return,no-shadow
+    function searchDataUsageAttribute(element) {
+      const { attributes, children } = element;
+      for (let i = 0; i < attributes.length; i++) {
+        const attributeName = attributes[i].name;
+        if (attributeName === 'data-usage' || attributeName === 'data-usage-id') {
+          return attributes[i].value;
+        }
+      }
+
+      for (let j = 0; j < children.length; j++) {
+        const result = searchDataUsageAttribute(children[j]);
+        if (result !== undefined) {
+          return result;
+        }
+      }
+    }
+
+    return searchDataUsageAttribute(element);
+  }
+
   // Recursively initialize the JavaScript code of each XBlock:
   function initializeXBlockAndChildren(element, callback) {
-    // The newer/pure/Blockstore runtime uses the 'data-usage' attribute, while the Studio uses 'data-usage-id'
-    const usageId = element.getAttribute('data-usage') || element.getAttribute('data-usage-id');
+    const usageId = findFirstDataAttributeValue(element);
 
     if (usageId !== null) {
       element[USAGE_ID_KEY] = usageId;
@@ -150,7 +175,6 @@ export function xblockIFrameConnector() {
     if (version != null && version !== '1') {
       throw new Error('Unsupported XBlock runtime version requirement.');
     }
-
     // Recursively initialize any children first:
     // We need to find all div.xblock-v1 children, unless they're grandchilden
     // So we build a list of all div.xblock-v1 descendants that aren't descendants
