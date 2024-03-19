@@ -7,7 +7,7 @@ export const MESSAGE_TYPES = {
 };
 
 export const IFRAME_FEATURE_POLICY = (
-  'microphone *; camera *; midi *; geolocation *; encrypted-media *, clipboard-write *'
+  'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;'
 );
 
 export const MESSAGE_ERROR_TYPES = {
