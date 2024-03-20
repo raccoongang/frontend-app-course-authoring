@@ -8,8 +8,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { getConfig } from '@edx/frontend-platform';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
@@ -29,22 +27,7 @@ import { COMPONENT_TYPES } from '../constants';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
-
-export const XBLOCK_VIEW_SYSTEM = {
-  LMS: 'lms',
-  Studio: 'studio',
-};
-
-export const getXBlockHandlerUrl = async (blockId, viewSystem, handlerName) => {
-  const client = getAuthenticatedHttpClient();
-  const baseUrl = viewSystem === XBLOCK_VIEW_SYSTEM.Studio ? getConfig().STUDIO_BASE_URL : getConfig().LMS_BASE_URL;
-  // const response = await client.get(`${baseUrl}/api/xblock/v2/xblocks/${blockId}/handler_url/${handlerName}/`);
-
-  // return response.data.handler_url;
-  return `${baseUrl}/xblock/${blockId}/handler/${handlerName}`;
-};
-
-const getHandlerUrl = async (blockId) => getXBlockHandlerUrl(blockId, 'studio', 'handler_name');
+import { getHandlerUrl } from './utils';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,

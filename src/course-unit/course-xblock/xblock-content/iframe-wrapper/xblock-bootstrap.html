@@ -59,7 +59,7 @@
       } else {
         // Request the HTML from the parent and then completely replace this entire
         // HTML document with the resulting HTML
-        postMessageToParent({method: 'bootstrap'}, function(data) {
+        postMessageToParent({ method: 'bootstrap' }, function(data) {
           replaceAllHtml(data.initialHtml || 'Error: Missing XBlock HTML.');
         });
       }
