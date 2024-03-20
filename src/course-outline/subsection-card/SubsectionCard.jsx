@@ -9,12 +9,11 @@ import classNames from 'classnames';
 
 import { setCurrentItem, setCurrentSection, setCurrentSubsection } from '../data/slice';
 import { RequestStatus } from '../../data/constants';
-import { COURSE_BLOCK_NAMES } from '../constants';
 import CardHeader from '../card-header/CardHeader';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
+import { useCopyToClipboard, PasteComponent } from '../../generic/clipboard';
 import TitleButton from '../card-header/TitleButton';
 import XBlockStatus from '../xblock-status/XBlockStatus';
-import PasteButton from '../paste-button/PasteButton';
 import { getItemStatus, getItemStatusBorder, scrollToElement } from '../utils';
 import messages from './messages';
 
@@ -44,6 +43,7 @@ const SubsectionCard = ({
   const isScrolledToElement = locatorId === subsection.id;
   const [isFormOpen, openForm, closeForm] = useToggle(false);
   const namePrefix = 'subsection';
+  const { sharedClipboardData, showPasteUnit } = useCopyToClipboard();
 
   const {
     id,
@@ -59,7 +59,7 @@ const SubsectionCard = ({
 
   // re-create actions object for customizations
   const actions = { ...subsectionActions };
-  // add actions to control display of move up & down menu buton.
+  // add actions to control display of move up & down menu button.
   actions.allowMoveUp = canMoveItem(index, -1);
   actions.allowMoveDown = canMoveItem(index, 1);
 
@@ -193,10 +193,11 @@ const SubsectionCard = ({
                 >
                   {intl.formatMessage(messages.newUnitButton)}
                 </Button>
-                {enableCopyPasteUnits && (
-                  <PasteButton
+                {enableCopyPasteUnits && showPasteUnit && (
+                  <PasteComponent
+                    className="mt-4"
                     text={intl.formatMessage(messages.pasteButton)}
-                    blockType={COURSE_BLOCK_NAMES.vertical.id}
+                    clipboardData={sharedClipboardData}
                     onClick={handlePasteButtonClick}
                   />
                 )}

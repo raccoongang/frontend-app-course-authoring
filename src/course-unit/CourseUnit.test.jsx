@@ -17,7 +17,6 @@ import {
   postXBlockBaseApiUrl,
 } from './data/api';
 import {
-  copyToClipboard,
   createNewCourseXBlock,
   deleteUnitItemQuery,
   editCourseUnitVisibilityAndData,
@@ -27,8 +26,6 @@ import {
 } from './data/thunk';
 import initializeStore from '../store';
 import {
-  clipboardUnit,
-  clipboardXBlock,
   courseCreateXblockMock,
   courseSectionVerticalMock,
   courseUnitIndexMock,
@@ -36,9 +33,13 @@ import {
   courseVerticalChildrenMock,
   clipboardMockResponse,
 } from './__mocks__';
+import {
+  clipboardUnit,
+  clipboardXBlock,
+} from '../__mocks__';
 import { executeThunk } from '../utils';
 import deleteModalMessages from '../generic/delete-modal/messages';
-import pasteComponentMessages from './clipboard/paste-component/messages';
+import pasteComponentMessages from '../generic/clipboard/paste-component/messages';
 import pasteNotificationsMessages from './clipboard/paste-notification/messages';
 import headerNavigationsMessages from './header-navigations/messages';
 import headerTitleMessages from './header-title/messages';
@@ -52,6 +53,7 @@ import CourseUnit from './CourseUnit';
 import messages from './messages';
 import configureModalMessages from '../generic/configure-modal/messages';
 import { RequestStatus } from '../data/constants';
+import { copyToClipboard } from '../generic/data/thunks';
 
 let axiosMock;
 let store;
@@ -928,7 +930,7 @@ describe('<CourseUnit />', () => {
 
       await waitFor(() => {
         expect(queryByText(sidebarMessages.actionButtonCopyUnitTitle.defaultMessage)).toBeNull();
-        expect(queryByRole('button', { name: pasteComponentMessages.pasteComponentButtonText.defaultMessage })).toBeNull();
+        expect(queryByRole('button', { name: messages.pasteButtonText.defaultMessage })).toBeNull();
       });
 
       axiosMock
@@ -961,10 +963,10 @@ describe('<CourseUnit />', () => {
         });
 
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
-      expect(getByRole('button', { name: pasteComponentMessages.pasteComponentButtonText.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.pasteButtonText.defaultMessage })).toBeInTheDocument();
 
       const whatsInClipboardText = getByText(
-        pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage,
+        pasteComponentMessages.pasteButtonWhatsInClipboardText.defaultMessage,
       );
 
       userEvent.hover(whatsInClipboardText);
@@ -1010,7 +1012,7 @@ describe('<CourseUnit />', () => {
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(copyToClipboard(blockId), store.dispatch);
 
-      userEvent.click(getByRole('button', { name: pasteComponentMessages.pasteComponentButtonText.defaultMessage }));
+      userEvent.click(getByRole('button', { name: messages.pasteButtonText.defaultMessage }));
 
       await waitFor(() => {
         expect(getAllByTestId('course-xblock')).toHaveLength(2);
@@ -1053,7 +1055,7 @@ describe('<CourseUnit />', () => {
 
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
       await executeThunk(copyToClipboard(blockId), store.dispatch);
-      expect(getByRole('button', { name: pasteComponentMessages.pasteComponentButtonText.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: messages.pasteButtonText.defaultMessage })).toBeInTheDocument();
     });
 
     it('should copy a unit, paste it as a new unit, and update the course section vertical data', async () => {
@@ -1319,10 +1321,10 @@ describe('<CourseUnit />', () => {
       await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
 
       expect(queryByRole('button', {
-        name: pasteComponentMessages.pasteComponentButtonText.defaultMessage,
+        name: messages.pasteButtonText.defaultMessage,
       })).not.toBeInTheDocument();
       expect(queryByText(
-        pasteComponentMessages.pasteComponentWhatsInClipboardText.defaultMessage,
+        pasteComponentMessages.pasteButtonWhatsInClipboardText.defaultMessage,
       )).not.toBeInTheDocument();
     });
   });
