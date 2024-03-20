@@ -18,7 +18,7 @@ import {
  *                   JS and CSS dependencies properly.
  * @param type The XBlock's type (openassessment, discussion, video, etc.)
  */
-export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type) {
+export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type, variant) {
   const resources = normalizeResources(sourceResources);
 
   /* Extract CSS resources. */
@@ -36,7 +36,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   jsTags += scripts.map(script => `<script>${script}</script>`).join('\n');
 
   let legacyIncludes = '';
-  if (html.indexOf('wrapper-xblock-message') !== -1) {
+  if (html.indexOf('wrapper-xblock-message') !== -1 || html.indexOf('xmodule_edit') !== -1) {
     legacyIncludes += `
       <!-- Built-in XBlocks (and some plugins) depends on Studio CSS -->
       <!-- At least one XBlock (drag and drop v2) expects Font Awesome -->
@@ -251,6 +251,53 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   modifiedHtml = modifiedHtml.replace('src=&#34;/static/studio', `src=&#34;${studioBaseUrl}/static/studio`);
   modifiedHtml = modifiedHtml.replace('data-target="/preview/xblock', `data-target="${studioBaseUrl}/preview/xblock`);
 
+  const hasCustomButtons = html.includes('editor-with-buttons');
+  const hasCustomTabs = html.includes('editor-with-tabs');
+  const hasPlugins = html.includes('wrapper-comp-plugins');
+  console.log('TYPE:', type);
+  console.log('VARIANT:', variant);
+  const getDataEditor = html.includes('wrapper-comp-editor');
+
+  const editingModalHeader = `          
+    <div class="modal-header">
+        <h2 id="modal-window-title" class="title modal-window-title">
+            <span class="modal-button-title">
+                Editing: displayName
+            </span> 
+            <button data-tooltip="Edit Title" class="btn-default action-edit title-edit-button">
+                <span class="icon fa fa-pencil" aria-hidden="true"></span>
+                <span class="sr"> Edit Title</span>
+            </button>
+        </h2>
+        <ul class="editor-modes action-list action-modes">        
+            <li class="action-item" data-mode="editor">
+                <a href="#" class="editor-button is-set">Editor</a>
+            </li>
+            <li class="action-item" data-mode="settings">
+                <a href="#" class="settings-button">Settings</a>
+            </li>
+        </ul>  
+    </div>`;
+
+  const defaultModalTitle = `
+    <div class="modal-header">
+        <h2 id="modal-window-title" class="title modal-window-title">Editing: displayName</h2>
+        <ul class="editor-modes action-list action-modes"></ul>
+    </div>`;
+
+  const getActionBar = `
+    <div class="modal-actions" style="display: block;">
+        <h3 class="sr">Actions</h3>
+        <ul>
+            <li class="action-item">
+                <a href="#" class="button action-primary action-save">Save</a>
+            </li>
+            <li class="action-item">
+                <a href="#" class="button  action-cancel">Cancel</a>
+            </li>
+        </ul>
+    </div>`;
+
   if (
     type === COMPONENT_TYPES.discussion
     || type === COMPONENT_TYPES.dragAndDrop
@@ -319,6 +366,42 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     </head>
     <body>
       ${modifiedHtml}
+      ${jsTags}
+      <script>
+        window.addEventListener('load', (${xblockIFrameConnector.toString()}));
+      </script>
+    </body>
+    </html>
+  `;
+  }
+
+  if (variant === 'edit-modal') {
+    result = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <!-- Open links in a new tab, not this iframe -->
+      <base target="_blank">
+      <meta charset="UTF-8">
+      ${legacyIncludes}
+      ${cssTags}
+    </head>
+    <!-- A Studio-served stylesheet will set the body min-height to 100% (a common strategy to allow for background
+    images to fill the viewport), but this has the undesireable side-effect of causing an infinite loop via the
+    onResize event listeners in certain situations.  Resetting it to the default "auto" skirts the problem. -->
+    <body style="min-height: auto; background-color: #0000006b; overflow: hidden;" class="course container view-container">
+    <div class="wrapper wrapper-modal-window wrapper-modal-window-edit-xblock">
+        <div class="modal-window-overlay"></div>
+        <div class="modal-window modal-editor confirm modal-lg modal-type-discussion" tabindex="-1" aria-labelledby="modal-window-title" style="top: 238.5px; left: 17px;">
+            <div class="edit-xblock-modal">
+              ${!hasCustomTabs && getDataEditor ? editingModalHeader : defaultModalTitle}
+              <div class="modal-content">
+                  ${html}      
+              </div>
+              ${!hasCustomButtons ? getActionBar : ''}
+            </div>
+        </div>
+    </div>
       ${jsTags}
       <script>
         window.addEventListener('load', (${xblockIFrameConnector.toString()}));

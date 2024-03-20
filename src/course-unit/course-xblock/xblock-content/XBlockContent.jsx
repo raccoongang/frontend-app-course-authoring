@@ -19,7 +19,7 @@ ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'st
  * requests as the user. However, it is allowed to call any XBlock handlers.
  */
 const XBlockContent = ({
-  view, type, getHandlerUrl, onBlockNotification,
+  view, type, getHandlerUrl, onBlockNotification, variant,
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
@@ -35,6 +35,7 @@ const XBlockContent = ({
           view.resources,
           getConfig().STUDIO_BASE_URL,
           type,
+          variant,
         );
 
         // Load the XBlock HTML into the IFrame:

@@ -22,6 +22,7 @@ const slice = createSlice({
     clipboardData: null,
     staticFileNotices: {},
     xblockIframeHtmlAndResources: [],
+    xblockModalData: [],
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -119,6 +120,9 @@ const slice = createSlice({
     fetchXBlockIframeResources: (state, { payload }) => {
       state.xblockIframeHtmlAndResources.push(payload);
     },
+    fetchXBlockModalData: (state, { payload }) => {
+      state.xblockModalData = payload;
+    },
   },
 });
 
@@ -143,6 +147,7 @@ export const {
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
   fetchXBlockIframeResources,
+  fetchXBlockModalData,
 } = slice.actions;
 
 export const {

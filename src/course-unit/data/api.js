@@ -13,6 +13,7 @@ export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}
 export const getCourseVerticalChildrenApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container/vertical/${itemId}/children`;
 export const getClipboardUrl = () => `${getStudioBaseUrl()}/api/content-staging/v1/clipboard/`;
 export const getXBlockContainerPreview = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/container_preview`;
+export const getXBlockModalDataApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/studio_view`;
 
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 
@@ -196,6 +197,13 @@ export async function setXBlockOrderList(blockId, children) {
 export async function getXBlockIframeData(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getXBlockContainerPreview(itemId));
+
+  return camelCaseObject(data);
+}
+
+export async function getXBlockModalData(itemId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getXBlockModalDataApiUrl(itemId));
 
   return camelCaseObject(data);
 }
