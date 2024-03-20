@@ -27,7 +27,7 @@ import {
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
-import { useCopyToClipboard } from './clipboard';
+import { useCopyToClipboard } from '../generic/clipboard';
 import { PUBLISH_TYPES } from './constants';
 
 // eslint-disable-next-line import/prefer-default-export

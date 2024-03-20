@@ -58,3 +58,14 @@ export const COURSE_BLOCK_NAMES = /** @type {const} */ ({
 });
 
 export const UPLOAD_FILE_MAX_SIZE = 20 * 1000 * 1000; // 20mb
+
+export const STUDIO_CLIPBOARD_CHANNEL = 'studio_clipboard_channel';
+
+export const CLIPBOARD_STATUS = {
+  loading: 'loading',
+  ready: 'ready',
+  expired: 'expired',
+  error: 'error',
+};
+
+export const NOT_XBLOCK_TYPES = ['vertical', 'sequential', 'chapter', 'course'];

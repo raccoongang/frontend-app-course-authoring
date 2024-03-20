@@ -12,6 +12,7 @@ import SubHeader from '../generic/sub-header/SubHeader';
 import { RequestStatus } from '../data/constants';
 import getPageHeadTitle from '../generic/utils';
 import AlertMessage from '../generic/alert-message';
+import { PasteComponent } from '../generic/clipboard';
 import ProcessingNotification from '../generic/processing-notification';
 import { SavingErrorAlert } from '../generic/saving-error-alert';
 import ConnectionErrorAlert from '../generic/ConnectionErrorAlert';
@@ -177,7 +178,8 @@ const CourseUnit = ({ courseId }) => {
               {showPasteXBlock && canPasteComponent && (
                 <PasteComponent
                   clipboardData={sharedClipboardData}
-                  handleCreateNewCourseXBlock={handleCreateNewCourseXBlock}
+                  onClick={handleCreateNewCourseXBlock}
+                  text={intl.formatMessage(messages.pasteButtonText)}
                 />
               )}
             </Layout.Element>
