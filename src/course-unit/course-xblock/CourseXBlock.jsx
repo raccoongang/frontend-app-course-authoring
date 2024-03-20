@@ -16,8 +16,15 @@ import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
-import { getCanEdit, getCourseId } from '../data/selectors';
-import { copyToClipboard, fetchXBlockHtmlAndResourcesQuery } from '../data/thunk';
+import {
+  getCanEdit,
+  getCourseId,
+  getXBlockIframeHtmlAndResources,
+} from '../data/selectors';
+import {
+  copyToClipboard,
+  fetchXBlockIframeHtmlAndResourcesQuery,
+} from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
@@ -51,15 +58,15 @@ const CourseXBlock = ({
   const courseId = useSelector(getCourseId);
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
-  const xblockHtmlAndResources = useSelector(state => state.courseUnit.xblockHtmlAndResources);
-  const xblockInstanceHtmlAndResources = find(xblockHtmlAndResources, { xblockId: id });
+  const xblockIframeHtmlAndResources = useSelector(getXBlockIframeHtmlAndResources);
+  const xblockInstanceHtmlAndResources = find(xblockIframeHtmlAndResources, { xblockId: id });
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
 
   useEffect(() => {
-    dispatch(fetchXBlockHtmlAndResourcesQuery(id));
+    dispatch(fetchXBlockIframeHtmlAndResourcesQuery(id));
   }, []);
 
   const currentItemData = {

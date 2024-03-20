@@ -1,11 +1,5 @@
 import PropTypes from 'prop-types';
 
-export const MESSAGE_TYPES = {
-  modal: 'plugin.modal',
-  resize: 'plugin.resize',
-  videoFullScreen: 'plugin.videoFullScreen',
-};
-
 export const IFRAME_FEATURE_POLICY = (
   'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;'
 );

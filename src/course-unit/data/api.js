@@ -12,9 +12,9 @@ export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${i
 export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
 export const getCourseVerticalChildrenApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container/vertical/${itemId}/children`;
 export const getClipboardUrl = () => `${getStudioBaseUrl()}/api/content-staging/v1/clipboard/`;
+export const getXBlockContainerPreview = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/container_preview`;
 
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
-export const getXBlockContainerPreview = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/container_preview`;
 
 /**
  * Get course unit.
@@ -188,7 +188,12 @@ export async function setXBlockOrderList(blockId, children) {
   return data;
 }
 
-export async function getXBlockEditIframeData(itemId) {
+/**
+ * Fetches XBlock iframe data.
+ * @param {string} itemId - The ID of the XBlock item.
+ * @returns {Promise<Object>} A Promise that resolves with the XBlock iframe data.
+ */
+export async function getXBlockIframeData(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getXBlockContainerPreview(itemId));
 

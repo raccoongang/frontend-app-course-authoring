@@ -14,6 +14,7 @@ export const getSequenceId = (state) => state.courseUnit.sequenceId;
 export const getCourseVerticalChildren = (state) => state.courseUnit.courseVerticalChildren;
 export const getClipboardData = (state) => state.courseUnit.clipboardData;
 const getLoadingStatuses = (state) => state.courseUnit.loadingStatus;
+export const getXBlockIframeHtmlAndResources = (state) => state.courseUnit.xblockIframeHtmlAndResources;
 export const getIsLoading = createSelector(
   [getLoadingStatuses],
   loadingStatus => Object.values(loadingStatus)
