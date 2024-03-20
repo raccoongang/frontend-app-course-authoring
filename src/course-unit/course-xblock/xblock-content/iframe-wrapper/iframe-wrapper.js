@@ -18,7 +18,7 @@ import {
  *                   JS and CSS dependencies properly.
  * @param type The XBlock's type (openassessment, discussion, video, etc.)
  */
-export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type, variant) {
+export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type, variant, editModalMetadata) {
   const resources = normalizeResources(sourceResources);
 
   /* Extract CSS resources. */
@@ -170,6 +170,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <script type="text/javascript" src="${studioBaseUrl}/static/studio/bundles/HtmlBlockDisplay.js"></script>
       <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
       <script type="text/javascript" src="https://studio.edx.org/c4x/edX/DemoX/asset/jquery.loupeAndLightbox.js"></script>
+      <script type="text/javascript" src="scripts.js"></script>
       <!-- Configure and load MathJax -->
       <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -254,15 +255,12 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   const hasCustomButtons = html.includes('editor-with-buttons');
   const hasCustomTabs = html.includes('editor-with-tabs');
   const hasPlugins = html.includes('wrapper-comp-plugins');
-  console.log('TYPE:', type);
-  console.log('VARIANT:', variant);
   const getDataEditor = html.includes('wrapper-comp-editor');
-
   const editingModalHeader = `          
     <div class="modal-header">
         <h2 id="modal-window-title" class="title modal-window-title">
             <span class="modal-button-title">
-                Editing: displayName
+                Editing: ${editModalMetadata?.display_name?.default_value || ''}
             </span> 
             <button data-tooltip="Edit Title" class="btn-default action-edit title-edit-button">
                 <span class="icon fa fa-pencil" aria-hidden="true"></span>
@@ -281,7 +279,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
 
   const defaultModalTitle = `
     <div class="modal-header">
-        <h2 id="modal-window-title" class="title modal-window-title">Editing: displayName</h2>
+        <h2 id="modal-window-title" class="title modal-window-title">Editing: ${editModalMetadata?.display_name?.display_name || ''}</h2>
         <ul class="editor-modes action-list action-modes"></ul>
     </div>`;
 
@@ -292,7 +290,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
             <li class="action-item">
                 <a href="#" class="button action-primary action-save">Save</a>
             </li>
-            <li class="action-item">
+            <li id="cancel-btn" class="action-item">
                 <a href="#" class="button  action-cancel">Cancel</a>
             </li>
         </ul>
@@ -396,7 +394,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
             <div class="edit-xblock-modal">
               ${!hasCustomTabs && getDataEditor ? editingModalHeader : defaultModalTitle}
               <div class="modal-content">
-                  ${html}      
+                  ${html}
               </div>
               ${!hasCustomButtons ? getActionBar : ''}
             </div>

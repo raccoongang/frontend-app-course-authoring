@@ -30,6 +30,7 @@ import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { getHandlerUrl } from './utils';
+import { createPortal } from 'react-dom';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -92,7 +93,12 @@ const CourseXBlock = ({
 
   return (
     <>
-      <XBlockContent getHandlerUrl={getHandlerUrl} view={xblockModalData} />
+      {Object.keys(xblockModalData).length && createPortal(
+        <div className="xblock-edit-modal">
+          <XBlockContent getHandlerUrl={getHandlerUrl} view={xblockModalData} variant="edit-modal" />
+        </div>,
+        document.body,
+      )}
       <div ref={courseXBlockElementRef} {...props}>
         <Card
           as={ConditionalSortableElement}
@@ -163,6 +169,7 @@ const CourseXBlock = ({
                     getHandlerUrl={getHandlerUrl}
                     view={xblockInstanceHtmlAndResources}
                     type={type}
+                    className="xblock-content-iframe"
                   />
                 )}
               </>

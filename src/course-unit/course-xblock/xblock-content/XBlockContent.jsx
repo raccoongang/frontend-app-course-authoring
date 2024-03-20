@@ -19,13 +19,14 @@ ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'st
  * requests as the user. However, it is allowed to call any XBlock handlers.
  */
 const XBlockContent = ({
-  view, type, getHandlerUrl, onBlockNotification, variant,
+  view, type, getHandlerUrl, onBlockNotification, variant, className
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
   const [iFrameHeight, setIFrameHeight] = useState(0);
   const [iframeKey, setIframeKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [editModalMetadata, setEditModalMetadata] = useState({});
 
   useEffect(() => {
     const processView = () => {
@@ -36,6 +37,7 @@ const XBlockContent = ({
           getConfig().STUDIO_BASE_URL,
           type,
           variant,
+          editModalMetadata,
         );
 
         // Load the XBlock HTML into the IFrame:
@@ -72,6 +74,8 @@ const XBlockContent = ({
         await sendReply({ handlerUrl });
       } else if (method === 'update_frame_height') {
         setIFrameHeight(args.height);
+      } else if (method === 'edit_modal_metadata') {
+        setEditModalMetadata(args.metadata);
       } else if (method?.indexOf('xblock:') === 0) {
         if (onBlockNotification) {
           // This is a notification from the XBlock's frontend via 'runtime.notify(event, args)'
@@ -107,21 +111,22 @@ const XBlockContent = ({
         </div>
       )}
       <div
-        style={{ height: `${iFrameHeight}px` }}
+        style={{ height: variant === 'edit-modal' ? '100%' : `${iFrameHeight}px` }}
         className="xblock-content"
       >
         <iframe
           key={iframeKey}
           ref={iframeRef}
           title="block"
+          id={`iframe-${variant}`}
           src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-          className="xblock-content-iframe"
+          className={className}
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow={IFRAME_FEATURE_POLICY}
           referrerPolicy="origin"
           frameBorder={0}
-          scrolling="no"
-          onLoad={() => setIsLoading(!isLoading)}
+          // scrolling="no"
+          onLoad={() => setIsLoading(false)}
           sandbox={[
             'allow-forms',
             'allow-modals',

@@ -138,13 +138,13 @@ export function xblockIFrameConnector() {
    * Finds the value of the first 'data-usage' or 'data-usage-id' attribute within the given element
    * and its descendants.
    */
-  function findFirstDataAttributeValue(element) {
+  function findFirstDataAttributeValue(element, target) {
     // eslint-disable-next-line consistent-return,no-shadow
     function searchDataUsageAttribute(element) {
       const { attributes, children } = element;
       for (let i = 0; i < attributes.length; i++) {
         const attributeName = attributes[i].name;
-        if (attributeName === 'data-usage' || attributeName === 'data-usage-id') {
+        if (attributeName === `data-${target}` || attributeName === `data-${target}-id`) {
           return attributes[i].value;
         }
       }
@@ -162,7 +162,18 @@ export function xblockIFrameConnector() {
 
   // Recursively initialize the JavaScript code of each XBlock:
   function initializeXBlockAndChildren(element, callback) {
-    const usageId = findFirstDataAttributeValue(element);
+    const usageId = findFirstDataAttributeValue(element, 'usage');
+    const metadata = findFirstDataAttributeValue(element, 'metadata');
+    if (metadata !== undefined) {
+      const parsedMetadata = JSON.parse(metadata);
+
+      postMessageToParent({
+        metadata: parsedMetadata,
+        method: 'edit_modal_metadata',
+      });
+
+      console.log('parsedMetadata ======>', parsedMetadata);
+    }
 
     if (usageId !== null) {
       element[USAGE_ID_KEY] = usageId;
