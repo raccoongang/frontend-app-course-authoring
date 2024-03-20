@@ -24,7 +24,6 @@
       function postMessageToParent(messageData, callback) {
         const messageReplyKey = uniqueKeyPrefix + (messageCount++);
         messageData.replyKey = messageReplyKey;
-
         if (callback !== undefined) {
           const handleResponse = function (event) {
             if (event.source === window.parent && event.data.replyKey === messageReplyKey) {
