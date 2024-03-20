@@ -19,7 +19,7 @@ ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'st
  * requests as the user. However, it is allowed to call any XBlock handlers.
  */
 const XBlockIframe = ({
-  view, type, getHandlerUrl, onBlockNotification,
+  view, type, getHandlerUrl, onBlockNotification, variant, className,
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
@@ -34,7 +34,8 @@ const XBlockIframe = ({
           view.html,
           view.resources,
           getConfig().STUDIO_BASE_URL,
-          type,
+          type = 'default',
+          variant,
         );
 
         // Load the XBlock HTML into the IFrame:
@@ -106,8 +107,8 @@ const XBlockIframe = ({
         </div>
       )}
       <div
-        style={{ height: `${iFrameHeight}px` }}
-        className="xblock-iframe-wrapper"
+        style={{ height: variant === 'edit-modal' ? '100%' : `${iFrameHeight}px` }}
+        className={className}
       >
         <iframe
           key={iframeKey}

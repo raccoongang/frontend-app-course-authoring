@@ -56,7 +56,6 @@ const CourseUnit = ({ courseId }) => {
     handleXBlockDragAndDrop,
     canPasteComponent,
   } = useCourseUnit({ courseId, blockId });
-
   const initialXBlocksData = useMemo(() => courseVerticalChildren.children ?? [], [courseVerticalChildren.children]);
   const [unitXBlocks, setUnitXBlocks] = useState(initialXBlocksData);
 

@@ -15,6 +15,7 @@ export const getClipboardUrl = () => `${getStudioBaseUrl()}/api/content-staging/
 
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 export const getXBlockContainerPreview = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/container_preview`;
+export const getXBlockModalDataApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/studio_view`;
 
 /**
  * Get course unit.
@@ -191,6 +192,13 @@ export async function setXBlockOrderList(blockId, children) {
 export async function getXBlockEditIframeData(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getXBlockContainerPreview(itemId));
+
+  return camelCaseObject(data);
+}
+
+export async function getXBlockModalData(itemId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getXBlockModalDataApiUrl(itemId));
 
   return camelCaseObject(data);
 }

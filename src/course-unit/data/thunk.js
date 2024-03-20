@@ -20,7 +20,7 @@ import {
   handleCourseUnitVisibilityAndData,
   deleteUnitItem,
   duplicateUnitItem,
-  setXBlockOrderList, getXBlockEditIframeData,
+  setXBlockOrderList, getXBlockEditIframeData, getXBlockModalData,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -40,7 +40,7 @@ import {
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
-  fetchXBlockHtmlAndResources,
+  fetchXBlockHtmlAndResources, fetchXBlockModalData,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -312,6 +312,23 @@ export function fetchXBlockHtmlAndResourcesQuery(xblockId) {
     try {
       const xblockIframeData = await getXBlockEditIframeData(xblockId);
       dispatch(fetchXBlockHtmlAndResources({ xblockId, ...xblockIframeData }));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function fetchXBlockModalDataQuery(xblockId) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
+
+    try {
+      const xblockModalData = await getXBlockModalData(xblockId);
+      dispatch(fetchXBlockModalData({ xblockId, ...xblockModalData }));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
