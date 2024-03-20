@@ -1,4 +1,4 @@
-import { COMPONENT_ICON_TYPES } from '../../../../constants';
+import { COMPONENT_TYPES } from '../../../../constants';
 
 /**
  * Normalizes an array of resources by mapping each entry to an object with specified properties.
@@ -28,7 +28,7 @@ export const filterAndExtractResources = (resources, kind, mimetype) => resource
  * @returns {string} - Generated HTML tags for resources.
  */
 export const generateResourceTags = (urls, baseUrl, type) => urls.map(url => {
-  const fullUrl = type === COMPONENT_ICON_TYPES.openassessment ? url : baseUrl + url;
+  const fullUrl = type === COMPONENT_TYPES.openassessment ? url : baseUrl + url;
   if (url.endsWith('.css')) {
     return `<link rel="stylesheet" href="${fullUrl}">`;
   } if (url.endsWith('.js')) {

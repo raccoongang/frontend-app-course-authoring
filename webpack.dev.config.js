@@ -15,18 +15,15 @@ const config = createConfig('webpack-dev', {
   },
 });
 
-/**
- * Allow serving xblock-bootstrap.html from the MFE itself.
- */
 config.plugins.push(
   new CopyPlugin({
     patterns: [
       {
-        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content/iframe-wrapper'),
+        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content/iframe-wrapper/static'),
         from: 'xblock-bootstrap.html',
       },
       {
-        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content'),
+        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content/iframe-wrapper/static'),
         from: 'XBlockIframe.css',
       },
     ],

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
 import { LoadingSpinner } from '../../../generic/Loading';
-import { COMPONENT_ICON_TYPES } from '../../constants';
+import { COMPONENT_TYPES } from '../../constants';
 import { blockViewShape, fetchable, IFRAME_FEATURE_POLICY } from '../constants';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 
@@ -75,7 +75,7 @@ const XBlockContent = ({
         if (onBlockNotification) {
           // This is a notification from the XBlock's frontend via 'runtime.notify(event, args)'
           onBlockNotification({
-            eventType: method.substr(7), // Remove the 'xblock:' prefix that we added in wrap.ts
+            eventType: method.substr(7), // Remove the 'xblock:' prefix that we added in iframe-wrapper.ts
             ...args,
           });
         }
@@ -107,14 +107,14 @@ const XBlockContent = ({
       )}
       <div
         style={{ height: `${iFrameHeight}px` }}
-        className="xblock-iframe-wrapper"
+        className="xblock-content"
       >
         <iframe
           key={iframeKey}
           ref={iframeRef}
           title="block"
           src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-          className="xblock-iframe"
+          className="xblock-content-iframe"
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow={IFRAME_FEATURE_POLICY}
           referrerPolicy="origin"
@@ -143,7 +143,7 @@ XBlockContent.propTypes = {
   getHandlerUrl: PropTypes.func.isRequired,
   onBlockNotification: PropTypes.func,
   view: fetchable(blockViewShape).isRequired,
-  type: PropTypes.oneOfType(Object.values(COMPONENT_ICON_TYPES)).isRequired,
+  type: PropTypes.oneOfType(Object.values(COMPONENT_TYPES)).isRequired,
 };
 
 XBlockContent.defaultProps = {

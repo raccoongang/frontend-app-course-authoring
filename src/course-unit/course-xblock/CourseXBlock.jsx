@@ -24,6 +24,7 @@ import {
   fetchXBlockIframeHtmlAndResourcesQuery,
 } from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
+import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
@@ -149,12 +150,17 @@ const CourseXBlock = ({
           )}
         />
         <Card.Section>
-          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : xblockInstanceHtmlAndResources && (
-            <XBlockContent
-              getHandlerUrl={getHandlerUrl}
-              view={xblockInstanceHtmlAndResources}
-              type={type}
-            />
+          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
+            <>
+              <XBlockMessages validationMessages={validationMessages} />
+              {xblockInstanceHtmlAndResources && (
+                <XBlockContent
+                  getHandlerUrl={getHandlerUrl}
+                  view={xblockInstanceHtmlAndResources}
+                  type={type}
+                />
+              )}
+            </>
           )}
         </Card.Section>
       </Card>
