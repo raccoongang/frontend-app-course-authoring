@@ -114,7 +114,6 @@ const XBlockContent = ({
           ref={iframeRef}
           title="block"
           src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-          data-testid="block-preview"
           className="xblock-iframe"
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow={IFRAME_FEATURE_POLICY}
