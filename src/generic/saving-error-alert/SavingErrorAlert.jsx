@@ -5,7 +5,7 @@ import { Warning as WarningIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { RequestStatus } from '../../data/constants';
-import { getSavingStatus } from '../data/selectors';
+import { getSavingStatus as getGenericSavingStatus } from '../data/selectors';
 import AlertMessage from '../alert-message';
 import messages from './messages';
 
@@ -16,7 +16,7 @@ const SavingErrorAlert = ({
   const intl = useIntl();
   const [showAlert, setShowAlert] = useState(false);
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
-  const genericSavingStatus = useSelector(getSavingStatus);
+  const genericSavingStatus = useSelector(getGenericSavingStatus);
   const isQueryFailed = savingStatus === RequestStatus.FAILED || genericSavingStatus === RequestStatus.FAILED;
 
   useEffect(() => {
