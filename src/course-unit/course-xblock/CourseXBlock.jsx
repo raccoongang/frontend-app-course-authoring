@@ -20,7 +20,7 @@ import { getCanEdit, getCourseId } from '../data/selectors';
 import { copyToClipboard, fetchXBlockHtmlAndResourcesQuery } from '../../generic/data/thunks';
 import { COMPONENT_TYPES } from '../constants';
 import RenderErrorAlert from './render-error-alert';
-import { XBlockIframe } from './xblock-iframe';
+import { XBlockContent } from './xblock-content';
 import messages from './messages';
 
 export const XBLOCK_VIEW_SYSTEM = {
@@ -160,7 +160,7 @@ const CourseXBlock = ({
         />
         <Card.Section>
           {renderError ? <RenderErrorAlert errorMessage={renderError} /> : xblockInstanceHtmlAndResources && (
-            <XBlockIframe
+            <XBlockContent
               getHandlerUrl={getHandlerUrl}
               view={xblockInstanceHtmlAndResources}
               type={type}

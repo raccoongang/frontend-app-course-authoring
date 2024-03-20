@@ -22,11 +22,11 @@ config.plugins.push(
   new CopyPlugin({
     patterns: [
       {
-        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-iframe/iframe-wrapper'),
+        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content/iframe-wrapper'),
         from: 'xblock-bootstrap.html',
       },
       {
-        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-iframe'),
+        context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content'),
         from: 'XBlockIframe.css',
       },
     ],
