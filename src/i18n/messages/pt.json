@@ -1150,8 +1150,6 @@
   "course-authoring.textbooks.form.upload-button.alt": "chapter-upload-button",
   "course-authoring.textbooks.form.delete-button.tooltip": "Delete",
   "course-authoring.textbooks.form.delete-button.alt": "chapter-delete-button",
-  "course-authoring.course-unit.popover.content.text": "From:",
-  "course-authoring.course-unit.paste-component.whats-in-clipboard.text": "What's in my clipboard?",
   "course-authoring.course-unit.paste-notification.has-conflicting-errors.title": "Files need to be updated manually.",
   "course-authoring.course-unit.paste-notification.has-conflicting-errors.description": "The following files must be updated manually for components to work as intended:",
   "course-authoring.course-unit.paste-notification.has-conflicting-errors.button.text": "Upload files",

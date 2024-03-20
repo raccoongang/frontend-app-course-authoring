@@ -29,6 +29,7 @@ export const getXBlockBaseApiUrl = () => `${getApiBaseUrl()}/xblock/`;
 export const getCourseItemApiUrl = (itemId) => `${getXBlockBaseApiUrl()}${itemId}`;
 export const getXBlockApiUrl = (blockId) => `${getXBlockBaseApiUrl()}outline/${blockId}`;
 export const getClipboardUrl = () => `${getApiBaseUrl()}/api/content-staging/v1/clipboard/`;
+export const getTagsCountApiUrl = (contentPattern) => new URL(`api/content_tagging/v1/object_tag_counts/${contentPattern}/?count_implicit`, getApiBaseUrl()).href;
 
 /**
  * @typedef {Object} courseOutline
@@ -432,20 +433,6 @@ export async function setVideoSharingOption(courseId, videoSharingOption) {
     });
 
   return data;
-}
-
-/**
- * Copy block to clipboard
- * @param {string} usageKey
- * @returns {Promise<Object>}
-*/
-export async function copyBlockToClipboard(usageKey) {
-  const { data } = await getAuthenticatedHttpClient()
-    .post(getClipboardUrl(), {
-      usage_key: usageKey,
-    });
-
-  return camelCaseObject(data);
 }
 
 /**
