@@ -9,22 +9,13 @@ import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
 
-/**
- * React component that displays an XBlock in a sandboxed IFrame.
- *
- * The IFrame is resized responsively so that it fits the content height.
- *
- * We use an IFrame so that the XBlock code, including user-authored HTML,
- * cannot access things like the user's cookies, nor can it make GET/POST
- * requests as the user. However, it is allowed to call any XBlock handlers.
- */
 const XBlockContent = ({
   view, type, getHandlerUrl, onBlockNotification,
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
-  const [iFrameHeight, setIFrameHeight] = useState(0);
-  const [iframeKey, setIframeKey] = useState(0);
+  const [iframeHeight, setIFrameHeight] = useState(0);
+  const [iframeKey, setIFrameKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -40,7 +31,7 @@ const XBlockContent = ({
         // Load the XBlock HTML into the IFrame:
         // iframe will only re-render in React when its property changes (key here)
         setHtml(newHtml);
-        setIframeKey(prevKey => prevKey + 1);
+        setIFrameKey(prevKey => prevKey + 1);
       }
     };
 
@@ -75,7 +66,7 @@ const XBlockContent = ({
         if (onBlockNotification) {
           // This is a notification from the XBlock's frontend via 'runtime.notify(event, args)'
           onBlockNotification({
-            eventType: method.substr(7), // Remove the 'xblock:' prefix that we added in iframe-wrapper.ts
+            eventType: method.substr('xblock'.length), // Remove the 'xblock:' prefix that we added in iframe-wrapper.ts
             ...args,
           });
         }
@@ -106,7 +97,7 @@ const XBlockContent = ({
         </div>
       )}
       <div
-        style={{ height: `${iFrameHeight}px` }}
+        style={{ height: `${iframeHeight}px` }}
         className="xblock-content"
       >
         <iframe

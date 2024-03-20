@@ -216,8 +216,8 @@ export function xblockIFrameConnector() {
 
   let lastHeight = -1;
   function checkFrameHeight() {
-    const visibleIframeContent = document.querySelector('.xblock-render');
-    const newHeight = visibleIframeContent.scrollHeight;
+    const visibleIFrameContent = document.querySelector('.xblock-render');
+    const newHeight = visibleIFrameContent.scrollHeight;
 
     if (newHeight !== lastHeight) {
       postMessageToParent({ method: 'update_frame_height', height: newHeight });

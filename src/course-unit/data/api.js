@@ -169,9 +169,15 @@ export async function setXBlockOrderList(blockId, children) {
  * @param {string} itemId - The ID of the XBlock item.
  * @returns {Promise<Object>} A Promise that resolves with the XBlock iframe data.
  */
-export async function getXBlockIframeData(itemId) {
+export async function getXBlockIFrameData(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getXBlockContainerPreview(itemId));
 
   return camelCaseObject(data);
 }
+
+export const getHandlerUrl = async (blockId) => {
+  const baseUrl = getConfig().STUDIO_BASE_URL;
+
+  return `${baseUrl}/xblock/${blockId}/handler/handler_name`;
+};

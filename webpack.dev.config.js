@@ -24,7 +24,7 @@ config.plugins.push(
       },
       {
         context: path.resolve(__dirname, 'src/course-unit/course-xblock/xblock-content/iframe-wrapper/static'),
-        from: 'XBlockIframe.css',
+        from: 'XBlockIFrame.css',
       },
     ],
   }),

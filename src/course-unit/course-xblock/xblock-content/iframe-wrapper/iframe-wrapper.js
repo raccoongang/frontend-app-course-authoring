@@ -62,7 +62,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
-      <link rel="stylesheet" href="XBlockIframe.css">
+      <link rel="stylesheet" href="XBlockIFrame.css">
 
       <!-- JS scripts that can be used by XBlocks -->
       <!-- gettext & XBlock JS i18n code -->

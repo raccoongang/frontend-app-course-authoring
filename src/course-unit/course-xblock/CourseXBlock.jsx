@@ -17,18 +17,18 @@ import { COURSE_BLOCK_NAMES } from '../../constants';
 import {
   getCanEdit,
   getCourseId,
-  getXBlockIframeHtmlAndResources,
+  getXBlockIFrameHtmlAndResources,
 } from '../data/selectors';
 import {
   copyToClipboard,
-  fetchXBlockIframeHtmlAndResourcesQuery,
 } from '../../generic/data/thunks';
+import { getHandlerUrl } from '../data/api';
+import { fetchXBlockIFrameHtmlAndResourcesQuery } from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
-import { getHandlerUrl } from './utils';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -42,15 +42,15 @@ const CourseXBlock = ({
   const courseId = useSelector(getCourseId);
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
-  const xblockIframeHtmlAndResources = useSelector(getXBlockIframeHtmlAndResources);
-  const xblockInstanceHtmlAndResources = find(xblockIframeHtmlAndResources, { xblockId: id });
+  const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
+  const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
 
   useEffect(() => {
-    dispatch(fetchXBlockIframeHtmlAndResourcesQuery(id));
+    dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
   }, []);
 
   const currentItemData = {
