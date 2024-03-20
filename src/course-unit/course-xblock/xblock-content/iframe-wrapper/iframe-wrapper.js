@@ -1,4 +1,4 @@
-import { COMPONENT_ICON_TYPES } from '../../../constants';
+import { COMPONENT_TYPES } from '../../../constants';
 import {
   filterAndExtractResources,
   generateResourceTags,
@@ -62,7 +62,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
-      <link rel="stylesheet" href="../XBlockIframe.css">
+      <link rel="stylesheet" href="XBlockIframe.css">
 
       <!-- JS scripts that can be used by XBlocks -->
       <!-- gettext & XBlock JS i18n code -->
@@ -252,9 +252,9 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   modifiedHtml = modifiedHtml.replace('data-target="/preview/xblock', `data-target="${studioBaseUrl}/preview/xblock`);
 
   if (
-    type === COMPONENT_ICON_TYPES.discussion
-    || type === COMPONENT_ICON_TYPES.dragAndDrop
-    || type === COMPONENT_ICON_TYPES.html
+    type === COMPONENT_TYPES.discussion
+    || type === COMPONENT_TYPES.dragAndDrop
+    || type === COMPONENT_TYPES.html
   ) {
     result = `
     <!DOCTYPE html>
@@ -265,7 +265,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       ${legacyIncludes}
       ${cssTags}
     </head>
-    <body style="background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper" style=" background-color: white">
+    <body class="wrapper-xblock level-page studio-xblock-wrapper">
         <article class="xblock-render">
             <div class="xblock xblock-author_view xblock-author_view-vertical xblock-initialized">
                 <div class="reorderable-container ui-sortable">
@@ -284,7 +284,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
     </body>
     </html>
   `;
-  } else if (COMPONENT_ICON_TYPES.advanced) {
+  } else if (COMPONENT_TYPES.advanced) {
     result = `
     <!DOCTYPE html>
     <html>
@@ -294,7 +294,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       ${legacyIncludes}
       ${cssTags}
     </head>
-    <body style="min-height: auto; background-color: white" class="wrapper-xblock level-page studio-xblock-wrapper">
+    <body class="wrapper-xblock level-page studio-xblock-wrapper">
       <section class="wrapper-xblock is-collapsible level-element">
         <article class="xblock-render">
             ${modifiedHtml}
@@ -317,7 +317,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       ${legacyIncludes}
       ${cssTags}
     </head>
-    <body style="background-color: white">
+    <body>
       ${modifiedHtml}
       ${jsTags}
       <script>
