@@ -29,10 +29,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.button.delete.label',
     defaultMessage: 'Delete',
   },
-  iframeErrorText: {
-    id: 'course-authoring.course-unit.xblock.iframe.error.text',
-    defaultMessage: 'Unit iframe failed to load. Server possibly returned 4xx or 5xx response.',
-  },
   visibilityMessage: {
     id: 'course-authoring.course-unit.xblock.visibility.message',
     defaultMessage: 'Access restricted to: {selectedGroupsLabel}',
