@@ -170,7 +170,6 @@
   "course-authoring.textbooks.form.upload-modal.file-size-invalid-text": "File size must be less than {maxSize}MB.",
   "course-authoring.textbooks.form.delete-modal.title": "Delete “{textbookTitle}”?",
   "course-authoring.textbooks.form.delete-modal.description": "Deleting a textbook cannot be undone and once deleted any reference to it in your courseware's navigation will also be removed.",
-  "course-authoring.course-unit.xblock.iframe.error.text": "Unit iframe failed to load. Server possibly returned 4xx or 5xx response.",
   "course-authoring.course-unit.paste-component.btn.text": "Paste component",
   "course-authoring.course-unit.popover.content.text": "From:",
   "course-authoring.course-unit.paste-component.whats-in-clipboard.text": "What's in my clipboard?",
