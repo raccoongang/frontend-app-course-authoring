@@ -20,6 +20,7 @@ const slice = createSlice({
     courseSectionVertical: {},
     courseVerticalChildren: { children: [], isPublished: true },
     staticFileNotices: {},
+    xblockIFrameHtmlAndResources: [],
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -111,6 +112,9 @@ const slice = createSlice({
       // This avoids the need to copy the array beforehand
       state.courseVerticalChildren.children.sort((a, b) => (indexMap.get(a.id) || 0) - (indexMap.get(b.id) || 0));
     },
+    fetchXBlockIFrameResources: (state, { payload }) => {
+      state.xblockIFrameHtmlAndResources.push(payload);
+    },
   },
 });
 
@@ -133,6 +137,7 @@ export const {
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
+  fetchXBlockIFrameResources,
 } = slice.actions;
 
 export const {

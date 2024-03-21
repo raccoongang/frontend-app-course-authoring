@@ -8,20 +8,25 @@ import {
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { find } from 'lodash';
 
-import { getCanEdit, getCourseId } from 'CourseAuthoring/course-unit/data/selectors';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import SortableItem from '../../generic/drag-helper/SortableItem';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
+import {
+  getCanEdit,
+  getCourseId,
+  getXBlockIFrameHtmlAndResources,
+} from '../data/selectors';
 import { copyToClipboard } from '../../generic/data/thunks';
+import { getHandlerUrl } from '../data/api';
+import { fetchXBlockIFrameHtmlAndResourcesQuery } from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
-import XBlockContent from './xblock-content/XBlockContent';
-import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
-import { getIFrameUrl } from './urls';
+import { XBlockContent } from './xblock-content';
 import messages from './messages';
 
 const CourseXBlock = ({
@@ -36,7 +41,8 @@ const CourseXBlock = ({
   const canEdit = useSelector(getCanEdit);
   const courseId = useSelector(getCourseId);
   const intl = useIntl();
-  const iframeUrl = getIFrameUrl({ blockId: id });
+  const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
+  const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
 
   const [searchParams] = useSearchParams();
   const locatorId = searchParams.get('show');
@@ -45,6 +51,10 @@ const CourseXBlock = ({
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
+
+  useEffect(() => {
+    dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+  }, []);
 
   const currentItemData = {
     category: COURSE_BLOCK_NAMES.component.id,
@@ -153,7 +163,13 @@ const CourseXBlock = ({
           {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
             <>
               <XBlockMessages validationMessages={validationMessages} />
-              <XBlockContent id={id} title={title} elementId={id} iframeUrl={iframeUrl} />
+              {xblockInstanceHtmlAndResources && (
+                <XBlockContent
+                  getHandlerUrl={getHandlerUrl}
+                  view={xblockInstanceHtmlAndResources}
+                  type={type}
+                />
+              )}
             </>
           )}
         </Card.Section>

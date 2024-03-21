@@ -50,10 +50,6 @@ const messages = defineMessages({
     defaultMessage: 'This component has validation issues.',
     description: 'The alert text of the visibility validation issues',
   },
-  iframeErrorText: {
-    id: 'course-authoring.course-unit.xblock.iframe.error.text',
-    defaultMessage: 'Unit iframe failed to load. Server possibly returned 4xx or 5xx response.',
-  },
   visibilityMessage: {
     id: 'course-authoring.course-unit.xblock.visibility.message',
     defaultMessage: 'Access restricted to: {selectedGroupsLabel}',
