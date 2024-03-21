@@ -542,7 +542,7 @@ describe('<CourseUnit />', () => {
     await executeThunk(fetchCourseUnitQuery(courseId), store.dispatch);
 
     await waitFor(() => {
-      const unpublishedAlert = queryByRole('alert', { class: 'course-unit-unpublished-alert' });
+      const unpublishedAlert = queryByRole('alert', { name: messages.alertUnpublishedVersion });
       expect(unpublishedAlert).toBeNull();
     });
   });

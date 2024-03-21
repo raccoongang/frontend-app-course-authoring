@@ -324,7 +324,7 @@ describe('<CourseXBlock />', () => {
     const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;
     const errorAlertMessage = renderErrorAlertMessages.alertRenderErrorMessage.defaultMessage
       .replace('{message}', renderErrorMessage);
-    const contentIframe = queryByTestId('content-iframe-test-id');
+    const contentIFrame = queryByTestId('content-iframe-test-id');
 
     expect(getByText(errorAlertTitle)).toBeInTheDocument();
     expect(getByText(errorAlertDescription)).toBeInTheDocument();
@@ -332,6 +332,6 @@ describe('<CourseXBlock />', () => {
     expect(getByText(name)).toBeInTheDocument();
     expect(getByLabelText(messages.blockAltButtonEdit.defaultMessage)).toBeInTheDocument();
     expect(getByLabelText(messages.blockActionsDropdownAlt.defaultMessage)).toBeInTheDocument();
-    expect(contentIframe).not.toBeInTheDocument();
+    expect(contentIFrame).not.toBeInTheDocument();
   });
 });
