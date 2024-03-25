@@ -6,6 +6,7 @@ import { Container, Layout, Stack } from '@openedx/paragon';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
 import { Warning as WarningIcon } from '@openedx/paragon/icons';
 import { DraggableList } from '@edx/frontend-lib-content-components';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { getProcessingNotification } from '../generic/processing-notification/data/selectors';
 import SubHeader from '../generic/sub-header/SubHeader';
@@ -151,24 +152,30 @@ const CourseUnit = ({ courseId }) => {
                   setState={setUnitXBlocks}
                   updateOrder={finalizeXBlockOrder}
                 >
-                  {unitXBlocks.map(({
-                    name, id, blockType: type, renderError, shouldScroll, userPartitionInfo, validationMessages,
-                  }) => (
-                    <CourseXBlock
-                      id={id}
-                      key={id}
-                      title={name}
-                      type={type}
-                      renderError={renderError}
-                      validationMessages={validationMessages}
-                      shouldScroll={shouldScroll}
-                      unitXBlockActions={unitXBlockActions}
-                      handleConfigureSubmit={handleConfigureSubmit}
-                      data-testid="course-xblock"
-                      className="course-unit__xblock"
-                      userPartitionInfo={userPartitionInfo}
-                    />
-                  ))}
+                  <SortableContext
+                    id="root"
+                    items={unitXBlocks}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {unitXBlocks.map(({
+                      name, id, blockType: type, renderError, shouldScroll, userPartitionInfo, validationMessages,
+                    }) => (
+                      <CourseXBlock
+                        id={id}
+                        key={id}
+                        title={name}
+                        type={type}
+                        renderError={renderError}
+                        validationMessages={validationMessages}
+                        shouldScroll={shouldScroll}
+                        unitXBlockActions={unitXBlockActions}
+                        handleConfigureSubmit={handleConfigureSubmit}
+                        data-testid="course-xblock"
+                        className="course-unit__xblock"
+                        userPartitionInfo={userPartitionInfo}
+                      />
+                    ))}
+                  </SortableContext>
                 </DraggableList>
               </Stack>
               <AddComponent
