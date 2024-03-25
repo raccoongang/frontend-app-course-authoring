@@ -29,7 +29,7 @@ import messages from './messages';
 import PublishControls from './sidebar/PublishControls';
 import LocationInfo from './sidebar/LocationInfo';
 import TagsSidebarControls from '../content-tags-drawer/tags-sidebar-controls';
-import { PasteNotificationAlert, PasteComponent } from './clipboard';
+import { PasteNotificationAlert } from './clipboard';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();

@@ -54,7 +54,7 @@ import {
   moveUnitOver,
   moveSubsection,
   moveUnit,
-} from './drag-helper/utils';
+} from '../generic/drag-helper/utils';
 import messages from './messages';
 
 let axiosMock;
