@@ -90,6 +90,7 @@ const CourseXBlock = ({
       <Card
         as={SortableItem}
         id={id}
+        category="xblock"
         draggable
         componentStyle={{ marginBottom: 0 }}
       >
