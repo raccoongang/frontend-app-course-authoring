@@ -94,6 +94,7 @@ const CourseXBlock = ({
         isDraggable
         isDroppable
         id={id}
+        category="xblock"
         componentStyle={{ marginBottom: 0 }}
       >
         <Card.Header
