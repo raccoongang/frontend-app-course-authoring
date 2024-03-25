@@ -11,7 +11,7 @@ import { find } from 'lodash';
 
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
-import ConditionalSortableElement from '../../generic/drag-helper/ConditionalSortableElement';
+import SortableItem from '../../generic/drag-helper/SortableItem';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import {
@@ -90,9 +90,10 @@ const CourseXBlock = ({
   return (
     <div ref={courseXBlockElementRef} {...props}>
       <Card
-        as={ConditionalSortableElement}
+        as={SortableItem}
+        isDraggable
+        isDroppable
         id={id}
-        draggable
         componentStyle={{ marginBottom: 0 }}
       >
         <Card.Header
