@@ -111,7 +111,7 @@ const XBlockContent = ({
           referrerPolicy="origin"
           frameBorder={0}
           scrolling="no"
-          onLoad={() => setIsLoading(!isLoading)}
+          onLoad={() => setIsLoading(false)}
           sandbox={[
             'allow-forms',
             'allow-modals',

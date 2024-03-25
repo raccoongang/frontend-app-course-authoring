@@ -43,14 +43,17 @@ const CourseXBlock = ({
   const canEdit = useSelector(getCanEdit);
   const intl = useIntl();
   const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
+  // console.log('xblockIFrameHtmlAndResources', xblockIFrameHtmlAndResources);
   const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
-
+  // console.log('xblockInstanceHtmlAndResources', xblockInstanceHtmlAndResources);
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
 
   useEffect(() => {
-    dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+    if (!xblockInstanceHtmlAndResources) {
+      dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+    }
   }, []);
 
   const currentItemData = {
