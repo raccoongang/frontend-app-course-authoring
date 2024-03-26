@@ -62,6 +62,9 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/assets/courseware/v1/911f0d1ac424861100db6c65e2504841/asset-v1:edx+1245+2024+type@asset+block/cm_style_guide_demox.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/normalize.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
       <link rel="stylesheet" href="XBlockIFrame.css">
 
       <!-- JS scripts that can be used by XBlocks -->
