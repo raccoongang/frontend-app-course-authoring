@@ -179,5 +179,5 @@ export async function getXBlockIFrameData(itemId) {
 export const getHandlerUrl = async (blockId) => {
   const baseUrl = getConfig().STUDIO_BASE_URL;
 
-  return `${baseUrl}/xblock/${blockId}/handler/handler_name`;
+  return `${baseUrl}/preview/xblock/${blockId}/handler/handler_name`;
 };
