@@ -246,10 +246,15 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   modifiedHtml = modifyVoidHrefToPreventDefault(html);
   // Due to the use of edx-platform scripts in MFE, it is necessary to ensure that the paths for static files
   // and important data-attributes are correct.
-  modifiedHtml = modifiedHtml.replace('url(&#39;/assets', `url('${studioBaseUrl}/assets`);
-  modifiedHtml = modifiedHtml.replace('src="/assets', `src="${studioBaseUrl}/assets`);
-  modifiedHtml = modifiedHtml.replace('src=&#34;/static/studio', `src=&#34;${studioBaseUrl}/static/studio`);
-  modifiedHtml = modifiedHtml.replace('data-target="/preview/xblock', `data-target="${studioBaseUrl}/preview/xblock`);
+  modifiedHtml = modifiedHtml.replace(/url\(&#39;\/assets/g, `url('${studioBaseUrl}/assets`);
+  modifiedHtml = modifiedHtml.replace(/src="\/asset/g, `src="${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replace(/src=&#34;\/asset/g, `src=&#34;${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replace(/href="\/asset/g, `href="${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replace(/src=&#34;\/static\/studio/g, `src=&#34;${studioBaseUrl}/static/studio`);
+  modifiedHtml = modifiedHtml.replace(/src="\/static/g, `src="${studioBaseUrl}/static`);
+  modifiedHtml = modifiedHtml.replace(/data-target="\/preview\/xblock/g, `data-target="${studioBaseUrl}/preview/xblock`);
+  modifiedHtml = modifiedHtml.replace(/data-url="\/preview/g, `data-url="${studioBaseUrl}/preview`);
+  modifiedHtml = modifiedHtml.replace(/src="\/media/g, `src="${studioBaseUrl}/media`);
 
   if (
     type === COMPONENT_TYPES.discussion
