@@ -29,6 +29,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.button.delete.label',
     defaultMessage: 'Delete',
   },
+  blockLabelButtonManageTags: {
+    id: 'course-authoring.course-unit.xblock.button.manageTags.label',
+    defaultMessage: 'Manage tags',
+  },
   visibilityMessage: {
     id: 'course-authoring.course-unit.xblock.visibility.message',
     defaultMessage: 'Access restricted to: {selectedGroupsLabel}',
