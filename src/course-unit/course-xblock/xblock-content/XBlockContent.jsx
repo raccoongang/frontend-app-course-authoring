@@ -10,7 +10,7 @@ import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
 
 const XBlockContent = ({
-  view, type, getHandlerUrl, onBlockNotification,
+  view, type, getHandlerUrl, onBlockNotification, stylesWithContent,
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
@@ -26,6 +26,7 @@ const XBlockContent = ({
           view.resources,
           getConfig().STUDIO_BASE_URL,
           type,
+          stylesWithContent,
         );
 
         // Load the XBlock HTML into the IFrame:
@@ -37,7 +38,7 @@ const XBlockContent = ({
 
     // Process the XBlock view:
     processView();
-  }, [view, type]);
+  }, [view, type, stylesWithContent]);
 
   useEffect(() => {
     // Handle any messages we receive from the XBlock Runtime code in the IFrame.

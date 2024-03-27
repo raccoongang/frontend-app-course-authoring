@@ -18,12 +18,22 @@ import {
  *                   JS and CSS dependencies properly.
  * @param type The XBlock's type (openassessment, discussion, video, etc.)
  */
-export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type) {
+export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type, stylesWithContent) {
   const resources = normalizeResources(sourceResources);
 
   /* Extract CSS resources. */
   const cssUrls = filterAndExtractResources(resources, 'url', 'text/css');
   const sheets = filterAndExtractResources(resources, 'text', 'text/css');
+
+  let additionalCSSTags = '';
+  additionalCSSTags += stylesWithContent
+    .map(sheet => {
+      if (Array.isArray(sheet)) {
+        return sheet.map(subSheet => `<style>${subSheet}</style>`).join('\n');
+      }
+      return `<style>${sheet}</style>`;
+    })
+    .join('\n');
 
   let cssTags = generateResourceTags(cssUrls, studioBaseUrl, type);
   cssTags += sheets.map(sheet => `<style>${sheet}</style>`).join('\n');
@@ -249,15 +259,29 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   modifiedHtml = modifyVoidHrefToPreventDefault(html);
   // Due to the use of edx-platform scripts in MFE, it is necessary to ensure that the paths for static files
   // and important data-attributes are correct.
-  modifiedHtml = modifiedHtml.replace(/url\(&#39;\/asset/g, `url('${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replace(/src="\/asset/g, `src="${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replace(/src=&#34;\/asset/g, `src=&#34;${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replace(/href="\/asset/g, `href="${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replace(/src=&#34;\/static/g, `src=&#34;${studioBaseUrl}/static`);
-  modifiedHtml = modifiedHtml.replace(/src="\/static/g, `src="${studioBaseUrl}/static`);
-  modifiedHtml = modifiedHtml.replace(/data-target="\/preview/g, `data-target="${studioBaseUrl}/preview`);
-  modifiedHtml = modifiedHtml.replace(/data-url="\/preview/g, `data-url="${studioBaseUrl}/preview`);
-  modifiedHtml = modifiedHtml.replace(/src="\/media/g, `src="${studioBaseUrl}/media`);
+  modifiedHtml = modifiedHtml.replaceAll('url(&#39;/asset', `url('${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replaceAll('src="/asset', `src="${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replaceAll('src=&#34;/asset', `src=&#34;${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replaceAll('href="/asset', `href="${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replaceAll('src=&#34;/static', `src=&#34;${studioBaseUrl}/static`);
+  modifiedHtml = modifiedHtml.replaceAll('src="/static', `src="${studioBaseUrl}/static`);
+  modifiedHtml = modifiedHtml.replaceAll('data-target="/preview', `data-target="${studioBaseUrl}/preview`);
+  modifiedHtml = modifiedHtml.replaceAll('data-url="/preview', `data-url="${studioBaseUrl}/preview`);
+  modifiedHtml = modifiedHtml.replaceAll('src="/preview', `src="${studioBaseUrl}/preview`);
+  modifiedHtml = modifiedHtml.replaceAll('src="/media', `src="${studioBaseUrl}/media`);
+  modifiedHtml = modifiedHtml.replaceAll(': "/asset', `: "${studioBaseUrl}/asset`);
+  modifiedHtml = modifiedHtml.replaceAll(': "/xblock', `: "${studioBaseUrl}/xblock`);
+
+  // modifiedHtml = modifiedHtml.replaceAll('url(&#39;/asset', `url('${studioBaseUrl}/asset`);
+  // modifiedHtml = modifiedHtml.replaceAll('src="/asset', `src="${studioBaseUrl}/asset`);
+  // modifiedHtml = modifiedHtml.replaceAll('src="&#34;/asset', `src="&#34;${studioBaseUrl}/asset`);
+  // modifiedHtml = modifiedHtml.replaceAll('href="/asset', `href="${studioBaseUrl}/asset`);
+  // modifiedHtml = modifiedHtml.replaceAll('src="&#34;/static', `src="&#34;${studioBaseUrl}/static`);
+  // modifiedHtml = modifiedHtml.replaceAll('src="/static', `src="${studioBaseUrl}/static`);
+  // modifiedHtml = modifiedHtml.replaceAll('data-target="/preview', `data-target="${studioBaseUrl}/preview`);
+  // modifiedHtml = modifiedHtml.replaceAll('data-url="/preview', `data-url="${studioBaseUrl}/preview`);
+  // modifiedHtml = modifiedHtml.replaceAll('src="/preview', `src="${studioBaseUrl}/preview`);
+  // modifiedHtml = modifiedHtml.replaceAll('src="/media', `src="${studioBaseUrl}/media`);
 
   if (
     type === COMPONENT_TYPES.discussion
@@ -272,6 +296,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
+      ${additionalCSSTags}
     </head>
     <body class="wrapper-xblock level-page studio-xblock-wrapper">
         <article class="xblock-render">
@@ -301,6 +326,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
+      ${additionalCSSTags}
     </head>
     <body class="wrapper-xblock level-page studio-xblock-wrapper">
       <section class="wrapper-xblock is-collapsible level-element">
@@ -324,6 +350,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
+      ${additionalCSSTags}
     </head>
     <body>
       ${modifiedHtml}
