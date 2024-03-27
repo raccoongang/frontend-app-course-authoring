@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  ActionRow, Card, Dropdown, Icon, IconButton, useToggle,
+  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, Sheet,
 } from '@openedx/paragon';
 import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { find } from 'lodash';
+import { getConfig } from '@edx/frontend-platform';
 
+import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
+import { useContentTaxonomyTagsCount } from '../../content-tags-drawer/data/apiHooks';
+import TagCount from '../../generic/tag-count';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import SortableItem from '../../generic/drag-helper/SortableItem';
@@ -35,6 +39,7 @@ const CourseXBlock = ({
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
+  const [isManageTagsOpen, openManageTagsModal, closeManageTagsModal] = useToggle(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const canEdit = useSelector(getCanEdit);
@@ -42,6 +47,11 @@ const CourseXBlock = ({
   const intl = useIntl();
   const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
   const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
+
+  const {
+    data: contentTaxonomyTagsCount,
+    isSuccess: isContentTaxonomyTagsCountLoaded,
+  } = useContentTaxonomyTagsCount(id || '');
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
@@ -99,6 +109,11 @@ const CourseXBlock = ({
           subtitle={visibilityMessage}
           actions={(
             <ActionRow className="mr-2">
+              {
+                isContentTaxonomyTagsCountLoaded
+                && contentTaxonomyTagsCount > 0
+                && <div className="mr-2"><TagCount count={contentTaxonomyTagsCount} /></div>
+              }
               <IconButton
                 alt={intl.formatMessage(messages.blockAltButtonEdit)}
                 iconAs={EditIcon}
@@ -116,6 +131,11 @@ const CourseXBlock = ({
                   <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
                     {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                   </Dropdown.Item>
+                  {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES && (
+                    <Dropdown.Item onClick={openManageTagsModal}>
+                      {intl.formatMessage(messages.blockLabelButtonManageTags)}
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item>
                     {intl.formatMessage(messages.blockLabelButtonMove)}
                   </Dropdown.Item>
@@ -145,6 +165,15 @@ const CourseXBlock = ({
                 onConfigureSubmit={onConfigureSubmit}
                 currentItemData={currentItemData}
               />
+              <Sheet
+                position="right"
+                show={isManageTagsOpen}
+                blocking={false}
+                variant="light"
+                onClose={closeManageTagsModal}
+              >
+                <ContentTagsDrawer id={id} onClose={closeManageTagsModal} />
+              </Sheet>
             </ActionRow>
           )}
         />
