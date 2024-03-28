@@ -17,8 +17,15 @@ import {
  *                   Only required for legacy XBlocks that don't declare their
  *                   JS and CSS dependencies properly.
  * @param type The XBlock's type (openassessment, discussion, video, etc.)
+ * @param stylesWithContent Custom CSS global for all XBlock's.
  */
-export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type, stylesWithContent) {
+export default function wrapBlockHtmlForIFrame(
+  html,
+  sourceResources,
+  studioBaseUrl,
+  type,
+  stylesWithContent,
+) {
   const resources = normalizeResources(sourceResources);
 
   /* Extract CSS resources. */
@@ -271,17 +278,6 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   modifiedHtml = modifiedHtml.replaceAll('src="/media', `src="${studioBaseUrl}/media`);
   modifiedHtml = modifiedHtml.replaceAll(': "/asset', `: "${studioBaseUrl}/asset`);
   modifiedHtml = modifiedHtml.replaceAll(': "/xblock', `: "${studioBaseUrl}/xblock`);
-
-  // modifiedHtml = modifiedHtml.replaceAll('url(&#39;/asset', `url('${studioBaseUrl}/asset`);
-  // modifiedHtml = modifiedHtml.replaceAll('src="/asset', `src="${studioBaseUrl}/asset`);
-  // modifiedHtml = modifiedHtml.replaceAll('src="&#34;/asset', `src="&#34;${studioBaseUrl}/asset`);
-  // modifiedHtml = modifiedHtml.replaceAll('href="/asset', `href="${studioBaseUrl}/asset`);
-  // modifiedHtml = modifiedHtml.replaceAll('src="&#34;/static', `src="&#34;${studioBaseUrl}/static`);
-  // modifiedHtml = modifiedHtml.replaceAll('src="/static', `src="${studioBaseUrl}/static`);
-  // modifiedHtml = modifiedHtml.replaceAll('data-target="/preview', `data-target="${studioBaseUrl}/preview`);
-  // modifiedHtml = modifiedHtml.replaceAll('data-url="/preview', `data-url="${studioBaseUrl}/preview`);
-  // modifiedHtml = modifiedHtml.replaceAll('src="/preview', `src="${studioBaseUrl}/preview`);
-  // modifiedHtml = modifiedHtml.replaceAll('src="/media', `src="${studioBaseUrl}/media`);
 
   if (
     type === COMPONENT_TYPES.discussion

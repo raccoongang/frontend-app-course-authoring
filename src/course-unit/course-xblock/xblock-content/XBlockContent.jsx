@@ -136,10 +136,13 @@ XBlockContent.propTypes = {
   onBlockNotification: PropTypes.func,
   view: fetchable(blockViewShape).isRequired,
   type: PropTypes.oneOfType(Object.values(COMPONENT_TYPES)).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  stylesWithContent: PropTypes.array,
 };
 
 XBlockContent.defaultProps = {
   onBlockNotification: null,
+  stylesWithContent: null,
 };
 
 export default XBlockContent;

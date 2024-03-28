@@ -33,6 +33,7 @@ import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
+import { extractStylesWithContent } from './utils';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -59,22 +60,8 @@ const CourseXBlock = ({
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
 
-  const styleTagPattern = /<style[^>]*>([\s\S]*?)<\/style>/gi;
-
-  function extractStylesWithContent(htmlString) {
-    const matches = [];
-    let match = styleTagPattern.exec(htmlString);
-
-    while (match !== null) {
-      matches.push(match[1]); // Pushing content of <style> tag
-      match = styleTagPattern.exec(htmlString);
-    }
-
-    return matches;
-  }
-
   const stylesWithContent = xblockIFrameHtmlAndResources
-    .map(item => extractStylesWithContent(item.html))
+    ?.map(item => extractStylesWithContent(item.html))
     .filter(styles => styles.length > 0);
 
   useEffect(() => {

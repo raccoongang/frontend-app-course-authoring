@@ -172,7 +172,7 @@ export async function setXBlockOrderList(blockId, children) {
 export async function getXBlockIFrameData(itemId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(getXBlockContainerPreview(itemId));
-  console.log('DATA ===>', data);
+
   return camelCaseObject(data);
 }
 
