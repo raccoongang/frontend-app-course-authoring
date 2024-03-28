@@ -17,7 +17,7 @@ const UsageList = ({ className, itemList, isExperiment }) => {
     : messages.accessTo;
 
   const renderValidationMessage = ({ text, type }) => (
-    <span className="d-inline-flex">
+    <span className="d-inline-flex align-items-center">
       <Icon
         src={MESSAGE_VALIDATION_TYPES.error === type ? ErrorIcon : WarningIcon}
         size="sm"
