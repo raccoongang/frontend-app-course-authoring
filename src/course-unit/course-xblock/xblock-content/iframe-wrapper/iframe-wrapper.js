@@ -32,15 +32,7 @@ export default function wrapBlockHtmlForIFrame(
   const cssUrls = filterAndExtractResources(resources, 'url', 'text/css');
   const sheets = filterAndExtractResources(resources, 'text', 'text/css');
 
-  let additionalCSSTags = '';
-  additionalCSSTags += stylesWithContent
-    .map(sheet => {
-      if (Array.isArray(sheet)) {
-        return sheet.map(subSheet => `<style>${subSheet}</style>`).join('\n');
-      }
-      return `<style>${sheet}</style>`;
-    })
-    .join('\n');
+  const additionalCssTags = stylesWithContent.flatMap(sheet => `<style>${sheet}</style>`).join('\n');
 
   let cssTags = generateResourceTags(cssUrls, studioBaseUrl, type);
   cssTags += sheets.map(sheet => `<style>${sheet}</style>`).join('\n');
@@ -263,21 +255,29 @@ export default function wrapBlockHtmlForIFrame(
   let result = '';
   let modifiedHtml = '';
 
-  modifiedHtml = modifyVoidHrefToPreventDefault(html);
   // Due to the use of edx-platform scripts in MFE, it is necessary to ensure that the paths for static files
   // and important data-attributes are correct.
-  modifiedHtml = modifiedHtml.replaceAll('url(&#39;/asset', `url('${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replaceAll('src="/asset', `src="${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replaceAll('src=&#34;/asset', `src=&#34;${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replaceAll('href="/asset', `href="${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replaceAll('src=&#34;/static', `src=&#34;${studioBaseUrl}/static`);
-  modifiedHtml = modifiedHtml.replaceAll('src="/static', `src="${studioBaseUrl}/static`);
-  modifiedHtml = modifiedHtml.replaceAll('data-target="/preview', `data-target="${studioBaseUrl}/preview`);
-  modifiedHtml = modifiedHtml.replaceAll('data-url="/preview', `data-url="${studioBaseUrl}/preview`);
-  modifiedHtml = modifiedHtml.replaceAll('src="/preview', `src="${studioBaseUrl}/preview`);
-  modifiedHtml = modifiedHtml.replaceAll('src="/media', `src="${studioBaseUrl}/media`);
-  modifiedHtml = modifiedHtml.replaceAll(': "/asset', `: "${studioBaseUrl}/asset`);
-  modifiedHtml = modifiedHtml.replaceAll(': "/xblock', `: "${studioBaseUrl}/xblock`);
+  const relativeToAbsoluteXBlocksUrls = {
+    'url(&#39;/asset': `url('${studioBaseUrl}/asset`,
+    'src="/asset': `src="${studioBaseUrl}/asset`,
+    'src=&#34;/asset': `src=&#34;${studioBaseUrl}/asset`,
+    'href="/asset': `href="${studioBaseUrl}/asset`,
+    'src=&#34;/static': `src=&#34;${studioBaseUrl}/static`,
+    'src="/static': `src="${studioBaseUrl}/static`,
+    'data-target="/preview': `data-target="${studioBaseUrl}/preview`,
+    'data-url="/preview': `data-url="${studioBaseUrl}/preview`,
+    'src="/preview': `src="${studioBaseUrl}/preview`,
+    'src="/media': `src="${studioBaseUrl}/media`,
+    ': "/asset': `: "${studioBaseUrl}/asset`,
+    ': "/xblock': `: "${studioBaseUrl}/xblock`,
+  };
+
+  modifiedHtml = modifyVoidHrefToPreventDefault(html);
+
+  // Block that replaces relative urls with absolute urls
+  Object.entries(relativeToAbsoluteXBlocksUrls).forEach(([key, value]) => {
+    modifiedHtml = modifiedHtml.replaceAll(key, value);
+  });
 
   if (
     type === COMPONENT_TYPES.discussion
@@ -292,7 +292,7 @@ export default function wrapBlockHtmlForIFrame(
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
-      ${additionalCSSTags}
+      ${additionalCssTags}
     </head>
     <body class="wrapper-xblock level-page studio-xblock-wrapper">
         <article class="xblock-render">
@@ -322,7 +322,7 @@ export default function wrapBlockHtmlForIFrame(
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
-      ${additionalCSSTags}
+      ${additionalCssTags}
     </head>
     <body class="wrapper-xblock level-page studio-xblock-wrapper">
       <section class="wrapper-xblock is-collapsible level-element">
@@ -346,7 +346,7 @@ export default function wrapBlockHtmlForIFrame(
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
-      ${additionalCSSTags}
+      ${additionalCssTags}
     </head>
     <body>
       ${modifiedHtml}
