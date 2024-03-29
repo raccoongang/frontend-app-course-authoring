@@ -73,6 +73,10 @@ const CourseUnit = ({ courseId }) => {
     setUnitXBlocks(courseVerticalChildren.children);
   }, [courseVerticalChildren.children]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const {
     isShow: isShowProcessingNotification,
     title: processingNotificationTitle,
