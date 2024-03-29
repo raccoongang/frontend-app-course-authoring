@@ -278,7 +278,6 @@ export function setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback)
 export function fetchXBlockIFrameHtmlAndResourcesQuery(xblockId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
-    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.adding));
 
     try {
       const xblockIFrameData = await getXBlockIFrameData(xblockId);

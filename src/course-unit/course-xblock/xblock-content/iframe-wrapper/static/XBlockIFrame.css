@@ -5,3 +5,7 @@
 .wrapper-xblock {
   border: none;
 }
+
+body .poll-block-form-wrapper {
+  display: block;
+}

@@ -27,3 +27,5 @@ export const blockViewShape = PropTypes.shape({
   content: PropTypes.string.isRequired,
   resources: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 });
+
+export const STYLE_TAG_PATTERN = /<style[^>]*>([\s\S]*?)<\/style>/gi;
