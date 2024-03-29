@@ -33,6 +33,7 @@ import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
+import { extractStylesWithContent } from './utils';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -58,6 +59,10 @@ const CourseXBlock = ({
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
+
+  const stylesWithContent = xblockIFrameHtmlAndResources
+    ?.map(item => extractStylesWithContent(item.html))
+    .filter(styles => styles.length > 0);
 
   useEffect(() => {
     dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
@@ -189,6 +194,7 @@ const CourseXBlock = ({
                   getHandlerUrl={getHandlerUrl}
                   view={xblockInstanceHtmlAndResources}
                   type={type}
+                  stylesWithContent={stylesWithContent}
                 />
               )}
             </>
