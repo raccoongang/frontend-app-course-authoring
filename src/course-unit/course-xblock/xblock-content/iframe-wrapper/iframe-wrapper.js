@@ -17,13 +17,22 @@ import {
  *                   Only required for legacy XBlocks that don't declare their
  *                   JS and CSS dependencies properly.
  * @param type The XBlock's type (openassessment, discussion, video, etc.)
+ * @param stylesWithContent Custom CSS global for all XBlock's.
  */
-export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBaseUrl, type) {
+export default function wrapBlockHtmlForIFrame(
+  html,
+  sourceResources,
+  studioBaseUrl,
+  type,
+  stylesWithContent,
+) {
   const resources = normalizeResources(sourceResources);
 
   /* Extract CSS resources. */
   const cssUrls = filterAndExtractResources(resources, 'url', 'text/css');
   const sheets = filterAndExtractResources(resources, 'text', 'text/css');
+
+  const additionalCssTags = stylesWithContent.flatMap(sheet => `<style>${sheet}</style>`).join('\n');
 
   let cssTags = generateResourceTags(cssUrls, studioBaseUrl, type);
   cssTags += sheets.map(sheet => `<style>${sheet}</style>`).join('\n');
@@ -62,6 +71,9 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/debug_toolbar/css/toolbar.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/html5-input-polyfills/number-polyfill.css">
       <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/WordCloudBlockDisplay.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/assets/courseware/v1/911f0d1ac424861100db6c65e2504841/asset-v1:edx+1245+2024+type@asset+block/cm_style_guide_demox.css">
+      <link rel="stylesheet" href="${studioBaseUrl}/static/studio/css/vendor/normalize.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
       <link rel="stylesheet" href="XBlockIFrame.css">
 
       <!-- JS scripts that can be used by XBlocks -->
@@ -243,13 +255,29 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
   let result = '';
   let modifiedHtml = '';
 
-  modifiedHtml = modifyVoidHrefToPreventDefault(html);
   // Due to the use of edx-platform scripts in MFE, it is necessary to ensure that the paths for static files
   // and important data-attributes are correct.
-  modifiedHtml = modifiedHtml.replace('url(&#39;/assets', `url('${studioBaseUrl}/assets`);
-  modifiedHtml = modifiedHtml.replace('src="/assets', `src="${studioBaseUrl}/assets`);
-  modifiedHtml = modifiedHtml.replace('src=&#34;/static/studio', `src=&#34;${studioBaseUrl}/static/studio`);
-  modifiedHtml = modifiedHtml.replace('data-target="/preview/xblock', `data-target="${studioBaseUrl}/preview/xblock`);
+  const relativeToAbsoluteXBlocksUrls = {
+    'url(&#39;/asset': `url('${studioBaseUrl}/asset`,
+    'src="/asset': `src="${studioBaseUrl}/asset`,
+    'src=&#34;/asset': `src=&#34;${studioBaseUrl}/asset`,
+    'href="/asset': `href="${studioBaseUrl}/asset`,
+    'src=&#34;/static': `src=&#34;${studioBaseUrl}/static`,
+    'src="/static': `src="${studioBaseUrl}/static`,
+    'data-target="/preview': `data-target="${studioBaseUrl}/preview`,
+    'data-url="/preview': `data-url="${studioBaseUrl}/preview`,
+    'src="/preview': `src="${studioBaseUrl}/preview`,
+    'src="/media': `src="${studioBaseUrl}/media`,
+    ': "/asset': `: "${studioBaseUrl}/asset`,
+    ': "/xblock': `: "${studioBaseUrl}/xblock`,
+  };
+
+  modifiedHtml = modifyVoidHrefToPreventDefault(html);
+
+  // Block that replaces relative urls with absolute urls
+  Object.entries(relativeToAbsoluteXBlocksUrls).forEach(([key, value]) => {
+    modifiedHtml = modifiedHtml.replaceAll(key, value);
+  });
 
   if (
     type === COMPONENT_TYPES.discussion
@@ -264,6 +292,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
+      ${additionalCssTags}
     </head>
     <body class="wrapper-xblock level-page studio-xblock-wrapper">
         <article class="xblock-render">
@@ -293,6 +322,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
+      ${additionalCssTags}
     </head>
     <body class="wrapper-xblock level-page studio-xblock-wrapper">
       <section class="wrapper-xblock is-collapsible level-element">
@@ -316,6 +346,7 @@ export default function wrapBlockHtmlForIFrame(html, sourceResources, studioBase
       <meta charset="UTF-8">
       ${legacyIncludes}
       ${cssTags}
+      ${additionalCssTags}
     </head>
     <body>
       ${modifiedHtml}
