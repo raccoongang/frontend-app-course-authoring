@@ -42,6 +42,7 @@ const unitXBlockActionsMock = {
   handleDelete: handleDeleteMock,
   handleDuplicate: handleDuplicateMock,
 };
+const xblockActions = camelCaseObject(courseSectionVerticalMock.xblock_info.actions);
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -75,6 +76,7 @@ const renderComponent = (props) => render(
           userPartitionInfo={userPartitionInfoFormatted}
           shouldScroll={false}
           handleConfigureSubmit={handleConfigureSubmitMock}
+          actions={xblockActions}
           {...props}
         />
       </IntlProvider>

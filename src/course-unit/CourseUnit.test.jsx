@@ -997,14 +997,12 @@ describe('<CourseUnit />', () => {
       queryByRole,
     } = render(<RootWrapper />);
 
-    const updatedXBlockActions = {
-      can_copy: false,
-      can_duplicate: false,
-      can_move: false,
-      can_manage_access: false,
-      can_manage_tags: false,
-      can_delete: false,
-    };
+    const convertedXBlockActions = camelCaseObject(courseVerticalChildrenMock.children[0].actions);
+
+    const updatedXBlockActions = Object.keys(convertedXBlockActions).reduce((acc, key) => {
+      acc[key] = false;
+      return acc;
+    }, {});
 
     axiosMock
       .onGet(getCourseVerticalChildrenApiUrl(blockId))
@@ -1216,6 +1214,7 @@ describe('<CourseUnit />', () => {
               block_id: '1234567890',
               block_type: 'drag-and-drop-v2',
               user_partition_info: {},
+              actions: courseVerticalChildrenMock.children[0].actions,
             },
           ],
         });
