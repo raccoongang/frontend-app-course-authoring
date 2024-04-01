@@ -11,7 +11,7 @@ import { find } from 'lodash';
 import { getConfig } from '@edx/frontend-platform';
 
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
-import { useContentTaxonomyTagsCount } from '../../content-tags-drawer/data/apiHooks';
+import { useContentTagsCount } from '../../generic/data/apiHooks';
 import TagCount from '../../generic/tag-count';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
@@ -54,7 +54,7 @@ const CourseXBlock = ({
   const {
     data: contentTaxonomyTagsCount,
     isSuccess: isContentTaxonomyTagsCountLoaded,
-  } = useContentTaxonomyTagsCount(id || '');
+  } = useContentTagsCount(id || '');
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })

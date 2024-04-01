@@ -8,6 +8,7 @@ import { camelCaseObject, initializeMockApp } from '@edx/frontend-platform';
 import { AppProvider } from '@edx/frontend-platform/react';
 import MockAdapter from 'axios-mock-adapter';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import configureModalMessages from '../../generic/configure-modal/messages';
 import deleteModalMessages from '../../generic/delete-modal/messages';
@@ -42,13 +43,6 @@ const unitXBlockActionsMock = {
   handleDuplicate: handleDuplicateMock,
 };
 
-jest.mock('../../content-tags-drawer/data/apiHooks', () => ({
-  useContentTaxonomyTagsCount: jest.fn(() => ({
-    isSuccess: true,
-    data: 17,
-  })),
-}));
-
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
@@ -59,21 +53,32 @@ jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
 }));
 
+const mockGetTagsCount = jest.fn();
+
+jest.mock('../../generic/data/api', () => ({
+  ...jest.requireActual('../../generic/data/api'),
+  getTagsCount: () => mockGetTagsCount(),
+}));
+
+const queryClient = new QueryClient();
+
 const renderComponent = (props) => render(
   <AppProvider store={store}>
-    <IntlProvider locale="en">
-      <CourseXBlock
-        id={id}
-        title={name}
-        type={type}
-        blockId={blockId}
-        unitXBlockActions={unitXBlockActionsMock}
-        userPartitionInfo={userPartitionInfoFormatted}
-        shouldScroll={false}
-        handleConfigureSubmit={handleConfigureSubmitMock}
-        {...props}
-      />
-    </IntlProvider>
+    <QueryClientProvider client={queryClient}>
+      <IntlProvider locale="en">
+        <CourseXBlock
+          id={id}
+          title={name}
+          type={type}
+          blockId={blockId}
+          unitXBlockActions={unitXBlockActionsMock}
+          userPartitionInfo={userPartitionInfoFormatted}
+          shouldScroll={false}
+          handleConfigureSubmit={handleConfigureSubmitMock}
+          {...props}
+        />
+      </IntlProvider>
+    </QueryClientProvider>
   </AppProvider>,
 );
 
