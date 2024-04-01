@@ -117,7 +117,7 @@ const CourseXBlock = ({
               {
                 isContentTaxonomyTagsCountLoaded
                 && contentTaxonomyTagsCount > 0
-                && <div className="mr-2"><TagCount count={contentTaxonomyTagsCount} /></div>
+                && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} /></div>
               }
               <IconButton
                 alt={intl.formatMessage(messages.blockAltButtonEdit)}
