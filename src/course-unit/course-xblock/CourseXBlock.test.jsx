@@ -43,13 +43,6 @@ const unitXBlockActionsMock = {
   handleDuplicate: handleDuplicateMock,
 };
 
-jest.mock('../../content-tags-drawer/data/apiHooks', () => ({
-  useContentTaxonomyTagsCount: jest.fn(() => ({
-    isSuccess: true,
-    data: 17,
-  })),
-}));
-
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedUsedNavigate,
