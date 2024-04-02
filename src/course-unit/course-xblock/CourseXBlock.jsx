@@ -144,7 +144,7 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                     </Dropdown.Item>
                   )}
-                  {canManageTags && getConfig().ENABLE_TAGGING_TAXONOMY_PAGES && (
+                  {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES && canManageTags && (
                     <Dropdown.Item onClick={openManageTagsModal}>
                       {intl.formatMessage(messages.blockLabelButtonManageTags)}
                     </Dropdown.Item>
