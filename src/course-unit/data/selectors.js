@@ -3,7 +3,6 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RequestStatus } from '../../data/constants';
 
 export const getCourseUnitData = (state) => state.courseUnit.unit;
-export const getCanEdit = (state) => state.courseUnit.canEdit;
 export const getStaticFileNotices = (state) => state.courseUnit.staticFileNotices;
 export const getSavingStatus = (state) => state.courseUnit.savingStatus;
 export const getErrorMessage = (state) => state.courseUnit.errorMessage;
