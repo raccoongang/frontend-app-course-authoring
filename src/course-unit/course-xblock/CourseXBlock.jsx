@@ -8,7 +8,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
-import { getConfig } from '@edx/frontend-platform';
 
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
@@ -121,7 +120,8 @@ const CourseXBlock = ({
           actions={(
             <ActionRow className="mr-2">
               {
-                isContentTaxonomyTagsCountLoaded
+                canManageTags
+                && isContentTaxonomyTagsCountLoaded
                 && contentTaxonomyTagsCount > 0
                 && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
               }
@@ -144,7 +144,7 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                     </Dropdown.Item>
                   )}
-                  {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES && canManageTags && (
+                  {canManageTags && (
                     <Dropdown.Item onClick={openManageTagsModal}>
                       {intl.formatMessage(messages.blockLabelButtonManageTags)}
                     </Dropdown.Item>
