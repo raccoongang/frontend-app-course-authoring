@@ -228,6 +228,9 @@ export default function wrapBlockHtmlForIFrame(
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
       <script>
         $.ajaxSetup({
+          headers: {
+            'X-CSRFToken': $.cookie('csrftoken')
+          },
           xhrFields: { withCredentials: true }
         });
         
