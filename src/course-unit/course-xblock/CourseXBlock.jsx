@@ -32,7 +32,7 @@ import messages from './messages';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, ...props
+  handleConfigureSubmit, validationMessages, renderError, actions, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -44,6 +44,9 @@ const CourseXBlock = ({
   const intl = useIntl();
   const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
   const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
+  const {
+    canCopy, canDelete, canDuplicate, canManageAccess, canMove,
+  } = actions;
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
@@ -115,23 +118,31 @@ const CourseXBlock = ({
                   iconAs={Icon}
                 />
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
-                    {intl.formatMessage(messages.blockLabelButtonDuplicate)}
-                  </Dropdown.Item>
-                  <Dropdown.Item>
-                    {intl.formatMessage(messages.blockLabelButtonMove)}
-                  </Dropdown.Item>
-                  {canEdit && (
+                  {canDuplicate && (
+                    <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
+                      {intl.formatMessage(messages.blockLabelButtonDuplicate)}
+                    </Dropdown.Item>
+                  )}
+                  {canMove && (
+                    <Dropdown.Item>
+                      {intl.formatMessage(messages.blockLabelButtonMove)}
+                    </Dropdown.Item>
+                  )}
+                  {canEdit && canCopy && (
                     <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
                       {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
                     </Dropdown.Item>
                   )}
-                  <Dropdown.Item onClick={openConfigureModal}>
-                    {intl.formatMessage(messages.blockLabelButtonManageAccess)}
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={openDeleteModal}>
-                    {intl.formatMessage(messages.blockLabelButtonDelete)}
-                  </Dropdown.Item>
+                  {canManageAccess && (
+                    <Dropdown.Item onClick={openConfigureModal}>
+                      {intl.formatMessage(messages.blockLabelButtonManageAccess)}
+                    </Dropdown.Item>
+                  )}
+                  {canDelete && (
+                    <Dropdown.Item onClick={openDeleteModal}>
+                      {intl.formatMessage(messages.blockLabelButtonDelete)}
+                    </Dropdown.Item>
+                  )}
                 </Dropdown.Menu>
               </Dropdown>
               <DeleteModal
@@ -205,6 +216,13 @@ CourseXBlock.propTypes = {
     selectedGroupsLabel: PropTypes.string,
   }).isRequired,
   handleConfigureSubmit: PropTypes.func.isRequired,
+  actions: PropTypes.shape({
+    canCopy: PropTypes.bool,
+    canDelete: PropTypes.bool,
+    canDuplicate: PropTypes.bool,
+    canManageAccess: PropTypes.bool,
+    canMove: PropTypes.bool,
+  }).isRequired,
 };
 
 export default CourseXBlock;
