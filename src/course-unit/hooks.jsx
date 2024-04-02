@@ -22,7 +22,6 @@ import {
   getSavingStatus,
   getSequenceStatus,
   getStaticFileNotices,
-  getCanEdit,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 import { PUBLISH_TYPES } from './constants';
@@ -45,9 +44,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const navigate = useNavigate();
   const isTitleEditFormOpen = useSelector(state => state.courseUnit.isTitleEditFormOpen);
   const isQueryPending = useSelector(state => state.courseUnit.isQueryPending);
-  const canEdit = useSelector(getCanEdit);
   const { currentlyVisibleToStudents } = courseUnit;
-  const { sharedClipboardData, showPasteXBlock, showPasteUnit } = useCopyToClipboard(canEdit);
+  const { sharedClipboardData, showPasteXBlock, showPasteUnit } = useCopyToClipboard();
   const { canPasteComponent } = courseVerticalChildren;
 
   const unitTitle = courseUnit.metadata?.displayName || '';
