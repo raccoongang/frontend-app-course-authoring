@@ -990,6 +990,56 @@ describe('<CourseUnit />', () => {
     )).toBeInTheDocument();
   });
 
+  it('should hide action buttons when their corresponding properties are set to false', async () => {
+    const {
+      getByText,
+      getAllByLabelText,
+      queryByRole,
+    } = render(<RootWrapper />);
+
+    const convertedXBlockActions = camelCaseObject(courseVerticalChildrenMock.children[0].actions);
+
+    const updatedXBlockActions = Object.keys(convertedXBlockActions).reduce((acc, key) => {
+      acc[key] = false;
+      return acc;
+    }, {});
+
+    axiosMock
+      .onGet(getCourseVerticalChildrenApiUrl(blockId))
+      .reply(200, {
+        children: [
+          {
+            ...courseVerticalChildrenMock.children[0],
+            actions: {
+              ...courseVerticalChildrenMock.children[0].actions,
+              updatedXBlockActions,
+            },
+          },
+        ],
+      });
+
+    await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
+
+    await waitFor(() => {
+      expect(getByText(unitDisplayName)).toBeInTheDocument();
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
+      userEvent.click(xblockActionBtn);
+      const deleteBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonDelete.defaultMessage });
+      const duplicateBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonDuplicate.defaultMessage });
+      const moveBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonMove.defaultMessage });
+      const copyToClipboardBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonCopyToClipboard.defaultMessage });
+      const manageAccessBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageAccess.defaultMessage });
+      const manageTagsBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageTags.defaultMessage });
+
+      expect(deleteBtn).not.toBeInTheDocument();
+      expect(duplicateBtn).not.toBeInTheDocument();
+      expect(moveBtn).not.toBeInTheDocument();
+      expect(copyToClipboardBtn).not.toBeInTheDocument();
+      expect(manageAccessBtn).not.toBeInTheDocument();
+      expect(manageTagsBtn).not.toBeInTheDocument();
+    });
+  });
+
   it('should toggle visibility from header configure modal and update course unit state accordingly', async () => {
     const { getByRole, getByTestId } = render(<RootWrapper />);
     let courseUnitSidebar;
@@ -1164,6 +1214,7 @@ describe('<CourseUnit />', () => {
               block_id: '1234567890',
               block_type: 'drag-and-drop-v2',
               user_partition_info: {},
+              actions: courseVerticalChildrenMock.children[0].actions,
             },
           ],
         });
