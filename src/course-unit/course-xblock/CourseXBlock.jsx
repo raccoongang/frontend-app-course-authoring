@@ -18,7 +18,6 @@ import SortableItem from '../../generic/drag-helper/SortableItem';
 import { scrollToElement } from '../../course-outline/utils';
 import { COURSE_BLOCK_NAMES } from '../../constants';
 import {
-  getCanEdit,
   getCourseId,
   getXBlockIFrameHtmlAndResources,
 } from '../data/selectors';
@@ -151,7 +150,7 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonMove)}
                     </Dropdown.Item>
                   )}
-                  {canEdit && canCopy && (
+                  {canCopy && (
                     <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
                       {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
                     </Dropdown.Item>
