@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
 
+import { createPortal } from 'react-dom';
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
 import TagCount from '../../generic/tag-count';
@@ -25,7 +26,7 @@ import {
   copyToClipboard,
 } from '../../generic/data/thunks';
 import { getHandlerUrl } from '../data/api';
-import { fetchXBlockIFrameHtmlAndResourcesQuery } from '../data/thunk';
+import { fetchXBlockIFrameHtmlAndResourcesQuery, fetchXBlockModalDataQuery } from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
@@ -51,6 +52,8 @@ const CourseXBlock = ({
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
 
+  const xblockModalDataObj = useSelector(state => state.courseUnit.xblockModalData);
+  console.log('xblockModalDataObj', xblockModalDataObj);
   const {
     data: contentTaxonomyTagsCount,
     isSuccess: isContentTaxonomyTagsCountLoaded,
@@ -88,6 +91,7 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
+      dispatch(fetchXBlockModalDataQuery(id));
     }
   };
 
@@ -103,41 +107,47 @@ const CourseXBlock = ({
   }, []);
 
   return (
-    <div ref={courseXBlockElementRef} {...props}>
-      <Card
-        as={SortableItem}
-        isDraggable
-        isDroppable
-        id={id}
-        category="xblock"
-        componentStyle={{ marginBottom: 0 }}
-      >
-        <Card.Header
-          title={title}
-          subtitle={visibilityMessage}
-          actions={(
-            <ActionRow className="mr-2">
-              {
-                canManageTags
+    <>
+      {Object.keys(xblockModalDataObj).length && createPortal(
+        <div className="xblock-edit-modal">
+          <XBlockContent getHandlerUrl={getHandlerUrl} view={xblockModalDataObj} variant="edit-modal" />
+        </div>,
+        document.body,
+      )}
+      <div ref={courseXBlockElementRef} {...props}>
+        <Card
+          as={SortableItem}
+          isDraggable
+          isDroppable
+          id={id}
+          category="xblock"
+          componentStyle={{ marginBottom: 0 }}
+        >
+          <Card.Header
+            title={title}
+            subtitle={visibilityMessage}
+            actions={(
+              <ActionRow className="mr-2">
+                {
+                  canManageTags
                 && isContentTaxonomyTagsCountLoaded
-                && contentTaxonomyTagsCount > 0
-                && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
-              }
-              <IconButton
-                alt={intl.formatMessage(messages.blockAltButtonEdit)}
-                iconAs={EditIcon}
-                onClick={handleEdit}
-              />
-              <Dropdown>
-                <Dropdown.Toggle
-                  id={id}
-                  as={IconButton}
-                  src={MoveVertIcon}
-                  alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
-                  iconAs={Icon}
+                  && contentTaxonomyTagsCount > 0
+                  && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
+                }
+                <IconButton
+                  alt={intl.formatMessage(messages.blockAltButtonEdit)}
+                  iconAs={EditIcon}
+                  onClick={handleEdit}
                 />
-                <Dropdown.Menu>
-                  {canDuplicate && (
+                <Dropdown>
+                  <Dropdown.Toggle
+                    id={id}
+                    as={IconButton}
+                    src={MoveVertIcon}
+                    alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
+                    iconAs={Icon}
+                  />
+                  <Dropdown.Menu>{canDuplicate && (
                     <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
                       {intl.formatMessage(messages.blockLabelButtonDuplicate)}
                     </Dropdown.Item>
@@ -147,7 +157,7 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonManageTags)}
                     </Dropdown.Item>
                   )}
-                  {canMove && (
+                    {canMove && (
                     <Dropdown.Item>
                       {intl.formatMessage(messages.blockLabelButtonMove)}
                     </Dropdown.Item>
@@ -157,7 +167,7 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
                     </Dropdown.Item>
                   )}
-                  {canManageAccess && (
+                    {canManageAccess && (
                     <Dropdown.Item onClick={openConfigureModal}>
                       {intl.formatMessage(messages.blockLabelButtonManageAccess)}
                     </Dropdown.Item>
@@ -167,50 +177,52 @@ const CourseXBlock = ({
                       {intl.formatMessage(messages.blockLabelButtonDelete)}
                     </Dropdown.Item>
                   )}
-                </Dropdown.Menu>
-              </Dropdown>
-              <DeleteModal
-                category="component"
-                isOpen={isDeleteModalOpen}
-                close={closeDeleteModal}
-                onDeleteSubmit={onDeleteSubmit}
-              />
-              <ConfigureModal
-                isXBlockComponent
-                isOpen={isConfigureModalOpen}
-                onClose={closeConfigureModal}
-                onConfigureSubmit={onConfigureSubmit}
-                currentItemData={currentItemData}
-              />
-              <Sheet
-                position="right"
-                show={isManageTagsOpen}
-                blocking={false}
-                variant="light"
-                onClose={closeManageTagsModal}
-              >
-                <ContentTagsDrawer id={id} onClose={closeManageTagsModal} />
-              </Sheet>
-            </ActionRow>
-          )}
-        />
-        <Card.Section>
-          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
-            <>
-              <XBlockMessages validationMessages={validationMessages} />
-              {xblockInstanceHtmlAndResources && (
-                <XBlockContent
-                  getHandlerUrl={getHandlerUrl}
-                  view={xblockInstanceHtmlAndResources}
-                  type={type}
-                  stylesWithContent={stylesWithContent}
+                  </Dropdown.Menu>
+                </Dropdown>
+                <DeleteModal
+                  category="component"
+                  isOpen={isDeleteModalOpen}
+                  close={closeDeleteModal}
+                  onDeleteSubmit={onDeleteSubmit}
                 />
-              )}
-            </>
-          )}
-        </Card.Section>
-      </Card>
-    </div>
+                <ConfigureModal
+                  isXBlockComponent
+                  isOpen={isConfigureModalOpen}
+                  onClose={closeConfigureModal}
+                  onConfigureSubmit={onConfigureSubmit}
+                  currentItemData={currentItemData}
+                />
+                <Sheet
+                  position="right"
+                  show={isManageTagsOpen}
+                  blocking={false}
+                  variant="light"
+                  onClose={closeManageTagsModal}
+                >
+                  <ContentTagsDrawer id={id} onClose={closeManageTagsModal} />
+                </Sheet>
+              </ActionRow>
+            )}
+          />
+          <Card.Section>
+            {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
+              <>
+                <XBlockMessages validationMessages={validationMessages} />
+                {xblockInstanceHtmlAndResources && (
+                  <XBlockContent
+                    getHandlerUrl={getHandlerUrl}
+                    view={xblockInstanceHtmlAndResources}
+                    type={type}
+                    stylesWithContent={stylesWithContent}
+                    className="xblock-content-iframe"
+                  />
+                )}
+              </>
+            )}
+          </Card.Section>
+        </Card>
+      </div>
+    </>
   );
 };
 

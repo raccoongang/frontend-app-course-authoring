@@ -21,10 +21,10 @@ import {
  */
 export default function wrapBlockHtmlForIFrame(
   html,
-  sourceResources,
+  sourceResources = [],
   studioBaseUrl,
-  type,
-  stylesWithContent,
+  type = 'modal',
+  stylesWithContent = [],
 ) {
   const resources = normalizeResources(sourceResources);
 
@@ -32,7 +32,7 @@ export default function wrapBlockHtmlForIFrame(
   const cssUrls = filterAndExtractResources(resources, 'url', 'text/css');
   const sheets = filterAndExtractResources(resources, 'text', 'text/css');
 
-  const additionalCssTags = stylesWithContent.flatMap(sheet => `<style>${sheet}</style>`).join('\n');
+  const additionalCssTags = stylesWithContent?.flatMap(sheet => `<style>${sheet}</style>`).join('\n');
 
   let cssTags = generateResourceTags(cssUrls, studioBaseUrl, type);
   cssTags += sheets.map(sheet => `<style>${sheet}</style>`).join('\n');
@@ -45,7 +45,7 @@ export default function wrapBlockHtmlForIFrame(
   jsTags += scripts.map(script => `<script>${script}</script>`).join('\n');
 
   let legacyIncludes = '';
-  if (html.indexOf('wrapper-xblock-message') !== -1) {
+  if (html.indexOf('wrapper-xblock-message') !== -1 || html.indexOf('wrapper-xblock') !== -1) {
     legacyIncludes += `
       <!-- Built-in XBlocks (and some plugins) depends on Studio CSS -->
       <!-- At least one XBlock (drag and drop v2) expects Font Awesome -->
@@ -273,6 +273,7 @@ export default function wrapBlockHtmlForIFrame(
     'src="/media': `src="${studioBaseUrl}/media`,
     ': "/asset': `: "${studioBaseUrl}/asset`,
     ': "/xblock': `: "${studioBaseUrl}/xblock`,
+    'href="/static': `href="${studioBaseUrl}/static`,
   };
 
   modifiedHtml = modifyVoidHrefToPreventDefault(html);

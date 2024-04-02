@@ -12,6 +12,7 @@ export const getXBlockBaseApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${i
 export const getCourseSectionVerticalApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container_handler/${itemId}`;
 export const getCourseVerticalChildrenApiUrl = (itemId) => `${getStudioBaseUrl()}/api/contentstore/v1/container/vertical/${itemId}/children`;
 export const getXBlockContainerPreview = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/container_preview`;
+export const getXBlockModalDataApiUrl = (itemId) => `${getStudioBaseUrl()}/xblock/${itemId}/editor`;
 
 export const postXBlockBaseApiUrl = () => `${getStudioBaseUrl()}/xblock/`;
 
@@ -181,3 +182,10 @@ export const getHandlerUrl = async (blockId) => {
 
   return `${baseUrl}/preview/xblock/${blockId}/handler/handler_name`;
 };
+
+export async function getXBlockModalData(itemId) {
+  const { data } = await getAuthenticatedHttpClient()
+    .get(getXBlockModalDataApiUrl(itemId));
+  // console.log('data', data);
+  return camelCaseObject(data);
+}
