@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, OverlayTrigger, Tooltip, Button, Sheet
+  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, OverlayTrigger, Tooltip, Button, Sheet,
 } from '@openedx/paragon';
 import {
   EditOutline as EditIcon,
@@ -16,7 +16,6 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { find } from 'lodash';
 import classNames from 'classnames';
-import { getConfig } from '@edx/frontend-platform';
 
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
@@ -69,7 +68,7 @@ const CourseXBlock = memo(({
   }, [isXBlocksExpanded, isXBlocksRendered]);
 
   const {
-    canCopy, canDelete, canDuplicate, canManageAccess, canMove,
+    canCopy, canDelete, canDuplicate, canManageAccess, canMove, canManageTags,
   } = actions;
 
   const {
@@ -163,7 +162,8 @@ const CourseXBlock = memo(({
           actions={(
             <ActionRow className="mr-2">
               {
-                isContentTaxonomyTagsCountLoaded
+                canManageTags
+                && isContentTaxonomyTagsCountLoaded
                 && contentTaxonomyTagsCount > 0
                 && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
               }
@@ -181,24 +181,24 @@ const CourseXBlock = memo(({
                   iconAs={Icon}
                 />
                 <Dropdown.Menu>
-                  {canDuplicate && (
-                    <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
-                      {intl.formatMessage(messages.blockLabelButtonDuplicate)}
-                    </Dropdown.Item>
-                  )}
-                  {getConfig().ENABLE_TAGGING_TAXONOMY_PAGES && (
+                  {canManageTags && (
                     <Dropdown.Item onClick={openManageTagsModal}>
                       {intl.formatMessage(messages.blockLabelButtonManageTags)}
-                    </Dropdown.Item>
-                  )}
-                  {canMove && (
-                    <Dropdown.Item>
-                      {intl.formatMessage(messages.blockLabelButtonMove)}
                     </Dropdown.Item>
                   )}
                   {canCopy && (
                     <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
                       {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                    </Dropdown.Item>
+                  )}
+                  {canDuplicate && (
+                    <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
+                      {intl.formatMessage(messages.blockLabelButtonDuplicate)}
+                    </Dropdown.Item>
+                  )}
+                  {canMove && (
+                    <Dropdown.Item>
+                      {intl.formatMessage(messages.blockLabelButtonMove)}
                     </Dropdown.Item>
                   )}
                   {canManageAccess && (
@@ -301,6 +301,7 @@ CourseXBlock.propTypes = {
     canDelete: PropTypes.bool,
     canDuplicate: PropTypes.bool,
     canManageAccess: PropTypes.bool,
+    canManageTags: PropTypes.bool,
     canMove: PropTypes.bool,
   }).isRequired,
   isXBlocksExpanded: PropTypes.bool.isRequired,
