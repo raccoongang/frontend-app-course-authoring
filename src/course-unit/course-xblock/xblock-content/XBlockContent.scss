@@ -33,14 +33,9 @@
   height: 100%;
   z-index: 9999999999999999999999;
 
-  .xblock-content {
+  iframe {
     height: 100%;
     width: 100%;
-    position: absolute;
-
-    iframe {
-      height: 100%;
-      width: 100%;
-    }
   }
+
 }

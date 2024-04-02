@@ -20,7 +20,6 @@ const slice = createSlice({
     courseVerticalChildren: {},
     staticFileNotices: {},
     xblockIFrameHtmlAndResources: [],
-    xblockModalData: {},
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -115,9 +114,6 @@ const slice = createSlice({
     fetchXBlockIFrameResources: (state, { payload }) => {
       state.xblockIFrameHtmlAndResources.push(payload);
     },
-    fetchXBlockModalData: (state, { payload }) => {
-      state.xblockModalData = payload;
-    },
   },
 });
 
@@ -141,7 +137,6 @@ export const {
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
   fetchXBlockIFrameResources,
-  fetchXBlockModalData,
 } = slice.actions;
 
 export const {

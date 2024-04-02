@@ -10,7 +10,7 @@ import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
 
 const XBlockContent = ({
-  view, type, getHandlerUrl, onBlockNotification, stylesWithContent, className, variant,
+  view, type, getHandlerUrl, onBlockNotification, stylesWithContent,
 }) => {
   const iframeRef = useRef(null);
   const [html, setHtml] = useState(null);
@@ -98,7 +98,7 @@ const XBlockContent = ({
         </div>
       )}
       <div
-        style={{ height: variant === 'edit-modal' ? '100%' : `${iframeHeight}px` }}
+        style={{ height: `${iframeHeight}px` }}
         className="xblock-content"
       >
         <iframe
@@ -106,7 +106,7 @@ const XBlockContent = ({
           ref={iframeRef}
           title="block"
           src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-          className={className}
+          className="xblock-content-iframe"
           // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
           allow={IFRAME_FEATURE_POLICY}
           referrerPolicy="origin"

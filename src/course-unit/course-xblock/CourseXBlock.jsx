@@ -33,6 +33,8 @@ import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
+import { createPortal } from 'react-dom';
+import { IFRAME_FEATURE_POLICY } from 'CourseAuthoring/course-unit/course-xblock/constants';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -52,8 +54,27 @@ const CourseXBlock = ({
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
 
-  const xblockModalDataObj = useSelector(state => state.courseUnit.xblockModalData);
-  console.log('xblockModalDataObj', xblockModalDataObj);
+  const [showLegacyEditModal, toggleShowLegacyEditModal] = useToggle(false);
+  const iframeRef = useRef(null);
+  console.log('id', id);
+  useEffect(() => {
+    const handleMessage = event => {
+      // Обрабатываем полученное сообщение
+      console.log('Received message =======>', event.data);
+
+      const { method } = event.data;
+      console.log('method =======>', method);
+      if (method === 'cancel_btn_click') {
+        toggleShowLegacyEditModal(false);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [iframeRef]);
   const {
     data: contentTaxonomyTagsCount,
     isSuccess: isContentTaxonomyTagsCountLoaded,
@@ -91,7 +112,8 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
-      dispatch(fetchXBlockModalDataQuery(id));
+      toggleShowLegacyEditModal(true);
+      iframeRef.current?.contentWindow.postMessage('TEST message', 'http://example.com');
     }
   };
 
@@ -105,12 +127,35 @@ const CourseXBlock = ({
       scrollToElement(courseXBlockElementRef.current);
     }
   }, []);
-
+  console.log('showLegacyEditModal', showLegacyEditModal);
   return (
     <>
-      {Object.keys(xblockModalDataObj).length && createPortal(
+      {showLegacyEditModal && createPortal(
         <div className="xblock-edit-modal">
-          <XBlockContent getHandlerUrl={getHandlerUrl} view={xblockModalDataObj} variant="edit-modal" />
+          <iframe
+            key="edit-modal"
+            title="block"
+            ref={iframeRef}
+            src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/editor`}
+            // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
+            allow={IFRAME_FEATURE_POLICY}
+            referrerPolicy="origin"
+            onLoad={() => console.log('Iframe loaded')}
+            frameBorder={0}
+            scrolling="no"
+            sandbox={[
+              'allow-forms',
+              'allow-modals',
+              'allow-popups',
+              'allow-popups-to-escape-sandbox',
+              'allow-presentation',
+              'allow-same-origin', // This is only secure IF the IFrame source
+              // is served from a completely different domain name
+              // e.g. labxchange-xblocks.net vs www.labxchange.org
+              'allow-scripts',
+              'allow-top-navigation-by-user-activation',
+            ].join(' ')}
+          />
         </div>,
         document.body,
       )}
@@ -214,7 +259,6 @@ const CourseXBlock = ({
                     view={xblockInstanceHtmlAndResources}
                     type={type}
                     stylesWithContent={stylesWithContent}
-                    className="xblock-content-iframe"
                   />
                 )}
               </>
