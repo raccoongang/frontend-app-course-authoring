@@ -98,7 +98,7 @@ const useModalDropzone = ({
 
     try {
       const response = await uploadAssets(courseId, selectedFile, onUploadProgress);
-      const url = response?.asset?.url;
+      const { url } = response.asset;
 
       if (url) {
         onChange(url);
