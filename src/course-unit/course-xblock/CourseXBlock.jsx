@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ActionRow, Card, Dropdown, Icon, IconButton, useToggle, Sheet,
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
 
 import { createPortal } from 'react-dom';
+import { IFRAME_FEATURE_POLICY } from 'CourseAuthoring/course-unit/course-xblock/constants';
+import { useOverflowControl } from 'CourseAuthoring/generic/hooks';
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
 import TagCount from '../../generic/tag-count';
@@ -26,19 +28,20 @@ import {
   copyToClipboard,
 } from '../../generic/data/thunks';
 import { getHandlerUrl } from '../data/api';
-import { fetchXBlockIFrameHtmlAndResourcesQuery, fetchXBlockModalDataQuery } from '../data/thunk';
+import {
+  fetchCourseVerticalChildrenData,
+  fetchXBlockIFrameHtmlAndResourcesQuery,
+} from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
-import { createPortal } from 'react-dom';
-import { IFRAME_FEATURE_POLICY } from 'CourseAuthoring/course-unit/course-xblock/constants';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, actions, ...props
+  handleConfigureSubmit, validationMessages, renderError, actions, blockId, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -54,18 +57,18 @@ const CourseXBlock = ({
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
 
-  const [showLegacyEditModal, toggleShowLegacyEditModal] = useToggle(false);
+  const [showLegacyEditModal, toggleShowLegacyEditModal] = useState(false);
   const iframeRef = useRef(null);
-  console.log('id', id);
+
+  useOverflowControl('.xblock-edit-modal');
+
   useEffect(() => {
     const handleMessage = event => {
-      // Обрабатываем полученное сообщение
-      console.log('Received message =======>', event.data);
-
       const { method } = event.data;
-      console.log('method =======>', method);
-      if (method === 'cancel_btn_click') {
+
+      if (method === 'close_edit_modal') {
         toggleShowLegacyEditModal(false);
+        dispatch(fetchCourseVerticalChildrenData(blockId));
       }
     };
 
@@ -113,7 +116,6 @@ const CourseXBlock = ({
       break;
     default:
       toggleShowLegacyEditModal(true);
-      iframeRef.current?.contentWindow.postMessage('TEST message', 'http://example.com');
     }
   };
 
@@ -127,7 +129,7 @@ const CourseXBlock = ({
       scrollToElement(courseXBlockElementRef.current);
     }
   }, []);
-  console.log('showLegacyEditModal', showLegacyEditModal);
+
   return (
     <>
       {showLegacyEditModal && createPortal(
@@ -140,7 +142,6 @@ const CourseXBlock = ({
             // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
             allow={IFRAME_FEATURE_POLICY}
             referrerPolicy="origin"
-            onLoad={() => console.log('Iframe loaded')}
             frameBorder={0}
             scrolling="no"
             sandbox={[
