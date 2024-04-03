@@ -8,10 +8,10 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
-
 import { createPortal } from 'react-dom';
-import { IFRAME_FEATURE_POLICY } from 'CourseAuthoring/course-unit/course-xblock/constants';
-import { useOverflowControl } from 'CourseAuthoring/generic/hooks';
+
+import { getConfig } from '@edx/frontend-platform';
+import { useOverflowControl } from '../../generic/hooks';
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
 import TagCount from '../../generic/tag-count';
@@ -38,6 +38,7 @@ import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
+import { IFRAME_FEATURE_POLICY } from './constants';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -57,17 +58,17 @@ const CourseXBlock = ({
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
 
-  const [showLegacyEditModal, toggleShowLegacyEditModal] = useState(false);
-  const iframeRef = useRef(null);
+  const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
+  const xblockLegacyEditModalRef = useRef(null);
 
   useOverflowControl('.xblock-edit-modal');
 
   useEffect(() => {
-    const handleMessage = event => {
+    const handleMessage = (event) => {
       const { method } = event.data;
 
       if (method === 'close_edit_modal') {
-        toggleShowLegacyEditModal(false);
+        toggleLegacyEditModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
       }
     };
@@ -77,7 +78,7 @@ const CourseXBlock = ({
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [iframeRef]);
+  }, [xblockLegacyEditModalRef]);
   const {
     data: contentTaxonomyTagsCount,
     isSuccess: isContentTaxonomyTagsCountLoaded,
@@ -115,7 +116,7 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
-      toggleShowLegacyEditModal(true);
+      toggleLegacyEditModal(true);
     }
   };
 
@@ -137,7 +138,7 @@ const CourseXBlock = ({
           <iframe
             key="edit-modal"
             title="block"
-            ref={iframeRef}
+            ref={xblockLegacyEditModalRef}
             src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/editor`}
             // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
             allow={IFRAME_FEATURE_POLICY}
@@ -281,6 +282,7 @@ CourseXBlock.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  blockId: PropTypes.string.isRequired,
   renderError: PropTypes.string,
   shouldScroll: PropTypes.bool,
   validationMessages: PropTypes.arrayOf(PropTypes.shape({

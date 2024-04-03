@@ -38,7 +38,7 @@ import {
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
-  fetchXBlockIFrameResources, fetchXBlockModalData,
+  fetchXBlockIFrameResources,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
