@@ -194,36 +194,37 @@ const CourseXBlock = ({
                     alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
                     iconAs={Icon}
                   />
-                  <Dropdown.Menu>{canDuplicate && (
-                    <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
-                      {intl.formatMessage(messages.blockLabelButtonDuplicate)}
-                    </Dropdown.Item>
-                  )}
-                  {canManageTags && (
-                    <Dropdown.Item onClick={openManageTagsModal}>
-                      {intl.formatMessage(messages.blockLabelButtonManageTags)}
-                    </Dropdown.Item>
-                  )}
+                  <Dropdown.Menu>
+                    {canDuplicate && (
+                      <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
+                        {intl.formatMessage(messages.blockLabelButtonDuplicate)}
+                      </Dropdown.Item>
+                    )}
+                    {canManageTags && (
+                      <Dropdown.Item onClick={openManageTagsModal}>
+                        {intl.formatMessage(messages.blockLabelButtonManageTags)}
+                      </Dropdown.Item>
+                    )}
                     {canMove && (
-                    <Dropdown.Item>
-                      {intl.formatMessage(messages.blockLabelButtonMove)}
-                    </Dropdown.Item>
-                  )}
-                  {canCopy && (
-                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
-                    </Dropdown.Item>
-                  )}
+                      <Dropdown.Item>
+                        {intl.formatMessage(messages.blockLabelButtonMove)}
+                      </Dropdown.Item>
+                    )}
+                    {canCopy && (
+                      <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                        {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                      </Dropdown.Item>
+                    )}
                     {canManageAccess && (
-                    <Dropdown.Item onClick={openConfigureModal}>
-                      {intl.formatMessage(messages.blockLabelButtonManageAccess)}
-                    </Dropdown.Item>
-                  )}
-                  {canDelete && (
-                    <Dropdown.Item onClick={openDeleteModal}>
-                      {intl.formatMessage(messages.blockLabelButtonDelete)}
-                    </Dropdown.Item>
-                  )}
+                      <Dropdown.Item onClick={openConfigureModal}>
+                        {intl.formatMessage(messages.blockLabelButtonManageAccess)}
+                      </Dropdown.Item>
+                    )}
+                    {canDelete && (
+                      <Dropdown.Item onClick={openDeleteModal}>
+                        {intl.formatMessage(messages.blockLabelButtonDelete)}
+                      </Dropdown.Item>
+                    )}
                   </Dropdown.Menu>
                 </Dropdown>
                 <DeleteModal
