@@ -31,6 +31,8 @@ import {
   fetchCourseVerticalChildrenData,
   fetchXBlockIFrameHtmlAndResourcesQuery,
 } from '../data/thunk';
+import { updateSavingStatus } from '../data/slice';
+import { RequestStatus } from '../../data/constants';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
@@ -38,6 +40,8 @@ import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
 import IframeComponent from './IframeComponent';
+
+const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -60,15 +64,22 @@ const CourseXBlock = ({
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
 
-  useOverflowControl('.xblock-edit-modal');
+  useOverflowControl(`.${XBLOCK_EDIT_MODAL_CLASS_NAME}`);
 
   useEffect(() => {
     const handleMessage = (event) => {
       const { method } = event.data;
 
-      if (method === 'close_edit_modal') {
+      switch (method) {
+      case 'close_edit_modal':
         toggleLegacyEditModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
+        break;
+      case 'edit_modal-error':
+        toggleLegacyEditModal(false);
+        dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+        break;
+      default:
       }
     };
 
@@ -134,10 +145,10 @@ const CourseXBlock = ({
   return (
     <>
       {showLegacyEditModal && (
-        <div className="xblock-edit-modal">
+        <div className={XBLOCK_EDIT_MODAL_CLASS_NAME}>
           <IframeComponent
             title="xblock-edit-modal-iframe"
-            key="xblock-edit-modal-iframe"
+            key="xblock-edit-modal-key"
             ref={xblockLegacyEditModalRef}
             src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/editor`}
           />
