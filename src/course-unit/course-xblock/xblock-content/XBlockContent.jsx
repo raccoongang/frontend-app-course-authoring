@@ -74,6 +74,15 @@ const XBlockContent = ({
       }
     };
 
+    const editedXBlockId = localStorage.getItem('editedXBlockId');
+    // Retrieve the identifier of the XBlock element being edited and smoothly scroll to it.
+    setTimeout(() => {
+      const editedXBlockElement = document.getElementById(editedXBlockId);
+      if (editedXBlockElement) {
+        editedXBlockElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 0);
+
     // Prepare to receive messages from the IFrame.
     // Messages are the only way that the code in the IFrame can communicate
     // with the surrounding UI.
@@ -82,7 +91,7 @@ const XBlockContent = ({
     return () => {
       window.removeEventListener('message', receivedWindowMessage);
     };
-  }, [html, getHandlerUrl, onBlockNotification]);
+  }, [html, getHandlerUrl, onBlockNotification, iframeHeight]);
 
   /* Only draw the iframe if the HTML has already been set. This is because xblock-bootstrap.html will only request
    * HTML once, upon being rendered. */

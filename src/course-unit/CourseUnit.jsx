@@ -72,6 +72,7 @@ const CourseUnit = ({ courseId }) => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    localStorage.removeItem('editedXBlockId');
   }, []);
 
   const {

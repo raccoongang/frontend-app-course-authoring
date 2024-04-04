@@ -8,7 +8,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
-import { createPortal } from 'react-dom';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useOverflowControl } from '../../generic/hooks';
@@ -117,6 +116,7 @@ const CourseXBlock = ({
       break;
     default:
       toggleLegacyEditModal(true);
+      localStorage.setItem('editedXBlockId', id);
     }
   };
 
@@ -133,7 +133,7 @@ const CourseXBlock = ({
 
   return (
     <>
-      {showLegacyEditModal && createPortal(
+      {showLegacyEditModal && (
         <div className="xblock-edit-modal">
           <iframe
             key="edit-modal"
@@ -158,10 +158,9 @@ const CourseXBlock = ({
               'allow-top-navigation-by-user-activation',
             ].join(' ')}
           />
-        </div>,
-        document.body,
+        </div>
       )}
-      <div ref={courseXBlockElementRef} {...props}>
+      <div id={id} ref={courseXBlockElementRef} {...props}>
         <Card
           as={SortableItem}
           isDraggable

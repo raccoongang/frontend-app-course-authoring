@@ -7,7 +7,6 @@ const useOverflowControl = (targetSelector) => {
       const targetElement = document.querySelector(targetSelector);
 
       if (targetElement) {
-        window.scrollTo({ top: 0 });
         body.style.overflow = 'hidden';
       } else {
         body.style.overflow = 'auto';
