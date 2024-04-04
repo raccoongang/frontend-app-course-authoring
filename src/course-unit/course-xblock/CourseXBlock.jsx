@@ -8,8 +8,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
-
 import { getConfig } from '@edx/frontend-platform';
+
 import { useOverflowControl } from '../../generic/hooks';
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
@@ -37,7 +37,7 @@ import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
-import { IFRAME_FEATURE_POLICY } from './constants';
+import IframeComponent from './IframeComponent';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -53,12 +53,12 @@ const CourseXBlock = ({
   const intl = useIntl();
   const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
   const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
+  const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
+  const xblockLegacyEditModalRef = useRef(null);
+
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
-
-  const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
-  const xblockLegacyEditModalRef = useRef(null);
 
   useOverflowControl('.xblock-edit-modal');
 
@@ -135,28 +135,11 @@ const CourseXBlock = ({
     <>
       {showLegacyEditModal && (
         <div className="xblock-edit-modal">
-          <iframe
-            key="edit-modal"
-            title="block"
+          <IframeComponent
+            title="xblock-edit-modal-iframe"
+            key="xblock-edit-modal-iframe"
             ref={xblockLegacyEditModalRef}
             src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/editor`}
-            // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
-            allow={IFRAME_FEATURE_POLICY}
-            referrerPolicy="origin"
-            frameBorder={0}
-            scrolling="no"
-            sandbox={[
-              'allow-forms',
-              'allow-modals',
-              'allow-popups',
-              'allow-popups-to-escape-sandbox',
-              'allow-presentation',
-              'allow-same-origin', // This is only secure IF the IFrame source
-              // is served from a completely different domain name
-              // e.g. labxchange-xblocks.net vs www.labxchange.org
-              'allow-scripts',
-              'allow-top-navigation-by-user-activation',
-            ].join(' ')}
           />
         </div>
       )}

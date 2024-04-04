@@ -4,7 +4,8 @@ import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
 import { LoadingSpinner } from '../../../generic/Loading';
 import { COMPONENT_TYPES } from '../../constants';
-import { blockViewShape, fetchable, IFRAME_FEATURE_POLICY } from '../constants';
+import { blockViewShape, fetchable } from '../constants';
+import IframeComponent from '../IframeComponent';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
@@ -110,30 +111,13 @@ const XBlockContent = ({
         style={{ height: `${iframeHeight}px` }}
         className="xblock-content"
       >
-        <iframe
+        <IframeComponent
+          className="xblock-content-iframe"
+          src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
           key={iframeKey}
           ref={iframeRef}
-          title="block"
-          src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-          className="xblock-content-iframe"
-          // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
-          allow={IFRAME_FEATURE_POLICY}
-          referrerPolicy="origin"
-          frameBorder={0}
-          scrolling="no"
           onLoad={() => setIsLoading(false)}
-          sandbox={[
-            'allow-forms',
-            'allow-modals',
-            'allow-popups',
-            'allow-popups-to-escape-sandbox',
-            'allow-presentation',
-            'allow-same-origin', // This is only secure IF the IFrame source
-            // is served from a completely different domain name
-            // e.g. labxchange-xblocks.net vs www.labxchange.org
-            'allow-scripts',
-            'allow-top-navigation-by-user-activation',
-          ].join(' ')}
+          title="xblock"
         />
       </div>
     </div>
