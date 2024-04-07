@@ -74,6 +74,7 @@ const CourseXBlock = ({
       case 'close_edit_modal':
         toggleLegacyEditModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
+        dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
         break;
       case 'edit_modal-error':
         toggleLegacyEditModal(false);
@@ -89,6 +90,7 @@ const CourseXBlock = ({
       window.removeEventListener('message', handleMessage);
     };
   }, [xblockLegacyEditModalRef]);
+
   const {
     data: contentTaxonomyTagsCount,
     isSuccess: isContentTaxonomyTagsCountLoaded,
@@ -104,6 +106,7 @@ const CourseXBlock = ({
 
   useEffect(() => {
     dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+    localStorage.removeItem('editedXBlockId');
   }, []);
 
   const currentItemData = {

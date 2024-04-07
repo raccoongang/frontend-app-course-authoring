@@ -99,10 +99,15 @@ jest.mock('@tanstack/react-query', () => ({
     setQueryData: jest.fn(),
   })),
 }));
+
 const clipboardBroadcastChannelMock = {
   postMessage: jest.fn(),
   close: jest.fn(),
 };
+
+jest.mock('../generic/hooks', () => ({
+  useOverflowControl: () => jest.fn(),
+}));
 
 global.BroadcastChannel = jest.fn(() => clipboardBroadcastChannelMock);
 

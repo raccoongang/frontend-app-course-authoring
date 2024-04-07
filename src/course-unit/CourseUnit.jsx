@@ -72,7 +72,6 @@ const CourseUnit = ({ courseId }) => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    localStorage.removeItem('editedXBlockId');
   }, []);
 
   const {
@@ -91,7 +90,7 @@ const CourseUnit = ({ courseId }) => {
       </Container>
     );
   }
-
+  console.log('savingStatus', savingStatus);
   const finalizeXBlockOrder = () => (newXBlocks) => {
     handleXBlockDragAndDrop(newXBlocks.map(xBlock => xBlock.id), () => {
       setUnitXBlocks(initialXBlocksData);
