@@ -25,6 +25,7 @@ export default function wrapBlockHtmlForIFrame(
   studioBaseUrl,
   type,
   stylesWithContent,
+  csrfTokenData,
 ) {
   const resources = normalizeResources(sourceResources);
 
@@ -229,7 +230,7 @@ export default function wrapBlockHtmlForIFrame(
       <script>
         $.ajaxSetup({
           headers: {
-            'X-CSRFToken': $.cookie('csrftoken')
+            'X-CSRFToken': csrfTokenData
           },
           xhrFields: { withCredentials: true }
         });

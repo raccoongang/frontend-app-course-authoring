@@ -7,6 +7,7 @@ import { COMPONENT_TYPES } from '../../constants';
 import { blockViewShape, fetchable } from '../constants';
 import CourseIFrame from '../CourseIFrame';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
+import { useSelector } from 'react-redux';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
 
@@ -18,6 +19,8 @@ const XBlockContent = ({
   const [iframeHeight, setIFrameHeight] = useState(0);
   const [iframeKey, setIFrameKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const csrfTokenData = useSelector(state => state.courseUnit.csrfToken);
+  console.log('csrfTokenData ===>', csrfTokenData);
 
   useEffect(() => {
     const processView = () => {
@@ -28,6 +31,7 @@ const XBlockContent = ({
           getConfig().STUDIO_BASE_URL,
           type,
           stylesWithContent,
+          csrfTokenData,
         );
 
         // Load the XBlock HTML into the IFrame:
@@ -39,7 +43,7 @@ const XBlockContent = ({
 
     // Process the XBlock view:
     processView();
-  }, [view, type, stylesWithContent]);
+  }, [view, type, stylesWithContent, csrfTokenData]);
 
   useEffect(() => {
     // Handle any messages we receive from the XBlock Runtime code in the IFrame.
