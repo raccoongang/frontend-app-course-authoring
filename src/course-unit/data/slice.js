@@ -112,9 +112,9 @@ const slice = createSlice({
       state.courseVerticalChildren.children.sort((a, b) => (indexMap.get(a.id) || 0) - (indexMap.get(b.id) || 0));
     },
     fetchXBlockIFrameResources: (state, { payload }) => {
-      const xblockId = state.xblockIFrameHtmlAndResources.findIndex(item => item.xblockId === payload.xblockId);
-      if (xblockId !== -1) {
-        state.xblockIFrameHtmlAndResources.splice(xblockId, 1, payload);
+      const xblockIdx = state.xblockIFrameHtmlAndResources.findIndex(item => item.xblockId === payload.xblockId);
+      if (xblockIdx !== -1) {
+        state.xblockIFrameHtmlAndResources[xblockIdx] = payload;
       } else {
         state.xblockIFrameHtmlAndResources.push(payload);
       }

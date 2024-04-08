@@ -5,7 +5,7 @@ import { ensureConfig, getConfig } from '@edx/frontend-platform';
 import { LoadingSpinner } from '../../../generic/Loading';
 import { COMPONENT_TYPES } from '../../constants';
 import { blockViewShape, fetchable } from '../constants';
-import IframeComponent from '../IframeComponent';
+import CourseIFrame from '../CourseIFrame';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
@@ -111,7 +111,7 @@ const XBlockContent = ({
         style={{ height: `${iframeHeight}px` }}
         className="xblock-content"
       >
-        <IframeComponent
+        <CourseIFrame
           className="xblock-content-iframe"
           src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
           key={iframeKey}

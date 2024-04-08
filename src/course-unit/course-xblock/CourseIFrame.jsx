@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { IFRAME_FEATURE_POLICY } from './constants';
 
-const IframeComponent = forwardRef(({ title, ...props }, ref) => (
+const CourseIFrame = forwardRef(({ title, ...props }, ref) => (
   <iframe
     title={title}
     // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
@@ -28,8 +28,8 @@ const IframeComponent = forwardRef(({ title, ...props }, ref) => (
   />
 ));
 
-IframeComponent.propTypes = {
+CourseIFrame.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-export default IframeComponent;
+export default CourseIFrame;

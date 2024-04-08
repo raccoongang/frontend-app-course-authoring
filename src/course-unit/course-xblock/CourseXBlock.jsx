@@ -37,7 +37,7 @@ import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
-import IframeComponent from './IframeComponent';
+import CourseIFrame from './CourseIFrame';
 
 const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
@@ -140,7 +140,7 @@ const CourseXBlock = ({
     <>
       {showLegacyEditModal && (
         <div className={XBLOCK_EDIT_MODAL_CLASS_NAME}>
-          <IframeComponent
+          <CourseIFrame
             title="xblock-edit-modal-iframe"
             key="xblock-edit-modal-key"
             ref={xblockLegacyEditModalRef}
