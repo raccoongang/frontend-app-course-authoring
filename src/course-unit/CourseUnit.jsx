@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -90,7 +90,7 @@ const CourseUnit = ({ courseId }) => {
       </Container>
     );
   }
-  console.log('savingStatus', savingStatus);
+
   const finalizeXBlockOrder = () => (newXBlocks) => {
     handleXBlockDragAndDrop(newXBlocks.map(xBlock => xBlock.id), () => {
       setUnitXBlocks(initialXBlocksData);

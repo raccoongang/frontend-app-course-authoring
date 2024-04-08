@@ -31,8 +31,6 @@ import {
   fetchCourseVerticalChildrenData,
   fetchXBlockIFrameHtmlAndResourcesQuery,
 } from '../data/thunk';
-import { updateSavingStatus } from '../data/slice';
-import { RequestStatus } from '../../data/constants';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
@@ -70,17 +68,10 @@ const CourseXBlock = ({
     const handleMessage = (event) => {
       const { method } = event.data;
 
-      switch (method) {
-      case 'close_edit_modal':
+      if (method === 'close_edit_modal') {
         toggleLegacyEditModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
         dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
-        break;
-      case 'edit_modal-error':
-        toggleLegacyEditModal(false);
-        dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
-        break;
-      default:
       }
     };
 
