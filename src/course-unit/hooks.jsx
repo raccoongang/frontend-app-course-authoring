@@ -13,6 +13,7 @@ import {
   duplicateUnitItemQuery,
   editCourseUnitVisibilityAndData,
   setXBlockOrderListQuery,
+  fetchCsrfTokenQuery,
 } from './data/thunk';
 import {
   getCourseSectionVertical,
@@ -109,7 +110,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(fetchCourseUnitQuery(blockId));
     dispatch(fetchCourseSectionVerticalData(blockId, sequenceId));
     dispatch(fetchCourseVerticalChildrenData(blockId));
-
+    dispatch(fetchCsrfTokenQuery());
     handleNavigate(sequenceId);
   }, [courseId, blockId, sequenceId]);
 
