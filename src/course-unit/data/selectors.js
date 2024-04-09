@@ -13,6 +13,7 @@ export const getCourseSectionVertical = (state) => state.courseUnit.courseSectio
 export const getCourseId = (state) => state.courseDetail.courseId;
 export const getSequenceId = (state) => state.courseUnit.sequenceId;
 export const getCourseVerticalChildren = (state) => state.courseUnit.courseVerticalChildren;
+export const getCsrfTokenData = (state) => state.courseUnit.csrfToken;
 const getLoadingStatuses = (state) => state.courseUnit.loadingStatus;
 export const getXBlockIFrameHtmlAndResources = (state) => state.courseUnit.xblockIFrameHtmlAndResources;
 export const getIsLoading = createSelector(
