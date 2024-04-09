@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ActionRow, Card, Dropdown, Icon, IconButton, useToggle, Sheet,
@@ -8,7 +8,9 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
+import { getConfig } from '@edx/frontend-platform';
 
+import { useOverflowControl } from '../../generic/hooks';
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
 import TagCount from '../../generic/tag-count';
@@ -25,17 +27,23 @@ import {
   copyToClipboard,
 } from '../../generic/data/thunks';
 import { getHandlerUrl } from '../data/api';
-import { fetchXBlockIFrameHtmlAndResourcesQuery } from '../data/thunk';
+import {
+  fetchCourseVerticalChildrenData,
+  fetchXBlockIFrameHtmlAndResourcesQuery,
+} from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
 import { XBlockContent } from './xblock-content';
 import messages from './messages';
 import { extractStylesWithContent } from './utils';
+import CourseIFrame from './CourseIFrame';
+
+const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
 const CourseXBlock = ({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, actions, ...props
+  handleConfigureSubmit, validationMessages, renderError, actions, blockId, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -47,9 +55,32 @@ const CourseXBlock = ({
   const intl = useIntl();
   const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
   const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
+  const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
+  const xblockLegacyEditModalRef = useRef(null);
+
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
+
+  useOverflowControl(`.${XBLOCK_EDIT_MODAL_CLASS_NAME}`);
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      const { method } = event.data;
+
+      if (method === 'close_edit_modal') {
+        toggleLegacyEditModal(false);
+        dispatch(fetchCourseVerticalChildrenData(blockId));
+        dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [xblockLegacyEditModalRef]);
 
   const {
     data: contentTaxonomyTagsCount,
@@ -66,6 +97,7 @@ const CourseXBlock = ({
 
   useEffect(() => {
     dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+    localStorage.removeItem('editedXBlockId');
   }, []);
 
   const currentItemData = {
@@ -88,6 +120,8 @@ const CourseXBlock = ({
       navigate(`/course/${courseId}/editor/${type}/${id}`);
       break;
     default:
+      toggleLegacyEditModal(true);
+      localStorage.setItem('editedXBlockId', id);
     }
   };
 
@@ -103,114 +137,126 @@ const CourseXBlock = ({
   }, []);
 
   return (
-    <div ref={courseXBlockElementRef} {...props}>
-      <Card
-        as={SortableItem}
-        isDraggable
-        isDroppable
-        id={id}
-        category="xblock"
-        componentStyle={{ marginBottom: 0 }}
-      >
-        <Card.Header
-          title={title}
-          subtitle={visibilityMessage}
-          actions={(
-            <ActionRow className="mr-2">
-              {
-                canManageTags
+    <>
+      {showLegacyEditModal && (
+        <div className={XBLOCK_EDIT_MODAL_CLASS_NAME}>
+          <CourseIFrame
+            title="xblock-edit-modal-iframe"
+            key="xblock-edit-modal-key"
+            ref={xblockLegacyEditModalRef}
+            src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/editor`}
+          />
+        </div>
+      )}
+      <div id={id} ref={courseXBlockElementRef} {...props}>
+        <Card
+          as={SortableItem}
+          isDraggable
+          isDroppable
+          id={id}
+          category="xblock"
+          componentStyle={{ marginBottom: 0 }}
+        >
+          <Card.Header
+            title={title}
+            subtitle={visibilityMessage}
+            actions={(
+              <ActionRow className="mr-2">
+                {
+                  canManageTags
                 && isContentTaxonomyTagsCountLoaded
-                && contentTaxonomyTagsCount > 0
-                && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
-              }
-              <IconButton
-                alt={intl.formatMessage(messages.blockAltButtonEdit)}
-                iconAs={EditIcon}
-                onClick={handleEdit}
-              />
-              <Dropdown>
-                <Dropdown.Toggle
-                  id={id}
-                  as={IconButton}
-                  src={MoveVertIcon}
-                  alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
-                  iconAs={Icon}
+                  && contentTaxonomyTagsCount > 0
+                  && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
+                }
+                <IconButton
+                  alt={intl.formatMessage(messages.blockAltButtonEdit)}
+                  iconAs={EditIcon}
+                  onClick={handleEdit}
                 />
-                <Dropdown.Menu>
-                  {canDuplicate && (
-                    <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
-                      {intl.formatMessage(messages.blockLabelButtonDuplicate)}
-                    </Dropdown.Item>
-                  )}
-                  {canManageTags && (
-                    <Dropdown.Item onClick={openManageTagsModal}>
-                      {intl.formatMessage(messages.blockLabelButtonManageTags)}
-                    </Dropdown.Item>
-                  )}
-                  {canMove && (
-                    <Dropdown.Item>
-                      {intl.formatMessage(messages.blockLabelButtonMove)}
-                    </Dropdown.Item>
-                  )}
-                  {canCopy && (
-                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
-                    </Dropdown.Item>
-                  )}
-                  {canManageAccess && (
-                    <Dropdown.Item onClick={openConfigureModal}>
-                      {intl.formatMessage(messages.blockLabelButtonManageAccess)}
-                    </Dropdown.Item>
-                  )}
-                  {canDelete && (
-                    <Dropdown.Item onClick={openDeleteModal}>
-                      {intl.formatMessage(messages.blockLabelButtonDelete)}
-                    </Dropdown.Item>
-                  )}
-                </Dropdown.Menu>
-              </Dropdown>
-              <DeleteModal
-                category="component"
-                isOpen={isDeleteModalOpen}
-                close={closeDeleteModal}
-                onDeleteSubmit={onDeleteSubmit}
-              />
-              <ConfigureModal
-                isXBlockComponent
-                isOpen={isConfigureModalOpen}
-                onClose={closeConfigureModal}
-                onConfigureSubmit={onConfigureSubmit}
-                currentItemData={currentItemData}
-              />
-              <Sheet
-                position="right"
-                show={isManageTagsOpen}
-                blocking={false}
-                variant="light"
-                onClose={closeManageTagsModal}
-              >
-                <ContentTagsDrawer id={id} onClose={closeManageTagsModal} />
-              </Sheet>
-            </ActionRow>
-          )}
-        />
-        <Card.Section>
-          {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
-            <>
-              <XBlockMessages validationMessages={validationMessages} />
-              {xblockInstanceHtmlAndResources && (
-                <XBlockContent
-                  getHandlerUrl={getHandlerUrl}
-                  view={xblockInstanceHtmlAndResources}
-                  type={type}
-                  stylesWithContent={stylesWithContent}
+                <Dropdown>
+                  <Dropdown.Toggle
+                    id={id}
+                    as={IconButton}
+                    src={MoveVertIcon}
+                    alt={intl.formatMessage(messages.blockActionsDropdownAlt)}
+                    iconAs={Icon}
+                  />
+                  <Dropdown.Menu>
+                    {canDuplicate && (
+                      <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
+                        {intl.formatMessage(messages.blockLabelButtonDuplicate)}
+                      </Dropdown.Item>
+                    )}
+                    {canManageTags && (
+                      <Dropdown.Item onClick={openManageTagsModal}>
+                        {intl.formatMessage(messages.blockLabelButtonManageTags)}
+                      </Dropdown.Item>
+                    )}
+                    {canMove && (
+                      <Dropdown.Item>
+                        {intl.formatMessage(messages.blockLabelButtonMove)}
+                      </Dropdown.Item>
+                    )}
+                    {canCopy && (
+                      <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                        {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                      </Dropdown.Item>
+                    )}
+                    {canManageAccess && (
+                      <Dropdown.Item onClick={openConfigureModal}>
+                        {intl.formatMessage(messages.blockLabelButtonManageAccess)}
+                      </Dropdown.Item>
+                    )}
+                    {canDelete && (
+                      <Dropdown.Item onClick={openDeleteModal}>
+                        {intl.formatMessage(messages.blockLabelButtonDelete)}
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+                <DeleteModal
+                  category="component"
+                  isOpen={isDeleteModalOpen}
+                  close={closeDeleteModal}
+                  onDeleteSubmit={onDeleteSubmit}
                 />
-              )}
-            </>
-          )}
-        </Card.Section>
-      </Card>
-    </div>
+                <ConfigureModal
+                  isXBlockComponent
+                  isOpen={isConfigureModalOpen}
+                  onClose={closeConfigureModal}
+                  onConfigureSubmit={onConfigureSubmit}
+                  currentItemData={currentItemData}
+                />
+                <Sheet
+                  position="right"
+                  show={isManageTagsOpen}
+                  blocking={false}
+                  variant="light"
+                  onClose={closeManageTagsModal}
+                >
+                  <ContentTagsDrawer id={id} onClose={closeManageTagsModal} />
+                </Sheet>
+              </ActionRow>
+            )}
+          />
+          <Card.Section>
+            {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
+              <>
+                <XBlockMessages validationMessages={validationMessages} />
+                {xblockInstanceHtmlAndResources && (
+                  <XBlockContent
+                    getHandlerUrl={getHandlerUrl}
+                    view={xblockInstanceHtmlAndResources}
+                    type={type}
+                    stylesWithContent={stylesWithContent}
+                  />
+                )}
+              </>
+            )}
+          </Card.Section>
+        </Card>
+      </div>
+    </>
   );
 };
 
@@ -224,6 +270,7 @@ CourseXBlock.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  blockId: PropTypes.string.isRequired,
   renderError: PropTypes.string,
   shouldScroll: PropTypes.bool,
   validationMessages: PropTypes.arrayOf(PropTypes.shape({

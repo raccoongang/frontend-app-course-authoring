@@ -176,6 +176,11 @@ export async function getXBlockIFrameData(itemId) {
   return camelCaseObject(data);
 }
 
+/**
+ * Returns the URL of the handler for the specified xblock.
+ * @param {string} blockId - The identifier of the xblock.
+ * @returns {Promise<string>} - A promise that resolves to the URL of the handler for the specified xblock.
+ */
 export const getHandlerUrl = async (blockId) => {
   const baseUrl = getConfig().STUDIO_BASE_URL;
 
