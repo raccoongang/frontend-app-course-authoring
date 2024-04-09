@@ -230,7 +230,7 @@ export default function wrapBlockHtmlForIFrame(
       <script>
         $.ajaxSetup({
           headers: {
-            'X-CSRFToken': csrfTokenData
+            'X-CSRFToken': "${csrfTokenData}",
           },
           xhrFields: { withCredentials: true }
         });

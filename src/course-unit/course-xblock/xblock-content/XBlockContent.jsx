@@ -2,12 +2,12 @@ import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
+import { useSelector } from 'react-redux';
 import { LoadingSpinner } from '../../../generic/Loading';
 import { COMPONENT_TYPES } from '../../constants';
 import { blockViewShape, fetchable } from '../constants';
 import CourseIFrame from '../CourseIFrame';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
-import { useSelector } from 'react-redux';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
 
