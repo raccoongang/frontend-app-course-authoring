@@ -274,6 +274,7 @@ export default function wrapBlockHtmlForIFrame(
     'src="/media': `src="${studioBaseUrl}/media`,
     ': "/asset': `: "${studioBaseUrl}/asset`,
     ': "/xblock': `: "${studioBaseUrl}/xblock`,
+    ': "/static': `: "${studioBaseUrl}/static`,
   };
 
   modifiedHtml = modifyVoidHrefToPreventDefault(html);
