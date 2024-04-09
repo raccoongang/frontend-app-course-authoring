@@ -4,7 +4,8 @@ import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
 import { LoadingSpinner } from '../../../generic/Loading';
 import { COMPONENT_TYPES } from '../../constants';
-import { blockViewShape, fetchable, IFRAME_FEATURE_POLICY } from '../constants';
+import { blockViewShape, fetchable } from '../constants';
+import CourseIFrame from '../CourseIFrame';
 import { wrapBlockHtmlForIFrame } from './iframe-wrapper';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
@@ -74,6 +75,15 @@ const XBlockContent = ({
       }
     };
 
+    const editedXBlockId = localStorage.getItem('editedXBlockId');
+    // Retrieve the identifier of the XBlock element being edited and smoothly scroll to it.
+    setTimeout(() => {
+      const editedXBlockElement = document.getElementById(editedXBlockId);
+      if (editedXBlockElement) {
+        editedXBlockElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 0);
+
     // Prepare to receive messages from the IFrame.
     // Messages are the only way that the code in the IFrame can communicate
     // with the surrounding UI.
@@ -82,7 +92,7 @@ const XBlockContent = ({
     return () => {
       window.removeEventListener('message', receivedWindowMessage);
     };
-  }, [html, getHandlerUrl, onBlockNotification]);
+  }, [html, getHandlerUrl, onBlockNotification, iframeHeight]);
 
   /* Only draw the iframe if the HTML has already been set. This is because xblock-bootstrap.html will only request
    * HTML once, upon being rendered. */
@@ -101,30 +111,13 @@ const XBlockContent = ({
         style={{ height: `${iframeHeight}px` }}
         className="xblock-content"
       >
-        <iframe
+        <CourseIFrame
+          className="xblock-content-iframe"
+          src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
           key={iframeKey}
           ref={iframeRef}
-          title="block"
-          src={`${getConfig().BASE_URL}${getConfig().SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL}`}
-          className="xblock-content-iframe"
-          // allowing 'autoplay' is required to allow the video XBlock to control the YouTube iframe it has.
-          allow={IFRAME_FEATURE_POLICY}
-          referrerPolicy="origin"
-          frameBorder={0}
-          scrolling="no"
           onLoad={() => setIsLoading(false)}
-          sandbox={[
-            'allow-forms',
-            'allow-modals',
-            'allow-popups',
-            'allow-popups-to-escape-sandbox',
-            'allow-presentation',
-            'allow-same-origin', // This is only secure IF the IFrame source
-            // is served from a completely different domain name
-            // e.g. labxchange-xblocks.net vs www.labxchange.org
-            'allow-scripts',
-            'allow-top-navigation-by-user-activation',
-          ].join(' ')}
+          title="xblock"
         />
       </div>
     </div>

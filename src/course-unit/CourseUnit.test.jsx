@@ -105,6 +105,10 @@ const clipboardBroadcastChannelMock = {
   close: jest.fn(),
 };
 
+jest.mock('../generic/hooks', () => ({
+  useOverflowControl: () => jest.fn(),
+}));
+
 global.BroadcastChannel = jest.fn(() => clipboardBroadcastChannelMock);
 
 const RootWrapper = () => (
