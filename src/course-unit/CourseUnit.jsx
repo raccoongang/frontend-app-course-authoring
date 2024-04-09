@@ -178,6 +178,7 @@ const CourseUnit = ({ courseId }) => {
                         unitXBlockActions={unitXBlockActions}
                         data-testid="course-xblock"
                         userPartitionInfo={userPartitionInfo}
+                        blockId={blockId}
                         actions={actions}
                       />
                     ))}

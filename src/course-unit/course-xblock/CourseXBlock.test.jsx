@@ -57,6 +57,10 @@ jest.mock('react-redux', () => ({
 
 const mockGetTagsCount = jest.fn();
 
+jest.mock('../../generic/hooks', () => ({
+  useOverflowControl: () => jest.fn(),
+}));
+
 jest.mock('../../generic/data/api', () => ({
   ...jest.requireActual('../../generic/data/api'),
   getTagsCount: () => mockGetTagsCount(),
