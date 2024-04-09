@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
-import { useSelector } from 'react-redux';
 import { LoadingSpinner } from '../../../generic/Loading';
 import { COMPONENT_TYPES } from '../../constants';
 import { blockViewShape, fetchable } from '../constants';
@@ -19,8 +18,6 @@ const XBlockContent = ({
   const [iframeHeight, setIFrameHeight] = useState(0);
   const [iframeKey, setIFrameKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const csrfTokenData = useSelector(state => state.courseUnit.csrfToken);
-  console.log('csrfTokenData ===>', csrfTokenData);
 
   useEffect(() => {
     const processView = () => {
@@ -31,7 +28,6 @@ const XBlockContent = ({
           getConfig().STUDIO_BASE_URL,
           type,
           stylesWithContent,
-          csrfTokenData,
         );
 
         // Load the XBlock HTML into the IFrame:
@@ -43,7 +39,7 @@ const XBlockContent = ({
 
     // Process the XBlock view:
     processView();
-  }, [view, type, stylesWithContent, csrfTokenData]);
+  }, [view, type, stylesWithContent]);
 
   useEffect(() => {
     // Handle any messages we receive from the XBlock Runtime code in the IFrame.

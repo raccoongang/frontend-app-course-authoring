@@ -8,7 +8,6 @@ const slice = createSlice({
   initialState: {
     savingStatus: '',
     errorMessage: '',
-    csrfToken: '',
     isQueryPending: false,
     isTitleEditFormOpen: false,
     loadingStatus: {
@@ -120,9 +119,6 @@ const slice = createSlice({
         state.xblockIFrameHtmlAndResources.push(payload);
       }
     },
-    fetchCsrfTokenSuccess: (state, { payload }) => {
-      state.csrfToken = payload;
-    },
   },
 });
 
@@ -146,7 +142,6 @@ export const {
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
   fetchXBlockIFrameResources,
-  fetchCsrfTokenSuccess,
 } = slice.actions;
 
 export const {
