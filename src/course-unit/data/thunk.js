@@ -19,6 +19,7 @@ import {
   duplicateUnitItem,
   setXBlockOrderList,
   getXBlockIFrameData,
+  getCsrfTokenData,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -38,6 +39,7 @@ import {
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
   fetchXBlockIFrameResources,
+  fetchCsrfTokenSuccess,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -281,6 +283,22 @@ export function fetchXBlockIFrameHtmlAndResourcesQuery(xblockId) {
     try {
       const xblockIFrameData = await getXBlockIFrameData(xblockId);
       dispatch(fetchXBlockIFrameResources({ xblockId, ...xblockIFrameData }));
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));
+    } finally {
+      dispatch(hideProcessingNotification());
+    }
+  };
+}
+
+export function fetchCsrfTokenQuery() {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+
+    try {
+      const csrfTokenData = await getCsrfTokenData();
+      dispatch(fetchCsrfTokenSuccess(csrfTokenData.csrfToken));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {
       dispatch(updateSavingStatus({ status: RequestStatus.FAILED }));

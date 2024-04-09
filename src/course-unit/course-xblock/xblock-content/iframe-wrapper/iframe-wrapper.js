@@ -25,6 +25,7 @@ export default function wrapBlockHtmlForIFrame(
   studioBaseUrl,
   type,
   stylesWithContent,
+  csrfTokenData,
 ) {
   const resources = normalizeResources(sourceResources);
 
@@ -228,6 +229,9 @@ export default function wrapBlockHtmlForIFrame(
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
       <script>
         $.ajaxSetup({
+          headers: {
+            'X-CSRFToken': "${csrfTokenData}",
+          },
           xhrFields: { withCredentials: true }
         });
         

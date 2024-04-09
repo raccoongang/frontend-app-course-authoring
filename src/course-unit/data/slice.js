@@ -7,6 +7,8 @@ const slice = createSlice({
   name: 'courseUnit',
   initialState: {
     savingStatus: '',
+    errorMessage: '',
+    csrfToken: '',
     isQueryPending: false,
     isTitleEditFormOpen: false,
     loadingStatus: {
@@ -111,6 +113,9 @@ const slice = createSlice({
     fetchXBlockIFrameResources: (state, { payload }) => {
       state.xblockIFrameHtmlAndResources.push(payload);
     },
+    fetchCsrfTokenSuccess: (state, { payload }) => {
+      state.csrfToken = payload;
+    },
   },
 });
 
@@ -134,6 +139,7 @@ export const {
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
   fetchXBlockIFrameResources,
+  fetchCsrfTokenSuccess,
 } = slice.actions;
 
 export const {
