@@ -234,9 +234,9 @@ export default function wrapBlockHtmlForIFrame(
           },
           xhrFields: { withCredentials: true }
         });
-        
+
         const originalAjax = $.ajax;
-        
+
         $.ajax = function(options) {
            // Due to the use of edx-platform scripts in MFE, it is necessary to provide additional protection
            // against random "undefined" that may appear in URLs before sending AJAX requests.
