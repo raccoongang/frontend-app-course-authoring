@@ -1,14 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  memo, useEffect, useRef, useMemo, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import {
-  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, Sheet,
+  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, Sheet, OverlayTrigger, Tooltip, Button,
 } from '@openedx/paragon';
-import { EditOutline as EditIcon, MoreVert as MoveVertIcon } from '@openedx/paragon/icons';
+import {
+  EditOutline as EditIcon,
+  MoreVert as MoveVertIcon,
+  ArrowDropDown as ArrowDownIcon,
+  ArrowDropUp as ArrowUpIcon,
+} from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { find } from 'lodash';
 import { getConfig } from '@edx/frontend-platform';
+import classNames from 'classnames';
 
 import { useOverflowControl } from '../../generic/hooks';
 import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
@@ -41,7 +49,7 @@ import CourseIFrame from './CourseIFrame';
 
 const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
-const CourseXBlock = ({
+const CourseXBlock = memo(({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
   handleConfigureSubmit, validationMessages, renderError, actions, blockId, ...props
 }) => {
@@ -54,9 +62,14 @@ const CourseXBlock = ({
   const courseId = useSelector(getCourseId);
   const intl = useIntl();
   const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
-  const xblockInstanceHtmlAndResources = find(xblockIFrameHtmlAndResources, { xblockId: id });
+  const xblockInstanceHtmlAndResources = useMemo(
+    () => find(xblockIFrameHtmlAndResources, { xblockId: id }),
+    [id, xblockIFrameHtmlAndResources],
+  );
   const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
   const xblockLegacyEditModalRef = useRef(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
 
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
@@ -91,9 +104,12 @@ const CourseXBlock = ({
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
     : null;
 
-  const stylesWithContent = xblockIFrameHtmlAndResources
-    ?.map(item => extractStylesWithContent(item.html))
-    .filter(styles => styles.length > 0);
+  const stylesWithContent = useMemo(
+    () => xblockIFrameHtmlAndResources
+      ?.map(item => extractStylesWithContent(item.html))
+      .filter(styles => styles.length > 0),
+    [],
+  );
 
   useEffect(() => {
     dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
@@ -129,6 +145,11 @@ const CourseXBlock = ({
     handleConfigureSubmit(id, ...arg, closeConfigureModal);
   };
 
+  const handleExpandContent = () => {
+    setIsRendered(true);
+    setIsExpanded((prevState) => !prevState);
+  };
+
   useEffect(() => {
     // if this item has been newly added, scroll to it.
     if (courseXBlockElementRef.current && shouldScroll) {
@@ -158,7 +179,24 @@ const CourseXBlock = ({
           componentStyle={{ marginBottom: 0 }}
         >
           <Card.Header
-            title={title}
+            title={(
+              <OverlayTrigger
+                placement="bottom"
+                overlay={(
+                  <Tooltip id={`${title}-${intl.formatMessage(messages.expandTooltip)}`}>
+                    {intl.formatMessage(messages.expandTooltip)}
+                  </Tooltip>
+                )}
+              >
+                <Button
+                  iconBefore={isExpanded ? ArrowUpIcon : ArrowDownIcon}
+                  variant="tertiary"
+                  onClick={handleExpandContent}
+                >
+                  <span className="pgn__card-header-title-md">{title}</span>
+                </Button>
+              </OverlayTrigger>
+            )}
             subtitle={visibilityMessage}
             actions={(
               <ActionRow className="mr-2">
@@ -239,26 +277,29 @@ const CourseXBlock = ({
               </ActionRow>
             )}
           />
-          <Card.Section>
-            {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
-              <>
-                <XBlockMessages validationMessages={validationMessages} />
-                {xblockInstanceHtmlAndResources && (
-                  <XBlockContent
-                    getHandlerUrl={getHandlerUrl}
-                    view={xblockInstanceHtmlAndResources}
-                    type={type}
-                    stylesWithContent={stylesWithContent}
-                  />
-                )}
-              </>
-            )}
-          </Card.Section>
+          {isRendered
+          && (
+            <Card.Section className={classNames({ 'd-none': !isExpanded })}>
+              {renderError ? <RenderErrorAlert errorMessage={renderError} /> : (
+                <>
+                  <XBlockMessages validationMessages={validationMessages} />
+                  {xblockInstanceHtmlAndResources && (
+                    <XBlockContent
+                      getHandlerUrl={getHandlerUrl}
+                      view={xblockInstanceHtmlAndResources}
+                      type={type}
+                      stylesWithContent={stylesWithContent}
+                    />
+                  )}
+                </>
+              )}
+            </Card.Section>
+          )}
         </Card>
       </div>
     </>
   );
-};
+});
 
 CourseXBlock.defaultProps = {
   validationMessages: [],
