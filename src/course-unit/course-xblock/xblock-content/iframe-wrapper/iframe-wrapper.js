@@ -228,24 +228,22 @@ export default function wrapBlockHtmlForIFrame(
            MathJax extension libraries -->
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG"></script>
       <script>
-        console.log('csrftoken 1 ============>', $.cookie('csrftoken'));
-        console.log('cookie ============>', $.cookie());
         $.ajaxSetup({
           headers: {
             'X-CSRFToken': "${csrfTokenData}",
           },
           xhrFields: { withCredentials: true }
         });
-        console.log('csrftoken 2 ============>', $.cookie('csrftoken'));
+
         const originalAjax = $.ajax;
-        console.log('originalAjax ============>', originalAjax);
+
         $.ajax = function(options) {
            // Due to the use of edx-platform scripts in MFE, it is necessary to provide additional protection
            // against random "undefined" that may appear in URLs before sending AJAX requests.
            if (options.url && options.url.includes('undefined')) {
              options.url = options.url.replace('undefined', '');
            }
-            console.log('options ============>', options);
+
            // AJAX requests, must follow certain settings, such as including credentials (x-csrf token, cookie, etc.)
            // and ensuring consistent URL formatting.
            if (!/^https?:\\/\\//i.test(options.url)) {
