@@ -40,6 +40,7 @@ import {
   fetchCourseVerticalChildrenData,
   fetchXBlockIFrameHtmlAndResourcesQuery,
 } from '../data/thunk';
+import { fetchEditedXBlockIdSuccess } from '../data/slice';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
 import RenderErrorAlert from './render-error-alert';
@@ -75,7 +76,7 @@ const CourseXBlock = memo(({
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
-
+  // console.log('id', id);
   useOverflowControl(`.${XBLOCK_EDIT_MODAL_CLASS_NAME}`);
 
   useEffect(() => {
@@ -87,6 +88,7 @@ const CourseXBlock = memo(({
         dispatch(fetchCourseVerticalChildrenData(blockId));
         dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
         dispatch(fetchCourseUnitQuery(blockId));
+        dispatch(fetchEditedXBlockIdSuccess(id));
       }
     };
 
