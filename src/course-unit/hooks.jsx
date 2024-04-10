@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -65,10 +65,10 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(changeEditTitleFormOpen(!isTitleEditFormOpen));
   };
 
-  const handleConfigureSubmit = (id, isVisible, groupAccess, closeModalFn) => {
+  const handleConfigureSubmit = useCallback((id, isVisible, groupAccess, closeModalFn) => {
     dispatch(editCourseUnitVisibilityAndData(id, PUBLISH_TYPES.republish, isVisible, groupAccess, true, blockId));
     closeModalFn();
-  };
+  }, [courseId, blockId]);
 
   const handleTitleEditSubmit = (displayName) => {
     if (unitTitle !== displayName) {
@@ -97,14 +97,14 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(createNewCourseXBlock(body, callback, blockId))
   );
 
-  const unitXBlockActions = {
+  const unitXBlockActions = useMemo(() => ({
     handleDelete: (XBlockId) => {
       dispatch(deleteUnitItemQuery(blockId, XBlockId));
     },
     handleDuplicate: (XBlockId) => {
       dispatch(duplicateUnitItemQuery(blockId, XBlockId));
     },
-  };
+  }), [courseId, blockId]);
 
   const handleXBlockDragAndDrop = (xblockListIds, restoreCallback) => {
     dispatch(setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback));

@@ -62,6 +62,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.validation.summary',
     defaultMessage: 'This component has validation issues.',
   },
+  expandTooltip: {
+    id: 'course-authoring.course-unit.xblock.expandTooltip',
+    defaultMessage: 'Collapse/Expand this block',
+  },
 });
 
 export default messages;
