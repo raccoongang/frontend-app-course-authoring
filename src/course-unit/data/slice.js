@@ -21,7 +21,6 @@ const slice = createSlice({
     courseVerticalChildren: {},
     staticFileNotices: {},
     xblockIFrameHtmlAndResources: [],
-    editedXBlockId: '',
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -124,9 +123,6 @@ const slice = createSlice({
     fetchCsrfTokenSuccess: (state, { payload }) => {
       state.csrfToken = payload;
     },
-    fetchEditedXBlockIdSuccess: (state, { payload }) => {
-      state.editedXBlockId = payload;
-    },
   },
 });
 
@@ -151,7 +147,6 @@ export const {
   reorderXBlockList,
   fetchXBlockIFrameResources,
   fetchCsrfTokenSuccess,
-  fetchEditedXBlockIdSuccess,
 } = slice.actions;
 
 export const {

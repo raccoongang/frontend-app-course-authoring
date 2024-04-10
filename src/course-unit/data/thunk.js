@@ -123,15 +123,7 @@ export function editCourseItemQuery(itemId, displayName, sequenceId) {
   };
 }
 
-export function editCourseUnitVisibilityAndData(
-  itemId,
-  type,
-  isVisible,
-  editedXBlockId,
-  groupAccess,
-  isModalView,
-  blockId = itemId,
-) {
+export function editCourseUnitVisibilityAndData(itemId, type, isVisible, groupAccess, isModalView, blockId = itemId) {
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(updateQueryPendingStatus(true));
@@ -145,10 +137,6 @@ export function editCourseUnitVisibilityAndData(
           dispatch(fetchCourseItemSuccess(courseUnit));
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
-          if (editedXBlockId) {
-            const xblockIFrameData = await getXBlockIFrameData(editedXBlockId);
-            dispatch(fetchXBlockIFrameResources({ xblockId: editedXBlockId, ...xblockIFrameData }));
-          }
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
         }
@@ -295,7 +283,6 @@ export function fetchXBlockIFrameHtmlAndResourcesQuery(xblockId) {
 
     try {
       const xblockIFrameData = await getXBlockIFrameData(xblockId);
-      // console.log('xblockIFrameData', xblockIFrameData.html);
       dispatch(fetchXBlockIFrameResources({ xblockId, ...xblockIFrameData }));
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
     } catch (error) {

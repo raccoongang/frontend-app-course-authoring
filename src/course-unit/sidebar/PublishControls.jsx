@@ -20,7 +20,6 @@ const PublishControls = ({ blockId }) => {
     visibleToStaffOnly,
   } = useCourseUnitData(useSelector(getCourseUnitData));
   const intl = useIntl();
-  const editedXBlockId = useSelector(state => state.courseUnit.editedXBlockId);
 
   const [isDiscardModalOpen, openDiscardModal, closeDiscardModal] = useToggle(false);
   const [isVisibleModalOpen, openVisibleModal, closeVisibleModal] = useToggle(false);
@@ -34,7 +33,7 @@ const PublishControls = ({ blockId }) => {
 
   const handleCourseUnitDiscardChanges = () => {
     closeDiscardModal();
-    dispatch(editCourseUnitVisibilityAndData(blockId, PUBLISH_TYPES.discardChanges, null, editedXBlockId));
+    dispatch(editCourseUnitVisibilityAndData(blockId, PUBLISH_TYPES.discardChanges));
   };
 
   const handleCourseUnitPublish = () => {

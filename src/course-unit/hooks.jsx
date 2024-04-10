@@ -65,7 +65,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   };
 
   const handleConfigureSubmit = useCallback((id, isVisible, groupAccess, closeModalFn) => {
-    dispatch(editCourseUnitVisibilityAndData(id, PUBLISH_TYPES.republish, isVisible, null, groupAccess, true, blockId));
+    dispatch(editCourseUnitVisibilityAndData(id, PUBLISH_TYPES.republish, isVisible, groupAccess, true, blockId));
     closeModalFn();
   }, [courseId, blockId]);
 
