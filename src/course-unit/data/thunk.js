@@ -232,6 +232,7 @@ export function deleteUnitItemQuery(itemId, xblockId) {
 }
 
 export function duplicateUnitItemQuery(itemId, xblockId) {
+  console.log({ itemId, xblockId });
   return async (dispatch) => {
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
     dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.duplicating));
