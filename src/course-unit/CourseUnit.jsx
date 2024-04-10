@@ -145,6 +145,7 @@ const CourseUnit = ({ courseId }) => {
               {currentlyVisibleToStudents && (
                 <AlertMessage
                   className="course-unit__alert"
+                  data-testid="course-unit-unpublished-alert"
                   title={intl.formatMessage(messages.alertUnpublishedVersion)}
                   variant="warning"
                   icon={WarningIcon}

@@ -54,6 +54,10 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.iframe.error.text',
     defaultMessage: 'Unit iframe failed to load. Server possibly returned 4xx or 5xx response.',
   },
+  expandTooltip: {
+    id: 'course-authoring.course-unit.xblock.expandTooltip',
+    defaultMessage: 'Collapse/Expand this block',
+  },
 });
 
 export default messages;

@@ -317,11 +317,15 @@ describe('<CourseXBlock />', () => {
 
   it('displays a render error message if item has error', () => {
     const renderErrorMessage = 'Some error message';
-    const { getByText, getByLabelText, queryByTestId } = renderComponent(
+    const {
+      getByText, getByLabelText, queryByTestId, getByRole,
+    } = renderComponent(
       {
         renderError: renderErrorMessage,
       },
     );
+
+    userEvent.click(getByRole('button', { name }));
 
     const errorAlertTitle = renderErrorAlertMessages.alertRenderErrorTitle.defaultMessage;
     const errorAlertDescription = renderErrorAlertMessages.alertRenderErrorDescription.defaultMessage;

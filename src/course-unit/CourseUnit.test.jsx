@@ -520,10 +520,10 @@ describe('<CourseUnit />', () => {
   });
 
   it('should display a warning alert for unpublished course unit version', async () => {
-    const { getByRole } = render(<RootWrapper />);
+    const { getByTestId } = render(<RootWrapper />);
 
     await waitFor(() => {
-      const unpublishedAlert = getByRole('alert', { class: 'course-unit-unpublished-alert' });
+      const unpublishedAlert = getByTestId('course-unit-unpublished-alert');
       expect(unpublishedAlert).toHaveTextContent(messages.alertUnpublishedVersion.defaultMessage);
       expect(unpublishedAlert).toHaveClass('alert-warning');
     });

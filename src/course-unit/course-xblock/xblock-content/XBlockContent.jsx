@@ -1,4 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
+import {
+  memo, useRef, useState, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 import { useSelector } from 'react-redux';
@@ -11,7 +13,7 @@ import { getCsrfTokenData } from '../../data/selectors';
 
 ensureConfig(['STUDIO_BASE_URL', 'SECURE_ORIGIN_XBLOCK_BOOTSTRAP_HTML_URL'], 'studio xblock component');
 
-const XBlockContent = ({
+const XBlockContent = memo(({
   view, type, getHandlerUrl, onBlockNotification, stylesWithContent,
 }) => {
   const csrfTokenData = useSelector(getCsrfTokenData);
@@ -133,7 +135,7 @@ const XBlockContent = ({
       </div>
     </div>
   );
-};
+});
 
 XBlockContent.propTypes = {
   getHandlerUrl: PropTypes.func.isRequired,
