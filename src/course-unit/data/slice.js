@@ -120,6 +120,9 @@ const slice = createSlice({
         state.xblockIFrameHtmlAndResources.push(payload);
       }
     },
+    discardXBlockIFrameResources: (state, { payload }) => {
+      state.xblockIFrameHtmlAndResources = payload;
+    },
     fetchCsrfTokenSuccess: (state, { payload }) => {
       state.csrfToken = payload;
     },
@@ -147,6 +150,7 @@ export const {
   reorderXBlockList,
   fetchXBlockIFrameResources,
   fetchCsrfTokenSuccess,
+  discardXBlockIFrameResources,
 } = slice.actions;
 
 export const {

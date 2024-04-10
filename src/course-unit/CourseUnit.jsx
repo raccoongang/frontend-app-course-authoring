@@ -180,6 +180,7 @@ const CourseUnit = ({ courseId }) => {
                         userPartitionInfo={userPartitionInfo}
                         blockId={blockId}
                         actions={actions}
+                        xblockCount={unitXBlocks.length}
                       />
                     ))}
                   </SortableContext>

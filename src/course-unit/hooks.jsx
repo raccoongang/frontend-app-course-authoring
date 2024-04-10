@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { RequestStatus } from '../data/constants';
 import {
@@ -25,7 +25,7 @@ import {
   getSequenceStatus,
   getStaticFileNotices,
 } from './data/selectors';
-import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
+import { changeEditTitleFormOpen, discardXBlockIFrameResources, updateQueryPendingStatus } from './data/slice';
 
 import { useCopyToClipboard } from '../generic/clipboard';
 import { PUBLISH_TYPES } from './constants';
@@ -111,6 +111,9 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(fetchCourseSectionVerticalData(blockId, sequenceId));
     dispatch(fetchCourseVerticalChildrenData(blockId));
     dispatch(fetchCsrfTokenQuery());
+    console.log('RERENDER');
+    dispatch(discardXBlockIFrameResources([]));
+    localStorage.removeItem('initialXBlockIFrameHtmlAndResources');
     handleNavigate(sequenceId);
   }, [courseId, blockId, sequenceId]);
 

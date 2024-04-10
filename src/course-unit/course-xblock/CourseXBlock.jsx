@@ -38,6 +38,7 @@ import { getHandlerUrl } from '../data/api';
 import {
   fetchCourseVerticalChildrenData,
   fetchXBlockIFrameHtmlAndResourcesQuery,
+  fetchCourseUnitQuery,
 } from '../data/thunk';
 import { COMPONENT_TYPES } from '../constants';
 import XBlockMessages from './xblock-messages/XBlockMessages';
@@ -51,7 +52,7 @@ const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
 const CourseXBlock = memo(({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, actions, blockId, ...props
+  handleConfigureSubmit, validationMessages, renderError, actions, blockId, xblockCount, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -66,10 +67,33 @@ const CourseXBlock = memo(({
     () => find(xblockIFrameHtmlAndResources, { xblockId: id }),
     [id, xblockIFrameHtmlAndResources],
   );
+  // const [xblockIFrameHtmlAndResourcesData, setXBlockIFrameHtmlAndResourcesData] = useState([]);
+  const [readyToSave, setReadyToSave] = useState(false);
   const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
   const xblockLegacyEditModalRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isRendered, setIsRendered] = useState(false);
+
+  useEffect(() => {
+    // Проверяем, все ли карточки загружены
+    const allCardsLoaded = xblockIFrameHtmlAndResources.length === xblockCount; // Здесь 2 - количество карточек
+    const xblockIFrameHtmlAndResourcesData = localStorage.getItem('initialXBlockIFrameHtmlAndResources');
+    // console.log({ allCardsLoaded, readyToSave, xblockIFrameHtmlAndResourcesData });
+    console.log('xblockIFrameHtmlAndResources.length', xblockIFrameHtmlAndResources.length);
+    console.log('xblockCount', xblockCount);
+    console.log('xblockIFrameHtmlAndResources', xblockIFrameHtmlAndResources);
+    // Если все карточки загружены, устанавливаем флаг готовности для сохранения
+    if (allCardsLoaded && !readyToSave && !xblockIFrameHtmlAndResourcesData) {
+      setReadyToSave(true);
+    }
+  }, [xblockIFrameHtmlAndResources, readyToSave]);
+
+  useEffect(() => {
+    if (readyToSave) {
+      console.log('LOCAL STORAGE UPDATED');
+      localStorage.setItem('initialXBlockIFrameHtmlAndResources', JSON.stringify(xblockIFrameHtmlAndResources));
+    }
+  }, [xblockIFrameHtmlAndResources, readyToSave]);
 
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
@@ -85,6 +109,7 @@ const CourseXBlock = memo(({
         toggleLegacyEditModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
         dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+        dispatch(fetchCourseUnitQuery(blockId));
       }
     };
 

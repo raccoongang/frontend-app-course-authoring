@@ -7,9 +7,10 @@ import useCourseUnitData from './hooks';
 import { editCourseUnitVisibilityAndData } from '../data/thunk';
 import { SidebarBody, SidebarFooter, SidebarHeader } from './components';
 import { PUBLISH_TYPES } from '../constants';
-import { getCourseUnitData } from '../data/selectors';
+import { getCourseUnitData, getXBlockIFrameHtmlAndResources } from '../data/selectors';
 import messages from './messages';
 import ModalNotification from '../../generic/modal-notification';
+import { discardXBlockIFrameResources } from 'CourseAuthoring/course-unit/data/slice';
 
 const PublishControls = ({ blockId }) => {
   const {
@@ -23,7 +24,7 @@ const PublishControls = ({ blockId }) => {
 
   const [isDiscardModalOpen, openDiscardModal, closeDiscardModal] = useToggle(false);
   const [isVisibleModalOpen, openVisibleModal, closeVisibleModal] = useToggle(false);
-
+  const xblockIFrameHtmlAndResources = useSelector(getXBlockIFrameHtmlAndResources);
   const dispatch = useDispatch();
 
   const handleCourseUnitVisibility = () => {
@@ -34,10 +35,17 @@ const PublishControls = ({ blockId }) => {
   const handleCourseUnitDiscardChanges = () => {
     closeDiscardModal();
     dispatch(editCourseUnitVisibilityAndData(blockId, PUBLISH_TYPES.discardChanges));
+    const xblockIFrameHtmlAndResourcesData = localStorage.getItem('initialXBlockIFrameHtmlAndResources');
+    if (xblockIFrameHtmlAndResourcesData) {
+      dispatch(discardXBlockIFrameResources(JSON.parse(xblockIFrameHtmlAndResourcesData)));
+      // localStorage.removeItem('initialXBlockIFrameHtmlAndResources');
+    }
   };
 
   const handleCourseUnitPublish = () => {
     dispatch(editCourseUnitVisibilityAndData(blockId, PUBLISH_TYPES.makePublic));
+    localStorage.setItem('initialXBlockIFrameHtmlAndResources', JSON.stringify(xblockIFrameHtmlAndResources));
+    // localStorage.removeItem('initialXBlockIFrameHtmlAndResources');
   };
 
   return (
