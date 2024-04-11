@@ -8,6 +8,7 @@ import { RequestStatus } from '../../data/constants';
 import { NOTIFICATION_MESSAGES } from '../../constants';
 import { updateModel, updateModels } from '../../generic/model-store';
 import { updateClipboardData } from '../../generic/data/slice';
+import { PUBLISH_TYPES } from '../constants';
 import {
   getCourseUnitData,
   editUnitDisplayName,
@@ -138,6 +139,9 @@ export function editCourseUnitVisibilityAndData(itemId, type, isVisible, groupAc
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
           dispatch(hideProcessingNotification());
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+          if (type === PUBLISH_TYPES.discardChanges) {
+            window.location.reload();
+          }
         }
       });
     } catch (error) {
