@@ -35,6 +35,7 @@ import {
 import { copyToClipboard } from '../../generic/data/thunks';
 import { getHandlerUrl } from '../data/api';
 import {
+  fetchCourseUnitQuery,
   fetchCourseVerticalChildrenData,
   fetchXBlockIFrameHtmlAndResourcesQuery,
 } from '../data/thunk';
@@ -84,6 +85,7 @@ const CourseXBlock = memo(({
         toggleLegacyEditModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
         dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+        dispatch(fetchCourseUnitQuery(blockId));
       }
     };
 
