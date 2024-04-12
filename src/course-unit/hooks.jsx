@@ -24,6 +24,7 @@ import {
   getErrorMessage,
   getSequenceStatus,
   getStaticFileNotices,
+  getIsLoadingFailed,
 } from './data/selectors';
 import { changeEditTitleFormOpen, updateQueryPendingStatus } from './data/slice';
 
@@ -37,6 +38,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
   const isLoading = useSelector(getIsLoading);
+  const isLoadingFailed = useSelector(getIsLoadingFailed);
   const errorMessage = useSelector(getErrorMessage);
   const sequenceStatus = useSelector(getSequenceStatus);
   const { draftPreviewLink, publishedPreviewLink } = useSelector(getCourseSectionVertical);
@@ -124,6 +126,7 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     staticFileNotices,
     currentlyVisibleToStudents,
     isLoading,
+    isLoadingFailed,
     isTitleEditFormOpen,
     sharedClipboardData,
     showPasteXBlock,
