@@ -32,7 +32,6 @@ import {
   fetchSequenceSuccess,
   fetchCourseSectionVerticalDataSuccess,
   updateLoadingCourseSectionVerticalDataStatus,
-  updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
   updateQueryPendingStatus,
@@ -154,7 +153,6 @@ export function editCourseUnitVisibilityAndData(itemId, type, isVisible, groupAc
 
 export function createNewCourseXBlock(body, callback, blockId) {
   return async (dispatch) => {
-    dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.IN_PROGRESS }));
     dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
 
     if (body.stagedContent) {
@@ -182,7 +180,6 @@ export function createNewCourseXBlock(body, callback, blockId) {
           const courseVerticalChildrenData = await getCourseVerticalChildren(blockId);
           dispatch(updateCourseVerticalChildren(courseVerticalChildrenData));
           dispatch(hideProcessingNotification());
-          dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.SUCCESSFUL }));
           dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
           if (callback) {
             callback(result);
@@ -194,7 +191,6 @@ export function createNewCourseXBlock(body, callback, blockId) {
       });
     } catch (error) {
       dispatch(hideProcessingNotification());
-      dispatch(updateLoadingCourseXblockStatus({ status: RequestStatus.FAILED }));
       handleResponseErrors(error, dispatch, updateSavingStatus);
     }
   };
