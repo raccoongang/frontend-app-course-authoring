@@ -67,12 +67,6 @@ const slice = createSlice({
         courseSectionVerticalLoadingStatus: payload.status,
       };
     },
-    updateLoadingCourseXblockStatus: (state, { payload }) => {
-      state.loadingStatus = {
-        ...state.loadingStatus,
-        createUnitXblockLoadingStatus: payload.status,
-      };
-    },
     addNewUnitStatus: (state, { payload }) => {
       state.loadingStatus = {
         ...state.loadingStatus,
@@ -138,7 +132,6 @@ export const {
   updateLoadingCourseSectionVerticalDataStatus,
   changeEditTitleFormOpen,
   updateQueryPendingStatus,
-  updateLoadingCourseXblockStatus,
   updateCourseVerticalChildren,
   updateCourseVerticalChildrenLoadingStatus,
   deleteXBlock,
