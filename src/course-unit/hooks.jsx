@@ -34,6 +34,8 @@ import { useCopyToClipboard } from '../generic/clipboard';
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
   const dispatch = useDispatch();
+  const [isXBlocksExpanded, setXBlocksExpanded] = useState(false);
+  const [isXBlocksRendered, setIsXBlocksRendered] = useState(false);
 
   const [isErrorAlert, toggleErrorAlert] = useState(false);
   const [hasInternetConnectionError, setInternetConnectionError] = useState(false);
@@ -107,6 +109,11 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback));
   };
 
+  const handleExpandAll = () => {
+    setIsXBlocksRendered(true);
+    setXBlocksExpanded((prevState) => !prevState);
+  };
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       dispatch(updateQueryPendingStatus(true));
@@ -149,5 +156,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     courseVerticalChildren,
     handleXBlockDragAndDrop,
     canPasteComponent,
+    isXBlocksExpanded,
+    isXBlocksRendered,
+    handleExpandAll,
   };
 };

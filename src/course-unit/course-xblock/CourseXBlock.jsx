@@ -40,7 +40,8 @@ import { extractStylesWithContent } from './utils';
 
 const CourseXBlock = memo(({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, actions, ...props
+  handleConfigureSubmit, validationMessages, renderError, actions,
+  isXBlocksExpanded, isXBlocksRendered, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -54,8 +55,13 @@ const CourseXBlock = memo(({
     () => find(xblockIFrameHtmlAndResources, { xblockId: id }),
     [id, xblockIFrameHtmlAndResources],
   );
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isRendered, setIsRendered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(isXBlocksExpanded);
+  const [isRendered, setIsRendered] = useState(isXBlocksRendered);
+
+  useEffect(() => {
+    setIsExpanded(isXBlocksExpanded);
+    setIsRendered(isXBlocksRendered);
+  }, [isXBlocksExpanded, isXBlocksRendered]);
 
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canMove,
@@ -268,6 +274,8 @@ CourseXBlock.propTypes = {
     canManageAccess: PropTypes.bool,
     canMove: PropTypes.bool,
   }).isRequired,
+  isXBlocksExpanded: PropTypes.bool.isRequired,
+  isXBlocksRendered: PropTypes.bool.isRequired,
 };
 
 export default CourseXBlock;
