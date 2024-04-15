@@ -51,7 +51,8 @@ const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
 const CourseXBlock = memo(({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
-  handleConfigureSubmit, validationMessages, renderError, actions, blockId, ...props
+  handleConfigureSubmit, validationMessages, renderError, actions, blockId,
+  isXBlocksExpanded, isXBlocksRendered, ...props
 }) => {
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
@@ -68,8 +69,13 @@ const CourseXBlock = memo(({
   );
   const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
   const xblockLegacyEditModalRef = useRef(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isRendered, setIsRendered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(isXBlocksExpanded);
+  const [isRendered, setIsRendered] = useState(isXBlocksRendered);
+
+  useEffect(() => {
+    setIsExpanded(isXBlocksExpanded);
+    setIsRendered(isXBlocksRendered);
+  }, [isXBlocksExpanded, isXBlocksRendered]);
 
   const {
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
@@ -357,6 +363,8 @@ CourseXBlock.propTypes = {
     canManageTags: PropTypes.bool,
     canMove: PropTypes.bool,
   }).isRequired,
+  isXBlocksExpanded: PropTypes.bool.isRequired,
+  isXBlocksRendered: PropTypes.bool.isRequired,
 };
 
 export default CourseXBlock;

@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -35,6 +37,8 @@ import { useCopyToClipboard } from '../generic/clipboard';
 export const useCourseUnit = ({ courseId, blockId }) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
+  const [isXBlocksExpanded, setXBlocksExpanded] = useState(false);
+  const [isXBlocksRendered, setIsXBlocksRendered] = useState(false);
 
   const courseUnit = useSelector(getCourseUnitData);
   const savingStatus = useSelector(getSavingStatus);
@@ -112,6 +116,11 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback));
   };
 
+  const handleExpandAll = () => {
+    setIsXBlocksRendered(true);
+    setXBlocksExpanded((prevState) => !prevState);
+  };
+
   useEffect(() => {
     if (savingStatus === RequestStatus.SUCCESSFUL) {
       dispatch(updateQueryPendingStatus(true));
@@ -149,6 +158,9 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     handleConfigureSubmit,
     courseVerticalChildren,
     handleXBlockDragAndDrop,
+    isXBlocksExpanded,
+    isXBlocksRendered,
+    handleExpandAll,
     canPasteComponent,
   };
 };
