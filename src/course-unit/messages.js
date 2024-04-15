@@ -13,6 +13,14 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.paste-component.btn.text',
     defaultMessage: 'Paste component',
   },
+  collapseAllButton: {
+    id: 'course-authoring.course-unit.xblocks.button.collapse-all',
+    defaultMessage: 'Collapse all',
+  },
+  expandAllButton: {
+    id: 'course-authoring.course-unit.xblocks.button.expand-all',
+    defaultMessage: 'Expand all',
+  },
 });
 
 export default messages;
