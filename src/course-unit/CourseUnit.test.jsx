@@ -594,6 +594,7 @@ describe('<CourseUnit />', () => {
             block_id: '1234567890',
             block_type: 'drag-and-drop-v2',
             user_partition_info: {},
+            actions: courseVerticalChildrenMock.children[0].actions,
           },
         ],
       });
@@ -1083,10 +1084,7 @@ describe('<CourseUnit />', () => {
         children: [
           {
             ...courseVerticalChildrenMock.children[0],
-            actions: {
-              ...courseVerticalChildrenMock.children[0].actions,
-              updatedXBlockActions,
-            },
+            actions: updatedXBlockActions,
           },
         ],
       });
@@ -1102,14 +1100,16 @@ describe('<CourseUnit />', () => {
       const moveBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonMove.defaultMessage });
       const copyToClipboardBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonCopyToClipboard.defaultMessage });
       const manageAccessBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageAccess.defaultMessage });
-      const manageTagsBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageTags.defaultMessage });
+      // ToDo: uncomment next lines when manage tags will be realized
+      // eslint-disable-next-line max-len
+      // const manageTagsBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageTags.defaultMessage });
 
       expect(deleteBtn).not.toBeInTheDocument();
       expect(duplicateBtn).not.toBeInTheDocument();
       expect(moveBtn).not.toBeInTheDocument();
       expect(copyToClipboardBtn).not.toBeInTheDocument();
       expect(manageAccessBtn).not.toBeInTheDocument();
-      expect(manageTagsBtn).not.toBeInTheDocument();
+      // expect(manageTagsBtn).not.toBeInTheDocument();
     });
   });
 
