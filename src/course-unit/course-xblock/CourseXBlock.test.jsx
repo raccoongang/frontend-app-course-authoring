@@ -66,7 +66,8 @@ const renderComponent = (props) => render(
         userPartitionInfo={userPartitionInfoFormatted}
         shouldScroll={false}
         handleConfigureSubmit={handleConfigureSubmitMock}
-        actions={xblockActions}{...props}
+        actions={xblockActions}
+        {...props}
       />
     </IntlProvider>
   </AppProvider>,
