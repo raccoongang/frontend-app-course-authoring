@@ -46,7 +46,7 @@ import messages from './messages';
 import { extractStylesWithContent } from './utils';
 import CourseIFrame from './CourseIFrame';
 
-const XBLOCK_EDIT_MODAL_CLASS_NAME = 'xblock-edit-modal';
+const XBLOCK_LEGACY_MODAL_CLASS_NAME = 'xblock-edit-modal';
 
 const CourseXBlock = memo(({
   id, title, type, unitXBlockActions, shouldScroll, userPartitionInfo,
@@ -67,7 +67,8 @@ const CourseXBlock = memo(({
     [id, xblockIFrameHtmlAndResources],
   );
   const [showLegacyEditModal, toggleLegacyEditModal] = useState(false);
-  const xblockLegacyEditModalRef = useRef(null);
+  const [showLegacyMoveModal, toggleLegacyMoveModal] = useState(false);
+  const xblockLegacyModalRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(isXBlocksExpanded);
   const [isRendered, setIsRendered] = useState(isXBlocksRendered);
 
@@ -80,7 +81,7 @@ const CourseXBlock = memo(({
     canCopy, canDelete, canDuplicate, canManageAccess, canManageTags, canMove,
   } = actions;
 
-  useOverflowControl(`.${XBLOCK_EDIT_MODAL_CLASS_NAME}`);
+  useOverflowControl(`.${XBLOCK_LEGACY_MODAL_CLASS_NAME}`);
 
   useEffect(() => {
     const handleMessage = (event) => {
@@ -88,6 +89,11 @@ const CourseXBlock = memo(({
 
       if (method === 'close_edit_modal') {
         toggleLegacyEditModal(false);
+        dispatch(fetchCourseVerticalChildrenData(blockId));
+        dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
+        dispatch(fetchCourseUnitQuery(blockId));
+      } else if (method === 'close_move_modal') {
+        toggleLegacyMoveModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
         dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
         dispatch(fetchCourseUnitQuery(blockId));
@@ -99,7 +105,7 @@ const CourseXBlock = memo(({
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [xblockLegacyEditModalRef]);
+  }, [xblockLegacyModalRef]);
 
   const {
     data: contentTaxonomyTagsCount,
@@ -147,6 +153,11 @@ const CourseXBlock = memo(({
     }
   };
 
+  const handleMove = () => {
+    toggleLegacyMoveModal(true);
+    localStorage.setItem('movingXBlockId', id);
+  };
+
   const onConfigureSubmit = (...arg) => {
     handleConfigureSubmit(id, ...arg, closeConfigureModal);
   };
@@ -166,12 +177,22 @@ const CourseXBlock = memo(({
   return (
     <>
       {showLegacyEditModal && (
-        <div className={XBLOCK_EDIT_MODAL_CLASS_NAME}>
+        <div className={XBLOCK_LEGACY_MODAL_CLASS_NAME}>
           <CourseIFrame
             title="xblock-edit-modal-iframe"
             key="xblock-edit-modal-key"
-            ref={xblockLegacyEditModalRef}
-            src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/editor`}
+            ref={xblockLegacyModalRef}
+            src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/actions/edit`}
+          />
+        </div>
+      )}
+      {showLegacyMoveModal && (
+        <div className={XBLOCK_LEGACY_MODAL_CLASS_NAME}>
+          <CourseIFrame
+            title="xblock-move-modal-iframe"
+            key="xblock-move-modal-key"
+            ref={xblockLegacyModalRef}
+            src={`${getConfig().STUDIO_BASE_URL}/xblock/${id}/actions/move`}
           />
         </div>
       )}
@@ -236,7 +257,7 @@ const CourseXBlock = memo(({
                       </Dropdown.Item>
                     )}
                     {canMove && (
-                      <Dropdown.Item>
+                      <Dropdown.Item onClick={handleMove}>
                         {intl.formatMessage(messages.blockLabelButtonMove)}
                       </Dropdown.Item>
                     )}
