@@ -22,6 +22,7 @@ import {
   setXBlockOrderList,
   getXBlockIFrameData,
   getCsrfTokenData,
+  rollbackUnitItem,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -41,6 +42,7 @@ import {
   reorderXBlockList,
   fetchXBlockIFrameResources,
   fetchCsrfTokenSuccess,
+  updateMovedXBlockParams,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -247,6 +249,27 @@ export function duplicateUnitItemQuery(itemId, xblockId) {
       dispatch(fetchCourseItemSuccess(courseUnit));
       dispatch(hideProcessingNotification());
       dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+    } catch (error) {
+      dispatch(hideProcessingNotification());
+      handleResponseErrors(error, dispatch, updateSavingStatus);
+    }
+  };
+}
+
+export function rollbackUnitItemQuery(itemId, xblockId, title) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.undoMoving));
+
+    try {
+      await rollbackUnitItem(itemId, xblockId);
+      const newCourseVerticalChildren = await getCourseVerticalChildren(itemId);
+      dispatch(updateCourseVerticalChildren(newCourseVerticalChildren));
+      const courseUnit = await getCourseUnitData(itemId);
+      dispatch(fetchCourseItemSuccess(courseUnit));
+      dispatch(hideProcessingNotification());
+      dispatch(updateSavingStatus({ status: RequestStatus.SUCCESSFUL }));
+      dispatch(updateMovedXBlockParams({ title, isSuccess: true, isUndo: true }));
     } catch (error) {
       dispatch(hideProcessingNotification());
       handleResponseErrors(error, dispatch, updateSavingStatus);
