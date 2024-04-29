@@ -14,6 +14,7 @@ export const getSequenceId = (state) => state.courseUnit.sequenceId;
 export const getCourseVerticalChildren = (state) => state.courseUnit.courseVerticalChildren;
 export const getCsrfTokenData = (state) => state.courseUnit.csrfToken;
 const getLoadingStatuses = (state) => state.courseUnit.loadingStatus;
+export const getMovedXBlockParams = (state) => state.courseUnit.movedXBlockParams;
 export const getXBlockIFrameHtmlAndResources = (state) => state.courseUnit.xblockIFrameHtmlAndResources;
 export const getIsLoading = createSelector(
   [getLoadingStatuses],

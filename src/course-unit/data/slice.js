@@ -11,6 +11,13 @@ const slice = createSlice({
     csrfToken: '',
     isQueryPending: false,
     isTitleEditFormOpen: false,
+    movedXBlockParams: {
+      isSuccess: false,
+      isUndo: false,
+      title: '',
+      sourceLocator: '',
+      targetParentLocator: '',
+    },
     loadingStatus: {
       fetchUnitLoadingStatus: RequestStatus.IN_PROGRESS,
       courseSectionVerticalLoadingStatus: RequestStatus.IN_PROGRESS,
@@ -34,6 +41,9 @@ const slice = createSlice({
     },
     updateQueryPendingStatus: (state, { payload }) => {
       state.isQueryPending = payload;
+    },
+    updateMovedXBlockParams: (state, { payload }) => {
+      state.movedXBlockParams = { ...state.movedXBlockParams, ...payload };
     },
     changeEditTitleFormOpen: (state, { payload }) => {
       state.isTitleEditFormOpen = payload;
@@ -140,6 +150,7 @@ export const {
   reorderXBlockList,
   fetchXBlockIFrameResources,
   fetchCsrfTokenSuccess,
+  updateMovedXBlockParams,
 } = slice.actions;
 
 export const {

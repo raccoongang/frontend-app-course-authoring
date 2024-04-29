@@ -5,7 +5,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
-import { camelCaseObject, initializeMockApp } from '@edx/frontend-platform';
+import { camelCaseObject, getConfig, initializeMockApp } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { cloneDeep, set } from 'lodash';
 
@@ -23,20 +23,18 @@ import {
   fetchCourseSectionVerticalData,
   fetchCourseUnitQuery,
   fetchCourseVerticalChildrenData,
+  rollbackUnitItemQuery,
 } from './data/thunk';
 import initializeStore from '../store';
 import {
+  clipboardMockResponse,
   courseCreateXblockMock,
   courseSectionVerticalMock,
   courseUnitIndexMock,
   courseUnitMock,
   courseVerticalChildrenMock,
-  clipboardMockResponse,
 } from './__mocks__';
-import {
-  clipboardUnit,
-  clipboardXBlock,
-} from '../__mocks__';
+import { clipboardUnit, clipboardXBlock } from '../__mocks__';
 import { executeThunk } from '../utils';
 import deleteModalMessages from '../generic/delete-modal/messages';
 import pasteComponentMessages from '../generic/clipboard/paste-component/messages';
@@ -110,6 +108,17 @@ jest.mock('../generic/hooks', () => ({
 }));
 
 global.BroadcastChannel = jest.fn(() => clipboardBroadcastChannelMock);
+
+const getIFramePostMessages = (method) => ({
+  data: {
+    method,
+    params: {
+      targetParentLocator: courseId,
+      sourceDisplayName: courseVerticalChildrenMock.children[0].name,
+      sourceLocator: courseVerticalChildrenMock.children[0].block_id,
+    },
+  },
+});
 
 const RootWrapper = () => (
   <AppProvider store={store}>
@@ -1588,6 +1597,155 @@ describe('<CourseUnit />', () => {
         // xblock content appears inside the xblock element
         expect(unitXBlockContentSections.length).toBeGreaterThan(0);
       });
+    });
+  });
+
+  describe('Edit and move modals', () => {
+    it('should close the edit modal when the close button is clicked', async () => {
+      const { getByTitle, getAllByTestId } = render(<RootWrapper />);
+
+      axiosMock
+        .onGet(getCourseVerticalChildrenApiUrl(blockId))
+        .reply(200, courseVerticalChildrenMock);
+
+      await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
+
+      const [discussionXBlock] = getAllByTestId('course-xblock');
+      const xblockEditBtn = within(discussionXBlock)
+        .getByLabelText(courseXBlockMessages.blockAltButtonEdit.defaultMessage);
+
+      userEvent.click(xblockEditBtn);
+
+      const iframePostMsg = getIFramePostMessages('close_edit_modal');
+      const editModalIFrame = getByTitle('xblock-edit-modal-iframe');
+
+      expect(editModalIFrame).toHaveAttribute('src', `${getConfig().STUDIO_BASE_URL}/xblock/${courseVerticalChildrenMock.children[0].block_id}/actions/edit`);
+
+      await act(async () => window.dispatchEvent(new MessageEvent('message', iframePostMsg)));
+
+      expect(editModalIFrame).not.toBeInTheDocument();
+    });
+
+    it('should display success alert and close move modal when move event is triggered', async () => {
+      const {
+        getByTitle,
+        getByRole,
+        getAllByLabelText,
+        getByText,
+      } = render(<RootWrapper />);
+
+      const iframePostMsg = getIFramePostMessages('move_xblock');
+
+      axiosMock
+        .onGet(getCourseVerticalChildrenApiUrl(blockId))
+        .reply(200, courseVerticalChildrenMock);
+
+      await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
+
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
+      userEvent.click(xblockActionBtn);
+
+      const xblockMoveBtn = getByRole('button', { name: courseXBlockMessages.blockLabelButtonMove.defaultMessage });
+      userEvent.click(xblockMoveBtn);
+
+      const moveModalIFrame = getByTitle('xblock-move-modal-iframe');
+
+      await act(async () => window.dispatchEvent(new MessageEvent('message', iframePostMsg)));
+
+      expect(moveModalIFrame).not.toBeInTheDocument();
+      expect(getByText(messages.alertMoveSuccessTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(
+        messages.alertMoveSuccessDescription.defaultMessage
+          .replace('{title}', courseVerticalChildrenMock.children[0].name),
+      )).toBeInTheDocument();
+
+      await waitFor(() => {
+        userEvent.click(getByText(/Cancel/i));
+        expect(moveModalIFrame).not.toBeInTheDocument();
+      });
+    });
+
+    it('should navigate to new location when new location button is clicked after successful move', async () => {
+      const {
+        getByTitle,
+        getByRole,
+        getAllByLabelText,
+        getByText,
+      } = render(<RootWrapper />);
+
+      const iframePostMsg = getIFramePostMessages('move_xblock');
+
+      axiosMock
+        .onGet(getCourseVerticalChildrenApiUrl(blockId))
+        .reply(200, courseVerticalChildrenMock);
+
+      await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
+
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
+      userEvent.click(xblockActionBtn);
+
+      const xblockMoveBtn = getByRole('button', { name: courseXBlockMessages.blockLabelButtonMove.defaultMessage });
+      userEvent.click(xblockMoveBtn);
+
+      const moveModalIFrame = getByTitle('xblock-move-modal-iframe');
+
+      await act(async () => window.dispatchEvent(new MessageEvent('message', iframePostMsg)));
+
+      expect(moveModalIFrame).not.toBeInTheDocument();
+      expect(getByText(messages.alertMoveSuccessTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(
+        messages.alertMoveSuccessDescription.defaultMessage
+          .replace('{title}', courseVerticalChildrenMock.children[0].name),
+      )).toBeInTheDocument();
+
+      await waitFor(() => {
+        userEvent.click(getByText(messages.newLocationButton.defaultMessage));
+        expect(mockedUsedNavigate).toHaveBeenCalledWith(`/course/${courseId}/container/${iframePostMsg.data.params.targetParentLocator}`);
+      });
+    });
+
+    it('should display move cancellation alert when undo move button is clicked', async () => {
+      const {
+        getByRole,
+        getAllByLabelText,
+        getByText,
+      } = render(<RootWrapper />);
+
+      const iframePostMsg = getIFramePostMessages('move_xblock');
+
+      axiosMock
+        .onGet(getCourseVerticalChildrenApiUrl(blockId))
+        .reply(200, courseVerticalChildrenMock);
+
+      await executeThunk(fetchCourseVerticalChildrenData(blockId), store.dispatch);
+
+      const [xblockActionBtn] = getAllByLabelText(courseXBlockMessages.blockActionsDropdownAlt.defaultMessage);
+      userEvent.click(xblockActionBtn);
+
+      const xblockMoveBtn = getByRole('button', { name: courseXBlockMessages.blockLabelButtonMove.defaultMessage });
+      userEvent.click(xblockMoveBtn);
+
+      await act(async () => window.dispatchEvent(new MessageEvent('message', iframePostMsg)));
+
+      await waitFor(() => userEvent.click(getByText(messages.undoMoveButton.defaultMessage)));
+
+      axiosMock
+        .onPatch(postXBlockBaseApiUrl(), {
+          parent_locator: blockId,
+          move_source_locator: courseVerticalChildrenMock.children[0].block_id,
+        })
+        .reply(200, {
+          parent_locator: blockId,
+          move_source_locator: courseVerticalChildrenMock.children[0].block_id,
+        });
+
+      await executeThunk(rollbackUnitItemQuery(blockId, courseVerticalChildrenMock.children[0].block_id, 'Discussion'), store.dispatch);
+
+      expect(getByText(messages.alertMoveCancelTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(
+        messages.alertMoveCancelDescription.defaultMessage
+          .replace('{title}', courseVerticalChildrenMock.children[0].name),
+      )).toBeInTheDocument();
     });
   });
 });
