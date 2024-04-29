@@ -998,9 +998,7 @@ describe('<CourseUnit />', () => {
         children: [
           {
             ...courseVerticalChildrenMock.children[0],
-            actions: {
-              ...updatedXBlockActions,
-            },
+            actions: updatedXBlockActions,
           },
         ],
       });
