@@ -54,14 +54,6 @@ const messages = defineMessages({
     id: 'course-authoring.course-unit.xblock.button.manageTags.label',
     defaultMessage: 'Manage tags',
   },
-  visibilityMessage: {
-    id: 'course-authoring.course-unit.xblock.visibility.message',
-    defaultMessage: 'Access restricted to: {selectedGroupsLabel}',
-  },
-  validationSummary: {
-    id: 'course-authoring.course-unit.xblock.validation.summary',
-    defaultMessage: 'This component has validation issues.',
-  },
   expandTooltip: {
     id: 'course-authoring.course-unit.xblock.expandTooltip',
     defaultMessage: 'Collapse/Expand this block',

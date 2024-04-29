@@ -135,6 +135,29 @@ describe('<ModalDropzone />', () => {
     await expect(uploadAssets(courseId, fileData, () => {})).rejects.toThrow('Network Error');
   });
 
+  it('displays an error message when the file size exceeds the limit', async () => {
+    const maxSizeInBytes = 20 * 1000 * 1000;
+
+    const { getByText, getByRole } = render(<RootWrapper {...props} maxSize={maxSizeInBytes} />);
+    const dropzoneInput = getByRole('presentation', { hidden: true });
+
+    const imageFile = new File(
+      [new ArrayBuffer(maxSizeInBytes + 1)],
+      'test-file.png',
+      { type: 'image/png' },
+    );
+
+    userEvent.upload(dropzoneInput.firstChild, imageFile);
+
+    await waitFor(() => {
+      // Assert that the error message is displayed
+      const maxSizeInMB = maxSizeInBytes / (1000 * 1000);
+      const expectedErrorMessage = messages.uploadImageDropzoneInvalidSizeMore
+        .defaultMessage.replace('{maxSize}', maxSizeInMB);
+      expect(getByText(expectedErrorMessage)).toBeInTheDocument();
+    });
+  });
+
   it('displays a custom error message when the file size exceeds the limit', async () => {
     const maxSizeInBytes = 20 * 1000 * 1000;
     const expectedErrorMessage = 'Custom error message';
@@ -144,13 +167,13 @@ describe('<ModalDropzone />', () => {
     );
     const dropzoneInput = getByRole('presentation', { hidden: true });
 
-    const fileToUpload = new File(
+    const imageFile = new File(
       [new ArrayBuffer(maxSizeInBytes + 1)],
       'test-file.png',
       { type: 'image/png' },
     );
 
-    userEvent.upload(dropzoneInput.firstChild, fileToUpload);
+    userEvent.upload(dropzoneInput.firstChild, imageFile);
 
     await waitFor(() => {
       expect(getByText(expectedErrorMessage)).toBeInTheDocument();
