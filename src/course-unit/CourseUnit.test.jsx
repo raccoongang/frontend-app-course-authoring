@@ -597,6 +597,14 @@ describe('<CourseUnit />', () => {
             name: 'New Cloned XBlock',
             block_id: '1234567890',
             block_type: 'drag-and-drop-v2',
+            actions: {
+              canCopy: true,
+              canDuplicate: true,
+              canMove: true,
+              canManageAccess: true,
+              canManageTags: true,
+              canDelete: true,
+            },
             user_partition_info: {},
           },
         ],
@@ -991,8 +999,7 @@ describe('<CourseUnit />', () => {
           {
             ...courseVerticalChildrenMock.children[0],
             actions: {
-              ...courseVerticalChildrenMock.children[0].actions,
-              updatedXBlockActions,
+              ...updatedXBlockActions,
             },
           },
         ],
@@ -1009,7 +1016,7 @@ describe('<CourseUnit />', () => {
       const moveBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonMove.defaultMessage });
       const copyToClipboardBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonCopyToClipboard.defaultMessage });
       const manageAccessBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageAccess.defaultMessage });
-      const manageTagsBtn = queryByRole('button', { name: courseXBlockMessages.blockLabelButtonManageTags.defaultMessage });
+      const manageTagsBtn = queryByRole('link', { name: courseXBlockMessages.blockLabelButtonManageTags.defaultMessage });
 
       expect(deleteBtn).not.toBeInTheDocument();
       expect(duplicateBtn).not.toBeInTheDocument();

@@ -138,13 +138,13 @@ describe('<ModalDropzone />', () => {
     const { getByText, getByRole } = render(<RootWrapper {...props} maxSize={maxSizeInBytes} />);
     const dropzoneInput = getByRole('presentation', { hidden: true });
 
-    const file = new File(
+    const imageFile = new File(
       [new ArrayBuffer(maxSizeInBytes + 1)],
       'test-file.png',
       { type: 'image/png' },
     );
 
-    userEvent.upload(dropzoneInput.firstChild, file);
+    userEvent.upload(dropzoneInput.firstChild, imageFile);
 
     await waitFor(() => {
       // Assert that the error message is displayed
@@ -164,13 +164,13 @@ describe('<ModalDropzone />', () => {
     );
     const dropzoneInput = getByRole('presentation', { hidden: true });
 
-    const file = new File(
+    const imageFile = new File(
       [new ArrayBuffer(maxSizeInBytes + 1)],
       'test-file.png',
       { type: 'image/png' },
     );
 
-    userEvent.upload(dropzoneInput.firstChild, file);
+    userEvent.upload(dropzoneInput.firstChild, imageFile);
 
     await waitFor(() => {
       expect(getByText(expectedErrorMessage)).toBeInTheDocument();
