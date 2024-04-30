@@ -43,6 +43,7 @@ const messages = defineMessages({
   blockLabelButtonManageTags: {
     id: 'course-authoring.course-unit.xblock.button.manageTags.label',
     defaultMessage: 'Manage tags',
+    description: 'The xblock manage tags button text',
   },
   visibilityMessage: {
     id: 'course-authoring.course-unit.xblock.visibility.message',
