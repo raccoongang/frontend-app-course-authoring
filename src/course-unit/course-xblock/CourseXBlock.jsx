@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, OverlayTrigger, Tooltip, Button,
+  ActionRow, Card, Dropdown, Icon, IconButton, useToggle, OverlayTrigger, Tooltip, Button, Sheet,
 } from '@openedx/paragon';
 import {
   EditOutline as EditIcon,
@@ -17,6 +17,9 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { find } from 'lodash';
 import classNames from 'classnames';
 
+import ContentTagsDrawer from '../../content-tags-drawer/ContentTagsDrawer';
+import { useContentTagsCount } from '../../generic/data/apiHooks';
+import TagCount from '../../generic/tag-count';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import SortableItem from '../../generic/drag-helper/SortableItem';
@@ -46,6 +49,7 @@ const CourseXBlock = memo(({
   const courseXBlockElementRef = useRef(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
+  const [isManageTagsOpen, openManageTagsModal, closeManageTagsModal] = useToggle(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const courseId = useSelector(getCourseId);
@@ -64,8 +68,13 @@ const CourseXBlock = memo(({
   }, [isXBlocksExpanded, isXBlocksRendered]);
 
   const {
-    canCopy, canDelete, canDuplicate, canManageAccess, canMove,
+    canCopy, canDelete, canDuplicate, canManageAccess, canMove, canManageTags,
   } = actions;
+
+  const {
+    data: contentTaxonomyTagsCount,
+    isSuccess: isContentTaxonomyTagsCountLoaded,
+  } = useContentTagsCount(id || '');
 
   const visibilityMessage = userPartitionInfo.selectedGroupsLabel
     ? intl.formatMessage(messages.visibilityMessage, { selectedGroupsLabel: userPartitionInfo.selectedGroupsLabel })
@@ -152,6 +161,12 @@ const CourseXBlock = memo(({
           subtitle={visibilityMessage}
           actions={(
             <ActionRow className="mr-2">
+              {
+                canManageTags
+                && isContentTaxonomyTagsCountLoaded
+                && contentTaxonomyTagsCount > 0
+                && <div className="ml-2"><TagCount count={contentTaxonomyTagsCount} onClick={openManageTagsModal} /></div>
+              }
               <IconButton
                 alt={intl.formatMessage(messages.blockAltButtonEdit)}
                 iconAs={EditIcon}
@@ -166,6 +181,16 @@ const CourseXBlock = memo(({
                   iconAs={Icon}
                 />
                 <Dropdown.Menu>
+                  {canManageTags && (
+                    <Dropdown.Item onClick={openManageTagsModal}>
+                      {intl.formatMessage(messages.blockLabelButtonManageTags)}
+                    </Dropdown.Item>
+                  )}
+                  {canCopy && (
+                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
+                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
+                    </Dropdown.Item>
+                  )}
                   {canDuplicate && (
                     <Dropdown.Item onClick={() => unitXBlockActions.handleDuplicate(id)}>
                       {intl.formatMessage(messages.blockLabelButtonDuplicate)}
@@ -174,11 +199,6 @@ const CourseXBlock = memo(({
                   {canMove && (
                     <Dropdown.Item>
                       {intl.formatMessage(messages.blockLabelButtonMove)}
-                    </Dropdown.Item>
-                  )}
-                  {canCopy && (
-                    <Dropdown.Item onClick={() => dispatch(copyToClipboard(id))}>
-                      {intl.formatMessage(messages.blockLabelButtonCopyToClipboard)}
                     </Dropdown.Item>
                   )}
                   {canManageAccess && (
@@ -206,6 +226,15 @@ const CourseXBlock = memo(({
                 onConfigureSubmit={onConfigureSubmit}
                 currentItemData={currentItemData}
               />
+              <Sheet
+                position="right"
+                show={isManageTagsOpen}
+                blocking={false}
+                variant="light"
+                onClose={closeManageTagsModal}
+              >
+                <ContentTagsDrawer id={id} onClose={closeManageTagsModal} />
+              </Sheet>
             </ActionRow>
           )}
         />
@@ -272,6 +301,7 @@ CourseXBlock.propTypes = {
     canDelete: PropTypes.bool,
     canDuplicate: PropTypes.bool,
     canManageAccess: PropTypes.bool,
+    canManageTags: PropTypes.bool,
     canMove: PropTypes.bool,
   }).isRequired,
   isXBlocksExpanded: PropTypes.bool.isRequired,
