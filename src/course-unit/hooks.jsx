@@ -38,6 +38,7 @@ import {
 import { PUBLISH_TYPES } from './constants';
 
 import { useCopyToClipboard } from '../generic/clipboard';
+import { createCorrectInternalRoute } from '../utils';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCourseUnit = ({ courseId, blockId }) => {
@@ -137,7 +138,8 @@ export const useCourseUnit = ({ courseId, blockId }) => {
   };
 
   const handleNavigateToTargetUnit = () => {
-    navigate(`/course/${courseId}/container/${movedXBlockParams.targetParentLocator}`);
+    const correctInternalRoute = createCorrectInternalRoute(`/course/${courseId}/container/${movedXBlockParams.targetParentLocator}`);
+    navigate(correctInternalRoute);
   };
 
   useEffect(() => {
