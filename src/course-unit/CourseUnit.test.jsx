@@ -1616,7 +1616,7 @@ describe('<CourseUnit />', () => {
 
       userEvent.click(xblockEditBtn);
 
-      const iframePostMsg = getIFramePostMessages('close_edit_modal');
+      const iframePostMsg = getIFramePostMessages('close_modal');
       const editModalIFrame = getByTitle('xblock-edit-modal-iframe');
 
       expect(editModalIFrame).toHaveAttribute('src', `${getConfig().STUDIO_BASE_URL}/xblock/${courseVerticalChildrenMock.children[0].block_id}/actions/edit`);
