@@ -87,13 +87,8 @@ const CourseXBlock = memo(({
     const handleMessage = (event) => {
       const { method, params } = event.data;
 
-      if (method === 'close_edit_modal') {
+      if (method === 'close_modal') {
         toggleLegacyEditModal(false);
-        dispatch(fetchCourseVerticalChildrenData(blockId));
-        dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
-        dispatch(fetchCourseUnitQuery(blockId));
-      } else if (method === 'close_move_modal') {
-        toggleLegacyMoveModal(false);
         dispatch(fetchCourseVerticalChildrenData(blockId));
         dispatch(fetchXBlockIFrameHtmlAndResourcesQuery(id));
         dispatch(fetchCourseUnitQuery(blockId));
