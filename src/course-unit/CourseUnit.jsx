@@ -2,10 +2,15 @@ import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Layout, Stack } from '@openedx/paragon';
+import {
+  Container, Layout, Stack, Button, TransitionReplace,
+} from '@openedx/paragon';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl, injectIntl } from '@edx/frontend-platform/i18n';
-import { Warning as WarningIcon } from '@openedx/paragon/icons';
+import {
+  Warning as WarningIcon,
+  CheckCircle as CheckCircleIcon,
+} from '@openedx/paragon/icons';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import DraggableList from '../editors/sharedComponents/DraggableList';
@@ -32,6 +37,7 @@ import PublishControls from './sidebar/PublishControls';
 import LocationInfo from './sidebar/LocationInfo';
 import TagsSidebarControls from '../content-tags-drawer/tags-sidebar-controls';
 import { PasteNotificationAlert } from './clipboard';
+import MoveModal from './move-modal';
 
 const CourseUnit = ({ courseId }) => {
   const { blockId } = useParams();
@@ -58,6 +64,13 @@ const CourseUnit = ({ courseId }) => {
     courseVerticalChildren,
     handleXBlockDragAndDrop,
     canPasteComponent,
+    isMoveModalOpen,
+    openMoveModal,
+    closeMoveModal,
+    movedXBlockParams,
+    handleRollbackMovedXBlock,
+    handleCloseXBlockMovedAlert,
+    handleNavigateToTargetUnit,
   } = useCourseUnit({ courseId, blockId });
 
   const initialXBlocksData = useMemo(() => courseVerticalChildren.children ?? [], [courseVerticalChildren.children]);
@@ -94,10 +107,40 @@ const CourseUnit = ({ courseId }) => {
     });
   };
 
+  console.log('movedXBlockParams', movedXBlockParams)
+
   return (
     <>
       <Container size="xl" className="course-unit px-4">
         <section className="course-unit-container mb-4 mt-5">
+          <TransitionReplace>
+            {movedXBlockParams.isSuccess ? (
+              <AlertMessage
+                key="xblock-moved-alert"
+                data-testid="xblock-moved-alert"
+                show={movedXBlockParams.isSuccess}
+                variant="success"
+                icon={CheckCircleIcon}
+                title={movedXBlockParams.isUndo
+                  ? intl.formatMessage(messages.alertMoveCancelTitle)
+                  : intl.formatMessage(messages.alertMoveSuccessTitle)}
+                description={movedXBlockParams.isUndo
+                  ? intl.formatMessage(messages.alertMoveCancelDescription, { title: movedXBlockParams.title })
+                  : intl.formatMessage(messages.alertMoveSuccessDescription, { title: movedXBlockParams.title })}
+                aria-hidden={movedXBlockParams.isSuccess}
+                dismissible
+                actions={movedXBlockParams.isUndo ? null : [
+                  <Button onClick={handleRollbackMovedXBlock}>
+                    {intl.formatMessage(messages.undoMoveButton)}
+                  </Button>,
+                  <Button onClick={handleNavigateToTargetUnit}>
+                    {intl.formatMessage(messages.newLocationButton)}
+                  </Button>,
+                ]}
+                onClose={handleCloseXBlockMovedAlert}
+              />
+            ) : null}
+          </TransitionReplace>
           <SubHeader
             hideBorder
             title={(
@@ -118,6 +161,18 @@ const CourseUnit = ({ courseId }) => {
               />
             )}
           />
+
+          <hr />
+          <hr />
+          <Button onClick={openMoveModal}>MOVE MODAL TRIGGER</Button>
+          <MoveModal
+            isOpen={isMoveModalOpen}
+            close={closeMoveModal}
+            displayName="Choosing a Compute Option"
+          />
+          <hr />
+          <hr />
+
           <Sequence
             courseId={courseId}
             sequenceId={sequenceId}

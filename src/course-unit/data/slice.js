@@ -20,6 +20,15 @@ const slice = createSlice({
     courseSectionVertical: {},
     courseVerticalChildren: { children: [], isPublished: true },
     staticFileNotices: {},
+    courseOutlineInfo: {},
+    courseOutlineInfoLoadingStatus: RequestStatus.IN_PROGRESS,
+    movedXBlockParams: {
+      isSuccess: false,
+      isUndo: false,
+      title: '',
+      sourceLocator: '',
+      targetParentLocator: '',
+    }
   },
   reducers: {
     fetchCourseItemSuccess: (state, { payload }) => {
@@ -111,6 +120,15 @@ const slice = createSlice({
       // This avoids the need to copy the array beforehand
       state.courseVerticalChildren.children.sort((a, b) => (indexMap.get(a.id) || 0) - (indexMap.get(b.id) || 0));
     },
+    updateCourseOutlineInfo: (state, { payload }) => {
+      state.courseOutlineInfo = payload;
+    },
+    updateCourseOutlineInfoLoadingStatus: (state, { payload }) => {
+      state.courseOutlineInfoLoadingStatus = payload.status;
+    },
+    updateMovedXBlockParams: (state, { payload }) => {
+      state.movedXBlockParams = { ...state.movedXBlockParams, ...payload };
+    },
   },
 });
 
@@ -133,6 +151,9 @@ export const {
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
+  updateCourseOutlineInfo,
+  updateCourseOutlineInfoLoadingStatus,
+  updateMovedXBlockParams,
 } = slice.actions;
 
 export const {

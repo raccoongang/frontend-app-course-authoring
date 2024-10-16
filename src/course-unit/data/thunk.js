@@ -19,6 +19,7 @@ import {
   deleteUnitItem,
   duplicateUnitItem,
   setXBlockOrderList,
+  getCourseOutlineInfo, patchUnitItem,
 } from './api';
 import {
   updateLoadingCourseUnitStatus,
@@ -37,6 +38,8 @@ import {
   duplicateXBlock,
   fetchStaticFileNoticesSuccess,
   reorderXBlockList,
+  updateCourseOutlineInfo,
+  updateCourseOutlineInfoLoadingStatus, updateMovedXBlockParams,
 } from './slice';
 import { getNotificationMessage } from './utils';
 
@@ -271,4 +274,49 @@ export function setXBlockOrderListQuery(blockId, xblockListIds, restoreCallback)
       dispatch(hideProcessingNotification());
     }
   };
+}
+
+export function getCourseOutlineInfoQuery(courseId) {
+  return async (dispatch) => {
+    dispatch(updateCourseOutlineInfoLoadingStatus({ status: RequestStatus.IN_PROGRESS }));
+
+    try {
+      await getCourseOutlineInfo(courseId).then(async (result) => {
+        if (result) {
+          dispatch(updateCourseOutlineInfo(result));
+          dispatch(updateCourseOutlineInfoLoadingStatus({ status: RequestStatus.SUCCESSFUL }));
+        }
+      })
+    } catch (error) {
+      handleResponseErrors(error, dispatch, updateSavingStatus);
+      dispatch(updateCourseOutlineInfoLoadingStatus({ status: RequestStatus.FAILED }));
+  }
+  }
+}
+
+export function patchUnitItemQuery({
+  sourceLocator, targetParentLocator, title, currentParentLocator, isMoving, callbackFn,
+}) {
+  return async (dispatch) => {
+    dispatch(updateSavingStatus({ status: RequestStatus.PENDING }));
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES[isMoving ? 'moving' : 'undoMoving']));
+
+    try {
+      await patchUnitItem(sourceLocator, isMoving ? targetParentLocator : currentParentLocator);
+      const xBlockParams = {
+        title,
+        isSuccess: true,
+        isUndo: !isMoving,
+        sourceLocator: sourceLocator || '',
+        targetParentLocator: targetParentLocator || '',
+        currentParentLocator: currentParentLocator || '',
+      };
+      dispatch(updateMovedXBlockParams(xBlockParams));
+      dispatch(hideProcessingNotification());
+      callbackFn();
+    } catch (error) {
+      handleResponseErrors(error, dispatch, updateSavingStatus);
+      dispatch(hideProcessingNotification());
+  }
+  }
 }
