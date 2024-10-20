@@ -39,11 +39,10 @@ export function fetchWaffleFlags(courseId) {
       dispatch(updateStatus({ courseId, status: RequestStatus.SUCCESSFUL }));
       dispatch(fetchWaffleFlagsSuccess({ waffleFlags }));
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        dispatch(updateStatus({ courseId, status: RequestStatus.NOT_FOUND }));
-      } else {
-        dispatch(updateStatus({ courseId, status: RequestStatus.FAILED }));
-      }
+      // If fetching the waffle flags is unsuccessful,
+      // the pages will still be accessible and display without any issues.
+      // eslint-disable-next-line no-console
+      console.error({ courseId, status: RequestStatus.NOT_FOUND });
     }
   };
 }
