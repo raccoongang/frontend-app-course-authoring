@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { ContentTagsDrawerSheet } from '../../content-tags-drawer';
 import TagCount from '../../generic/tag-count';
 import { useHelpUrls } from '../../help-urls/hooks';
+import { getWaffleFlags } from '../../data/selectors';
 import { VIDEO_SHARING_OPTIONS } from '../constants';
 import { useContentTagsCount } from '../../generic/data/apiHooks';
 import messages from './messages';
@@ -45,7 +46,7 @@ const StatusBar = ({
 }) => {
   const intl = useIntl();
   const { config } = useContext(AppContext);
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const {
     courseReleaseDate,

@@ -8,6 +8,7 @@ import {
 } from '@openedx/paragon/icons';
 import { getConfig } from '@edx/frontend-platform';
 
+import { getWaffleFlags } from '../../data/selectors';
 import { createCorrectInternalRoute } from '../../utils';
 import { getCourseSectionVertical } from '../data/selectors';
 import messages from './messages';
@@ -17,7 +18,7 @@ const Breadcrumbs = () => {
   const { ancestorXblocks } = useSelector(getCourseSectionVertical);
   const [section, subsection] = ancestorXblocks ?? [];
   const navigate = useNavigate();
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const handleClick = (e, url) => {
     e.preventDefault();
@@ -44,7 +45,7 @@ const Breadcrumbs = () => {
               {section.children.map(({ url, displayName }) => (
                 <Dropdown.Item
                   key={url}
-                  onClick={(e) => handleClick(e, createCorrectInternalRoute(`${url}`))}
+                  onClick={(e) => handleClick(e, createCorrectInternalRoute(url))}
                   className="small"
                   data-testid="breadcrumbs-section-dropdown-item"
                 >
@@ -73,7 +74,7 @@ const Breadcrumbs = () => {
               {subsection.children.map(({ url, displayName }) => (
                 <Dropdown.Item
                   key={url}
-                  onClick={(e) => handleClick(e, createCorrectInternalRoute(`${url}`))}
+                  onClick={(e) => handleClick(e, createCorrectInternalRoute(url))}
                   className="small"
                   data-testid="breadcrumbs-subsection-dropdown-item"
                 >

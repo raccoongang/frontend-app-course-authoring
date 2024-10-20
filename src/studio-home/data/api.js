@@ -13,7 +13,6 @@ export const getCourseNotificationUrl = (url) => new URL(url, getApiBaseUrl()).h
  */
 export async function getStudioHomeData() {
   const { data } = await getAuthenticatedHttpClient().get(getStudioHomeApiUrl());
-
   return camelCaseObject(data);
 }
 

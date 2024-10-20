@@ -1,80 +1,86 @@
 import { render, screen } from '@testing-library/react';
+import { useSelector } from 'react-redux';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import configureStore from 'redux-mock-store';
 
 import PageSettingButton from './PageSettingButton';
-import messages from '../messages';
 
-const mockStore = configureStore([]);
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+}));
 
-const renderComponent = (props, store) => {
-  render(
-    <Provider store={store}>
-      <IntlProvider locale="en" messages={messages}>
-        <MemoryRouter>
-          <PageSettingButton {...props} />
-        </MemoryRouter>
-      </IntlProvider>
-    </Provider>,
-  );
+jest.mock('react-router-dom', () => {
+  // eslint-disable-next-line global-require
+  const PropTypes = require('prop-types');
+
+  const Link = ({ children, to }) => <a href={to}>{children}</a>;
+
+  Link.propTypes = {
+    children: PropTypes.node.isRequired,
+    to: PropTypes.string.isRequired,
+  };
+
+  return {
+    useNavigate: jest.fn(),
+    Link,
+  };
+});
+
+const mockWaffleFlags = {
+  useNewTextbooksPage: true,
+  useNewCustomPages: true,
 };
 
+const defaultProps = {
+  id: 'page_id',
+  courseId: 'course-v1:edX+DemoX+Demo_Course',
+  legacyLink: 'http://legacylink.com/tabs',
+  allowedOperations: { configure: true, enable: true },
+};
+
+const renderComponent = (props = {}) => render(
+  <IntlProvider locale="en">
+    <PageSettingButton {...defaultProps} {...props} />
+  </IntlProvider>,
+);
+
 describe('PageSettingButton', () => {
-  let store;
-
   beforeEach(() => {
-    store = mockStore({
-      studioHomeData: {
-        waffleFlags: {
-          ENABLE_NEW_TEXTBOOKS_PAGE: true,
-          ENABLE_NEW_CUSTOM_PAGES: true,
-        },
-      },
-    });
+    useSelector.mockClear();
   });
 
-  it('renders a link when legacyLink is provided and matches textbooks condition', () => {
-    renderComponent({
-      id: 'page_1',
-      courseId: 'course_1',
-      legacyLink: 'textbooks',
-      allowedOperations: {},
-    }, store);
+  it('renders the settings button with the new textbooks page link when useNewTextbooksPage is true', () => {
+    useSelector.mockReturnValue(mockWaffleFlags);
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/textbooks');
+    renderComponent({ legacyLink: 'http://legacylink.com/textbooks' });
+
+    const linkElement = screen.getByRole('link');
+    expect(linkElement).toHaveAttribute('href', `/course/${defaultProps.courseId}/page-id`);
   });
 
-  it('renders a link when legacyLink is provided and matches tabs condition', () => {
-    renderComponent({
-      id: 'page_2',
-      courseId: 'course_2',
-      legacyLink: 'tabs',
-      allowedOperations: {},
-    }, store);
+  it('renders the settings button with the legacy link when useNewTextbooksPage is false', () => {
+    useSelector.mockReturnValue({ ...mockWaffleFlags, useNewTextbooksPage: false });
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/tabs');
+    renderComponent({ legacyLink: 'http://legacylink.com/textbooks' });
+
+    const linkElement = screen.getByRole('link');
+    expect(linkElement).toHaveAttribute('href', 'http://legacylink.com/textbooks');
   });
 
-  it('renders an IconButton when allowedOperations allows configuration or enabling', () => {
-    renderComponent({
-      id: 'page_3',
-      courseId: 'course_3',
-      allowedOperations: { configure: true },
-    }, store);
+  it('renders the settings button with the new custom pages link when useNewCustomPages is true', () => {
+    useSelector.mockReturnValue(mockWaffleFlags);
 
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    renderComponent();
+
+    const linkElement = screen.getByRole('link');
+    expect(linkElement).toHaveAttribute('href', `/course/${defaultProps.courseId}/page-id`);
   });
 
-  it('does not render anything when neither legacyLink nor allowedOperations allows configuration or enabling', () => {
-    renderComponent({
-      id: 'page_4',
-      courseId: 'course_4',
-      allowedOperations: {},
-    }, store);
+  it('renders the settings button with the legacy link when useNewCustomPages is false', () => {
+    useSelector.mockReturnValue({ ...mockWaffleFlags, useNewCustomPages: false });
 
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    renderComponent();
+
+    const linkElement = screen.getByRole('link');
+    expect(linkElement).toHaveAttribute('href', defaultProps.legacyLink);
   });
 });

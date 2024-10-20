@@ -18,8 +18,6 @@ import Loading from './generic/Loading';
 
 const CourseAuthoringPage = ({ courseId, children }) => {
   const dispatch = useDispatch();
-  const STORE = useSelector(state => state);
-  console.log('STORE', STORE);
 
   useEffect(() => {
     dispatch(fetchCourseDetail(courseId));

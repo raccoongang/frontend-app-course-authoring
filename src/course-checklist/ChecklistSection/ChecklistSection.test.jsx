@@ -23,53 +23,36 @@ const defaultProps = {
   checkId: 'welcomeMessage',
   isCompleted: false,
   updateLink: 'https://example.com/update',
-  intl: {
-    formatMessage: jest.fn(({ defaultMessage }) => defaultMessage),
-  },
 };
 
-const waffleFlags = {
-  ENABLE_NEW_COURSE_UPDATES_PAGE: false,
+const renderComponent = (props = {}, mockWaffleFlags = { useNewUpdatesPage: false }) => {
+  useSelector.mockReturnValue(mockWaffleFlags);
+  return render(
+    <IntlProvider locale="en">
+      <ChecklistItemBody {...defaultProps} {...props} />
+    </IntlProvider>,
+  );
 };
 
 describe('ChecklistItemBody', () => {
-  beforeEach(() => {
-    useSelector.mockReturnValue({ waffleFlags });
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders uncompleted icon when isCompleted is false', () => {
-    render(
-      <IntlProvider locale="en">
-        <ChecklistItemBody {...defaultProps} />
-      </IntlProvider>,
-    );
-
+    renderComponent();
     const uncompletedIcon = screen.getByTestId('uncompleted-icon');
     expect(uncompletedIcon).toBeInTheDocument();
   });
 
   it('renders completed icon when isCompleted is true', () => {
-    render(
-      <IntlProvider locale="en">
-        <ChecklistItemBody {...defaultProps} isCompleted />
-      </IntlProvider>,
-    );
-
+    renderComponent({ isCompleted: true });
     const completedIcon = screen.getByTestId('completed-icon');
     expect(completedIcon).toBeInTheDocument();
   });
 
   it('renders short and long descriptions based on checkId', () => {
-    render(
-      <IntlProvider locale="en">
-        <ChecklistItemBody {...defaultProps} />
-      </IntlProvider>,
-    );
-
+    renderComponent();
     const shortDescription = screen.getByText(messages.welcomeMessageShortDescription.defaultMessage);
     const longDescription = screen.getByText(messages.welcomeMessageLongDescription.defaultMessage);
 
@@ -78,38 +61,21 @@ describe('ChecklistItemBody', () => {
   });
 
   it('renders update hyperlink when updateLink is provided', () => {
-    render(
-      <IntlProvider locale="en">
-        <ChecklistItemBody {...defaultProps} />
-      </IntlProvider>,
-    );
-
+    renderComponent();
     const updateLink = screen.getByTestId('update-hyperlink');
     expect(updateLink).toBeInTheDocument();
   });
 
-  it('navigates to internal course page if ENABLE_NEW_COURSE_UPDATES_PAGE flag is enabled', () => {
-    useSelector.mockReturnValue({ waffleFlags: { ENABLE_NEW_COURSE_UPDATES_PAGE: true } });
-
-    render(
-      <IntlProvider locale="en">
-        <ChecklistItemBody {...defaultProps} />
-      </IntlProvider>,
-    );
-
+  it('navigates to internal course page if useNewUpdatesPage flag is enabled', () => {
+    renderComponent({}, { useNewUpdatesPage: true });
     const updateLink = screen.getByTestId('update-hyperlink');
     fireEvent.click(updateLink);
 
     expect(mockNavigate).toHaveBeenCalledWith(`/course/${defaultProps.courseId}/course_info`);
   });
 
-  it('redirects to external link if ENABLE_NEW_COURSE_UPDATES_PAGE flag is disabled', () => {
-    render(
-      <IntlProvider locale="en">
-        <ChecklistItemBody {...defaultProps} />
-      </IntlProvider>,
-    );
-
+  it('redirects to external link if useNewUpdatesPage flag is disabled', () => {
+    renderComponent();
     const updateLink = screen.getByTestId('update-hyperlink');
     fireEvent.click(updateLink);
 

@@ -10,6 +10,7 @@ import {
 import { useSelector } from 'react-redux';
 import { CheckCircle, RadioButtonUnchecked } from '@openedx/paragon/icons';
 
+import { getWaffleFlags } from '../../data/selectors';
 import messages from './messages';
 
 const ChecklistItemBody = ({
@@ -20,7 +21,7 @@ const ChecklistItemBody = ({
   // injected
   intl,
 }) => {
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
   const navigate = useNavigate();
 
   const handleClick = (e, url) => {

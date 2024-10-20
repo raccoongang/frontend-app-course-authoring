@@ -37,7 +37,6 @@ export function fetchWaffleFlags(courseId) {
     try {
       const waffleFlags = await getWaffleFlags(courseId);
       dispatch(updateStatus({ courseId, status: RequestStatus.SUCCESSFUL }));
-      console.log('fetchWaffleFlags thunk', waffleFlags);
       dispatch(fetchWaffleFlagsSuccess({ waffleFlags }));
     } catch (error) {
       if (error.response && error.response.status === 404) {

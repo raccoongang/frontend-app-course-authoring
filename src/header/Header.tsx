@@ -5,7 +5,7 @@ import { StudioHeader } from '@edx/frontend-component-header';
 import { type Container, useToggle } from '@openedx/paragon';
 import { generatePath, useHref, useNavigate } from 'react-router-dom';
 
-import { getStudioHomeData } from '../studio-home/data/selectors';
+import { getWaffleFlags } from '../data/selectors';
 import { SearchModal } from '../search-modal';
 import { useContentMenuItems, useSettingMenuItems, useToolsMenuItems } from './hooks';
 import messages from './messages';
@@ -34,7 +34,7 @@ const Header = ({
   const intl = useIntl();
   const libraryHref = useHref('/library/:libraryId');
   const navigate = useNavigate();
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const [isShowSearchModalOpen, openSearchModal, closeSearchModal] = useToggle(false);
 

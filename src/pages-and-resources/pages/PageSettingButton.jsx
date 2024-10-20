@@ -7,6 +7,7 @@ import { Icon, IconButton } from '@openedx/paragon';
 import { ArrowForward, Settings } from '@openedx/paragon/icons';
 import { useNavigate, Link } from 'react-router-dom';
 
+import { getWaffleFlags } from '../../data/selectors';
 import messages from '../messages';
 import { PagesAndResourcesContext } from '../PagesAndResourcesProvider';
 
@@ -19,7 +20,7 @@ const PageSettingButton = ({
   const { formatMessage } = useIntl();
   const { path: pagesAndResourcesPath } = useContext(PagesAndResourcesContext);
   const navigate = useNavigate();
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const determineLinkDestination = useMemo(() => {
     if (!legacyLink) { return null; }

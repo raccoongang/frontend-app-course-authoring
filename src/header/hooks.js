@@ -1,14 +1,16 @@
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useSelector } from 'react-redux';
+
 import { getPagePath } from '../utils';
+import { getWaffleFlags } from '../data/selectors';
 import { getStudioHomeData } from '../studio-home/data/selectors';
 import messages from './messages';
 
 export const useContentMenuItems = courseId => {
   const intl = useIntl();
   const studioBaseUrl = getConfig().STUDIO_BASE_URL;
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const items = [
     {
@@ -42,7 +44,7 @@ export const useSettingMenuItems = courseId => {
   const intl = useIntl();
   const studioBaseUrl = getConfig().STUDIO_BASE_URL;
   const { canAccessAdvancedSettings } = useSelector(getStudioHomeData);
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const items = [
     {
@@ -80,7 +82,7 @@ export const useSettingMenuItems = courseId => {
 export const useToolsMenuItems = courseId => {
   const intl = useIntl();
   const studioBaseUrl = getConfig().STUDIO_BASE_URL;
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const items = [
     {

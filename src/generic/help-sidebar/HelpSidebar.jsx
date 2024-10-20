@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
 
-import { getStudioHomeData } from '../../studio-home/data/selectors';
+import { getWaffleFlags } from '../../data/selectors';
 import { otherLinkURLParams } from './constants';
 import messages from './messages';
 import HelpSidebarLink from './HelpSidebarLink';
@@ -26,7 +26,7 @@ const HelpSidebar = ({
     scheduleAndDetails,
     groupConfigurations,
   } = otherLinkURLParams;
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const showOtherLink = (params) => !pathname.includes(params);
   const generateLegacyURL = (urlParameter) => {

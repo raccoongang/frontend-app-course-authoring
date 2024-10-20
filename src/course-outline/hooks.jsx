@@ -6,6 +6,7 @@ import { getConfig } from '@edx/frontend-platform';
 
 import { copyToClipboard } from '../generic/data/thunks';
 import { getSavingStatus as getGenericSavingStatus } from '../generic/data/selectors';
+import { getWaffleFlags } from '../data/selectors';
 import { RequestStatus } from '../data/constants';
 import { COURSE_BLOCK_NAMES } from './constants';
 import {
@@ -58,7 +59,7 @@ import {
 const useCourseOutline = ({ courseId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const waffleFlags = useSelector(state => state.courseDetail.waffleFlags);
+  const waffleFlags = useSelector(getWaffleFlags);
 
   const {
     reindexLink,
