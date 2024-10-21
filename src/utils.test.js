@@ -88,6 +88,16 @@ describe('FilesAndUploads utils', () => {
 
       expect(result).toBe('/course-authoring/some/path');
     });
+
+    it('returns checkPath as is when basePath is part of checkPath', () => {
+      getConfig.mockReturnValue({ PUBLIC_PATH: 'example.com' });
+      getPath.mockReturnValue('/example-base/');
+
+      const checkPath = '/example-base/some/path';
+      const result = createCorrectInternalRoute(checkPath);
+
+      expect(result).toBe(checkPath);
+    });
   });
 
   describe('convertObjectToSnakeCase', () => {

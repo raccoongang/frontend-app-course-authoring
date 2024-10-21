@@ -2,6 +2,15 @@
 import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
+const getStudioBaseUrl = () => getConfig().STUDIO_BASE_URL;
+
+export const getApiWaffleFlagsUrl = (courseId) => {
+  const baseUrl = getStudioBaseUrl();
+  const apiPath = '/api/contentstore/v1/course_waffle_flags';
+
+  return courseId ? `${baseUrl}${apiPath}/${courseId}` : `${baseUrl}${apiPath}`;
+};
+
 function normalizeCourseDetail(data) {
   return {
     id: data.course_id,
@@ -17,11 +26,8 @@ export async function getCourseDetail(courseId, username) {
 }
 
 export async function getWaffleFlags(courseId) {
-  const apiUrl = courseId
-    ? `${getConfig().STUDIO_BASE_URL}/api/contentstore/v1/course_waffle_flags/${courseId}/`
-    : `${getConfig().STUDIO_BASE_URL}/api/contentstore/v1/course_waffle_flags/`;
   const { data } = await getAuthenticatedHttpClient()
-    .get(apiUrl);
+    .get(getApiWaffleFlagsUrl(courseId));
 
   return normalizeCourseDetail(data);
 }
