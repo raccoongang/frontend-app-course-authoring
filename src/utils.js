@@ -100,15 +100,11 @@ export function parseArrayOrObjectValues(obj) {
  * @param {string} checkPath - the internal route path that is validated
  * @returns {string} - the correct internal route path
  */
-export const createCorrectInternalRoute = (checkPath) => {
+export const createCorrectInternalRoute = (checkPath, isNewCourseOutlinePageEnabled) => {
   let basePath = getPath(getConfig().PUBLIC_PATH);
 
   if (basePath.endsWith('/')) {
     basePath = basePath.slice(0, -1);
-  }
-
-  if (!checkPath.startsWith(basePath)) {
-    return checkPath;
   }
 
   return checkPath;

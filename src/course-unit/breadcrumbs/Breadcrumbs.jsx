@@ -25,7 +25,7 @@ const Breadcrumbs = () => {
     if (waffleFlags?.useNewCourseOutlinePage) {
       navigate(url);
     } else {
-      window.location.href = `${getConfig().STUDIO_BASE_URL}/${url}`;
+      window.location.href = `${getConfig().STUDIO_BASE_URL}${url}`;
     }
   };
 
@@ -45,7 +45,7 @@ const Breadcrumbs = () => {
               {section.children.map(({ url, displayName }) => (
                 <Dropdown.Item
                   key={url}
-                  onClick={(e) => handleClick(e, createCorrectInternalRoute(url))}
+                  onClick={(e) => handleClick(e, createCorrectInternalRoute(url, waffleFlags?.useNewCourseOutlinePage))}
                   className="small"
                   data-testid="breadcrumbs-section-dropdown-item"
                 >

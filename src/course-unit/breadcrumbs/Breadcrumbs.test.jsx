@@ -137,7 +137,7 @@ describe('<Breadcrumbs />', () => {
 
     userEvent.click(dropdownItem);
 
-    expect(window.location.href).toBe(`${getConfig().STUDIO_BASE_URL}/${url}`);
+    expect(window.location.href).toBe(`${getConfig().STUDIO_BASE_URL}${url}`);
 
     // Restore the original window.location object
     window.location = originalLocation;
