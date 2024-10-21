@@ -45,7 +45,7 @@ const Breadcrumbs = () => {
               {section.children.map(({ url, displayName }) => (
                 <Dropdown.Item
                   key={url}
-                  onClick={(e) => handleClick(e, createCorrectInternalRoute(url, waffleFlags?.useNewCourseOutlinePage))}
+                  onClick={(e) => handleClick(e, createCorrectInternalRoute(url))}
                   className="small"
                   data-testid="breadcrumbs-section-dropdown-item"
                 >
