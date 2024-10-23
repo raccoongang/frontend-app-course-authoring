@@ -63,6 +63,7 @@ export interface ITreeNode {
 }
 
 export interface IXBlockInfo {
+    id: string,
     category?: string;
     hasChildren?: boolean;
     has_children?: boolean;
@@ -71,13 +72,6 @@ export interface IXBlockInfo {
 export interface IAncestor {
     category?: string;
     display_name?: string;
-}
-
-export interface IMoveModalProps {
-    isOpenModal: boolean,
-    closeModal: () => void,
-    openModal: () => void,
-    courseId: string,
 }
 
 export interface IXBlockChildInfo {

@@ -1,7 +1,3 @@
-// TODO: List
-// - Create tests for the move modal
-// - Check case: when we move xBlock to the empty unit
-
 import React, { FC, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -17,11 +13,11 @@ import {
 
 import { LoadingSpinner } from '../../generic/Loading';
 import { CATEGORIES_KEYS } from './constants';
-import { IMoveModalProps, IXBlock, IXBlockInfo } from './interfaces';
+import { IUseMoveModalParams, IXBlock, IXBlockInfo } from './interfaces';
 import { useMoveModal } from './hooks';
 import messages from './messages';
 
-const MoveModal: FC<IMoveModalProps> = ({
+const MoveModal: FC<IUseMoveModalParams> = ({
   isOpenModal, closeModal, openModal, courseId,
 }) => {
   const intl = useIntl();
@@ -53,26 +49,31 @@ const MoveModal: FC<IMoveModalProps> = ({
 
   const getBreadcrumbs = useCallback(() => (
     <Breadcrumb
-      ariaLabel="Course Outline breadcrumb"
+      ariaLabel={intl.formatMessage(messages.moveModalBreadcrumbsLabel)}
       data-testid="move-xblock-modal-breadcrumbs"
       isMobile={isExtraSmall}
       links={breadcrumbs.slice(0, -1).map((breadcrumb, index) => (
         { label: breadcrumb, 'data-parent-index': index }
       ))}
       activeLabel={breadcrumbs[breadcrumbs.length - 1]}
-      clickHandler={(e) => handleBreadcrumbsClick(e.target.dataset.parentIndex)}
+      clickHandler={({ target }) => handleBreadcrumbsClick(target.dataset.parentIndex)}
     />
   ), [isExtraSmall, breadcrumbs, handleBreadcrumbsClick]);
 
   const getEmptyMessage = useCallback(() => (
-    <span className="xblock-no-child-message">
-      This {parentInfo.category} has no {categoryText.toLowerCase()}
-    </span>
+      <li className="xblock-no-child-message">
+        {intl.formatMessage(messages.moveModalEmptyCategoryText, {
+          category: parentInfo.category,
+          categoryText: categoryText.toLowerCase(),
+        })}
+      </li>
   ), [parentInfo.category, categoryText]);
 
   const getCategoryIndicator = useCallback(() => (
-    <div className="xblock-items-category small text-gray-500">
-      <span className="sr-only">{categoryText} in {displayName}</span>
+      <div className="xblock-items-category small text-gray-500">
+      <span className="sr-only">
+        {intl.formatMessage(messages.moveModalCategoryIndicatorAccessibilityText, { categoryText, displayName })}
+      </span>
       <span
         className="category-text"
         aria-hidden="true"
@@ -83,7 +84,7 @@ const MoveModal: FC<IMoveModalProps> = ({
     </div>
   ), [categoryText, displayName]);
 
-  const getCourseStructureItemButton = useCallback((xblock: IXBlock, index: number) => (
+  const getCourseStructureItemButton = useCallback((xBlock: IXBlock, index: number) => (
     <Button
       variant="link"
       className="button-forward text-left justify-content-start text-gray-700"
@@ -91,15 +92,17 @@ const MoveModal: FC<IMoveModalProps> = ({
       onClick={() => handleXBlockClick(index)}
     >
       <span className="xblock-displayname text-truncate">
-        {xblock?.display_name}
+        {xBlock?.display_name}
       </span>
-      {currentXBlockParentIds.includes(xblock.id) && (
+      {currentXBlockParentIds.includes(xBlock.id) && (
         <span className="current-location text-nowrap mr-3">
-          (Current location)
+          {intl.formatMessage(messages.moveModalOutlineItemCurrentLocationText)}
         </span>
       )}
       <ArrowForwardIosIcon className="ml-auto flex-shrink-0" />
-      <span className="sr-only">View child items</span>
+      <span className="sr-only">
+        {intl.formatMessage(messages.moveModalOutlineItemViewText)}
+      </span>
     </Button>
   ), [currentXBlockParentIds, handleXBlockClick]);
 
@@ -110,7 +113,7 @@ const MoveModal: FC<IMoveModalProps> = ({
       </span>
       {currentXBlockParentIds.includes(xBlock.id) && (
         <span className="current-location text-nowrap mr-3">
-          (Currently selected)
+          {intl.formatMessage(messages.moveModalOutlineItemCurrentComponentLocationText)}
         </span>
       )}
     </span>
@@ -147,11 +150,8 @@ const MoveModal: FC<IMoveModalProps> = ({
               <ul className="xblock-items-container p-0 m-0">
                 {!childrenInfo.children?.length
                   ? getEmptyMessage()
-                  : childrenInfo.children.map((xblock: IXBlock | IXBlockInfo, index: number) => {
-                    if ('display_name' in xblock) {
-                      return getCourseStructureListItem(xblock as IXBlock, index);
-                    }
-                    return null;
+                  : childrenInfo.children.map((xBlock: IXBlock | IXBlockInfo, index: number) => {
+                    return getCourseStructureListItem(xBlock as IXBlock, index);
                   })}
               </ul>
             </div>

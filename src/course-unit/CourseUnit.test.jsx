@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import {
-  act, render, waitFor, fireEvent, within,
+  act, render, waitFor, fireEvent, within, screen,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
@@ -17,7 +17,7 @@ import { cloneDeep, set } from 'lodash';
 import {
   getCourseSectionVerticalApiUrl,
   getCourseUnitApiUrl,
-  getCourseVerticalChildrenApiUrl,
+  getCourseVerticalChildrenApiUrl, getOutlineInfo,
   getXBlockBaseApiUrl,
   postXBlockBaseApiUrl,
 } from './data/api';
@@ -26,7 +26,8 @@ import {
   editCourseUnitVisibilityAndData,
   fetchCourseSectionVerticalData,
   fetchCourseUnitQuery,
-  fetchCourseVerticalChildrenData,
+  fetchCourseVerticalChildrenData, getCourseOutlineInfoQuery,
+  patchUnitItemQuery,
 } from './data/thunk';
 import initializeStore from '../store';
 import {
@@ -35,7 +36,7 @@ import {
   courseUnitIndexMock,
   courseUnitMock,
   courseVerticalChildrenMock,
-  clipboardMockResponse,
+  clipboardMockResponse, courseOutlineInfoMock,
 } from './__mocks__';
 import { clipboardUnit } from '../__mocks__';
 import { executeThunk } from '../utils';
@@ -49,11 +50,12 @@ import { extractCourseUnitId } from './sidebar/utils';
 import CourseUnit from './CourseUnit';
 
 import configureModalMessages from '../generic/configure-modal/messages';
-import addComponentMessages from './add-component/messages';
-import { PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
-import messages from './messages';
 import { getContentTaxonomyTagsApiUrl, getContentTaxonomyTagsCountApiUrl } from '../content-tags-drawer/data/api';
+import addComponentMessages from './add-component/messages';
+import { messageTypes, PUBLISH_TYPES, UNIT_VISIBILITY_STATES } from './constants';
 import { IframeProvider } from './context/iFrameContext';
+import moveModalMessages from './move-modal/messages';
+import messages from './messages';
 
 let axiosMock;
 let store;
@@ -126,6 +128,7 @@ describe('<CourseUnit />', () => {
         roles: [],
       },
     });
+    window.scrollTo = jest.fn();
     global.localStorage.clear();
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
@@ -547,6 +550,7 @@ describe('<CourseUnit />', () => {
       expect(unpublishedAlert).toBeNull();
     });
   });
+
   //   axiosMock
   //     .onPost(postXBlockBaseApiUrl({
   //       parent_locator: blockId,
@@ -1119,6 +1123,178 @@ describe('<CourseUnit />', () => {
       )).not.toBeInTheDocument();
     });
   });
+
+  describe('Move functionality', () => {
+    const requestData = {
+      sourceLocator: 'block-v1:edX+DemoX+Demo_Course+type@vertical+block@867dddb6f55d410caaa9c1eb9c6743ec',
+      targetParentLocator: 'block-v1:edX+DemoX+Demo_Course+type@course+block@course',
+      title: 'Getting Started',
+      currentParentLocator: 'block-v1:edX+DemoX+Demo_Course+type@sequential+block@19a30717eff543078a5d94ae9d6c18a5',
+      isMoving: true,
+      callbackFn: jest.fn(),
+    };
+    const messageEvent = new MessageEvent('message', {
+      data: {
+        type: messageTypes.showMoveXBlockModal,
+        payload: {
+          sourceXBlockInfo: {
+            id: requestData.sourceLocator,
+            displayName: requestData.title,
+          },
+          sourceParentXBlockInfo: {
+            id: requestData.currentParentLocator,
+            category: 'vertical',
+            hasChildren: true,
+          }
+        }
+      },
+      origin: '*',
+    });
+
+    it('should display "Move Modal" on receive trigger message', async () => {
+      const {
+        getByText,
+        getByRole,
+      } = render(<RootWrapper />);
+
+      await waitFor(() => {
+        expect(getByText(unitDisplayName)).toBeInTheDocument();
+      });
+
+      axiosMock
+        .onGet(getOutlineInfo(courseId))
+        .reply(200, courseOutlineInfoMock);
+      await executeThunk(getCourseOutlineInfoQuery(courseId), store.dispatch);
+
+      window.dispatchEvent(messageEvent);
+
+      expect(getByText(
+        moveModalMessages.moveModalTitle.defaultMessage.replace('{displayName}', requestData.title)
+      )).toBeInTheDocument();
+      expect(getByRole('button', { name: moveModalMessages.moveModalSubmitButton.defaultMessage })).toBeInTheDocument();
+      expect(getByRole('button', { name: moveModalMessages.moveModalCancelButton.defaultMessage })).toBeInTheDocument();
+    });
+
+    it('should navigates to xBlock current unit', async () => {
+      const {
+        getByText,
+        getByRole,
+      } = render(<RootWrapper />);
+
+      await waitFor(() => {
+        expect(getByText(unitDisplayName)).toBeInTheDocument();
+      });
+
+      axiosMock
+        .onGet(getOutlineInfo(courseId))
+        .reply(200, courseOutlineInfoMock);
+      await executeThunk(getCourseOutlineInfoQuery(courseId), store.dispatch);
+
+      window.dispatchEvent(messageEvent);
+
+      expect(getByText(
+        moveModalMessages.moveModalTitle.defaultMessage.replace('{displayName}', requestData.title)
+      )).toBeInTheDocument();
+
+      const currentSection = courseOutlineInfoMock.child_info.children[1];
+      const currentSectionItemText = getByRole('button', {
+        name: `${currentSection.display_name} ${moveModalMessages.moveModalOutlineItemCurrentLocationText.defaultMessage} ${moveModalMessages.moveModalOutlineItemViewText.defaultMessage}`,
+      });
+      expect(currentSectionItemText).toBeInTheDocument();
+      fireEvent.click(currentSectionItemText);
+
+      const currentSubsection = currentSection.child_info.children[0];
+      const currentSubsectionText = getByRole('button', {
+        name: `${currentSubsection.display_name} ${moveModalMessages.moveModalOutlineItemCurrentLocationText.defaultMessage} ${moveModalMessages.moveModalOutlineItemViewText.defaultMessage}`,
+      });
+      expect(currentSubsectionText).toBeInTheDocument();
+      fireEvent.click(currentSubsectionText);
+
+      const currentComponentLocationText = getByText(
+        moveModalMessages.moveModalOutlineItemCurrentComponentLocationText.defaultMessage
+      );
+      expect(currentComponentLocationText).toBeInTheDocument();
+    });
+
+    it('should display "Move Confirmation" alert after moving and undo operations', async () => {
+      const {
+        queryByRole,
+        getByText,
+      } = render(<RootWrapper />);
+
+      axiosMock
+        .onPatch(postXBlockBaseApiUrl())
+        .reply(200, {});
+
+      await executeThunk(patchUnitItemQuery({
+        sourceLocator: requestData.sourceLocator,
+        targetParentLocator: requestData.targetParentLocator,
+        title: requestData.title,
+        currentParentLocator: requestData.currentParentLocator,
+        isMoving: requestData.isMoving,
+        callbackFn: requestData.callbackFn,
+      }), store.dispatch);
+
+      const dismissButton = queryByRole('button', {
+        name: /dismiss/i, hidden: true,
+      });
+      const undoButton = queryByRole('button', {
+        name: messages.undoMoveButton.defaultMessage, hidden: true,
+      });
+      const newLocationButton = queryByRole('button', {
+        name: messages.newLocationButton.defaultMessage, hidden: true,
+      });
+
+      expect(getByText(messages.alertMoveSuccessTitle.defaultMessage)).toBeInTheDocument();
+      expect(getByText(`${requestData.title} has been moved`)).toBeInTheDocument();
+      expect(dismissButton).toBeInTheDocument();
+      expect(undoButton).toBeInTheDocument();
+      expect(newLocationButton).toBeInTheDocument();
+      expect(requestData.callbackFn).toHaveBeenCalled();
+
+      fireEvent.click(undoButton);
+
+      await waitFor(() => {
+        expect(getByText(messages.alertMoveCancelTitle.defaultMessage)).toBeInTheDocument();
+      });
+      expect(getByText(
+        messages.alertMoveCancelDescription.defaultMessage.replace('{title}', requestData.title),
+      )).toBeInTheDocument();
+      expect(dismissButton).toBeInTheDocument();
+      expect(undoButton).not.toBeInTheDocument();
+      expect(newLocationButton).not.toBeInTheDocument();
+      expect(requestData.callbackFn).toHaveBeenCalled();
+    });
+
+    it('should navigate to new location by button click', async () => {
+      const {
+        queryByRole,
+      } = render(<RootWrapper />);
+
+      axiosMock
+        .onPatch(postXBlockBaseApiUrl())
+        .reply(200, {});
+
+      await executeThunk(patchUnitItemQuery({
+        sourceLocator: requestData.sourceLocator,
+        targetParentLocator: requestData.targetParentLocator,
+        title: requestData.title,
+        currentParentLocator: requestData.currentParentLocator,
+        isMoving: requestData.isMoving,
+        callbackFn: requestData.callbackFn,
+      }), store.dispatch);
+
+      const newLocationButton = queryByRole('button', {
+        name: messages.newLocationButton.defaultMessage, hidden: true,
+      });
+      fireEvent.click(newLocationButton);
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(
+        `/course/${courseId}/container/${blockId}/${requestData.currentParentLocator}`,
+        { replace: true },
+      );
+    });
+  });
+
   //   it('checks xblock list is restored to original order when API call fails', async () => {
   //     const { findAllByRole } = render(<RootWrapper />);
 

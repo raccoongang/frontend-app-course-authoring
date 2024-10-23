@@ -216,26 +216,6 @@ export const useMoveModal = ({
     setDisplayedXBlocksCategories, enableMoveOperation,
   ]);
 
-  console.log(
-      state.sourceXBlockInfo,
-      {
-        isLoading: loadingStatus === RequestStatus.IN_PROGRESS,
-        isValidMove: state.isValidMove,
-        isExtraSmall,
-        parentInfo: state.parentInfo,
-        childrenInfo: state.childrenInfo,
-        displayName: state.sourceXBlockInfo.current.displayName,
-        sourceXBlockId: state.sourceXBlockInfo.current.id,
-        categoryText: getCategoryText(),
-        breadcrumbs,
-        currentXBlockParentIds,
-        handleXBlockClick,
-        handleBreadcrumbsClick,
-        handleCLoseModal,
-        handleMoveXBlock,
-      }
-  );
-
   return {
     isLoading: loadingStatus === RequestStatus.IN_PROGRESS,
     isValidMove: state.isValidMove,
