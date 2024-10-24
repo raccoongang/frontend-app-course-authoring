@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  render, screen, fireEvent, waitFor,
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import ChecklistItemBody from './ChecklistItemBody';
@@ -79,6 +81,8 @@ describe('ChecklistItemBody', () => {
     const updateLink = screen.getByTestId('update-hyperlink');
     fireEvent.click(updateLink);
 
-    expect(window.location.href).toBe('http://localhost/');
+    waitFor(() => {
+      expect(window.location.href).toBe(defaultProps.updateLink);
+    });
   });
 });
