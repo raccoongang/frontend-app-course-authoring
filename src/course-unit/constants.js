@@ -58,8 +58,5 @@ export const messageTypes = {
   duplicateXBlock: 'duplicateXBlock',
   refreshPositions: 'refreshPositions',
   newXBlockEditor: 'newXBlockEditor',
+  toggleDropdownMenu: 'toggleDropdownMenu',
 };
-
-export const IFRAME_FEATURE_POLICY = (
-  'microphone *; camera *; midi *; geolocation *; encrypted-media *, clipboard-write *'
-);

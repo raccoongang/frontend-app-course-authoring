@@ -10,14 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import { copyToClipboard } from '../../generic/data/thunks';
-import { COURSE_BLOCK_NAMES } from '../../constants';
-import { IFRAME_FEATURE_POLICY, messageTypes } from '../constants';
+import { COURSE_BLOCK_NAMES, IFRAME_FEATURE_POLICY } from '../../constants';
+import { messageTypes } from '../constants';
 import { fetchCourseUnitQuery } from '../data/thunk';
 import { useIframe } from '../context/hooks';
 import { useIFrameBehavior } from './hooks';
 import messages from './messages';
-
-const IFRAME_BOTTOM_OFFSET = 220;
 
 interface XBlockContainerIframeProps {
   courseId: string;
@@ -73,6 +71,7 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
   const [deleteXblockId, setDeleteXblockId] = useState<string | null>(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
+  const [dropdownHeight, setDropdownHeight] = useState(0);
   const { setIframeRef, sendMessageToIframe } = useIframe();
   const [editXblockId, setEditXblockId] = useState<string | null>(null);
   const [currentXblockData, setCurrentXblockData] = useState<any>({});
@@ -141,10 +140,12 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
       [messageTypes.duplicateXBlock]: (payload) => handleDuplicateXBlock(payload.id),
       [messageTypes.refreshPositions]: handleRefreshXBlocks,
       [messageTypes.newXBlockEditor]: (payload) => navigateToNewXBlockEditor(payload.url),
+      [messageTypes.toggleDropdownMenu]: ({ subMenuHeight }) => setDropdownHeight(subMenuHeight),
     };
 
     const handleMessage = (event: MessageEvent) => {
       const { type, payload } = event.data || {};
+
       if (type && messageHandlers[type]) {
         messageHandlers[type](payload);
       }
@@ -209,7 +210,10 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
         allow={IFRAME_FEATURE_POLICY}
         allowFullScreen
         loading="lazy"
-        style={{ width: '100%', height: iframeHeight + IFRAME_BOTTOM_OFFSET }}
+        style={{
+          width: '100%',
+          height: iframeHeight + dropdownHeight,
+        }}
         scrolling="no"
         referrerPolicy="origin"
         aria-label={intl.formatMessage(messages.xblockIframeLabel, { xblockCount: xblocks.length })}

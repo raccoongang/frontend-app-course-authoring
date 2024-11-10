@@ -52,8 +52,9 @@ import CourseUnit from './CourseUnit';
 import configureModalMessages from '../generic/configure-modal/messages';
 import addComponentMessages from './add-component/messages';
 import {
-  PUBLISH_TYPES, UNIT_VISIBILITY_STATES, IFRAME_FEATURE_POLICY, messageTypes,
+  PUBLISH_TYPES, UNIT_VISIBILITY_STATES, messageTypes,
 } from './constants';
+import { IFRAME_FEATURE_POLICY } from '../constants';
 import messages from './messages';
 import xblockContainerIframeMessages from './xblock-container-iframe/messages';
 import { getContentTaxonomyTagsApiUrl, getContentTaxonomyTagsCountApiUrl } from '../content-tags-drawer/data/api';
@@ -450,6 +451,26 @@ describe('<CourseUnit />', () => {
     });
 
     window.open = open;
+  });
+
+  it('updates iframe height when dropdown menu is toggled', async () => {
+    const { getByTitle } = render(<RootWrapper />);
+
+    const ACTION_DROPDOWN_HEIGHT = 300;
+
+    await waitFor(() => {
+      const iframe = getByTitle(xblockContainerIframeMessages.xblockIframeTitle.defaultMessage);
+      expect(iframe.getAttribute('style')).toContain('height: 0px;');
+    });
+
+    simulatePostMessageEvent(messageTypes.toggleDropdownMenu, {
+      subMenuHeight: ACTION_DROPDOWN_HEIGHT,
+    });
+
+    await waitFor(() => {
+      const iframe = getByTitle(xblockContainerIframeMessages.xblockIframeTitle.defaultMessage);
+      expect(iframe.getAttribute('style')).toContain(`height: ${ACTION_DROPDOWN_HEIGHT}px;`);
+    });
   });
 
   it('checks courseUnit title changing when edit query is successfully', async () => {
