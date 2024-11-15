@@ -10,19 +10,22 @@ import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../../generic/delete-modal/DeleteModal';
 import ConfigureModal from '../../generic/configure-modal/ConfigureModal';
 import { copyToClipboard } from '../../generic/data/thunks';
-import { COURSE_BLOCK_NAMES, IFRAME_FEATURE_POLICY } from '../../constants';
+import { COURSE_BLOCK_NAMES, IFRAME_FEATURE_POLICY, NOTIFICATION_MESSAGES } from '../../constants';
 import { messageTypes } from '../constants';
-import { fetchCourseUnitQuery } from '../data/thunk';
 import { useIframe } from '../context/hooks';
 import { useIFrameBehavior } from './hooks';
 import messages from './messages';
+import {
+  hideProcessingNotification,
+  showProcessingNotification,
+} from '../../generic/processing-notification/data/slice';
 
 interface XBlockContainerIframeProps {
   courseId: string;
   blockId: string;
   unitXBlockActions: {
-    handleDelete: (XBlockId: string) => void;
-    handleDuplicate: (XBlockId: string) => void;
+    handleDelete: () => void;
+    handleDuplicate: () => void;
   };
   xblocks: Array<{
     name: string;
@@ -58,34 +61,29 @@ interface XBlockContainerIframeProps {
     id: string;
   }>;
   handleConfigureSubmit: (XBlockId: string, ...args: any[]) => void;
+  handleXBlockDragAndDrop: () => void;
 }
 
 const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
-  courseId, blockId, unitXBlockActions, xblocks, handleConfigureSubmit,
+  courseId, blockId, unitXBlockActions, xblocks, handleConfigureSubmit, handleXBlockDragAndDrop,
 }) => {
   const intl = useIntl();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [deleteXblockId, setDeleteXblockId] = useState<string | null>(null);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [isConfigureModalOpen, openConfigureModal, closeConfigureModal] = useToggle(false);
-  const [dropdownHeight, setDropdownHeight] = useState(0);
   const { setIframeRef, sendMessageToIframe } = useIframe();
   const [editXblockId, setEditXblockId] = useState<string | null>(null);
   const [currentXblockData, setCurrentXblockData] = useState<any>({});
 
   const iframeUrl = `${getConfig().STUDIO_BASE_URL}/container_embed/${blockId}`;
+  const { iframeHeight } = useIFrameBehavior({ id: blockId, iframeUrl });
 
   useEffect(() => {
     setIframeRef(iframeRef);
   }, [setIframeRef]);
-
-  const handleDelete = (id: string) => {
-    openDeleteModal();
-    setDeleteXblockId(id);
-  };
 
   const handleConfigure = (id: string) => {
     openConfigureModal();
@@ -105,13 +103,27 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
     }
   };
 
-  const handleCopy = (id: string) => {
-    dispatch(copyToClipboard(id));
+  const handleDuplicateXBlock = () => {
+    unitXBlockActions.handleDuplicate();
+    dispatch(showProcessingNotification(NOTIFICATION_MESSAGES.duplicating));
   };
 
-  const handleDuplicateXBlock = (id) => {
-    if (id) {
-      unitXBlockActions.handleDuplicate(id);
+  const handleFinishDuplicateXBlock = () => {
+    unitXBlockActions.handleDuplicate();
+    requestAnimationFrame(() => {
+      dispatch(hideProcessingNotification());
+    });
+  };
+
+  const handleDeleteItemSubmit = () => {
+    unitXBlockActions.handleDelete();
+    closeDeleteModal();
+    sendMessageToIframe('confirmDeleteXBlock', null);
+  };
+
+  const onConfigureSubmit = (...args: any[]) => {
+    if (editXblockId) {
+      handleConfigureSubmit(editXblockId, ...args, closeConfigureModal);
       // TODO: this artificial delay is a temporary solution
       // to ensure the iframe content is properly refreshed.
       setTimeout(() => {
@@ -120,27 +132,16 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
     }
   };
 
-  const handleRefreshXBlocks = () => {
-    // TODO: this artificial delay is a temporary solution
-    // to ensure the iframe content is properly refreshed.
-    setTimeout(() => {
-      dispatch(fetchCourseUnitQuery(blockId));
-    }, 1000);
-  };
-
-  const navigateToNewXBlockEditor = (url: string) => {
-    navigate(`/course/${courseId}/editor${url}`);
-  };
-
   useEffect(() => {
     const messageHandlers: Record<string, (payload) => void> = {
-      [messageTypes.deleteXBlock]: (payload) => handleDelete(payload.id),
+      [messageTypes.startDeleteXBlock]: () => openDeleteModal(),
+      [messageTypes.finishDeleteXBlock]: () => dispatch(hideProcessingNotification()),
       [messageTypes.manageXBlockAccess]: (payload) => handleConfigure(payload.id),
-      [messageTypes.copyXBlock]: (payload) => handleCopy(payload.id),
-      [messageTypes.duplicateXBlock]: (payload) => handleDuplicateXBlock(payload.id),
-      [messageTypes.refreshPositions]: handleRefreshXBlocks,
-      [messageTypes.newXBlockEditor]: (payload) => navigateToNewXBlockEditor(payload.url),
-      [messageTypes.toggleDropdownMenu]: ({ subMenuHeight }) => setDropdownHeight(subMenuHeight),
+      [messageTypes.copyXBlock]: (payload) => dispatch(copyToClipboard(payload.id)),
+      [messageTypes.startDuplicateXBlock]: () => handleDuplicateXBlock(),
+      [messageTypes.finishDuplicateXBlock]: () => handleFinishDuplicateXBlock(),
+      [messageTypes.refreshPositions]: () => handleXBlockDragAndDrop(),
+      [messageTypes.newXBlockEditor]: (payload) => navigate(`/course/${courseId}/editor${payload.url}`),
     };
 
     const handleMessage = (event: MessageEvent) => {
@@ -157,34 +158,6 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
       window.removeEventListener('message', handleMessage);
     };
   }, [dispatch, blockId, xblocks]);
-
-  const { iframeHeight } = useIFrameBehavior({
-    id: blockId,
-    iframeUrl,
-  });
-
-  const handleDeleteItemSubmit = () => {
-    if (deleteXblockId) {
-      unitXBlockActions.handleDelete(deleteXblockId);
-      closeDeleteModal();
-      // TODO: this artificial delay is a temporary solution
-      // to ensure the iframe content is properly refreshed.
-      setTimeout(() => {
-        sendMessageToIframe(messageTypes.refreshXBlock, null);
-      }, 1000);
-    }
-  };
-
-  const onConfigureSubmit = (...args: any[]) => {
-    if (editXblockId) {
-      handleConfigureSubmit(editXblockId, ...args, closeConfigureModal);
-      // TODO: this artificial delay is a temporary solution
-      // to ensure the iframe content is properly refreshed.
-      setTimeout(() => {
-        sendMessageToIframe(messageTypes.refreshXBlock, null);
-      }, 1000);
-    }
-  };
 
   return (
     <>
@@ -212,7 +185,8 @@ const XBlockContainerIframe: FC<XBlockContainerIframeProps> = ({
         loading="lazy"
         style={{
           width: '100%',
-          height: iframeHeight + dropdownHeight,
+          height: iframeHeight,
+          // height: iframeHeight,
         }}
         scrolling="no"
         referrerPolicy="origin"

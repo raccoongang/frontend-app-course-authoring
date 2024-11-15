@@ -17,6 +17,7 @@ import {
   editCourseUnitVisibilityAndData,
   getCourseOutlineInfoQuery,
   patchUnitItemQuery,
+  setXBlockOrderListQuery,
 } from './data/thunk';
 import {
   getCourseSectionVertical,
@@ -79,8 +80,16 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     dispatch(changeEditTitleFormOpen(!isTitleEditFormOpen));
   };
 
-  const handleConfigureSubmit = (id, isVisible, groupAccess, closeModalFn) => {
-    dispatch(editCourseUnitVisibilityAndData(id, PUBLISH_TYPES.republish, isVisible, groupAccess, true, blockId));
+  const handleConfigureSubmit = (id, isVisible, groupAccess, isDiscussionEnabled, closeModalFn) => {
+    dispatch(editCourseUnitVisibilityAndData(
+      id,
+      PUBLISH_TYPES.republish,
+      isVisible,
+      groupAccess,
+      isDiscussionEnabled,
+      () => sendMessageToIframe(messageTypes.refreshXBlock, null),
+      blockId,
+    ));
     closeModalFn();
   };
 
@@ -90,6 +99,10 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     }
 
     handleTitleEdit();
+  };
+
+  const handleXBlockDragAndDrop = (restoreCallback) => {
+    dispatch(setXBlockOrderListQuery(blockId, restoreCallback));
   };
 
   const handleNavigate = (id) => {
@@ -107,16 +120,21 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     }
   };
 
-  const handleCreateNewCourseXBlock = (body, callback) => (
-    dispatch(createNewCourseXBlock(body, callback, blockId))
-  );
+  const handleCreateNewCourseXBlock = (body, callback) => {
+    dispatch(createNewCourseXBlock(body, callback, blockId));
+    // TODO: this artificial delay is a temporary solution
+    // to ensure the iframe content is properly refreshed.
+    setTimeout(() => {
+      sendMessageToIframe(messageTypes.refreshXBlock, null);
+    }, 1000);
+  };
 
   const unitXBlockActions = {
-    handleDelete: (XBlockId) => {
-      dispatch(deleteUnitItemQuery(blockId, XBlockId));
+    handleDelete: () => {
+      dispatch(deleteUnitItemQuery(blockId));
     },
-    handleDuplicate: (XBlockId) => {
-      dispatch(duplicateUnitItemQuery(blockId, XBlockId));
+    handleDuplicate: () => {
+      dispatch(duplicateUnitItemQuery(blockId));
     },
   };
 
@@ -196,5 +214,6 @@ export const useCourseUnit = ({ courseId, blockId }) => {
     handleCloseXBlockMovedAlert,
     movedXBlockParams,
     handleNavigateToTargetUnit,
+    handleXBlockDragAndDrop,
   };
 };

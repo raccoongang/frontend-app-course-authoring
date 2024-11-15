@@ -54,9 +54,10 @@ export const messageTypes = {
   showMoveXBlockModal: 'showMoveXBlockModal',
   copyXBlock: 'copyXBlock',
   manageXBlockAccess: 'manageXBlockAccess',
-  deleteXBlock: 'deleteXBlock',
-  duplicateXBlock: 'duplicateXBlock',
+  startDeleteXBlock: 'startDeleteXBlock',
+  finishDeleteXBlock: 'finishDeleteXBlock',
+  startDuplicateXBlock: 'startDuplicateXBlock',
+  finishDuplicateXBlock: 'finishDuplicateXBlock',
   refreshPositions: 'refreshPositions',
   newXBlockEditor: 'newXBlockEditor',
-  toggleDropdownMenu: 'toggleDropdownMenu',
 };

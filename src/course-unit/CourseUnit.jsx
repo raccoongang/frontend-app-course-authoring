@@ -68,6 +68,7 @@ const CourseUnit = ({ courseId }) => {
     handleRollbackMovedXBlock,
     handleCloseXBlockMovedAlert,
     handleNavigateToTargetUnit,
+    handleXBlockDragAndDrop,
   } = useCourseUnit({ courseId, blockId });
 
   useEffect(() => {
@@ -184,6 +185,7 @@ const CourseUnit = ({ courseId }) => {
                 unitXBlockActions={unitXBlockActions}
                 xblocks={courseVerticalChildren.children}
                 handleConfigureSubmit={handleConfigureSubmit}
+                handleXBlockDragAndDrop={handleXBlockDragAndDrop}
               />
               <AddComponent
                 blockId={blockId}
