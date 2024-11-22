@@ -52,6 +52,7 @@ import sidebarMessages from './sidebar/messages';
 import { extractCourseUnitId } from './sidebar/utils';
 import CourseUnit from './CourseUnit';
 
+import { getClipboardUrl } from '../generic/data/api';
 import configureModalMessages from '../generic/configure-modal/messages';
 import { getContentTaxonomyTagsApiUrl, getContentTaxonomyTagsCountApiUrl } from '../content-tags-drawer/data/api';
 import addComponentMessages from './add-component/messages';
@@ -135,6 +136,9 @@ describe('<CourseUnit />', () => {
     global.localStorage.clear();
     store = initializeStore();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
+    axiosMock
+      .onGet(getClipboardUrl())
+      .reply(200, clipboardUnit);
     axiosMock
       .onGet(getCourseUnitApiUrl(courseId))
       .reply(200, courseUnitIndexMock);
@@ -911,9 +915,7 @@ describe('<CourseUnit />', () => {
         .reply(200, clipboardMockResponse);
       axiosMock
         .onGet(getCourseSectionVerticalApiUrl(blockId))
-        .reply(200, {
-          ...updatedCourseSectionVerticalData,
-        });
+        .reply(200, updatedCourseSectionVerticalData);
 
       global.localStorage.setItem('staticFileNotices', JSON.stringify(clipboardMockResponse.staticFileNotices));
       await executeThunk(fetchCourseSectionVerticalData(blockId), store.dispatch);
@@ -1187,7 +1189,7 @@ describe('<CourseUnit />', () => {
 
       axiosMock
         .onGet(getCourseUnitApiUrl(blockId))
-        .reply(200, {});
+        .reply(200, courseUnitIndexMock);
 
       await act(async () => {
         await waitFor(() => {

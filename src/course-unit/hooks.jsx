@@ -87,7 +87,9 @@ export const useCourseUnit = ({ courseId, blockId }) => {
       isDiscussionEnabled,
       blockId,
     ));
-    closeModalFn();
+    if (typeof closeModalFn === 'function') {
+      closeModalFn();
+    }
   };
 
   const handleTitleEditSubmit = (displayName) => {

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Badge, Button } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { COMPONENT_TYPES } from '../../../generic/block-type-utils/constants';
 import messages from '../messages';
 import AddComponentIcon from './AddComponentIcon';
 

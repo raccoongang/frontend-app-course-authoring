@@ -263,6 +263,7 @@ const ConfigureModal = ({
       size="lg"
       isOpen={isOpen}
       onClose={onClose}
+      title={dialogTitle}
       hasCloseButton
       isFullscreenOnMobile
       isOverflowVisible={false}

@@ -77,13 +77,17 @@ describe('<Breadcrumbs />', () => {
     expect(queryAllByTestId('breadcrumbs-section-dropdown-item')).toHaveLength(0);
     expect(queryAllByTestId('breadcrumbs-subsection-dropdown-item')).toHaveLength(0);
 
-    const button = getByText(breadcrumbsExpected.section.displayName);
-    userEvent.click(button);
+    const sectionBtn = getByText(breadcrumbsExpected.section.displayName);
+    userEvent.click(sectionBtn);
     await waitFor(() => {
       expect(queryAllByTestId('breadcrumbs-section-dropdown-item')).toHaveLength(5);
     });
 
-    userEvent.click(getByText(breadcrumbsExpected.subsection.displayName));
+    await waitFor(() => {
+      const subsectionBtn = getByText(breadcrumbsExpected.subsection.displayName);
+      userEvent.click(subsectionBtn);
+    });
+
     expect(queryAllByTestId('breadcrumbs-subsection-dropdown-item')).toHaveLength(2);
   });
 

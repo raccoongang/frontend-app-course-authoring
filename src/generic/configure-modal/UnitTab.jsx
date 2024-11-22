@@ -157,9 +157,7 @@ UnitTab.propTypes = {
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
-    selectedGroups: PropTypes.oneOfType([
-      PropTypes.string,
-    ]),
+    selectedGroups: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   setFieldValue: PropTypes.func.isRequired,
   showWarning: PropTypes.bool.isRequired,
