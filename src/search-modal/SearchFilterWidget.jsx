@@ -24,13 +24,13 @@ import {
  */
 const SearchFilterWidget = ({ appliedFilters, ...props }) => {
   const [isOpen, open, close] = useToggle(false);
-  const [target, setTarget] = React.useState(null);
+  const targetRef = React.useRef(null);
 
   return (
     <>
       <div className="d-flex mr-3">
         <Button
-          ref={setTarget}
+          ref={targetRef}
           variant={appliedFilters.length ? 'light' : 'outline-primary'}
           size="sm"
           onClick={open}
@@ -42,7 +42,7 @@ const SearchFilterWidget = ({ appliedFilters, ...props }) => {
         </Button>
       </div>
       <ModalPopup
-        positionRef={target}
+        positionRef={targetRef}
         isOpen={isOpen}
         onClose={close}
       >

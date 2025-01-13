@@ -230,7 +230,6 @@ const SearchResult = ({ hit }) => {
       <IconButton
         src={OpenInNew}
         iconAs={Icon}
-        disabled={noRedirectUrl ? true : undefined}
         onClick={openContextInNewWindow}
         alt={intl.formatMessage(messages.openInNewWindow)}
       />
