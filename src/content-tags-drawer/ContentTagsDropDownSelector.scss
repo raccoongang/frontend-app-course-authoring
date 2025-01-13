@@ -7,7 +7,7 @@
 
   &:hover {
     background-color: transparent;
-    color: $info-900 !important;
+    color: var(--pgn-color-info-900) !important;
   }
 }
 
@@ -19,7 +19,7 @@
   // In the future, this customizability should be implemented in paragon instead
   input.pgn__form-checkbox-input {
     &:indeterminate {
-      @extend :checked; /* stylelint-disable-line scss/at-extend-no-missing-placeholder */
+      @extend :checked !optional; /* stylelint-disable-line scss/at-extend-no-missing-placeholder */
     }
   }
 }
@@ -34,6 +34,6 @@
 }
 
 .dropdown-selector-tag-actions:focus-visible {
-  outline: solid 2px $info-900;
+  outline: solid 2px var(--pgn-color-info-900);
   border-radius: 4px;
 }

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const path = require('path');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { createConfig } = require('@openedx/frontend-build');
