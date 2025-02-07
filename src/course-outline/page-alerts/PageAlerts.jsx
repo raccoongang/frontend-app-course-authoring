@@ -377,7 +377,7 @@ const PageAlerts = ({
               && (
                 <Alert.Heading>{msgObj.title}</Alert.Heading>
               )}
-            {msgObj.desc && <Truncate lines={2}>{msgObj.desc}</Truncate>}
+            {msgObj.desc && <Truncate.Deprecated lines={2}>{msgObj.desc}</Truncate.Deprecated>}
           </ErrorAlert>
         ) : (
           <Alert
@@ -389,7 +389,7 @@ const PageAlerts = ({
                 && (
                   <Alert.Heading>{msgObj.title}</Alert.Heading>
                 )}
-            {msgObj.desc && <Truncate lines={2}>{msgObj.desc}</Truncate>}
+            {msgObj.desc && <Truncate.Deprecated lines={2}>{msgObj.desc}</Truncate.Deprecated>}
           </Alert>
         )
       ))
